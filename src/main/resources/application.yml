@@ -1,0 +1,13 @@
+spring:
+  application:
+      name: itzip
+  profiles:
+    active: local
+  jpa:
+    show-sql: true
+    database: postgresql
+    hibernate:
+      ddl-auto: update
+  mongodb:
+    embedded:
+      version: 4.0.21

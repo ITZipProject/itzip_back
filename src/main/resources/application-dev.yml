@@ -1,0 +1,23 @@
+# 현재 설정 값은 local만 있음
+
+spring:
+  datasource:
+    url: ${LOC_POSTGRESQL_URL}
+    username: ${LOC_POSTGRESQL_USERNAME}
+    password: ${LOC_POSTGRESQL_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+  data:
+    redis:
+      host: ${LOC_REDIS_HOST}
+      port: ${LOC_REDIS_PORT}
+      password: ${LOC_REDIS_PASSWORD}
+
+    mongodb:
+      host: ${LOC_MONGO_HOST}
+      port: ${LOC_MONGO_PORT}
+      username: ${LOC_MONGO_USERNAME}
+      password: ${LOC_MONGO_PASSWORD}
+      database: ${LOC_MONGO_DATABASE}
+      authentication-database: ${LOC_MONGO_AUTH}
+      uri: ${LOC_MONGO_URI}
