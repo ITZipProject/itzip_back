@@ -1,6 +1,6 @@
-package darkoverload.itzip.global.config.exception.exception;
+package darkoverload.itzip.global.config.response.exception;
 
-import darkoverload.itzip.global.config.exception.exceptionCode.ExceptionCode;
+import darkoverload.itzip.global.config.response.exceptionCode.ExceptionCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

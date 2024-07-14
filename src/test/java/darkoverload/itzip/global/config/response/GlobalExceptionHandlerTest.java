@@ -1,4 +1,4 @@
-package darkoverload.itzip.global.config.exception;
+package darkoverload.itzip.global.config.response;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

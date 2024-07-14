@@ -1,7 +1,7 @@
-package darkoverload.itzip.global.config.exception.handler;
+package darkoverload.itzip.global.config.response.handler;
 
-import darkoverload.itzip.global.config.exception.exception.RestApiException;
-import darkoverload.itzip.global.config.exception.exceptionCode.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
+import darkoverload.itzip.global.config.response.exceptionCode.CommonExceptionCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

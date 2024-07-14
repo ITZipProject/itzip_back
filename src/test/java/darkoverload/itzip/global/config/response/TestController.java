@@ -1,7 +1,7 @@
-package darkoverload.itzip.global.config.exception;
+package darkoverload.itzip.global.config.response;
 
-import darkoverload.itzip.global.config.exception.exception.RestApiException;
-import darkoverload.itzip.global.config.exception.exceptionCode.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
+import darkoverload.itzip.global.config.response.exceptionCode.CommonExceptionCode;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

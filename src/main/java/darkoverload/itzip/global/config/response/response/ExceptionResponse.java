@@ -1,4 +1,4 @@
-package darkoverload.itzip.global.config.exception.response;
+package darkoverload.itzip.global.config.response.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;

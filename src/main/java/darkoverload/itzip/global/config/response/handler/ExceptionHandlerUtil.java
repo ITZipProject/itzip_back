@@ -1,7 +1,7 @@
-package darkoverload.itzip.global.config.exception.handler;
+package darkoverload.itzip.global.config.response.handler;
 
-import darkoverload.itzip.global.config.exception.exceptionCode.ExceptionCode;
-import darkoverload.itzip.global.config.exception.response.ExceptionResponse;
+import darkoverload.itzip.global.config.response.exceptionCode.ExceptionCode;
+import darkoverload.itzip.global.config.response.response.ExceptionResponse;
 import org.springframework.http.ResponseEntity;
 
 public class ExceptionHandlerUtil {
