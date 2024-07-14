@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### env ###
+/src/main/resources/properties/env.properties
+/src/main/java/darkoverload/itzip/global/config/properties/PropertyConfig.java
