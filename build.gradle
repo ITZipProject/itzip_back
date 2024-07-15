@@ -58,6 +58,13 @@ dependencies {
     // Swagger ui
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
+    // aws-bucket
+    implementation 'io.awspring.cloud:spring-cloud-starter-aws:2.4.4'
+
+    // 파일 업로드
+    implementation 'commons-io:commons-io:2.14.0'
+    implementation 'commons-fileupload:commons-fileupload:1.5'
+
     // JUnit5 설정 완료
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
