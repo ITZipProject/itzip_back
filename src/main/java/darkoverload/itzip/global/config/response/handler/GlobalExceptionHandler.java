@@ -1,21 +1,22 @@
-package darkoverload.itzip.global.config.exception.handler;
+package darkoverload.itzip.global.config.response.handler;
 
-import darkoverload.itzip.global.config.exception.exception.RestApiException;
-import darkoverload.itzip.global.config.exception.exceptionCode.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.handler.Util.ExceptionHandlerUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "darkoverload.itzip")
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     // RestApiException 예외를 처리하는 핸들러
     @ExceptionHandler(RestApiException.class)
     public ResponseEntity<Object> handleRestApiException(RestApiException e) {
-        log.error("RestApiException: {}", e.getExceptionCode().getMessage(), e);
+        log.error("RestApiException: {}", e.getExceptionCode().getData(), e);
         return ExceptionHandlerUtil.handleExceptionInternal(e.getExceptionCode());
     }
 

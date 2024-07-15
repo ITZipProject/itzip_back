@@ -1,7 +1,8 @@
-package darkoverload.itzip.global.config.exception;
+package darkoverload.itzip.global.config.response;
 
-import darkoverload.itzip.global.config.exception.exception.RestApiException;
-import darkoverload.itzip.global.config.exception.exceptionCode.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -62,5 +63,27 @@ public class TestController {
     public void throwException2() {
         String str = null;
         str.length();
+    }
+
+
+    @GetMapping("/success")
+    public String successs() {
+        return "성공했습니다";
+    }
+
+    @GetMapping("/success2")
+    public ResponseEntity<Object> successs2() {
+        Map<String, String> response = new HashMap<>();
+        response.put("field1", "field1Value");
+        response.put("field2", "field2Value");
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/success3")
+    public Map<String, String> successs3() {
+        Map<String, String> response = new HashMap<>();
+        response.put("field1", "field1Value");
+        response.put("field2", "field2Value");
+        return response;
     }
 }

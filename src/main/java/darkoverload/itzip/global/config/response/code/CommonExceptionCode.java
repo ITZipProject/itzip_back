@@ -1,4 +1,4 @@
-package darkoverload.itzip.global.config.exception.exceptionCode;
+package darkoverload.itzip.global.config.response.code;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor
-public enum CommonExceptionCode implements ExceptionCode{
+public enum CommonExceptionCode implements ResponseCode {
     /**
      * 4** client
      */
@@ -42,5 +42,5 @@ public enum CommonExceptionCode implements ExceptionCode{
     NETWORK_AUTHENTICATION_REQUIRED(HttpStatus.NETWORK_AUTHENTICATION_REQUIRED, "네트워크 인증이 필요합니다");
 
     private final HttpStatus httpStatus;
-    private final String message;
+    private final String data;
 }
