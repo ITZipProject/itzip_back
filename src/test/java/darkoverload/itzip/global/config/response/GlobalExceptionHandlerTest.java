@@ -119,7 +119,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void getSuccesss2Response() {
+    void getSuccess2Response() {
         Assertions.assertTimeout(Duration.ofSeconds(2), () -> {
             mockMvc.perform(get("/test/success2")
                             .contentType(MediaType.APPLICATION_JSON))
@@ -133,7 +133,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void getSuccesssResponse() throws Exception {
+    void getSuccessResponse() throws Exception {
         mockMvc.perform(get("/test/success")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -143,7 +143,7 @@ class GlobalExceptionHandlerTest {
     }
 
     @Test
-    void getSuccesss3Response() {
+    void getSuccess3Response() {
         Assertions.assertTimeout(Duration.ofSeconds(2), () -> {
             mockMvc.perform(get("/test/success3")
                             .contentType(MediaType.APPLICATION_JSON))
