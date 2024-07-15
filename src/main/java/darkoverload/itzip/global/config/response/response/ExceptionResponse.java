@@ -13,8 +13,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExceptionResponse {
 
+    private final String status;
     private final String code;
-    private final String message;
+    private final Object data;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private final List<ValidationException> errors;
@@ -23,13 +24,15 @@ public class ExceptionResponse {
     @Builder
     @RequiredArgsConstructor
     public static class ValidationException {
+        private final String status;
         private final String field;
-        private final String message;
+        private final Object data;
 
         public static ValidationException of(final FieldError fieldError) {
             return ValidationException.builder()
+                    .status("400 Bad Request")
                     .field(fieldError.getField())
-                    .message(fieldError.getDefaultMessage())
+                    .data(fieldError.getDefaultMessage())
                     .build();
         }
     }
