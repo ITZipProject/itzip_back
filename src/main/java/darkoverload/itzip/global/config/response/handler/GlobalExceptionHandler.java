@@ -3,6 +3,7 @@ package darkoverload.itzip.global.config.response.handler;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.handler.Util.ExceptionHandlerUtil;
+import darkoverload.itzip.image.exception.CustomImageException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -40,4 +41,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("UnsupportedOperationException: {}", e.getMessage(), e);
         return ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.UNSUPPORTED_MEDIA_TYPE, e.getMessage());
     }
+
+    //  파일 에러 //
+    @ExceptionHandler(CustomImageException.class)
+    public ResponseEntity<Object> handleCustomFileException(CustomImageException e) {
+        log.error("CustomFileException : {}", e.getMessage(), e);
+
+        return ExceptionHandlerUtil.handleExceptionInternal(e.getExceptionCode());
+    }
+
+
+
 }
