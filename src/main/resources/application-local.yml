@@ -28,6 +28,8 @@ cloud:
     s3:
       bucket: ${LOC_AWS_BUCKET_NAME}
     region:
-      auto: false
       static: ap-northeast-2
-    stack: false
+      auto: false
+
+file:
+  path: ${LOC_FILE_PATH}
