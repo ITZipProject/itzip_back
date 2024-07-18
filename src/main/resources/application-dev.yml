@@ -33,3 +33,6 @@ cloud:
       auto: false
       static: ap-northeast-2
     stack: false
+
+file:
+  cloudfront-path: ${LOC_FILE_PATH}

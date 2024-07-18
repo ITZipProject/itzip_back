@@ -44,6 +44,7 @@ public class ImageEntity {
 
     public Image convertToDomain(){
         return Image.builder()
+                .imageSeq(this.imageSeq)
                 .imageName(this.imageName)
                 .imageType(this.imageType)
                 .imagePath(this.imagePath)

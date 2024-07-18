@@ -10,6 +10,8 @@ import lombok.ToString;
 @Builder
 public class Image {
 
+    private Long imageSeq;
+
     private String imageName;
 
     private String imageType;
@@ -22,6 +24,7 @@ public class Image {
 
     public ImageEntity convertToEntity() {
         return ImageEntity.builder()
+                .imageSeq(this.imageSeq)
                 .imageName(this.imageName)
                 .imageType(this.imageType)
                 .imagePath(this.imagePath)

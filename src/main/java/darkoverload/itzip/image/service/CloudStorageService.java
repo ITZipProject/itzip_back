@@ -25,7 +25,7 @@ public class CloudStorageService implements StorageService {
 
     @Transactional
     @Override
-    public Image temporaryImageUpload(MultipartFile multipartFile, String featureDir) {
+    public String temporaryImageUpload(MultipartFile multipartFile, String featureDir) {
         log.info("file :: {}", featureDir);
 
         if(multipartFile.isEmpty()) throw new CustomImageException(CommonExceptionCode.IMAGE_NOT_FOUND);
@@ -67,8 +67,29 @@ public class CloudStorageService implements StorageService {
         // 이미지 리사이즈
 //        InputStream resizeIn = FileUtil.resizeImage(fileFormatName, multipartFile, 780);
 
+        return insertData.getImagePath();
+    }
 
-        return insertData;
+    @Transactional
+    public String imageUpload(String imagePath, String featureDir){
+
+        Image findImage= imageService.findByImagePath(imagePath);
+
+        String moveImagePath = awsService.moveFile(findImage, featureDir);
+
+        imageService.imagePathUpdate(moveImagePath, findImage.getImageSeq());
+
+        return moveImagePath;
+    }
+
+
+    @Transactional
+    public void imageDelete(String imagePath, String featureDir) {
+
+        Image findImage = imageService.findByImagePath(imagePath);
+        imageService.delete(findImage.getImageSeq());
+
+        awsService.delete(findImage.getImageName(), featureDir);
 
     }
 }

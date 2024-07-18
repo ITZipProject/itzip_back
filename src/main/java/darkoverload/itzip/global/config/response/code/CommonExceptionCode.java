@@ -25,7 +25,11 @@ public enum CommonExceptionCode implements ResponseCode {
     // 파일 형식을 지키지 않은 경우
     IMAGE_FORMAT_ERROR(HttpStatus.BAD_REQUEST, "이미지 형식이 올바르지 않습니다"),
 
-    IMAGE_RESIZE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드 실패"),
+    // 이미지 리사이즈 실패
+    IMAGE_RESIZE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "이미지 업로드 에러"),
+
+    // 임시 이미지 x
+    IMAGE_NOT_TEMP(HttpStatus.BAD_REQUEST, "이미지 에러"),
 
 
     /**
