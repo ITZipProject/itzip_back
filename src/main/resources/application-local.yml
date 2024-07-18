@@ -19,3 +19,8 @@ spring:
       database: ${LOC_MONGO_DATABASE}
       authentication-database: ${LOC_MONGO_AUTH}
       uri: ${LOC_MONGO_URI}
+jwt:
+  accessSecret: ${LOC_JWT_ACCESS_SECRET}
+  refreshSecret: ${LOC_JWT_REFRESH_SECRET}
+  accessTokenExpire: ${LOC_JWT_ACCESS_EXPIRE}
+  refreshTokenExpire: ${LOC_JWT_REFRESH_EXPIRE}
