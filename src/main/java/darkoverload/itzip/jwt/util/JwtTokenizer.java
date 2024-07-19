@@ -1,9 +1,12 @@
 package darkoverload.itzip.jwt.util;
 
+import darkoverload.itzip.global.config.response.exception.RestApiException;
+import darkoverload.itzip.jwt.exception.TokenExceptionCode;
 import darkoverload.itzip.user.entity.Authority;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -101,11 +104,18 @@ public class JwtTokenizer {
     }
 
     public Claims parseToken(String token, byte[] secretKey) {
-        return Jwts.parserBuilder()
-                .setSigningKey(getSigningKey(secretKey))
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
+        Claims claims = null;
+        try {
+            claims = Jwts.parserBuilder()
+                    .setSigningKey(getSigningKey(secretKey))
+                    .build()
+                    .parseClaimsJws(token)
+                    .getBody();
+        } catch (SignatureException e) { // 토큰 유효성 체크 실패 시
+            throw new RestApiException(TokenExceptionCode.JWT_INVALID_ERROR);
+        }
+
+        return claims;
     }
 
     /**

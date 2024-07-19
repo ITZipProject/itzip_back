@@ -1,6 +1,6 @@
 package darkoverload.itzip.jwt.filter;
 
-import darkoverload.itzip.jwt.exception.CustomJwtException;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
 import darkoverload.itzip.jwt.exception.TokenExceptionCode;
 import darkoverload.itzip.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.jwt.infrastructure.JwtAuthenticationToken;
@@ -24,7 +24,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -54,24 +53,15 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             try {
                 getAuthentication(token); // 토큰을 사용하여 인증 설정
             } catch (ExpiredJwtException e) {
-                request.setAttribute("exception", TokenExceptionCode.JWT_UNKNOWN_ERROR.getCode());
-                log.error("Expired Token : {}", token, e);
-                throw new CustomJwtException(TokenExceptionCode.JWT_UNKNOWN_ERROR);
+                throw new RestApiException(TokenExceptionCode.JWT_UNKNOWN_ERROR);
             } catch (UnsupportedJwtException e) {
-                request.setAttribute("exception", TokenExceptionCode.JWT_UNSUPPORTED_ERROR.getCode());
-                log.error("Unsupported Token: {}", token, e);
-                throw new CustomJwtException(TokenExceptionCode.JWT_UNSUPPORTED_ERROR);
+                throw new RestApiException(TokenExceptionCode.JWT_UNSUPPORTED_ERROR);
             } catch (MalformedJwtException e) {
-                request.setAttribute("exception", TokenExceptionCode.JWT_INVALID_ERROR.getCode());
-                log.error("Invalid Token: {}", token, e);
-                throw new CustomJwtException(TokenExceptionCode.JWT_INVALID_ERROR);
+                throw new RestApiException(TokenExceptionCode.JWT_INVALID_ERROR);
             } catch (IllegalArgumentException e) {
-                request.setAttribute("exception", TokenExceptionCode.JWT_UNKNOWN_ERROR.getCode());
-                log.error("Token not found: {}", token, e);
-                throw new CustomJwtException(TokenExceptionCode.JWT_UNKNOWN_ERROR);
+                throw new RestApiException(TokenExceptionCode.JWT_UNKNOWN_ERROR);
             } catch (Exception e) {
-                log.error("JWT Filter - Internal Error: {}", token, e);
-                throw new CustomJwtException(TokenExceptionCode.JWT_INTERNAL_ERROR);
+                throw new RestApiException(TokenExceptionCode.JWT_INTERNAL_ERROR);
             }
         }
         filterChain.doFilter(request, response); // 다음 필터로 요청을 전달

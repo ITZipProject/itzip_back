@@ -1,7 +1,7 @@
 package darkoverload.itzip.jwt.service;
 
+import darkoverload.itzip.global.config.response.exception.RestApiException;
 import darkoverload.itzip.jwt.entity.Token;
-import darkoverload.itzip.jwt.exception.CustomJwtException;
 import darkoverload.itzip.jwt.exception.TokenExceptionCode;
 import darkoverload.itzip.jwt.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -71,7 +71,7 @@ public class TokenService {
     @Transactional
     public void updateByRefreshToken(String refreshToken, String accessToken) {
         Token token = tokenRepository.findByRefreshToken(refreshToken)
-                .orElseThrow(() -> new CustomJwtException(TokenExceptionCode.JWT_UNKNOWN_ERROR));
+                .orElseThrow(() -> new RestApiException(TokenExceptionCode.JWT_UNKNOWN_ERROR));
 
         token.setAccessToken(accessToken);
         tokenRepository.save(token);
