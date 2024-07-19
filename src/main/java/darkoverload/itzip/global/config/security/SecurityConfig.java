@@ -1,12 +1,16 @@
 package darkoverload.itzip.global.config.security;
 
+import darkoverload.itzip.jwt.util.JwtTokenizer;
+import darkoverload.itzip.jwt.filter.TokenAuthenticationFilter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
  * Spring Security 설정 클래스
@@ -14,7 +18,25 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
  */
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+    // JWT util
+    private final JwtTokenizer jwtTokenizer;
+
+    // 모든 유저 허용 페이지
+    String[] allAllowPage = new String[]{
+            "/", // 메인페이지
+            "/error", // 에러페이지
+            "/test/**", // 테스트 페이지
+            "/user/refreshToken" // 토큰 재발급 페이지
+    };
+
+    // 비로그인 유저 허용 페이지
+    String[] notLoggedAllowPage = new String[]{
+            "/user/login", // 로그인 페이지
+            "/join" // 회원가입 페이지
+    };
+
     /**
      * 보안 필터 체인
      *
@@ -24,11 +46,27 @@ public class SecurityConfig {
      */
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                // 모든 요청 허용
-                .authorizeHttpRequests(auth -> auth.requestMatchers(new AntPathRequestMatcher("/**")).permitAll())
-                // cors 허용
-                .csrf(csrf -> csrf.disable());
+        // 유저별 페이지 접근 허용
+        http.authorizeHttpRequests(auth -> auth
+                .requestMatchers(allAllowPage).permitAll() // 모든 유저
+                .requestMatchers(notLoggedAllowPage).not().authenticated() // 비로그인 유저
+                .anyRequest().authenticated()
+        );
+
+        // 세션 관리 Stateless 설정(서버가 클라이언트 상태 저장x)
+        http.sessionManagement(auth -> auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+
+        // cors 허용
+        http.csrf(csrf -> csrf.disable());
+
+        // 로그인 폼 비활성화
+        http.formLogin(auth -> auth.disable());
+
+        // http 기본 인증(헤더) 비활성화
+        http.httpBasic(auth -> auth.disable());
+
+        // JWT 필터 사용
+        http.addFilterBefore(new TokenAuthenticationFilter(jwtTokenizer), UsernamePasswordAuthenticationFilter.class);
 
         // SecurityFilterChain을 빌드 후 반환
         return http.build();
