@@ -1,8 +1,9 @@
 package darkoverload.itzip.image.service;
 
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.handler.Util.ExceptionHandlerUtil;
+import darkoverload.itzip.image.code.ImageExceptionCode;
 import darkoverload.itzip.image.domain.Image;
-import darkoverload.itzip.image.exception.CustomImageException;
 import darkoverload.itzip.image.util.FileUtil;
 import darkoverload.itzip.infra.bucket.domain.AWSFile;
 import darkoverload.itzip.infra.bucket.service.AWSService;
@@ -26,9 +27,7 @@ public class CloudStorageService implements StorageService {
     @Transactional
     @Override
     public String temporaryImageUpload(MultipartFile multipartFile, String featureDir) {
-        log.info("file :: {}", featureDir);
-
-        if(multipartFile.isEmpty()) throw new CustomImageException(CommonExceptionCode.IMAGE_NOT_FOUND);
+        if(multipartFile.isEmpty()) ExceptionHandlerUtil.handleExceptionInternal(ImageExceptionCode.IMAGE_NOT_FOUND);
 
         InputStream inputStream = null;
         Image insertData =  null;
@@ -36,7 +35,7 @@ public class CloudStorageService implements StorageService {
             String fileName = FileUtil.generateFileName(multipartFile.getOriginalFilename());
             inputStream = multipartFile.getInputStream();
             if(!FileUtil.imageExtensionCheck(multipartFile.getInputStream())){
-                throw new CustomImageException(CommonExceptionCode.IMAGE_FORMAT_ERROR);
+                ExceptionHandlerUtil.handleExceptionInternal(ImageExceptionCode.IMAGE_FORMAT_ERROR);
             }
 
             Image originImage = Image.builder()
@@ -50,7 +49,7 @@ public class CloudStorageService implements StorageService {
             try {
                 awsFile = awsService.upload(originImage, inputStream);
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                ExceptionHandlerUtil.handleExceptionInternal(ImageExceptionCode.IMAGE_ERROR);
             }
             insertData = Image.builder()
                     .imageName(awsFile.getFilename())
@@ -61,11 +60,9 @@ public class CloudStorageService implements StorageService {
 
             imageService.save(insertData);
         } catch (IOException e) {
-            throw new CustomImageException(CommonExceptionCode.IMAGE_ERROR);
+            ExceptionHandlerUtil.handleExceptionInternal(ImageExceptionCode.IMAGE_ERROR);
         }
 
-        // 이미지 리사이즈
-//        InputStream resizeIn = FileUtil.resizeImage(fileFormatName, multipartFile, 780);
 
         return insertData.getImagePath();
     }

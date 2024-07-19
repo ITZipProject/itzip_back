@@ -2,9 +2,9 @@ package darkoverload.itzip.infra.bucket.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
-import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.handler.Util.ExceptionHandlerUtil;
+import darkoverload.itzip.image.code.ImageExceptionCode;
 import darkoverload.itzip.image.domain.Image;
-import darkoverload.itzip.image.exception.CustomImageException;
 import darkoverload.itzip.infra.bucket.domain.AWSFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,11 +68,10 @@ public class AWSService {
         if(isObjectExist) {
             amazonS3.deleteObject(new DeleteObjectRequest(bucketDir, keyName));
         } else {
-            throw new CustomImageException(CommonExceptionCode.IMAGE_NOT_FOUND);
+            ExceptionHandlerUtil.handleExceptionInternal(ImageExceptionCode.IMAGE_NOT_FOUND);
         }
 
     }
-
 
     public String moveFile(Image image,String featureDir){
         String newSource = bucketName + "/" + featureDir;
@@ -80,7 +79,7 @@ public class AWSService {
         String keyName = image.getImageName();
 
         boolean isObjectExist = amazonS3.doesObjectExist(oldSource, image.getImageName());
-        if(!isObjectExist) throw new CustomImageException(CommonExceptionCode.IMAGE_NOT_FOUND);
+        if(!isObjectExist) ExceptionHandlerUtil.handleExceptionInternal(ImageExceptionCode.IMAGE_NOT_FOUND);
 
         amazonS3.copyObject(oldSource, keyName, newSource, keyName);
 
@@ -89,10 +88,10 @@ public class AWSService {
         return filePath + featureDir + "/" + image.getImageName();
     }
 
+
     private String makeOldResource(Image image) {
-        if(!image.getImagePath().contains("temporary")){
-            throw new CustomImageException(CommonExceptionCode.IMAGE_NOT_TEMP);
-        }
+        if(!image.getImagePath().contains("temporary"))
+            ExceptionHandlerUtil.handleExceptionInternal(ImageExceptionCode.IMAGE_NOT_TEMP);
 
         int index = image.getImagePath().lastIndexOf("temporary");
         String tempPath = image.getImagePath().substring(index, index+9);

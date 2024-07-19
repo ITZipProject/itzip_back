@@ -3,9 +3,7 @@ package darkoverload.itzip.image.controller;
 
 import darkoverload.itzip.image.controller.request.ImageDeleteRequest;
 import darkoverload.itzip.image.controller.request.ImageUploadRequest;
-import darkoverload.itzip.image.domain.Image;
 import darkoverload.itzip.image.service.CloudStorageService;
-import darkoverload.itzip.image.service.ImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

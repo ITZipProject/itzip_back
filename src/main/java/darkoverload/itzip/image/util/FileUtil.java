@@ -1,13 +1,9 @@
 package darkoverload.itzip.image.util;
 
-import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
-import darkoverload.itzip.image.exception.CustomImageException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tika.Tika;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.UUID;
 

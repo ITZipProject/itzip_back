@@ -2,9 +2,9 @@ package darkoverload.itzip.image.service;
 
 
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
+import darkoverload.itzip.image.code.ImageExceptionCode;
 import darkoverload.itzip.image.domain.Image;
-import darkoverload.itzip.image.entity.ImageEntity;
-import darkoverload.itzip.image.exception.CustomImageException;
 import darkoverload.itzip.image.repository.ImageRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class ImageServiceImpl implements ImageService{
 
     @Override
     public Image findByImagePath(String imagePath) {
-        return repository.findByImagePath(imagePath).orElseThrow(()-> new CustomImageException(CommonExceptionCode.IMAGE_NOT_FOUND)).convertToDomain();
+        return repository.findByImagePath(imagePath).orElseThrow(()-> new RestApiException(ImageExceptionCode.IMAGE_NOT_FOUND)).convertToDomain();
     }
 
     @Override
