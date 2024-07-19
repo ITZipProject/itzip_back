@@ -33,3 +33,10 @@ cloud:
 
 file:
   cloudfront-path: ${LOC_FILE_PATH}
+
+jwt:
+  accessSecret: ${LOC_JWT_ACCESS_SECRET}
+  refreshSecret: ${LOC_JWT_REFRESH_SECRET}
+  accessTokenExpire: ${LOC_JWT_ACCESS_EXPIRE}
+  refreshTokenExpire: ${LOC_JWT_REFRESH_EXPIRE}
+
