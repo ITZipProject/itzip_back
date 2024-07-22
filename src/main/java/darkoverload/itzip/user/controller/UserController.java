@@ -3,11 +3,12 @@ package darkoverload.itzip.user.controller;
 import darkoverload.itzip.jwt.entity.Token;
 import darkoverload.itzip.jwt.service.TokenService;
 import darkoverload.itzip.jwt.util.JwtTokenizer;
+import darkoverload.itzip.user.dto.UserJoinDto;
 import darkoverload.itzip.user.dto.UserLoginDto;
 import darkoverload.itzip.user.dto.UserLoginResponseDto;
 import darkoverload.itzip.user.entity.Authority;
 import darkoverload.itzip.user.entity.User;
-import darkoverload.itzip.user.sevice.UserService;
+import darkoverload.itzip.user.service.UserService;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,9 +23,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -42,8 +43,10 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
 
-            Map<String, String> errors = fieldErrors.stream()
-                    .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError fieldError : fieldErrors) {
+                errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
 
             return new ResponseEntity(Map.of("errors", errors), HttpStatus.BAD_REQUEST);
         }
@@ -172,5 +175,23 @@ public class UserController {
                 .build();
 
         return new ResponseEntity(responseDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/join")
+    public ResponseEntity join(@RequestBody @Valid UserJoinDto userJoinDto, BindingResult bindingResult) {
+        // 필드 에러 확인
+        if (bindingResult.hasErrors()) {
+            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+
+            Map<String, String> errors = new HashMap<>();
+            for (FieldError fieldError : fieldErrors) {
+                errors.put(fieldError.getField(), fieldError.getDefaultMessage());
+            }
+
+            return new ResponseEntity(Map.of("errors", errors), HttpStatus.OK);
+        }
+
+        userService.save(userJoinDto);
+        return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
 }
