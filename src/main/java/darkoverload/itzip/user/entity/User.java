@@ -2,10 +2,7 @@ package darkoverload.itzip.user.entity;
 
 import darkoverload.itzip.global.entity.AuditingFields;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "users")
@@ -18,12 +15,14 @@ public class User extends AuditingFields {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Setter
+    @Column(nullable = false, unique = true)
     private String nickname;
 
+    @Setter
     @Column(nullable = false)
     private String password;
 
