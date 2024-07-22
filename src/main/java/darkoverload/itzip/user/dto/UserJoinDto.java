@@ -1,5 +1,6 @@
 package darkoverload.itzip.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import darkoverload.itzip.user.entity.Authority;
 import darkoverload.itzip.user.entity.User;
 import jakarta.validation.constraints.AssertTrue;
@@ -25,6 +26,7 @@ public class UserJoinDto {
             message = "영어, 숫자, 특수문자를 포함한 8~16자 비밀번호를 입력해주세요.")
     private String password;
 
+    @JsonProperty("password_check")
     @NotEmpty(message = "비밀번호 확인을 입력해주세요.")
     private String passwordCheck;
 
