@@ -18,12 +18,18 @@ import java.util.Optional;
 public class UserService {
     private final UserRepository userRepository;
     private final RandomNickname randomNickname;
+    private final VerificationService verificationService;
 
     @Transactional
     public void save(UserJoinDto userJoinDto) {
         // 이메일 중복 체크
         if (findByEmail(userJoinDto.getEmail()) != null) {
             throw new RestApiException(UserExceptionCode.EXIST_EMAIL_ERROR);
+        }
+
+        // 이메일 인증번호 체크
+        if (!verificationService.verifyCode(userJoinDto.getEmail(), userJoinDto.getAuthCode())){
+            throw new RestApiException(UserExceptionCode.NOT_MATCH_AUTH_CODE);
         }
 
         User user = userJoinDto.toEntity();

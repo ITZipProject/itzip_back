@@ -19,6 +19,20 @@ spring:
       database: ${LOC_MONGO_DATABASE}
       authentication-database: ${LOC_MONGO_AUTH}
       uri: ${LOC_MONGO_URI}
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${LOC_GAMIL_USERNAME}
+    password: ${LOC_GAMIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
+
 jwt:
   accessSecret: ${LOC_JWT_ACCESS_SECRET}
   refreshSecret: ${LOC_JWT_REFRESH_SECRET}

@@ -30,6 +30,10 @@ public class UserJoinDto {
     @NotEmpty(message = "비밀번호 확인을 입력해주세요.")
     private String passwordCheck;
 
+    @JsonProperty("auth_code")
+    @NotEmpty(message = "이메일을 인증해주세요.")
+    private String authCode;
+
     @AssertTrue(message = "비밀번호와 비밀번호 확인이 일치하지 않습니다.")
     public boolean isPasswordMatching() {
         if (password == null || passwordCheck == null) {
