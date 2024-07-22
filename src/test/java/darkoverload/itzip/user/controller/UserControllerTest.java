@@ -16,7 +16,7 @@ class UserControllerTest {
     private final UserService userService;
     private final EmailService emailService;
     private final VerificationService verificationService;
-    private final String email = "dktjdej@naver.com"; // 여러분의 이메일을 넣어서 테스트 해보세요^^
+    private final String email = "test@naver.com"; // 여러분의 이메일을 넣어서 테스트 해보세요^^
     private String authCode; // 여러분의 이메일을 넣어서 테스트 해보세요^^
 
     @Autowired
