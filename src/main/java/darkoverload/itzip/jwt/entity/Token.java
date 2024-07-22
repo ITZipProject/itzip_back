@@ -21,10 +21,10 @@ public class Token extends AuditingFields {
     private User user;
 
     @Setter
-    @Column(nullable = false)
+    @Column(nullable = false, length = 300)
     private String accessToken;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 300)
     private String refreshToken;
 
     @Column(nullable = false)
