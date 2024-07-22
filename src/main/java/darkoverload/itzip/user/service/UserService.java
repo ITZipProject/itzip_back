@@ -43,7 +43,11 @@ public class UserService {
         userRepository.save(user);
     }
 
-    private String getUniqueNickname() {
+    /**
+     * 중복되지 않은 랜덤 닉네임 생성
+     * @return unique random nickname
+     */
+    public String getUniqueNickname() {
         String nickname;
         do {
             nickname = randomNickname.generate();

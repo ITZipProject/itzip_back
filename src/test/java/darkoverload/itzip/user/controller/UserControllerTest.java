@@ -1,6 +1,7 @@
 package darkoverload.itzip.user.controller;
 
 import darkoverload.itzip.user.service.EmailService;
+import darkoverload.itzip.user.service.UserService;
 import darkoverload.itzip.user.service.VerificationService;
 import darkoverload.itzip.user.util.RandomAuthCode;
 import lombok.extern.slf4j.Slf4j;
@@ -11,16 +12,25 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @Slf4j
-class AuthEmailTest {
+class UserControllerTest {
+    private final UserService userService;
     private final EmailService emailService;
     private final VerificationService verificationService;
     private final String email = "dktjdej@naver.com"; // 여러분의 이메일을 넣어서 테스트 해보세요^^
     private String authCode; // 여러분의 이메일을 넣어서 테스트 해보세요^^
 
     @Autowired
-    AuthEmailTest(EmailService emailService, VerificationService verificationService) {
+    UserControllerTest(UserService userService, EmailService emailService, VerificationService verificationService) {
+        this.userService = userService;
         this.emailService = emailService;
         this.verificationService = verificationService;
+    }
+
+    @Test
+    @DisplayName("랜덤 닉네임 생성 Test")
+    void createRandomNickname() {
+        String newName = userService.getUniqueNickname();
+        log.info("당신의 이름은 이제부터 \"{}\"입니다.", newName);
     }
 
     @Test
