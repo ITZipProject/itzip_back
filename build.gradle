@@ -54,12 +54,15 @@ dependencies {
     // 롬복 관련 의존성 주입
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
     // Swagger ui
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
     // aws-bucket
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    testImplementation 'io.findify:s3mock_2.12:0.2.4'
 
     // 파일 업로드
     implementation 'commons-io:commons-io:2.14.0'
@@ -89,6 +92,7 @@ dependencies {
 
     // validation
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.2'
+    testRuntimeOnly 'com.h2database:h2'
 
     // 메일 발송
     implementation 'org.springframework.boot:spring-boot-starter-mail'

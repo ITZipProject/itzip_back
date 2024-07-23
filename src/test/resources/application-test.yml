@@ -1,0 +1,47 @@
+spring:
+  jpa:
+    show-sql: true
+    database: h2
+    hibernate:
+      ddl-auto: create-drop
+      database-platform: org.hibernate.dialect.H2Dialect
+  datasource:
+    url: ${TEST_DB_URL}
+    username: ${TEST_DB_USERNAME}
+    password: ${TEST_DB_PASSWORD}
+    driver-class-name: org.h2.Driver
+  data:
+    redis:
+      host: ${LOC_REDIS_HOST}
+      port: ${LOC_REDIS_PORT}
+      password: ${LOC_REDIS_PASSWORD}
+
+    mongodb:
+      host: ${LOC_MONGO_HOST}
+      port: ${LOC_MONGO_PORT}
+      username: ${LOC_MONGO_USERNAME}
+      password: ${LOC_MONGO_PASSWORD}
+      database: ${LOC_MONGO_DATABASE}
+      authentication-database: ${LOC_MONGO_AUTH}
+      uri: ${LOC_MONGO_URI}
+cloud:
+  aws:
+    credentials:
+      instance-profile: false
+      accessKey: ${LOC_AWS_ACCESS_KEY}
+      secretKey: ${LOC_AWS_SECRET_KEY}
+    s3:
+      bucket: ${LOC_AWS_BUCKET_NAME}
+    region:
+      static: ap-northeast-2
+      auto: false
+
+file:
+  cloudfront-path: ${LOC_FILE_PATH}
+
+jwt:
+  accessSecret: ${LOC_JWT_ACCESS_SECRET}
+  refreshSecret: ${LOC_JWT_REFRESH_SECRET}
+  accessTokenExpire: ${LOC_JWT_ACCESS_EXPIRE}
+  refreshTokenExpire: ${LOC_JWT_REFRESH_EXPIRE}
+
