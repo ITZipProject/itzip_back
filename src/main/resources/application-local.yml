@@ -30,7 +30,18 @@ cloud:
     region:
       static: ap-northeast-2
       auto: false
-
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${LOC_GAMIL_USERNAME}
+    password: ${LOC_GAMIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
 file:
   cloudfront-path: ${LOC_FILE_PATH}
 

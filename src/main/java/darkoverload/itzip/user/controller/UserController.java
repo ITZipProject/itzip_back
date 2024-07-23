@@ -3,11 +3,14 @@ package darkoverload.itzip.user.controller;
 import darkoverload.itzip.jwt.entity.Token;
 import darkoverload.itzip.jwt.service.TokenService;
 import darkoverload.itzip.jwt.util.JwtTokenizer;
-import darkoverload.itzip.user.dto.UserLoginDto;
-import darkoverload.itzip.user.dto.UserLoginResponseDto;
+import darkoverload.itzip.user.dto.*;
 import darkoverload.itzip.user.entity.Authority;
 import darkoverload.itzip.user.entity.User;
-import darkoverload.itzip.user.sevice.UserService;
+import darkoverload.itzip.user.service.EmailService;
+import darkoverload.itzip.user.service.UserService;
+import darkoverload.itzip.user.service.VerificationService;
+import darkoverload.itzip.user.util.RandomAuthCode;
+import darkoverload.itzip.user.util.ValidationUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,12 +22,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/user")
@@ -32,18 +32,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+    private final TokenService tokenService;
+    private final EmailService emailService;
+    private final VerificationService verificationService;
+
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenizer jwtTokenizer;
-    private final TokenService tokenService;
+    private final ValidationUtil validationUtil;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid UserLoginDto userLoginDto, BindingResult bindingResult, HttpServletResponse httpServletResponse) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
-            List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-
-            Map<String, String> errors = fieldErrors.stream()
-                    .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+            Map<String, String> errors = validationUtil.getBindingError(bindingResult);
 
             return new ResponseEntity(Map.of("errors", errors), HttpStatus.BAD_REQUEST);
         }
@@ -172,5 +173,57 @@ public class UserController {
                 .build();
 
         return new ResponseEntity(responseDto, HttpStatus.OK);
+    }
+
+    @PostMapping("/join")
+    public ResponseEntity join(@RequestBody @Valid UserJoinDto userJoinDto, BindingResult bindingResult) {
+        // 필드 에러 확인
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = validationUtil.getBindingError(bindingResult);
+
+            return new ResponseEntity(Map.of("errors", errors), HttpStatus.BAD_REQUEST);
+        }
+
+        userService.save(userJoinDto);
+        return ResponseEntity.ok("회원가입이 완료되었습니다.");
+    }
+
+    /**
+     * 인증번호 발송 메소드
+     */
+    @PostMapping("/authEmail")
+    public ResponseEntity sendAuthEmail(@RequestBody @Valid EmailSendDto emailSendDto, BindingResult bindingResult) {
+        // 필드 에러 확인
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = validationUtil.getBindingError(bindingResult);
+
+            return new ResponseEntity(Map.of("errors", errors), HttpStatus.BAD_REQUEST);
+        }
+
+        // 랜덤 인증 코드 생성
+        String authCode = RandomAuthCode.generate();
+        // redis에 인증 코드 저장
+        verificationService.saveCode(emailSendDto.getEmail(), authCode);
+        // 메일 발송
+        emailService.sendSimpleMessage(emailSendDto.getEmail(), "test", authCode);
+        return ResponseEntity.ok("인증 메일이 발송되었습니다.");
+    }
+
+    /**
+     * 인증번호 검증 메소드
+     */
+    @GetMapping("/authEmail")
+    public ResponseEntity checkAuthEmail(@RequestBody @Valid EmailCheckDto emailCheckDto, BindingResult bindingResult) {
+        // 필드 에러 확인
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errors = validationUtil.getBindingError(bindingResult);
+
+            return new ResponseEntity(Map.of("errors", errors), HttpStatus.BAD_REQUEST);
+        }
+
+        // redis에 저장된 인증번호와 비교하여 확인
+        boolean isVerified = verificationService.verifyCode(emailCheckDto.getEmail(), emailCheckDto.getAuthCode());
+
+        return ResponseEntity.ok(isVerified ? "인증이 완료되었습니다." : "인증번호를 확인해주세요.");
     }
 }

@@ -95,14 +95,30 @@ public class JwtTokenizer {
         return Long.valueOf((Integer) claims.get("userId"));
     }
 
+    /**
+     * access token 파싱
+     * @param accessToken access token
+     * @return 파싱된 토큰
+     */
     public Claims parseAccessToken(String accessToken) {
         return parseToken(accessToken, accessSecret);
     }
 
+    /**
+     * refresh token 파싱
+     * @param refreshToken refresh token
+     * @return 파싱된 토큰
+     */
     public Claims parseRefreshToken(String refreshToken) {
         return parseToken(refreshToken, refreshSecret);
     }
 
+    /**
+     * token 파싱
+     * @param token access/refresh token
+     * @param secretKey access/refresh 비밀키
+     * @return 파싱된 토큰
+     */
     public Claims parseToken(String token, byte[] secretKey) {
         Claims claims = null;
         try {

@@ -68,6 +68,9 @@ dependencies {
     // Apache Tika core 라이브러리 추가
     implementation 'org.apache.tika:tika-core:1.28.4'
 
+    // Test 코드에 lombok 의존성 추가
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
     // JUnit5 설정 완료
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
@@ -87,6 +90,8 @@ dependencies {
     // validation
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.2'
 
+    // 메일 발송
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
 }
 // QueryDsl 테스트코드 시, QClass 생성
 sourceSets {
