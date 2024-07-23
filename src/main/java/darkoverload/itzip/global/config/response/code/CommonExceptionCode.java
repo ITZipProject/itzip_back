@@ -4,6 +4,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
+/*
+예외 응답 코드 보통 사용하는 예외 응답 코드를 정리해뒀다.
+ */
 @Getter
 @RequiredArgsConstructor
 public enum CommonExceptionCode implements ResponseCode {
