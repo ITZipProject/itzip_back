@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface ImageRepository extends JpaRepository<ImageEntity, Long>, CustomImageRepository {
     Optional<ImageEntity> findByImagePath(String imagePath);
+
 }

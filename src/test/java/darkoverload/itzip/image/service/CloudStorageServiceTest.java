@@ -66,6 +66,7 @@ class CloudStorageServiceTest {
                         .filePath("https://dy1vg9emkijkn.cloudfront.net/temporary/" + image.getImageName())
                         .build()
         );
+
         given(imageService.save(any(Image.class))).willReturn(image);
 
         // when

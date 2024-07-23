@@ -26,6 +26,11 @@ import static darkoverload.itzip.image.domain.ImageConst.TEMPDIR;
 public class ImageController {
     private final CloudStorageService storageService;
 
+    /**
+     * 임시 파일 저장 Controller
+     * @param multipartFiles
+     * @return
+     */
     @PostMapping("/temp")
     public ResponseEntity<Object> tempImageUpload(@RequestParam("files") List<MultipartFile> multipartFiles) {
 
@@ -40,6 +45,11 @@ public class ImageController {
             return ResponseEntity.ok(response);
     }
 
+    /**
+     * 실제 파일 저장 Controller
+     * @param request
+     * @return
+     */
     @PostMapping("")
     public ResponseEntity<Object> imageUpload(@RequestBody ImageUploadRequest request) {
         List<Image> images = new ArrayList<>();
@@ -54,12 +64,22 @@ public class ImageController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * 파일 삭제 Controller
+     * @param request
+     * @return
+     */
     @DeleteMapping("")
     public String fileDelete(@RequestBody ImageDeleteRequest request) {
         request.getImagePaths().forEach(path-> storageService.imageDelete(path, request.getFeatureDir()));
         return "이미지 삭제 성공";
     }
 
+    /**
+     * 파일 전체 공통 응답 값을 내려주기 위한 메서드
+     * @param images
+     * @param result
+     */
     private static void makeImageResponse(List<Image> images, List<ImageResponse> result) {
         for(Image image : images) {
             result.add(ImageResponse.builder()
