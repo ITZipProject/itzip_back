@@ -19,17 +19,6 @@ spring:
       database: ${LOC_MONGO_DATABASE}
       authentication-database: ${LOC_MONGO_AUTH}
       uri: ${LOC_MONGO_URI}
-cloud:
-  aws:
-    credentials:
-      instance-profile: false
-      accessKey: ${LOC_AWS_ACCESS_KEY}
-      secretKey: ${LOC_AWS_SECRET_KEY}
-    s3:
-      bucket: ${LOC_AWS_BUCKET_NAME}
-    region:
-      static: ap-northeast-2
-      auto: false
   mail:
     host: smtp.gmail.com
     port: 587
@@ -42,6 +31,18 @@ cloud:
           timeout: 5000
           starttls:
             enable: true
+cloud:
+  aws:
+    credentials:
+      instance-profile: false
+      accessKey: ${LOC_AWS_ACCESS_KEY}
+      secretKey: ${LOC_AWS_SECRET_KEY}
+    s3:
+      bucket: ${LOC_AWS_BUCKET_NAME}
+    region:
+      static: ap-northeast-2
+      auto: false
+
 file:
   cloudfront-path: ${LOC_FILE_PATH}
 
