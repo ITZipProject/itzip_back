@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+/*
+예외가 발생할시 반환을 가로채서 예외를 형식에 맞게 출력시키는 헨들러
+ */
 @RestControllerAdvice(basePackages = "darkoverload.itzip")
 @Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
