@@ -55,12 +55,8 @@ public class CloudStorageService implements StorageService {
                 throw new RestApiException(ImageExceptionCode.IMAGE_ERROR);
             }
 
-            Image insertData = Image.builder()
-                    .imageName(awsFile.getFilename())
-                    .imagePath(awsFile.getFilePath())
-                    .imageType(awsFile.getFileType())
-                    .imageSize(awsFile.getSize())
-                    .build();
+            Image insertData = Image.awsFrom(awsFile);
+
             // db 실질 저장
             result = imageService.save(insertData);
         } catch (IOException e) {

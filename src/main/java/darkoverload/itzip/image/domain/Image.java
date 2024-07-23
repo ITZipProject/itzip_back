@@ -2,6 +2,7 @@ package darkoverload.itzip.image.domain;
 
 import darkoverload.itzip.image.entity.ImageEntity;
 import darkoverload.itzip.image.util.FileUtil;
+import darkoverload.itzip.infra.bucket.domain.AWSFile;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,6 +24,15 @@ public class Image {
     private String imagePath;
 
     private String featureDir;
+
+    public static Image awsFrom(AWSFile awsFile) {
+        return Image.builder()
+                .imageName(awsFile.getFilename())
+                .imagePath(awsFile.getFilePath())
+                .imageType(awsFile.getFileType())
+                .imageSize(awsFile.getSize())
+                .build();
+    }
 
     public ImageEntity convertToEntity() {
         return ImageEntity.builder()
