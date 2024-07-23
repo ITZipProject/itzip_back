@@ -1,6 +1,7 @@
 package darkoverload.itzip.image.service;
 
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
 import darkoverload.itzip.global.config.response.handler.Util.ExceptionHandlerUtil;
 import darkoverload.itzip.image.code.ImageExceptionCode;
 import darkoverload.itzip.image.domain.Image;
@@ -9,6 +10,7 @@ import darkoverload.itzip.infra.bucket.domain.AWSFile;
 import darkoverload.itzip.infra.bucket.service.AWSService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,49 +28,44 @@ public class CloudStorageService implements StorageService {
 
     @Transactional
     @Override
-    public String temporaryImageUpload(MultipartFile multipartFile, String featureDir) {
-        if(multipartFile.isEmpty()) ExceptionHandlerUtil.handleExceptionInternal(ImageExceptionCode.IMAGE_NOT_FOUND);
+    public Image temporaryImageUpload(MultipartFile multipartFile, String featureDir) {
+        if(multipartFile.isEmpty()) throw new RestApiException(ImageExceptionCode.IMAGE_NOT_FOUND);
 
         InputStream inputStream = null;
-        Image insertData =  null;
+
+        Image result = null;
         try {
-            String fileName = FileUtil.generateFileName(multipartFile.getOriginalFilename());
             inputStream = multipartFile.getInputStream();
             if(!FileUtil.imageExtensionCheck(multipartFile.getInputStream())){
-                ExceptionHandlerUtil.handleExceptionInternal(ImageExceptionCode.IMAGE_FORMAT_ERROR);
+                throw new RestApiException(ImageExceptionCode.IMAGE_FORMAT_ERROR);
             }
 
-            Image originImage = Image.builder()
-                    .imageSize(multipartFile.getSize())
-                    .imageName(fileName)
-                    .imageType(multipartFile.getContentType())
-                    .featureDir(featureDir)
-                    .build();
-
+            Image originImage = Image.createImage(multipartFile, featureDir);
             AWSFile awsFile = null;
             try {
                 awsFile = awsService.upload(originImage, inputStream);
             } catch (IOException e) {
-                ExceptionHandlerUtil.handleExceptionInternal(ImageExceptionCode.IMAGE_ERROR);
+                throw new RestApiException(ImageExceptionCode.IMAGE_ERROR);
             }
-            insertData = Image.builder()
+
+            Image insertData = Image.builder()
                     .imageName(awsFile.getFilename())
                     .imagePath(awsFile.getFilePath())
                     .imageType(awsFile.getFileType())
                     .imageSize(awsFile.getSize())
                     .build();
 
-            imageService.save(insertData);
+            result = imageService.save(insertData);
         } catch (IOException e) {
-            ExceptionHandlerUtil.handleExceptionInternal(ImageExceptionCode.IMAGE_ERROR);
+            throw new RestApiException(ImageExceptionCode.IMAGE_ERROR);
         }
 
 
-        return insertData.getImagePath();
+        return result;
     }
 
     @Transactional
-    public String imageUpload(String imagePath, String featureDir){
+    public Image imageUpload(String imagePath, String featureDir){
 
         Image findImage= imageService.findByImagePath(imagePath);
 
@@ -76,7 +73,12 @@ public class CloudStorageService implements StorageService {
 
         imageService.imagePathUpdate(moveImagePath, findImage.getImageSeq());
 
-        return moveImagePath;
+        Image result = Image.builder()
+                .imageSeq(findImage.getImageSeq())
+                .imagePath(moveImagePath)
+                .build();
+
+        return result;
     }
 
 
@@ -87,6 +89,5 @@ public class CloudStorageService implements StorageService {
         imageService.delete(findImage.getImageSeq());
 
         awsService.delete(findImage.getImageName(), featureDir);
-
     }
 }

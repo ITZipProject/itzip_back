@@ -41,7 +41,7 @@ public class FileUtil {
         String mimeType = tika.detect(stream);
         log.info("MIME TYPE = {}", mimeType);
 
-        return mimeType.startsWith("image");
+        return mimeType.startsWith("image/png") || mimeType.startsWith("image/jpeg") || mimeType.startsWith("image/jpg");
     }
 
     public static String getMimeType(InputStream stream) throws IOException {

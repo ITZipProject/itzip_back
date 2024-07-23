@@ -4,7 +4,7 @@ import darkoverload.itzip.image.domain.Image;
 
 public interface ImageService {
 
-    void save(Image image);
+    Image save(Image image);
 
     Image findByImagePath(String imagePath);
 

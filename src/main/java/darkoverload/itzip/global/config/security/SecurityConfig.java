@@ -30,6 +30,8 @@ public class SecurityConfig {
             "/test/**", // 테스트 페이지
             "/user/refreshToken", // 토큰 재발급 페이지
             "/user/authEmail", // 인증 메일 페이지
+            "/resources/image/**",
+            "/image/**"
     };
 
     // 비로그인 유저 허용 페이지

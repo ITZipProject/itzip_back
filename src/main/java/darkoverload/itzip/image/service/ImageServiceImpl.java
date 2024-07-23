@@ -18,8 +18,8 @@ public class ImageServiceImpl implements ImageService{
     private final ImageRepository repository;
 
     @Override
-    public void save(Image image) {
-       repository.save(image.convertToEntity());
+    public Image save(Image image) {
+       return repository.save(image.convertToEntity()).convertToDomain();
     }
 
     @Override

@@ -6,9 +6,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.awt.*;
 
 public interface StorageService {
-    String temporaryImageUpload(MultipartFile multipartFile, String featureDir);
+    Image temporaryImageUpload(MultipartFile multipartFile, String featureDir);
 
-    String imageUpload(String imagePath, String featureDir);
+    Image imageUpload(String imagePath, String featureDir);
 
     void imageDelete(String imagePath, String featureDir);
 }

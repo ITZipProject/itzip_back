@@ -1,13 +1,15 @@
 package darkoverload.itzip.image.domain;
 
 import darkoverload.itzip.image.entity.ImageEntity;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.ToString;
+import darkoverload.itzip.image.util.FileUtil;
+import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @ToString
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Image {
 
     private Long imageSeq;
@@ -31,4 +33,14 @@ public class Image {
                 .imageSize(this.imageSize)
                 .build();
     }
+
+    public static Image createImage(MultipartFile file, String featureDir){
+        return Image.builder()
+                .imageSize(file.getSize())
+                .imageName(FileUtil.generateFileName(file.getOriginalFilename()))
+                .imageType(file.getContentType())
+                .featureDir(featureDir)
+                .build();
+    }
+
 }
