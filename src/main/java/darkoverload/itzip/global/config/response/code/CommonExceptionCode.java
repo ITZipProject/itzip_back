@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum CommonExceptionCode implements ResponseCode {
+
     /**
      * 4** client
      */

@@ -43,4 +43,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         log.error("UnsupportedOperationException: {}", e.getMessage(), e);
         return ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.UNSUPPORTED_MEDIA_TYPE, e.getMessage());
     }
+
+
 }

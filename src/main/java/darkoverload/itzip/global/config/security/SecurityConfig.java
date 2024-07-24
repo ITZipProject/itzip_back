@@ -35,7 +35,9 @@ public class SecurityConfig {
             "/swagger-resources/**", // Swagger resources
             "/swagger-ui.html", // Swagger HTML
             "/webjars/**",// Webjars for Swagger
-            "/swagger/**"// Swagger try it out
+            "/swagger/**",// Swagger try it out
+            "/resources/image/**", // 이미지 리소스
+            "/image/**", // 이미지 url 임시 허용
     };
 
     // 비로그인 유저 허용 페이지

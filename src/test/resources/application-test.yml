@@ -1,10 +1,15 @@
 spring:
+  jpa:
+    show-sql: true
+    database: h2
+    hibernate:
+      ddl-auto: create-drop
+      database-platform: org.hibernate.dialect.H2Dialect
   datasource:
-    url: ${LOC_POSTGRESQL_URL}
-    username: ${LOC_POSTGRESQL_USERNAME}
-    password: ${LOC_POSTGRESQL_PASSWORD}
-    driver-class-name: org.postgresql.Driver
-
+    url: ${TEST_DB_URL}
+    username: ${TEST_DB_USERNAME}
+    password: ${TEST_DB_PASSWORD}
+    driver-class-name: org.h2.Driver
   data:
     redis:
       host: ${LOC_REDIS_HOST}
@@ -19,18 +24,6 @@ spring:
       database: ${LOC_MONGO_DATABASE}
       authentication-database: ${LOC_MONGO_AUTH}
       uri: ${LOC_MONGO_URI}
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: ${LOC_GAMIL_USERNAME}
-    password: ${LOC_GAMIL_PASSWORD}
-    properties:
-      mail:
-        smtp:
-          auth: true
-          timeout: 5000
-          starttls:
-            enable: true
 cloud:
   aws:
     credentials:

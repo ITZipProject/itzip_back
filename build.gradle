@@ -54,9 +54,22 @@ dependencies {
     // 롬복 관련 의존성 주입
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
     // Swagger ui
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
+
+    // aws-bucket
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+    testImplementation 'io.findify:s3mock_2.12:0.2.4'
+
+    // 파일 업로드
+    implementation 'commons-io:commons-io:2.14.0'
+    implementation 'commons-fileupload:commons-fileupload:1.5'
+
+    // Apache Tika core 라이브러리 추가
+    implementation 'org.apache.tika:tika-core:1.28.4'
 
     // Test 코드에 lombok 의존성 추가
     testCompileOnly 'org.projectlombok:lombok'
@@ -66,6 +79,9 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
 
+    // mockito
+    testImplementation 'org.mockito:mockito-core:4.0.0'
+    testImplementation 'org.mockito:mockito-junit-jupiter:4.0.0'
     // jwt
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
@@ -76,6 +92,7 @@ dependencies {
 
     // validation
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.2'
+    testRuntimeOnly 'com.h2database:h2'
 
     // 메일 발송
     implementation 'org.springframework.boot:spring-boot-starter-mail'

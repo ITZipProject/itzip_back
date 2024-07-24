@@ -1,5 +1,4 @@
 # 현재 설정 값은 local만 있음
-
 spring:
   datasource:
     url: ${LOC_POSTGRESQL_URL}
@@ -21,3 +20,19 @@ spring:
       database: ${LOC_MONGO_DATABASE}
       authentication-database: ${LOC_MONGO_AUTH}
       uri: ${LOC_MONGO_URI}
+
+cloud:
+  aws:
+    credentials:
+      instance-profile: false
+      accessKey: ${LOC_AWS_ACCESS_KEY}
+      secretKey: ${LOC_AWS_SECRET_KEY}
+    s3:
+      bucket: ${LOC_AWS_BUCKET_NAME}
+    region:
+      auto: false
+      static: ap-northeast-2
+    stack: false
+
+file:
+  cloudfront-path: ${LOC_FILE_PATH}
