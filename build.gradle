@@ -96,6 +96,10 @@ dependencies {
 
     // 메일 발송
     implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    // 이미지 사이즈 조정 라이브러리
+    implementation 'com.github.downgoon:marvin:1.5.5'
+    implementation 'com.github.downgoon:MarvinPlugins:1.5.5'
 }
 // QueryDsl 테스트코드 시, QClass 생성
 sourceSets {
