@@ -10,6 +10,7 @@ import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.media.Schema;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import java.lang.reflect.Field;
 import java.util.Optional;
 
+@Slf4j
 @Configuration
 public class SwaggerConfig {
 
@@ -79,7 +81,6 @@ public class SwaggerConfig {
             content = new Content();
             response.setContent(content);
         }
-
         MediaType mediaType = content.getOrDefault("application/json", new MediaType());
         mediaType.setSchema(createExceptionSchema(exceptionCode));
         content.addMediaType("application/json", mediaType);

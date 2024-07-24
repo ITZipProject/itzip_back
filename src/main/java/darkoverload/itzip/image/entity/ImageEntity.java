@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 @EntityListeners(AuditingEntityListener.class)
 @AllArgsConstructor
 @NoArgsConstructor
-public class ImageEntity {
+public class ImageEntity extends AuditingEntityListener{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name="image_seq")
@@ -33,14 +33,6 @@ public class ImageEntity {
 
     @Column(name="image_size")
     private Long imageSize;
-
-    @CreatedDate
-    @Column(name="create_date")
-    private LocalDateTime createDate;
-
-    @LastModifiedDate
-    @Column(name="update_date")
-    private LocalDateTime updateDate;
 
     public Image convertToDomain(){
         return Image.builder()

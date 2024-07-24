@@ -1,7 +1,7 @@
 package darkoverload.itzip.image.service;
 
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
-import darkoverload.itzip.image.code.ImageExceptionCode;
 import darkoverload.itzip.image.domain.Image;
 import darkoverload.itzip.image.util.FileUtil;
 import darkoverload.itzip.infra.bucket.domain.AWSFile;
@@ -33,7 +33,7 @@ public class CloudStorageService implements StorageService {
     @Transactional
     @Override
     public Image temporaryImageUpload(MultipartFile multipartFile, String featureDir) {
-        if(multipartFile.isEmpty()) throw new RestApiException(ImageExceptionCode.IMAGE_NOT_FOUND);
+        if(multipartFile.isEmpty()) throw new RestApiException(CommonExceptionCode.IMAGE_NOT_FOUND);
 
         InputStream inputStream = null;
 
@@ -43,7 +43,7 @@ public class CloudStorageService implements StorageService {
 
             // 이미지 확장자 체크 git, jpeg, jpg, png 허용
             if(!FileUtil.imageExtensionCheck(multipartFile.getInputStream())){
-                throw new RestApiException(ImageExceptionCode.IMAGE_FORMAT_ERROR);
+                throw new RestApiException(CommonExceptionCode.IMAGE_FORMAT_ERROR);
             }
 
             Image originImage = Image.createImage(multipartFile, featureDir);
@@ -52,7 +52,7 @@ public class CloudStorageService implements StorageService {
                 // aws 실질적으로 upload
                 awsFile = awsService.upload(originImage, inputStream);
             } catch (IOException e) {
-                throw new RestApiException(ImageExceptionCode.IMAGE_ERROR);
+                throw new RestApiException(CommonExceptionCode.IMAGE_ERROR);
             }
 
             Image insertData = Image.awsFrom(awsFile);
@@ -60,7 +60,7 @@ public class CloudStorageService implements StorageService {
             // db 실질 저장
             result = imageService.save(insertData);
         } catch (IOException e) {
-            throw new RestApiException(ImageExceptionCode.IMAGE_ERROR);
+            throw new RestApiException(CommonExceptionCode.IMAGE_ERROR);
         }
 
 
