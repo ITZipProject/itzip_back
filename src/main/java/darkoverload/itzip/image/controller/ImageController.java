@@ -1,13 +1,20 @@
 package darkoverload.itzip.image.controller;
 
 
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.code.CommonResponseCode;
+import darkoverload.itzip.global.config.swagger.ExceptionCodeAnnotations;
+import darkoverload.itzip.global.config.swagger.ResponseCodeAnnotation;
 import darkoverload.itzip.image.controller.request.ImageDeleteRequest;
 import darkoverload.itzip.image.controller.request.ImageUploadRequest;
 import darkoverload.itzip.image.controller.response.ImageResponse;
 import darkoverload.itzip.image.domain.Image;
 import darkoverload.itzip.image.service.CloudStorageService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import static darkoverload.itzip.image.domain.ImageConst.TEMPDIR;
+
 
 @Slf4j
 @RestController
@@ -31,7 +39,9 @@ public class ImageController {
      * @param multipartFiles
      * @return
      */
-    @PostMapping("/temp")
+    @ResponseCodeAnnotation(CommonResponseCode.CREATED)
+    @ExceptionCodeAnnotations(CommonExceptionCode.BAD_REQUEST)
+    @PostMapping(value = "/temp", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Object> tempImageUpload(@RequestParam("files") List<MultipartFile> multipartFiles) {
 
             List<Image> images = new ArrayList<>();
@@ -50,6 +60,8 @@ public class ImageController {
      * @param request
      * @return
      */
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations(CommonExceptionCode.BAD_REQUEST)
     @PostMapping("")
     public ResponseEntity<Object> imageUpload(@RequestBody ImageUploadRequest request) {
         List<Image> images = new ArrayList<>();
@@ -69,6 +81,8 @@ public class ImageController {
      * @param request
      * @return
      */
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations(CommonExceptionCode.BAD_REQUEST)
     @DeleteMapping("")
     public String fileDelete(@RequestBody ImageDeleteRequest request) {
         request.getImagePaths().forEach(path-> storageService.imageDelete(path, request.getFeatureDir()));

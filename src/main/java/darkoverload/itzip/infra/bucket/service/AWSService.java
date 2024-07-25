@@ -2,14 +2,13 @@ package darkoverload.itzip.infra.bucket.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.handler.Util.ExceptionHandlerUtil;
-import darkoverload.itzip.image.code.ImageExceptionCode;
 import darkoverload.itzip.image.domain.Image;
 import darkoverload.itzip.infra.bucket.domain.AWSFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -95,7 +94,7 @@ public class AWSService {
         if(isObjectExist) {
             amazonS3.deleteObject(new DeleteObjectRequest(bucketDir, keyName));
         } else {
-            ExceptionHandlerUtil.handleExceptionInternal(ImageExceptionCode.IMAGE_NOT_FOUND);
+            ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.IMAGE_NOT_FOUND);
         }
 
     }
@@ -115,7 +114,7 @@ public class AWSService {
 
         // 존재 여부 확인
         boolean isObjectExist = amazonS3.doesObjectExist(oldSource, image.getImageName());
-        if(!isObjectExist) ExceptionHandlerUtil.handleExceptionInternal(ImageExceptionCode.IMAGE_NOT_FOUND);
+        if(!isObjectExist) ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.IMAGE_NOT_FOUND);
 
         // 버킷 파일 이동
         amazonS3.copyObject(oldSource, keyName, newSource, keyName);
@@ -133,7 +132,7 @@ public class AWSService {
      */
     private String makeOldResource(Image image) {
         if(!image.getImagePath().contains("temporary"))
-            ExceptionHandlerUtil.handleExceptionInternal(ImageExceptionCode.IMAGE_NOT_TEMP);
+            ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.IMAGE_NOT_TEMP);
 
         int index = image.getImagePath().lastIndexOf("temporary");
         String tempPath = image.getImagePath().substring(index, index+9);
