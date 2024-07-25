@@ -1,4 +1,4 @@
-insert into images(image_seq, image_name, image_path, image_size, image_type, create_date, update_date)
+insert into images(image_seq, image_name, image_path, image_size, image_type, create_date, modify_date)
 values (1,
         'e44444qee-f337-487a-8c9e-100ba6d046cf.png',
         'https://dy1vg9emkijkn.cloudfront.net/temporary/e44444qee-f337-487a-8c9e-100ba6d046cf.png',
