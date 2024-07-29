@@ -3,7 +3,11 @@ package darkoverload.itzip.user.controller;
 import darkoverload.itzip.jwt.entity.Token;
 import darkoverload.itzip.jwt.service.TokenService;
 import darkoverload.itzip.jwt.util.JwtTokenizer;
-import darkoverload.itzip.user.dto.*;
+import darkoverload.itzip.user.controller.request.EmailCheckRequest;
+import darkoverload.itzip.user.controller.request.EmailSendRequest;
+import darkoverload.itzip.user.controller.request.UserJoinRequest;
+import darkoverload.itzip.user.controller.request.UserLoginRequest;
+import darkoverload.itzip.user.controller.response.UserLoginResponse;
 import darkoverload.itzip.user.entity.Authority;
 import darkoverload.itzip.user.entity.User;
 import darkoverload.itzip.user.service.EmailService;
@@ -41,7 +45,7 @@ public class UserController {
     private final ValidationUtil validationUtil;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid UserLoginDto userLoginDto, BindingResult bindingResult, HttpServletResponse httpServletResponse) {
+    public ResponseEntity login(@RequestBody @Valid UserLoginRequest userLoginDto, BindingResult bindingResult, HttpServletResponse httpServletResponse) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = validationUtil.getBindingError(bindingResult);
@@ -87,7 +91,7 @@ public class UserController {
         httpServletResponse.addCookie(refreshTokenCookie);
 
         // 응답 값
-        UserLoginResponseDto loginResponseDto = UserLoginResponseDto.builder()
+        UserLoginResponse loginResponseDto = UserLoginResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .userId(user.getId())
@@ -165,7 +169,7 @@ public class UserController {
         tokenService.updateByRefreshToken(refreshToken, accessToken);
 
         // 응답 값
-        UserLoginResponseDto responseDto = UserLoginResponseDto.builder()
+        UserLoginResponse responseDto = UserLoginResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .nickname(user.getNickname())
@@ -176,7 +180,7 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public ResponseEntity join(@RequestBody @Valid UserJoinDto userJoinDto, BindingResult bindingResult) {
+    public ResponseEntity join(@RequestBody @Valid UserJoinRequest userJoinDto, BindingResult bindingResult) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = validationUtil.getBindingError(bindingResult);
@@ -192,7 +196,7 @@ public class UserController {
      * 인증번호 발송 메소드
      */
     @PostMapping("/authEmail")
-    public ResponseEntity sendAuthEmail(@RequestBody @Valid EmailSendDto emailSendDto, BindingResult bindingResult) {
+    public ResponseEntity sendAuthEmail(@RequestBody @Valid EmailSendRequest emailSendDto, BindingResult bindingResult) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = validationUtil.getBindingError(bindingResult);
@@ -213,7 +217,7 @@ public class UserController {
      * 인증번호 검증 메소드
      */
     @GetMapping("/authEmail")
-    public ResponseEntity checkAuthEmail(@RequestBody @Valid EmailCheckDto emailCheckDto, BindingResult bindingResult) {
+    public ResponseEntity checkAuthEmail(@RequestBody @Valid EmailCheckRequest emailCheckDto, BindingResult bindingResult) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
             Map<String, String> errors = validationUtil.getBindingError(bindingResult);

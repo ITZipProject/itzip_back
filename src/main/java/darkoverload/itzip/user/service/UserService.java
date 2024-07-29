@@ -1,7 +1,7 @@
 package darkoverload.itzip.user.service;
 
 import darkoverload.itzip.global.config.response.exception.RestApiException;
-import darkoverload.itzip.user.dto.UserJoinDto;
+import darkoverload.itzip.user.controller.request.UserJoinRequest;
 import darkoverload.itzip.user.entity.User;
 import darkoverload.itzip.user.exception.UserExceptionCode;
 import darkoverload.itzip.user.repository.UserRepository;
@@ -21,7 +21,7 @@ public class UserService {
     private final VerificationService verificationService;
 
     @Transactional
-    public void save(UserJoinDto userJoinDto) {
+    public void save(UserJoinRequest userJoinDto) {
         // 이메일 중복 체크
         if (findByEmail(userJoinDto.getEmail()) != null) {
             throw new RestApiException(UserExceptionCode.EXIST_EMAIL_ERROR);

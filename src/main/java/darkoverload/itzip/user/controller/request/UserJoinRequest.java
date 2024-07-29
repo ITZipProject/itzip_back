@@ -1,4 +1,4 @@
-package darkoverload.itzip.user.dto;
+package darkoverload.itzip.user.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import darkoverload.itzip.user.entity.Authority;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor
 @AllArgsConstructor
 @Slf4j
-public class UserJoinDto {
+public class UserJoinRequest {
     @NotBlank(message = "이메일을 입력해주세요.")
     @Pattern(regexp = "^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}$",
             message = "이메일 형식으로 입력해주세요.")
