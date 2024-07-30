@@ -1,6 +1,7 @@
 package darkoverload.itzip.jwt.service;
 
 import darkoverload.itzip.global.config.response.exception.RestApiException;
+import darkoverload.itzip.jwt.domain.Token;
 import darkoverload.itzip.jwt.entity.TokenEntity;
 import darkoverload.itzip.jwt.exception.TokenExceptionCode;
 import darkoverload.itzip.jwt.repository.TokenRepository;
@@ -14,19 +15,22 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class TokenServiceImpl implements TokenService {
     private final TokenRepository tokenRepository;
+
     /**
      * 토큰 사용자의 토큰이 저장되어 있을 경우 update, 없을 경우 create
-     * @param tokenEntity Token 데이터
+     *
+     * @param token Token domain
      */
     @Transactional
-    public void saveOrUpdate(TokenEntity tokenEntity) {
-        TokenEntity oldTokenEntity = tokenRepository.findByUserId(tokenEntity.getUser().getId());
-        if (oldTokenEntity != null) {
-            oldTokenEntity.update(tokenEntity.getAccessToken(), tokenEntity.getRefreshToken(), tokenEntity.getGrantType());
+    public void saveOrUpdate(Token token) {
+        Token oldToken = tokenRepository.findByUserId(token.getUser().getId()).convertToDomain();
 
-            tokenRepository.save(oldTokenEntity);
+        if (oldToken == null) {
+            tokenRepository.save(token.convertToEntity());
         } else {
-            tokenRepository.save(tokenEntity);
+            oldToken.update(token.getAccessToken(), token.getRefreshToken(), token.getGrantType());
+
+            tokenRepository.save(oldToken.convertToEntity());
         }
     }
 
@@ -70,10 +74,10 @@ public class TokenServiceImpl implements TokenService {
      */
     @Transactional
     public void updateByRefreshToken(String refreshToken, String accessToken) {
-        TokenEntity tokenEntity = tokenRepository.findByRefreshToken(refreshToken)
-                .orElseThrow(() -> new RestApiException(TokenExceptionCode.JWT_UNKNOWN_ERROR));
+        Token token = tokenRepository.findByRefreshToken(refreshToken)
+                .orElseThrow(() -> new RestApiException(TokenExceptionCode.JWT_UNKNOWN_ERROR)).convertToDomain();
 
-        tokenEntity.setAccessToken(accessToken);
-        tokenRepository.save(tokenEntity);
+        token.setAccessToken(accessToken);
+        tokenRepository.save(token.convertToEntity());
     }
 }

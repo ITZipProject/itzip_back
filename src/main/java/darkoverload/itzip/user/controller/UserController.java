@@ -1,6 +1,6 @@
 package darkoverload.itzip.user.controller;
 
-import darkoverload.itzip.jwt.entity.Token;
+import darkoverload.itzip.jwt.domain.Token;
 import darkoverload.itzip.jwt.service.TokenService;
 import darkoverload.itzip.jwt.util.JwtTokenizer;
 import darkoverload.itzip.user.controller.request.EmailCheckRequest;

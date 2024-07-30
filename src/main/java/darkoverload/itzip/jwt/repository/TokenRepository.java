@@ -1,12 +1,12 @@
 package darkoverload.itzip.jwt.repository;
 
-import darkoverload.itzip.jwt.entity.Token;
+import darkoverload.itzip.jwt.entity.TokenEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
-public interface TokenRepository extends JpaRepository<Token, Long> {
-    Token findByUserId(Long userId);
-    Optional<Token> findByAccessToken(String accessToken);
-    Optional<Token> findByRefreshToken(String refreshToken);
+public interface TokenRepository extends JpaRepository<TokenEntity, Long> {
+    TokenEntity findByUserId(Long userId);
+    Optional<TokenEntity> findByAccessToken(String accessToken);
+    Optional<TokenEntity> findByRefreshToken(String refreshToken);
 }

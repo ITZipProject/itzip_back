@@ -1,11 +1,12 @@
 package darkoverload.itzip.jwt.service;
 
+import darkoverload.itzip.jwt.domain.Token;
 import darkoverload.itzip.jwt.entity.TokenEntity;
 
 import java.util.Optional;
 
 public interface TokenService {
-    void saveOrUpdate(TokenEntity tokenEntity);
+    void saveOrUpdate(Token token);
 
     void deleteByAccessToken(String token);
 
