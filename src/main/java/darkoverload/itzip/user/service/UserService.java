@@ -1,7 +1,7 @@
 package darkoverload.itzip.user.service;
 
 import darkoverload.itzip.user.controller.request.UserJoinRequest;
-import darkoverload.itzip.user.entity.User;
+import darkoverload.itzip.user.domain.User;
 
 import java.util.Optional;
 

@@ -2,7 +2,8 @@ package darkoverload.itzip.user.service;
 
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import darkoverload.itzip.user.controller.request.UserJoinRequest;
-import darkoverload.itzip.user.entity.User;
+import darkoverload.itzip.user.domain.User;
+import darkoverload.itzip.user.entity.UserEntity;
 import darkoverload.itzip.user.exception.UserExceptionCode;
 import darkoverload.itzip.user.repository.UserRepository;
 import darkoverload.itzip.user.util.RandomNickname;
@@ -28,11 +29,11 @@ public class UserServiceImpl implements UserService {
         }
 
         // 이메일 인증번호 체크
-        if (!verificationService.verifyCode(userJoinDto.getEmail(), userJoinDto.getAuthCode())){
+        if (!verificationService.verifyCode(userJoinDto.getEmail(), userJoinDto.getAuthCode())) {
             throw new RestApiException(UserExceptionCode.NOT_MATCH_AUTH_CODE);
         }
 
-        User user = userJoinDto.toEntity();
+        User user = userJoinDto.toDomain();
 
         // 비밀번호 암호화
         String encryptedPassword = encryptPassword(userJoinDto.getPassword());
@@ -40,11 +41,12 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encryptedPassword);
         user.setNickname(getUniqueNickname());
 
-        userRepository.save(user);
+        userRepository.save(user.coverToEntity());
     }
 
     /**
      * 중복되지 않은 랜덤 닉네임 생성
+     *
      * @return unique random nickname
      */
     public String getUniqueNickname() {
@@ -58,17 +60,17 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     public User findByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email).coverToDomain();
     }
 
     @Transactional(readOnly = true)
     public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+        return userRepository.findById(id).map(UserEntity::coverToDomain);
     }
 
     @Transactional(readOnly = true)
     public Optional<User> findByNickname(String nickname) {
-        return userRepository.findByNickname(nickname);
+        return userRepository.findByNickname(nickname).map(UserEntity::coverToDomain);
     }
 
     /**

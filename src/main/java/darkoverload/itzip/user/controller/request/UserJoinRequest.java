@@ -1,8 +1,8 @@
 package darkoverload.itzip.user.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import darkoverload.itzip.user.domain.User;
 import darkoverload.itzip.user.entity.Authority;
-import darkoverload.itzip.user.entity.User;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -45,9 +45,9 @@ public class UserJoinRequest {
     /**
      * entity 변환
      *
-     * @return User Entity
+     * @return User Domain
      */
-    public User toEntity() {
+    public User toDomain() {
         return User.builder()
                 .email(this.email)
                 .password(this.password)

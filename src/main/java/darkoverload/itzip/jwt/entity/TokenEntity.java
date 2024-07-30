@@ -2,7 +2,7 @@ package darkoverload.itzip.jwt.entity;
 
 import darkoverload.itzip.global.entity.AuditingFields;
 import darkoverload.itzip.jwt.domain.Token;
-import darkoverload.itzip.user.entity.User;
+import darkoverload.itzip.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,7 +19,7 @@ public class TokenEntity extends AuditingFields {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity userEntity;
 
     @Setter
     @Column(nullable = false, length = 300)
@@ -34,7 +34,7 @@ public class TokenEntity extends AuditingFields {
     public Token convertToDomain() {
         return Token.builder()
                 .id(this.id)
-                .user(this.user)
+                .user(this.userEntity.coverToDomain())
                 .accessToken(this.accessToken)
                 .refreshToken(this.refreshToken)
                 .grantType(this.grantType)

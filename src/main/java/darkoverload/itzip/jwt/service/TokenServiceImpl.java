@@ -23,7 +23,7 @@ public class TokenServiceImpl implements TokenService {
      */
     @Transactional
     public void saveOrUpdate(Token token) {
-        Token oldToken = tokenRepository.findByUserId(token.getUser().getId()).convertToDomain();
+        Token oldToken = tokenRepository.findByUserEntityId(token.getUser().getId()).convertToDomain();
 
         if (oldToken == null) {
             tokenRepository.save(token.convertToEntity());

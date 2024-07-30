@@ -1,7 +1,7 @@
 package darkoverload.itzip.jwt.domain;
 
 import darkoverload.itzip.jwt.entity.TokenEntity;
-import darkoverload.itzip.user.entity.User;
+import darkoverload.itzip.user.domain.User;
 import lombok.*;
 
 @Getter
@@ -34,7 +34,7 @@ public class Token {
     public TokenEntity convertToEntity() {
         return TokenEntity.builder()
                 .id(this.id)
-                .user(this.user)
+                .userEntity(this.user.coverToEntity())
                 .accessToken(this.accessToken)
                 .refreshToken(this.refreshToken)
                 .grantType(this.grantType)
