@@ -1,0 +1,155 @@
+[{
+  "_id": "1a2b3c4d5e6f7g8h9i0j",
+  "question_text": "컴퓨터의 중앙처리장치(CPU)가 주로 담당하는 역할은 무엇인가요?",
+  "difficulty": 2,
+  "category": "컴퓨터 과학",
+  "answer": 2,
+  "create_date": "2024-07-25T00:00:00.000+00:00",
+  "modify_date": "2024-07-25T00:00:00.000+00:00",
+  "accepted_user_count": 8,
+  "tried_user_count": 30,
+  "points": 5,
+  "create_user_id": "1234567890123456789",
+  "choices": [
+    {
+      "id": 1,
+      "choice_text": "데이터 저장"
+    },
+    {
+      "id": 2,
+      "choice_text": "명령어 실행"
+    },
+    {
+      "id": 3,
+      "choice_text": "네트워크 연결"
+    },
+    {
+      "id": 4,
+      "choice_text": "입출력 관리"
+    }
+  ]
+},
+{
+  "_id": "2b3c4d5e6f7g8h9i0j1a",
+  "question_text": "인터넷 프로토콜(IP) 주소는 몇 비트로 구성되어 있나요?",
+  "difficulty": 3,
+  "category": "네트워크",
+  "answer": 4,
+  "create_date": "2024-07-25T00:00:00.000+00:00",
+  "modify_date": "2024-07-25T00:00:00.000+00:00",
+  "accepted_user_count": 12,
+  "tried_user_count": 40,
+  "points": 10,
+  "create_user_id": "2345678901234567890",
+  "choices": [
+    {
+      "id": 1,
+      "choice_text": "16비트"
+    },
+    {
+      "id": 2,
+      "choice_text": "32비트"
+    },
+    {
+      "id": 3,
+      "choice_text": "48비트"
+    },
+    {
+      "id": 4,
+      "choice_text": "64비트"
+    }
+  ]
+},
+{
+  "_id": "3c4d5e6f7g8h9i0j1a2b",
+  "question_text": "객체지향 프로그래밍(OOP)의 4대 원칙에 포함되지 않는 것은 무엇인가요?",
+  "difficulty": 3,
+  "category": "프로그래밍",
+  "answer": 3,
+  "create_date": "2024-07-25T00:00:00.000+00:00",
+  "modify_date": "2024-07-25T00:00:00.000+00:00",
+  "accepted_user_count": 15,
+  "tried_user_count": 45,
+  "points": 10,
+  "create_user_id": "3456789012345678901",
+  "choices": [
+    {
+      "id": 1,
+      "choice_text": "캡슐화"
+    },
+    {
+      "id": 2,
+      "choice_text": "상속"
+    },
+    {
+      "id": 3,
+      "choice_text": "동기화"
+    },
+    {
+      "id": 4,
+      "choice_text": "다형성"
+    }
+  ]
+},
+{
+  "_id": "4d5e6f7g8h9i0j1a2b3c",
+  "question_text": "소프트웨어 개발 생명주기(SDLC)의 단계 중 첫 번째 단계는 무엇인가요?",
+  "difficulty": 2,
+  "category": "소프트웨어 공학",
+  "answer": 1,
+  "create_date": "2024-07-25T00:00:00.000+00:00",
+  "modify_date": "2024-07-25T00:00:00.000+00:00",
+  "accepted_user_count": 10,
+  "tried_user_count": 35,
+  "points": 5,
+  "create_user_id": "4567890123456789012",
+  "choices": [
+    {
+      "id": 1,
+      "choice_text": "요구사항 분석"
+    },
+    {
+      "id": 2,
+      "choice_text": "설계"
+    },
+    {
+      "id": 3,
+      "choice_text": "구현"
+    },
+    {
+      "id": 4,
+      "choice_text": "테스트"
+    }
+  ]
+},
+{
+  "_id": "5e6f7g8h9i0j1a2b3c4d",
+  "question_text": "다음 중 데이터베이스에서 사용되는 SQL 언어의 종류가 아닌 것은?",
+  "difficulty": 3,
+  "category": "데이터베이스",
+  "answer": 3,
+  "create_date": "2024-07-25T00:00:00.000+00:00",
+  "modify_date": "2024-07-25T00:00:00.000+00:00",
+  "accepted_user_count": 9,
+  "tried_user_count": 28,
+  "points": 10,
+  "create_user_id": "5678901234567890123",
+  "choices": [
+    {
+      "id": 1,
+      "choice_text": "DDL (데이터 정의 언어)"
+    },
+    {
+      "id": 2,
+      "choice_text": "DML (데이터 조작 언어)"
+    },
+    {
+      "id": 3,
+      "choice_text": "DQL (데이터 질의 언어)"
+    },
+    {
+      "id": 4,
+      "choice_text": "DCL (데이터 제어 언어)"
+    }
+  ]
+}]
