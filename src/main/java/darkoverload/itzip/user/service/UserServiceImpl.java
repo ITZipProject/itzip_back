@@ -1,10 +1,10 @@
 package darkoverload.itzip.user.service;
 
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import darkoverload.itzip.user.controller.request.UserJoinRequest;
 import darkoverload.itzip.user.domain.User;
 import darkoverload.itzip.user.entity.UserEntity;
-import darkoverload.itzip.user.exception.UserExceptionCode;
 import darkoverload.itzip.user.repository.UserRepository;
 import darkoverload.itzip.user.util.RandomNickname;
 import lombok.AllArgsConstructor;
@@ -25,12 +25,12 @@ public class UserServiceImpl implements UserService {
     public void save(UserJoinRequest userJoinDto) {
         // 이메일 중복 체크
         if (findByEmail(userJoinDto.getEmail()).isPresent()) {
-            throw new RestApiException(UserExceptionCode.EXIST_EMAIL_ERROR);
+            throw new RestApiException(CommonExceptionCode.EXIST_EMAIL_ERROR);
         }
 
         // 이메일 인증번호 체크
         if (!verificationService.verifyCode(userJoinDto.getEmail(), userJoinDto.getAuthCode())) {
-            throw new RestApiException(UserExceptionCode.NOT_MATCH_AUTH_CODE);
+            throw new RestApiException(CommonExceptionCode.NOT_MATCH_AUTH_CODE);
         }
 
         User user = userJoinDto.toDomain();

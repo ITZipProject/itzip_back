@@ -1,7 +1,7 @@
 package darkoverload.itzip.jwt.util;
 
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
-import darkoverload.itzip.jwt.exception.TokenExceptionCode;
 import darkoverload.itzip.user.entity.Authority;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -128,7 +128,7 @@ public class JwtTokenizer {
                     .parseClaimsJws(token)
                     .getBody();
         } catch (SignatureException e) { // 토큰 유효성 체크 실패 시
-            throw new RestApiException(TokenExceptionCode.JWT_INVALID_ERROR);
+            throw new RestApiException(CommonExceptionCode.JWT_INVALID_ERROR);
         }
 
         return claims;
