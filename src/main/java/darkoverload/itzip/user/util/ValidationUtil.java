@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * BindingResult 필드 오류 메시지 매핑 클래스
+ * BindingResult 필드 오류 메시지 매핑 클래스 (미사용)
+ *
+ * @deprecated field error 내용 반환이 불필요하여 미사용 처리
  */
 @Component
 public class ValidationUtil {
