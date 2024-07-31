@@ -35,6 +35,34 @@ public enum CommonExceptionCode implements ResponseCode {
     IMAGE_NOT_TEMP(HttpStatus.BAD_REQUEST, "이미지 에러"),
 
     /**
+     * Token Error
+     */
+    // TOKEN 만료
+    JWT_EXPIRED_ERROR(HttpStatus.UNAUTHORIZED, "토큰이 만료되었습니다."),
+    // Token 오류
+    JWT_INVALID_ERROR(HttpStatus.UNAUTHORIZED, "토큰이 유효하지 않습니다."),
+    // 토큰 오류
+    JWT_UNKNOWN_ERROR(HttpStatus.UNAUTHORIZED, "토큰이 존재하지 않습니다."),
+    // 변조된 토큰
+    JWT_UNSUPPORTED_ERROR(HttpStatus.UNAUTHORIZED, "변조된 토큰입니다."),
+    // 알 수 없는 오류
+    JWT_INTERNAL_ERROR(HttpStatus.UNAUTHORIZED, "알 수 없는 오류가 발생했습니다."),
+
+    /**
+     * User Error
+     */
+    // 사용 중인 이메일
+    EXIST_EMAIL_ERROR(HttpStatus.BAD_REQUEST, "이미 사용 중인 이메일입니다."),
+    // 올바르지 않은 요청값
+    FILED_ERROR(HttpStatus.BAD_REQUEST, "요청값이 올바르지 않습니다."),
+    // 이메일 인증번호 불일치
+    NOT_MATCH_AUTH_CODE(HttpStatus.BAD_REQUEST, "인증번호가 일치하지 않습니다."),
+    // 이메일 비밀번호 불일치
+    NOT_MATCH_PASSWORD(HttpStatus.BAD_REQUEST, "이메일과 비밀번호가 일치하지 않습니다."),
+    // 유저를 찾을 수 없음
+    NOT_FOUND_USER(HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다."),
+
+    /**
      * 4** client
      */
     // 400

@@ -1,5 +1,10 @@
 package darkoverload.itzip.user.controller;
 
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.code.CommonResponseCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
+import darkoverload.itzip.global.config.swagger.ExceptionCodeAnnotations;
+import darkoverload.itzip.global.config.swagger.ResponseCodeAnnotation;
 import darkoverload.itzip.jwt.domain.Token;
 import darkoverload.itzip.jwt.service.TokenService;
 import darkoverload.itzip.jwt.util.JwtTokenizer;
@@ -14,7 +19,6 @@ import darkoverload.itzip.user.service.EmailService;
 import darkoverload.itzip.user.service.UserService;
 import darkoverload.itzip.user.service.VerificationService;
 import darkoverload.itzip.user.util.RandomAuthCode;
-import darkoverload.itzip.user.util.ValidationUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,8 +32,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/user")
 @Slf4j
@@ -42,25 +44,21 @@ public class UserController {
 
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenizer jwtTokenizer;
-    private final ValidationUtil validationUtil;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid UserLoginRequest userLoginDto, BindingResult bindingResult, HttpServletResponse httpServletResponse) {
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_MATCH_PASSWORD})
+    public ResponseEntity<UserLoginResponse> login(@RequestBody @Valid UserLoginRequest userLoginRequest, BindingResult bindingResult, HttpServletResponse httpServletResponse) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = validationUtil.getBindingError(bindingResult);
-
-            return new ResponseEntity(Map.of("errors", errors), HttpStatus.BAD_REQUEST);
+            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
         }
 
-        User user = userService.findByEmail(userLoginDto.getEmail());
+        User user = userService.findByEmail(userLoginRequest.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_MATCH_PASSWORD));
 
         // 비밀번호 일치여부 체크
-        if (user == null || !passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
-            return new ResponseEntity(
-                    Map.of("errors", Map.of("password", "이메일과 비밀번호가 일치하지 않습니다.")),
-                    HttpStatus.UNAUTHORIZED
-            );
+        if (!passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword())) {
+            throw new RestApiException(CommonExceptionCode.NOT_MATCH_PASSWORD);
         }
 
         // 토큰 발급
@@ -98,11 +96,12 @@ public class UserController {
                 .nickname(user.getNickname())
                 .build();
 
-        return new ResponseEntity(loginResponseDto, HttpStatus.OK);
+        return new ResponseEntity<>(loginResponseDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/logout")
-    public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) {
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
         String accessToken = null;
 
         // access / refresh token cookie 삭제
@@ -124,11 +123,13 @@ public class UserController {
 
         // tokens 데이터 삭제
         tokenService.deleteByAccessToken(accessToken);
-        return new ResponseEntity("로그아웃 되었습니다.", HttpStatus.OK);
+        return ResponseEntity.ok("로그아웃 되었습니다.");
     }
 
     @PatchMapping("/refreshToken")
-    public ResponseEntity refreshToken(HttpServletRequest request, HttpServletResponse response) {
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations({CommonExceptionCode.JWT_UNKNOWN_ERROR, CommonExceptionCode.NOT_FOUND_USER})
+    public ResponseEntity<UserLoginResponse> refreshToken(HttpServletRequest request, HttpServletResponse response) {
         // refresh token cookie 가져오기
         String refreshToken = null;
         Cookie[] cookies = request.getCookies();
@@ -143,7 +144,7 @@ public class UserController {
 
         // refresh token이 없을 경우
         if (refreshToken == null) {
-            return new ResponseEntity("토큰이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+            throw new RestApiException(CommonExceptionCode.JWT_UNKNOWN_ERROR);
         }
 
         // refresh token 파싱
@@ -151,7 +152,7 @@ public class UserController {
 
         // 유저 정보 가져오기
         Long userId = Long.valueOf((Integer) claims.get("userId"));
-        User user = userService.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾지 못했습니다."));
+        User user = userService.findById(userId).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
         Authority authority = Authority.valueOf(claims.get("authority", String.class));
 
         // access token 생성
@@ -169,23 +170,23 @@ public class UserController {
         tokenService.updateByRefreshToken(refreshToken, accessToken);
 
         // 응답 값
-        UserLoginResponse responseDto = UserLoginResponse.builder()
+        UserLoginResponse userLoginResponse = UserLoginResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .nickname(user.getNickname())
                 .userId(user.getId())
                 .build();
 
-        return new ResponseEntity(responseDto, HttpStatus.OK);
+        return new ResponseEntity<>(userLoginResponse, HttpStatus.OK);
     }
 
     @PostMapping("/join")
-    public ResponseEntity join(@RequestBody @Valid UserJoinRequest userJoinDto, BindingResult bindingResult) {
+    @ResponseCodeAnnotation(CommonResponseCode.CREATED)
+    @ExceptionCodeAnnotations(CommonExceptionCode.FILED_ERROR)
+    public ResponseEntity<String> join(@RequestBody @Valid UserJoinRequest userJoinDto, BindingResult bindingResult) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = validationUtil.getBindingError(bindingResult);
-
-            return new ResponseEntity(Map.of("errors", errors), HttpStatus.BAD_REQUEST);
+            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
         }
 
         userService.save(userJoinDto);
@@ -196,12 +197,12 @@ public class UserController {
      * 인증번호 발송 메소드
      */
     @PostMapping("/authEmail")
-    public ResponseEntity sendAuthEmail(@RequestBody @Valid EmailSendRequest emailSendDto, BindingResult bindingResult) {
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations(CommonExceptionCode.FILED_ERROR)
+    public ResponseEntity<String> sendAuthEmail(@RequestBody @Valid EmailSendRequest emailSendDto, BindingResult bindingResult) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = validationUtil.getBindingError(bindingResult);
-
-            return new ResponseEntity(Map.of("errors", errors), HttpStatus.BAD_REQUEST);
+            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
         }
 
         // 랜덤 인증 코드 생성
@@ -217,17 +218,19 @@ public class UserController {
      * 인증번호 검증 메소드
      */
     @GetMapping("/authEmail")
-    public ResponseEntity checkAuthEmail(@RequestBody @Valid EmailCheckRequest emailCheckDto, BindingResult bindingResult) {
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_MATCH_AUTH_CODE})
+    public ResponseEntity<String> checkAuthEmail(@RequestBody @Valid EmailCheckRequest emailCheckDto, BindingResult bindingResult) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = validationUtil.getBindingError(bindingResult);
-
-            return new ResponseEntity(Map.of("errors", errors), HttpStatus.BAD_REQUEST);
+            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
         }
 
         // redis에 저장된 인증번호와 비교하여 확인
-        boolean isVerified = verificationService.verifyCode(emailCheckDto.getEmail(), emailCheckDto.getAuthCode());
+        if (!verificationService.verifyCode(emailCheckDto.getEmail(), emailCheckDto.getAuthCode())) {
+            throw new RestApiException(CommonExceptionCode.NOT_MATCH_AUTH_CODE);
+        }
 
-        return ResponseEntity.ok(isVerified ? "인증이 완료되었습니다." : "인증번호를 확인해주세요.");
+        return ResponseEntity.ok("인증이 완료되었습니다.");
     }
 }

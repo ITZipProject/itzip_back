@@ -1,7 +1,7 @@
 package darkoverload.itzip.jwt.filter;
 
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
-import darkoverload.itzip.jwt.exception.TokenExceptionCode;
 import darkoverload.itzip.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.jwt.infrastructure.JwtAuthenticationToken;
 import darkoverload.itzip.jwt.util.JwtTokenizer;
@@ -53,15 +53,15 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
             try {
                 getAuthentication(token); // 토큰을 사용하여 인증 설정
             } catch (ExpiredJwtException e) {
-                throw new RestApiException(TokenExceptionCode.JWT_UNKNOWN_ERROR);
+                throw new RestApiException(CommonExceptionCode.JWT_UNKNOWN_ERROR);
             } catch (UnsupportedJwtException e) {
-                throw new RestApiException(TokenExceptionCode.JWT_UNSUPPORTED_ERROR);
+                throw new RestApiException(CommonExceptionCode.JWT_UNSUPPORTED_ERROR);
             } catch (MalformedJwtException e) {
-                throw new RestApiException(TokenExceptionCode.JWT_INVALID_ERROR);
+                throw new RestApiException(CommonExceptionCode.JWT_INVALID_ERROR);
             } catch (IllegalArgumentException e) {
-                throw new RestApiException(TokenExceptionCode.JWT_UNKNOWN_ERROR);
+                throw new RestApiException(CommonExceptionCode.JWT_UNKNOWN_ERROR);
             } catch (Exception e) {
-                throw new RestApiException(TokenExceptionCode.JWT_INTERNAL_ERROR);
+                throw new RestApiException(CommonExceptionCode.JWT_INTERNAL_ERROR);
             }
         }
         filterChain.doFilter(request, response); // 다음 필터로 요청을 전달
