@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public void save(UserJoinRequest userJoinDto) {
         // 이메일 중복 체크
-        if (findByEmail(userJoinDto.getEmail()) != null) {
+        if (findByEmail(userJoinDto.getEmail()).isPresent()) {
             throw new RestApiException(UserExceptionCode.EXIST_EMAIL_ERROR);
         }
 
@@ -59,8 +59,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = true)
-    public User findByEmail(String email) {
-        return userRepository.findByEmail(email).coverToDomain();
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email).map(UserEntity::coverToDomain);
     }
 
     @Transactional(readOnly = true)

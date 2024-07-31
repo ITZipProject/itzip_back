@@ -1,6 +1,10 @@
 package darkoverload.itzip.user.controller;
 
+import darkoverload.itzip.global.config.response.code.CommonResponseCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
+import darkoverload.itzip.global.config.swagger.ResponseCodeAnnotation;
 import darkoverload.itzip.jwt.domain.Token;
+import darkoverload.itzip.jwt.exception.TokenExceptionCode;
 import darkoverload.itzip.jwt.service.TokenService;
 import darkoverload.itzip.jwt.util.JwtTokenizer;
 import darkoverload.itzip.user.controller.request.EmailCheckRequest;
@@ -10,6 +14,7 @@ import darkoverload.itzip.user.controller.request.UserLoginRequest;
 import darkoverload.itzip.user.controller.response.UserLoginResponse;
 import darkoverload.itzip.user.domain.User;
 import darkoverload.itzip.user.entity.Authority;
+import darkoverload.itzip.user.exception.UserExceptionCode;
 import darkoverload.itzip.user.service.EmailService;
 import darkoverload.itzip.user.service.UserService;
 import darkoverload.itzip.user.service.VerificationService;
@@ -27,8 +32,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -48,19 +51,14 @@ public class UserController {
     public ResponseEntity login(@RequestBody @Valid UserLoginRequest userLoginDto, BindingResult bindingResult, HttpServletResponse httpServletResponse) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = validationUtil.getBindingError(bindingResult);
-
-            return new ResponseEntity(Map.of("errors", errors), HttpStatus.BAD_REQUEST);
+            throw new RestApiException(UserExceptionCode.FILED_ERROR);
         }
 
-        User user = userService.findByEmail(userLoginDto.getEmail());
+        User user = userService.findByEmail(userLoginDto.getEmail()).orElseThrow(() -> new RestApiException(UserExceptionCode.NOT_MATCH_PASSWORD));
 
         // 비밀번호 일치여부 체크
-        if (user == null || !passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
-            return new ResponseEntity(
-                    Map.of("errors", Map.of("password", "이메일과 비밀번호가 일치하지 않습니다.")),
-                    HttpStatus.UNAUTHORIZED
-            );
+        if (!passwordEncoder.matches(userLoginDto.getPassword(), user.getPassword())) {
+            throw new RestApiException(UserExceptionCode.NOT_MATCH_PASSWORD);
         }
 
         // 토큰 발급
@@ -143,7 +141,7 @@ public class UserController {
 
         // refresh token이 없을 경우
         if (refreshToken == null) {
-            return new ResponseEntity("토큰이 존재하지 않습니다.", HttpStatus.BAD_REQUEST);
+            throw new RestApiException(TokenExceptionCode.JWT_UNKNOWN_ERROR);
         }
 
         // refresh token 파싱
@@ -151,7 +149,7 @@ public class UserController {
 
         // 유저 정보 가져오기
         Long userId = Long.valueOf((Integer) claims.get("userId"));
-        User user = userService.findById(userId).orElseThrow(() -> new IllegalArgumentException("사용자를 찾지 못했습니다."));
+        User user = userService.findById(userId).orElseThrow(() -> new RestApiException(UserExceptionCode.NOT_FOUND_USER));
         Authority authority = Authority.valueOf(claims.get("authority", String.class));
 
         // access token 생성
@@ -183,9 +181,7 @@ public class UserController {
     public ResponseEntity join(@RequestBody @Valid UserJoinRequest userJoinDto, BindingResult bindingResult) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = validationUtil.getBindingError(bindingResult);
-
-            return new ResponseEntity(Map.of("errors", errors), HttpStatus.BAD_REQUEST);
+            throw new RestApiException(UserExceptionCode.FILED_ERROR);
         }
 
         userService.save(userJoinDto);
@@ -199,9 +195,7 @@ public class UserController {
     public ResponseEntity sendAuthEmail(@RequestBody @Valid EmailSendRequest emailSendDto, BindingResult bindingResult) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = validationUtil.getBindingError(bindingResult);
-
-            return new ResponseEntity(Map.of("errors", errors), HttpStatus.BAD_REQUEST);
+            throw new RestApiException(UserExceptionCode.FILED_ERROR);
         }
 
         // 랜덤 인증 코드 생성
@@ -220,14 +214,14 @@ public class UserController {
     public ResponseEntity checkAuthEmail(@RequestBody @Valid EmailCheckRequest emailCheckDto, BindingResult bindingResult) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
-            Map<String, String> errors = validationUtil.getBindingError(bindingResult);
-
-            return new ResponseEntity(Map.of("errors", errors), HttpStatus.BAD_REQUEST);
+            throw new RestApiException(UserExceptionCode.FILED_ERROR);
         }
 
         // redis에 저장된 인증번호와 비교하여 확인
-        boolean isVerified = verificationService.verifyCode(emailCheckDto.getEmail(), emailCheckDto.getAuthCode());
+        if (!verificationService.verifyCode(emailCheckDto.getEmail(), emailCheckDto.getAuthCode())){
+            throw  new RestApiException(UserExceptionCode.NOT_MATCH_AUTH_CODE);
+        };
 
-        return ResponseEntity.ok(isVerified ? "인증이 완료되었습니다." : "인증번호를 확인해주세요.");
+        return ResponseEntity.ok("인증이 완료되었습니다.");
     }
 }
