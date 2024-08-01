@@ -10,7 +10,7 @@ public interface UserService {
 
     String getUniqueNickname();
 
-    User findByEmail(String email);
+    Optional<User> findByEmail(String email);
 
     Optional<User> findById(Long id);
 

@@ -1,9 +1,9 @@
 package darkoverload.itzip.jwt.service;
 
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import darkoverload.itzip.jwt.domain.Token;
 import darkoverload.itzip.jwt.entity.TokenEntity;
-import darkoverload.itzip.jwt.exception.TokenExceptionCode;
 import darkoverload.itzip.jwt.repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -75,7 +75,7 @@ public class TokenServiceImpl implements TokenService {
     @Transactional
     public void updateByRefreshToken(String refreshToken, String accessToken) {
         Token token = tokenRepository.findByRefreshToken(refreshToken)
-                .orElseThrow(() -> new RestApiException(TokenExceptionCode.JWT_UNKNOWN_ERROR)).convertToDomain();
+                .orElseThrow(() -> new RestApiException(CommonExceptionCode.JWT_UNKNOWN_ERROR)).convertToDomain();
 
         token.setAccessToken(accessToken);
         tokenRepository.save(token.convertToEntity());
