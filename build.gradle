@@ -100,6 +100,12 @@ dependencies {
     // 이미지 사이즈 조정 라이브러리
     implementation 'com.github.downgoon:marvin:1.5.5'
     implementation 'com.github.downgoon:MarvinPlugins:1.5.5'
+
+    // WebClient 외부 API 호출하기
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // json-simple 의존성 추가
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 }
 // QueryDsl 테스트코드 시, QClass 생성
 sourceSets {

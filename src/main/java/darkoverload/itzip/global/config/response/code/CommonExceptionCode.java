@@ -12,6 +12,11 @@ import org.springframework.http.HttpStatus;
 public enum CommonExceptionCode implements ResponseCode {
 
     /**
+     *
+     */
+    SCHOOL_NOT_FOUND(HttpStatus.NOT_FOUND, "학교 정보를 찾을 수 없습니다"),
+
+    /**
      * file error
      */
     FILE_ERROR(HttpStatus.BAD_REQUEST, "파일 에러"),
