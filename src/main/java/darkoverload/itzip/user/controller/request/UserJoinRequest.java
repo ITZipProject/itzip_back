@@ -1,8 +1,8 @@
-package darkoverload.itzip.user.dto;
+package darkoverload.itzip.user.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import darkoverload.itzip.user.domain.User;
 import darkoverload.itzip.user.entity.Authority;
-import darkoverload.itzip.user.entity.User;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -15,7 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @NoArgsConstructor
 @AllArgsConstructor
 @Slf4j
-public class UserJoinDto {
+public class UserJoinRequest {
     @NotBlank(message = "이메일을 입력해주세요.")
     @Pattern(regexp = "^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}$",
             message = "이메일 형식으로 입력해주세요.")
@@ -45,9 +45,9 @@ public class UserJoinDto {
     /**
      * entity 변환
      *
-     * @return User Entity
+     * @return User Domain
      */
-    public User toEntity() {
+    public User toDomain() {
         return User.builder()
                 .email(this.email)
                 .password(this.password)

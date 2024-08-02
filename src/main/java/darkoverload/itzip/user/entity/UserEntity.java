@@ -1,6 +1,7 @@
 package darkoverload.itzip.user.entity;
 
 import darkoverload.itzip.global.entity.AuditingFields;
+import darkoverload.itzip.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User extends AuditingFields {
+public class UserEntity extends AuditingFields {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,4 +30,14 @@ public class User extends AuditingFields {
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Authority authority;
+
+    public User coverToDomain(){
+        return User.builder()
+                .id(this.id)
+                .email(this.email)
+                .nickname(this.nickname)
+                .password(this.password)
+                .authority(this.authority)
+                .build();
+    }
 }

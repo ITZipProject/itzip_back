@@ -1,7 +1,8 @@
 package darkoverload.itzip.jwt.entity;
 
 import darkoverload.itzip.global.entity.AuditingFields;
-import darkoverload.itzip.user.entity.User;
+import darkoverload.itzip.jwt.domain.Token;
+import darkoverload.itzip.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,14 +12,14 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Getter
-public class Token extends AuditingFields {
+public class TokenEntity extends AuditingFields {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity userEntity;
 
     @Setter
     @Column(nullable = false, length = 300)
@@ -30,14 +31,13 @@ public class Token extends AuditingFields {
     @Column(nullable = false)
     private String grantType;
 
-    // 업데이트 빌더
-    public Token update(String accessToken, String refreshToken, String grantType) {
+    public Token convertToDomain() {
         return Token.builder()
                 .id(this.id)
-                .user(this.user)
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .grantType(grantType)
+                .user(this.userEntity.coverToDomain())
+                .accessToken(this.accessToken)
+                .refreshToken(this.refreshToken)
+                .grantType(this.grantType)
                 .build();
     }
 }

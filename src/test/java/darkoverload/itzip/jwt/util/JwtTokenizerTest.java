@@ -11,8 +11,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 @Slf4j
 class JwtTokenizerTest {
     private final JwtTokenizer jwtTokenizer;
-    private final String testAccessToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0QGV4YW1wbGUuY29tIiwiYXV0aG9yaXR5IjoiVVNFUiIsInVzZXJJZCI6MSwibmlja25hbWUiOiLsmqnqsJDtlZwgMTHrsojsp7ggQWxlcGgga2ltIiwiaWF0IjoxNzIxNjExNzc1LCJleHAiOjE3MjE2MTUzNzV9.YjB4NhAiItg5ae_MaGAFdVWnNkktnr3yXpkcXl4xdyiqpCJQNLi1TiWBXT1ibeAKYdGRr1CZJOc8g3XO0_I_lw";
-    private final String testRefreshToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0QGV4YW1wbGUuY29tIiwiYXV0aG9yaXR5IjoiVVNFUiIsInVzZXJJZCI6MSwibmlja25hbWUiOiLsmqnqsJDtlZwgMTHrsojsp7ggQWxlcGgga2ltIiwiaWF0IjoxNzIxNjEyMTEwLCJleHAiOjE3MjIyMTY5MTB9._o7vypaJ455WBytaOw4X7dqDpp9AQRBt0y1mNsb26o9Yarnskjo8hl9QfWcMSq7TRc_EmMp25knAIfg9tHDpng";
+
+    private final Long testId = 1L;
+    private final String testEmail = "test@example.com";
+    private final String testNickname = "용감한 11번째 Aleph kim";
+    private final Authority testAuthority = Authority.USER;
 
    @Autowired
     JwtTokenizerTest(JwtTokenizer jwtTokenizer) {
@@ -21,30 +24,33 @@ class JwtTokenizerTest {
 
     @Test
     void createAccessToken() {
-        String token = jwtTokenizer.createAccessToken(1L, "test@example.com", "용감한 11번째 Aleph kim", Authority.USER);
-        log.info(token);
+        String testAccessToken = jwtTokenizer.createAccessToken(testId, testEmail, testNickname, testAuthority);
+        log.info(testAccessToken);
     }
 
     @Test
     void createRefreshToken() {
-        String token = jwtTokenizer.createRefreshToken(1L, "test@example.com", "용감한 11번째 Aleph kim", Authority.USER);
-        log.info(token);
+        String testRefreshToken = jwtTokenizer.createRefreshToken(testId, testEmail, testNickname, testAuthority);
+        log.info(testRefreshToken);
     }
 
     @Test
     void getUserIdFromToken() {
+        String testAccessToken = jwtTokenizer.createAccessToken(testId, testEmail, testNickname, testAuthority);
         Long userId = jwtTokenizer.getUserIdFromToken(testAccessToken);
         log.info("userId : " + userId);
     }
 
     @Test
     void parseAccessToken() {
+        String testAccessToken = jwtTokenizer.createAccessToken(testId, testEmail, testNickname, testAuthority);
         Claims parse = jwtTokenizer.parseAccessToken(testAccessToken);
         log.info(String.valueOf(parse));
     }
 
     @Test
     void parseRefreshToken() {
+        String testRefreshToken = jwtTokenizer.createRefreshToken(testId, testEmail, testNickname, testAuthority);
         Claims parse = jwtTokenizer.parseRefreshToken(testRefreshToken);
         log.info(String.valueOf(parse));
     }
