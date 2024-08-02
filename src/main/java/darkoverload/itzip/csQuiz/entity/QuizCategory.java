@@ -9,6 +9,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+//퀴즈 카테고리를 받아오는 엔티티
 @Entity
 @Getter
 @Builder

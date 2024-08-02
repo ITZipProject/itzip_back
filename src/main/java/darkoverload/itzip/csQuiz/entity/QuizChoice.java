@@ -3,6 +3,7 @@ package darkoverload.itzip.csQuiz.entity;
 import lombok.Builder;
 import lombok.Getter;
 
+//퀴즈 정답을 담을 객체
 @Getter
 @Builder
 public class QuizChoice {
