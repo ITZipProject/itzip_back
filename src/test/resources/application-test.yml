@@ -21,6 +21,14 @@ spring:
       port: ${TEST_REDIS_PORT}
       password: ${TEST_REDIS_PASSWORD}
 
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
+
     mongodb:
       host: ${TEST_MONGO_HOST}
       port: ${TEST_MONGO_PORT}
@@ -66,3 +74,7 @@ jwt:
   refreshSecret: ${TEST_JWT_REFRESH_SECRET}
   accessTokenExpire: ${TEST_JWT_ACCESS_EXPIRE}
   refreshTokenExpire: ${TEST_JWT_REFRESH_EXPIRE}
+
+school:
+  api-url: https://www.career.go.kr/cnet/openapi/getOpenApi
+  api-key: fb063f3d08c52c2998ca08a1e2787581
