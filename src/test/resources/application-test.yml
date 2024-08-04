@@ -1,47 +1,68 @@
 spring:
   jpa:
     show-sql: true
-    database: h2
+    database: postgresql
     hibernate:
-      ddl-auto: create-drop
-      database-platform: org.hibernate.dialect.H2Dialect
+      ddl-auto: create
+
+  mongodb:
+    embedded:
+      version: 4.0.21
+
   datasource:
-    url: ${TEST_DB_URL}
-    username: ${TEST_DB_USERNAME}
-    password: ${TEST_DB_PASSWORD}
-    driver-class-name: org.h2.Driver
+    url: ${TEST_POSTGRESQL_URL}
+    username: ${TEST_POSTGRESQL_USERNAME}
+    password: ${TEST_POSTGRESQL_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
   data:
     redis:
-      host: ${LOC_REDIS_HOST}
-      port: ${LOC_REDIS_PORT}
-      password: ${LOC_REDIS_PASSWORD}
+      host: ${TEST_REDIS_HOST}
+      port: ${TEST_REDIS_PORT}
+      password: ${TEST_REDIS_PASSWORD}
 
     mongodb:
-      host: ${LOC_MONGO_HOST}
-      port: ${LOC_MONGO_PORT}
-      username: ${LOC_MONGO_USERNAME}
-      password: ${LOC_MONGO_PASSWORD}
-      database: ${LOC_MONGO_DATABASE}
-      authentication-database: ${LOC_MONGO_AUTH}
-      uri: ${LOC_MONGO_URI}
+      host: ${TEST_MONGO_HOST}
+      port: ${TEST_MONGO_PORT}
+      username: ${TEST_MONGO_USERNAME}
+      password: ${TEST_MONGO_PASSWORD}
+      database: ${TEST_MONGO_DATABASE}
+      authentication-database: ${TEST_MONGO_AUTH}
+      uri: ${TEST_MONGO_URI}
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${TEST_GAMIL_USERNAME}
+    password: ${TEST_GAMIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          timeout: 5000
+          starttls:
+            enable: true
+
 cloud:
   aws:
     credentials:
       instance-profile: false
-      accessKey: ${LOC_AWS_ACCESS_KEY}
-      secretKey: ${LOC_AWS_SECRET_KEY}
+      accessKey: ${TEST_AWS_ACCESS_KEY}
+      secretKey: ${TEST_AWS_SECRET_KEY}
+
     s3:
-      bucket: ${LOC_AWS_BUCKET_NAME}
+      bucket: ${TEST_AWS_BUCKET_NAME}
+      endpoint: ${TEST_AWS_END_POINT}
+
     region:
-      static: ap-northeast-2
+      static: us-east-1
       auto: false
 
 file:
-  cloudfront-path: ${LOC_FILE_PATH}
+  cloudfront-path: ${TEST_FILE_PATH}
 
 jwt:
-  accessSecret: ${LOC_JWT_ACCESS_SECRET}
-  refreshSecret: ${LOC_JWT_REFRESH_SECRET}
-  accessTokenExpire: ${LOC_JWT_ACCESS_EXPIRE}
-  refreshTokenExpire: ${LOC_JWT_REFRESH_EXPIRE}
-
+  accessSecret: ${TEST_JWT_ACCESS_SECRET}
+  refreshSecret: ${TEST_JWT_REFRESH_SECRET}
+  accessTokenExpire: ${TEST_JWT_ACCESS_EXPIRE}
+  refreshTokenExpire: ${TEST_JWT_REFRESH_EXPIRE}
