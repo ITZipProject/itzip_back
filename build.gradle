@@ -24,89 +24,92 @@ repositories {
 }
 
 dependencies {
-    // spring security
+    // Spring Security
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
 
-    // spring boot starter web
+    // Spring Boot Starter Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    // postgreSQL
+    // PostgreSQL
     implementation group: 'org.postgresql', name:'postgresql', version: '42.2.19'
 
-    // mongoDB
+    // MongoDB
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
 
-    // jpa 추가
+    // JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // H2
     runtimeOnly 'com.h2database:h2'
 
     // redis 설정 주입
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-    // SpringBoot 3.x이상 QueryDsl 추가
+    // SpringBoot 3.x later for QueryDsl
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 
-    // 롬복 관련 의존성 주입
+    // Lombok
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
-    // Swagger ui
+    // Swagger UI
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
 
-    // aws-bucket
+    // AWS for Bucket
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     testImplementation 'io.findify:s3mock_2.12:0.2.4'
 
-    // 파일 업로드
+    // File Upload
     implementation 'commons-io:commons-io:2.14.0'
     implementation 'commons-fileupload:commons-fileupload:1.5'
 
-    // Apache Tika core 라이브러리 추가
+    // Apache Tika Core
     implementation 'org.apache.tika:tika-core:1.28.4'
 
-    // Test 코드에 lombok 의존성 추가
+    // Lombok for Test Code
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
-    // JUnit5 설정 완료
+    // JUnit5
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
 
-    // mockito
+    // Mockito
     testImplementation 'org.mockito:mockito-core:4.0.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:4.0.0'
-    // jwt
+
+    // JWT
     implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
     runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
 
-    // json
+    // Json
     implementation 'com.google.code.gson:gson'
 
-    // validation
+    // Validation
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.2'
     testRuntimeOnly 'com.h2database:h2'
 
-    // 메일 발송
+    // Java Mail Sender
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-    // 이미지 사이즈 조정 라이브러리
+    // Image Resize
     implementation 'com.github.downgoon:marvin:1.5.5'
     implementation 'com.github.downgoon:MarvinPlugins:1.5.5'
 }
-// QueryDsl 테스트코드 시, QClass 생성
+// QueryDsl Test Code 실행 시, QClass 생성
 sourceSets {
     main.java.srcDirs += 'build/generated/source/apt/main'
 }
 
-// gradle clean 시에 QClass 디렉토리 삭제
+// Gradle Clean 실행 시, QClass 디렉토리 삭제
 clean {
     delete file('src/main/generated')
 }
