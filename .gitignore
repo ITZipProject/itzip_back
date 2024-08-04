@@ -39,4 +39,6 @@ out/
 ### env ###
 /src/main/resources/properties/env.properties
 /src/main/java/darkoverload/itzip/global/config/properties/PropertyConfig.java
+/src/test/resources/properties/test-env.properties
+/src/test/java/darkoverload/itzip/global/config/properties/PropertyConfig.java
 *.env
