@@ -1,6 +1,6 @@
 package darkoverload.itzip.mongo.sample.repository;
 
-import darkoverload.itzip.global.config.mongo.ExcludeFromJpaRepositories;
+import darkoverload.itzip.global.config.querydsl.ExcludeFromJpaRepositories;
 import darkoverload.itzip.mongo.sample.domain.SampleMongo;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
