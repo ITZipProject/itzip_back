@@ -1,7 +1,6 @@
 package darkoverload.itzip.global.config.querydsl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import darkoverload.itzip.global.config.mongo.ExcludeFromJpaRepositories;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.springframework.context.annotation.Bean;
