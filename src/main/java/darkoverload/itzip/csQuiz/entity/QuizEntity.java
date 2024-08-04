@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-//뮈즈의 모든 정보를 담아두는 엔티티
+//퀴즈의 모든 정보를 담아두는 엔티티
 @Getter
 @Builder
 @Document(collection = "quizzes")
@@ -21,7 +21,9 @@ public class QuizEntity extends AuditingFields{
     //문제 난이도
     private Integer difficulty;
     //문제 카테고리 id
-    private Long category;
+    private Long categoryId;
+    //문제 유형 번호
+    private String category;
     //문제 정답 번호
     private Integer answer;
     //문제를 맞춘 사람들 수

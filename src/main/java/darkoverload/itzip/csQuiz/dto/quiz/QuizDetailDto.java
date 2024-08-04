@@ -1,6 +1,5 @@
 package darkoverload.itzip.csQuiz.dto.quiz;
 
-import darkoverload.itzip.csQuiz.dto.quizcategory.QuizCategoryDetailDto;
 import darkoverload.itzip.csQuiz.entity.QuizChoice;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -23,8 +22,10 @@ public class QuizDetailDto {
     private String questionText;
     @Schema(description = "난이도", example = "3")
     private Integer difficulty;
+    @Schema(description = "카테고리 Id", example = "카테고리 Id")
+    private Long categoryId;
     @Schema(description = "카테고리 종류", example = "예시 문제 유형")
-    private QuizCategoryDetailDto category;
+    private String category;
     @Schema(description = "맞춘 유저 수", example = "9999")
     private Integer acceptedUserCount;
     @Schema(description = "시도한 유저 수", example = "10000")
