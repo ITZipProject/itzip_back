@@ -1,4 +1,4 @@
-package darkoverload.itzip.global.config.mongo;
+package darkoverload.itzip.global.config.querydsl;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
