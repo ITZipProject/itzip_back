@@ -21,6 +21,9 @@ public class S3MockConfig {
     @Value("${cloud.aws.s3.bucket}")
     String bucket;
 
+    @Value("${cloud.aws.s3.endpoint}")
+    private String endpoint;
+
     @Bean
     public S3Mock s3Mock() {
         return new S3Mock.Builder().withPort(8001).withInMemoryBackend().build();
@@ -28,13 +31,13 @@ public class S3MockConfig {
 
     @Bean
     @Primary
-    public AmazonS3 amazonS3(S3Mock s3Mock){
+    public AmazonS3 amazonS3(S3Mock s3Mock) {
         s3Mock.start();
-        AwsClientBuilder.EndpointConfiguration endpoint = new AwsClientBuilder.EndpointConfiguration("http://localhost:8001", region);
+        AwsClientBuilder.EndpointConfiguration endpointConfiguration = new AwsClientBuilder.EndpointConfiguration(endpoint, region);
         AmazonS3 client = AmazonS3ClientBuilder
                 .standard()
                 .withPathStyleAccessEnabled(true)
-                .withEndpointConfiguration(endpoint)
+                .withEndpointConfiguration(endpointConfiguration)
                 .withCredentials(new AWSStaticCredentialsProvider(new AnonymousAWSCredentials()))
                 .build();
         client.createBucket(bucket);
