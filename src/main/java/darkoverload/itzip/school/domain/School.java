@@ -1,10 +1,10 @@
-package darkoverload.itzip.resume.domain;
+package darkoverload.itzip.school.domain;
 
-import darkoverload.itzip.resume.code.EstType;
-import darkoverload.itzip.resume.code.RegionType;
-import darkoverload.itzip.resume.code.SchoolType;
-import darkoverload.itzip.resume.entity.SchoolEntity;
-import darkoverload.itzip.resume.util.SchoolJsonUtil;
+import darkoverload.itzip.school.code.EstType;
+import darkoverload.itzip.school.code.RegionType;
+import darkoverload.itzip.school.code.SchoolType;
+import darkoverload.itzip.school.entity.SchoolEntity;
+import darkoverload.itzip.school.util.SchoolJsonUtil;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -13,7 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import java.util.ArrayList;
 import java.util.List;
 
-import static darkoverload.itzip.resume.util.SchoolJsonUtil.getSchoolInfo;
+import static darkoverload.itzip.school.util.SchoolJsonUtil.getSchoolInfo;
 
 @Builder
 @ToString
