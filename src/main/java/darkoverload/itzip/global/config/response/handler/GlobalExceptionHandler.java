@@ -44,5 +44,4 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.UNSUPPORTED_MEDIA_TYPE, e.getMessage());
     }
 
-
 }

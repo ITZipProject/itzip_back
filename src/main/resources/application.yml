@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   application:
       name: itzip
   profiles:
@@ -8,6 +10,15 @@ spring:
     database: postgresql
     hibernate:
       ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 500
+        order_inserts: true
+        order_updates: true
   mongodb:
     embedded:
       version: 4.0.21
+school:
+  api-url: ${SCHOOL_API_URL}
+  api-key: ${SCHOOL_API_KEY}
