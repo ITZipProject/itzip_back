@@ -1,7 +1,7 @@
 package darkoverload.itzip.global.config.security;
 
-import darkoverload.itzip.jwt.util.JwtTokenizer;
-import darkoverload.itzip.jwt.filter.TokenAuthenticationFilter;
+import darkoverload.itzip.feature.jwt.util.JwtTokenizer;
+import darkoverload.itzip.feature.jwt.filter.TokenAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

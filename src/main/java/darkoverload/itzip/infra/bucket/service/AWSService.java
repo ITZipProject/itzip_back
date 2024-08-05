@@ -4,7 +4,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.handler.Util.ExceptionHandlerUtil;
-import darkoverload.itzip.image.domain.Image;
+import darkoverload.itzip.feature.image.domain.Image;
 import darkoverload.itzip.infra.bucket.domain.AWSFile;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,9 +1,9 @@
 package darkoverload.itzip.user.controller;
 
-import darkoverload.itzip.user.service.EmailService;
-import darkoverload.itzip.user.service.UserService;
-import darkoverload.itzip.user.service.VerificationService;
-import darkoverload.itzip.user.util.RandomAuthCode;
+import darkoverload.itzip.feature.user.service.EmailService;
+import darkoverload.itzip.feature.user.service.UserService;
+import darkoverload.itzip.feature.user.service.VerificationService;
+import darkoverload.itzip.feature.user.util.RandomAuthCode;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

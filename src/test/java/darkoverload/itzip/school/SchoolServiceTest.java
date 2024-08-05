@@ -1,11 +1,11 @@
 package darkoverload.itzip.school;
 
 import darkoverload.itzip.global.config.response.exception.RestApiException;
-import darkoverload.itzip.school.code.RegionType;
-import darkoverload.itzip.school.code.SchoolType;
-import darkoverload.itzip.school.domain.School;
-import darkoverload.itzip.school.service.SchoolConnectServiceImpl;
-import darkoverload.itzip.school.util.SchoolJsonUtil;
+import darkoverload.itzip.feature.school.code.RegionType;
+import darkoverload.itzip.feature.school.code.SchoolType;
+import darkoverload.itzip.feature.school.domain.School;
+import darkoverload.itzip.feature.school.service.SchoolConnectServiceImpl;
+import darkoverload.itzip.feature.school.util.SchoolJsonUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

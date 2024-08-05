@@ -1,7 +1,7 @@
 package darkoverload.itzip.school;
 
-import darkoverload.itzip.school.domain.School;
-import darkoverload.itzip.school.entity.SchoolEntity;
+import darkoverload.itzip.feature.school.domain.School;
+import darkoverload.itzip.feature.school.entity.SchoolEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 import java.util.List;
-import static darkoverload.itzip.school.domain.School.getSchoolInfoData;
+import static darkoverload.itzip.feature.school.domain.School.getSchoolInfoData;
 import static org.assertj.core.api.Assertions.*;
 
 
