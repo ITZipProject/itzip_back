@@ -1,0 +1,92 @@
+[
+  {
+    "_id": "64cbf28d10aebf6d60f7bbae",
+    "questionText": "컴퓨터 아키텍처에서 파이프라이닝의 주요 목적은 무엇인가요?",
+    "difficulty": 2,
+    "categoryId": 1,
+    "category": "Computer Architecture",
+    "answer": 2,
+    "acceptedUserCount": 120,
+    "triedUserCount": 150,
+    "points": 5,
+    "createUserId": 1,
+    "choices": [
+      {"choiceId": 1, "text": "메모리 사용 최적화"},
+      {"choiceId": 2, "text": "명령어 처리 속도 향상"},
+      {"choiceId": 3, "text": "데이터 보안 강화"},
+      {"choiceId": 4, "text": "저장 공간 절약"}
+    ]
+  },
+  {
+    "_id": "64cbf28d10aebf6d60f7bbaf",
+    "questionText": "스택 자료구조의 주요 특징은 무엇인가요?",
+    "difficulty": 1,
+    "categoryId": 2,
+    "category": "Data Structure",
+    "answer": 1,
+    "acceptedUserCount": 220,
+    "triedUserCount": 250,
+    "points": 4,
+    "createUserId": 2,
+    "choices": [
+      {"choiceId": 1, "text": "LIFO (Last In First Out)"},
+      {"choiceId": 2, "text": "FIFO (First In First Out)"},
+      {"choiceId": 3, "text": "노드와 간선"},
+      {"choiceId": 4, "text": "키와 값 쌍"}
+    ]
+  },
+  {
+    "_id": "64cbf28d10aebf6d60f7bbb0",
+    "questionText": "데이터베이스에서 인덱스의 주요 목적은 무엇인가요?",
+    "difficulty": 2,
+    "categoryId": 3,
+    "category": "Database",
+    "answer": 3,
+    "acceptedUserCount": 180,
+    "triedUserCount": 200,
+    "points": 3,
+    "createUserId": 3,
+    "choices": [
+      {"choiceId": 1, "text": "데이터 암호화"},
+      {"choiceId": 2, "text": "데이터 무결성 보장"},
+      {"choiceId": 3, "text": "데이터 검색 속도 향상"},
+      {"choiceId": 4, "text": "데이터 중복 제거"}
+    ]
+  },
+  {
+    "_id": "64cbf28d10aebf6d60f7bbb1",
+    "questionText": "네트워크 계층에서 사용하는 프로토콜은 무엇인가요?",
+    "difficulty": 3,
+    "categoryId": 4,
+    "category": "Network",
+    "answer": 2,
+    "acceptedUserCount": 140,
+    "triedUserCount": 170,
+    "points": 4,
+    "createUserId": 4,
+    "choices": [
+      {"choiceId": 1, "text": "HTTP"},
+      {"choiceId": 2, "text": "IP"},
+      {"choiceId": 3, "text": "FTP"},
+      {"choiceId": 4, "text": "SSH"}
+    ]
+  },
+  {
+    "_id": "64cbf28d10aebf6d60f7bbb2",
+    "questionText": "운영체제에서 멀티태스킹의 주요 이점은 무엇인가요?",
+    "difficulty": 1,
+    "categoryId": 5,
+    "category": "Operating System",
+    "answer": 4,
+    "acceptedUserCount": 250,
+    "triedUserCount": 270,
+    "points": 5,
+    "createUserId": 5,
+    "choices": [
+      {"choiceId": 1, "text": "데이터 저장 공간 절약"},
+      {"choiceId": 2, "text": "사용자 인터페이스 향상"},
+      {"choiceId": 3, "text": "시스템 보안 강화"},
+      {"choiceId": 4, "text": "CPU 사용률 최적화"}
+    ]
+  }
+]
