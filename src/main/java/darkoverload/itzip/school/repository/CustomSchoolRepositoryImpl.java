@@ -3,7 +3,8 @@ package darkoverload.itzip.school.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
-import static darkoverload.itzip.resume.entity.QSchoolEntity.schoolEntity;
+import static darkoverload.itzip.school.entity.QSchoolEntity.schoolEntity;
+
 
 @RequiredArgsConstructor
 public class CustomSchoolRepositoryImpl implements CustomSchoolRepository{
