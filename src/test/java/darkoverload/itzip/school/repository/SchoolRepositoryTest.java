@@ -4,7 +4,6 @@ package darkoverload.itzip.school.repository;
 import darkoverload.itzip.global.config.querydsl.TestQueryDslConfig;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
-import darkoverload.itzip.resume.repository.SchoolRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
