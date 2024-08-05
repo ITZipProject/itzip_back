@@ -1,21 +1,19 @@
 package darkoverload.itzip.resume.service;
 
-import darkoverload.itzip.resume.code.SchoolType;
+import darkoverload.itzip.resume.domain.School;
 import darkoverload.itzip.resume.domain.WebClientWrapper;
-import darkoverload.itzip.resume.entity.SchoolEntity;
 import darkoverload.itzip.resume.repository.SchoolRepository;
-import darkoverload.itzip.resume.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static darkoverload.itzip.resume.util.JsonUtil.getSchoolInfo;
+import static darkoverload.itzip.resume.domain.School.getSchoolInfoData;
 
 @Slf4j
 @Service
@@ -37,7 +35,7 @@ public class SchoolConnectServiceImpl implements SchoolConnectService {
     public void connectSchoolApi() {
 
         // 실제 호출할 url_list가 담겨 있다. 순서는 gubun_list 동일하다.
-        List<String> totalCountList = getTotalCount(apiUrl, apiKey);
+        List<String> totalCountList = School.getTotalCount(apiUrl, apiKey, gubun_list);
         Map<String, Integer> calculateMap = calculatePageCount(totalCountList);
 
         for(String gubun:gubun_list) {
@@ -57,42 +55,6 @@ public class SchoolConnectServiceImpl implements SchoolConnectService {
         }
 
         return calcualteMap;
-    }
-
-
-    private List<String> getTotalCount(String apiUrl, String apiKey) {
-        // 학교정보 url 리스트 만들기
-        List<String> makeUrl_list = new ArrayList<>();
-
-        // makeUrl_list에 넣어준다.
-        for(String gubun: gubun_list) makeUrl_list.add(apiUrl + "?apiKey=" + apiKey + "&svcType=api&svcCode=SCHOOL&contentType=json&gubun=" + gubun);
-
-        // convertToList에 넣어준다.
-        List<String> convertToList = new ArrayList<>();
-        for(String makeUrl : makeUrl_list) convertToList.add(webClientWrapper.get().uri(makeUrl).retrieve().bodyToMono(String.class).block());
-
-        // total_list 정보
-        ArrayList<String> totalPages = new ArrayList<>();
-        convertToList.forEach(json -> totalPages.add(JsonUtil.getTotalCount(json)));
-
-        return totalPages;
-    }
-
-
-    private List<SchoolEntity> getSchoolInfoData(String apiUrl, String apiKey, int page, int perPage, String gubun) {
-        String url = apiUrl + "?apiKey=" + apiKey + "&svcType=api&svcCode=SCHOOL&contentType=json&gubun=" + gubun + "&thisPage="+ page + "&perPage=" + perPage;
-        String schools = webClientWrapper.get().uri(url).retrieve().bodyToMono(String.class).block();
-
-        SchoolType schoolType = null;
-        switch(gubun) {
-            case "elem_list"-> schoolType = SchoolType.ELEMENTARY_SCHOOL;
-            case "midd_list"-> schoolType = SchoolType.MIDDLE_SCHOOL;
-            case "high_list"-> schoolType = SchoolType.HIGH_SCHOOL;
-            case "univ_list"-> schoolType = SchoolType.UNIVERSITY;
-            case "seet_list" -> schoolType = SchoolType.SPECIAL_SCHOOL;
-        }
-
-        return getSchoolInfo(schools, schoolType);
     }
 
     @Override

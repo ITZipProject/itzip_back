@@ -3,6 +3,7 @@ package darkoverload.itzip.resume.entity;
 import darkoverload.itzip.resume.code.EstType;
 import darkoverload.itzip.resume.code.RegionType;
 import darkoverload.itzip.resume.code.SchoolType;
+import darkoverload.itzip.resume.domain.School;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -46,4 +47,16 @@ public class SchoolEntity {
     @Enumerated(EnumType.STRING)
     private RegionType region;
 
+
+    public School convertDomain(){
+        return School.builder()
+                .schoolName(this.schoolName)
+                .gubun(this.gubun)
+                .schoolType(this.schoolType)
+                .address(this.address)
+                .campusName(this.campusName)
+                .estType(this.estType)
+                .region(this.region)
+                .build();
+    }
 }
