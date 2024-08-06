@@ -2,7 +2,7 @@ spring:
   config:
     import: optional:file:.env[.properties]
   application:
-      name: itzip
+    name: itzip
   profiles:
     active: local
   jpa:

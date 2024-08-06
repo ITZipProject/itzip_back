@@ -1,6 +1,7 @@
 package darkoverload.itzip.jwt.util;
 
-import darkoverload.itzip.user.entity.Authority;
+import darkoverload.itzip.feature.jwt.util.JwtTokenizer;
+import darkoverload.itzip.feature.user.entity.Authority;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
