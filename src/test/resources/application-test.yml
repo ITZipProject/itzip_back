@@ -76,5 +76,5 @@ jwt:
   refreshTokenExpire: ${TEST_JWT_REFRESH_EXPIRE}
 
 school:
-  api-url: https://www.career.go.kr/cnet/openapi/getOpenApi
-  api-key: fb063f3d08c52c2998ca08a1e2787581
+  api-url: ${TEST_SCHOOL_API_URL}
+  api-key: ${TEST_SCHOOL_API_KEY}

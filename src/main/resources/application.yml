@@ -20,5 +20,5 @@ spring:
     embedded:
       version: 4.0.21
 school:
-  api-url: https://www.career.go.kr/cnet/openapi/getOpenApi
-  api-key: fb063f3d08c52c2998ca08a1e2787581
+  api-url: ${SCHOOL_API_URL}
+  api-key: ${SCHOOL_API_KEY}
