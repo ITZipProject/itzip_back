@@ -1,7 +1,8 @@
 package darkoverload.itzip.image.repository;
 
+import darkoverload.itzip.feature.image.domain.Image;
+import darkoverload.itzip.feature.image.repository.ImageRepository;
 import darkoverload.itzip.global.config.querydsl.TestQueryDslConfig;
-import darkoverload.itzip.image.domain.Image;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

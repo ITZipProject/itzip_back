@@ -3,9 +3,11 @@ package darkoverload.itzip.image.service;
 
 
 import com.amazonaws.services.s3.AmazonS3;
+import darkoverload.itzip.feature.image.domain.Image;
+import darkoverload.itzip.feature.image.domain.ImageConst;
+import darkoverload.itzip.feature.image.service.CloudStorageService;
+import darkoverload.itzip.feature.image.service.ImageService;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
-import darkoverload.itzip.image.domain.Image;
-import darkoverload.itzip.image.domain.ImageConst;
 import darkoverload.itzip.infra.bucket.domain.AWSFile;
 import darkoverload.itzip.infra.bucket.service.AWSService;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,7 @@
 package darkoverload.itzip.school.repository;
 
 
+import darkoverload.itzip.feature.school.repository.SchoolRepository;
 import darkoverload.itzip.global.config.querydsl.TestQueryDslConfig;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
