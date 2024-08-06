@@ -1,4 +1,4 @@
-package darkoverload.itzip.school;
+package darkoverload.itzip.feature.school;
 
 import darkoverload.itzip.feature.school.code.RegionType;
 import darkoverload.itzip.feature.school.code.SchoolType;

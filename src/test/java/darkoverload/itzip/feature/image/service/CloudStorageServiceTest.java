@@ -1,4 +1,4 @@
-package darkoverload.itzip.image.service;
+package darkoverload.itzip.feature.image.service;
 
 
 

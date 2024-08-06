@@ -1,4 +1,4 @@
-package darkoverload.itzip.school.repository;
+package darkoverload.itzip.feature.school.repository;
 
 
 import darkoverload.itzip.feature.school.repository.SchoolRepository;

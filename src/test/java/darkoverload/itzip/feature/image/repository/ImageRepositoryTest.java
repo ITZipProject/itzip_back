@@ -1,4 +1,4 @@
-package darkoverload.itzip.image.repository;
+package darkoverload.itzip.feature.image.repository;
 
 import darkoverload.itzip.feature.image.domain.Image;
 import darkoverload.itzip.feature.image.repository.ImageRepository;

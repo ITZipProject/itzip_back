@@ -1,4 +1,4 @@
-package darkoverload.itzip.school;
+package darkoverload.itzip.feature.school;
 
 //@ExtendWith(MockitoExtension.class)
 //@SpringBootTest

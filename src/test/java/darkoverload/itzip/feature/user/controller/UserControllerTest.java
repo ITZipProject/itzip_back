@@ -1,4 +1,4 @@
-package darkoverload.itzip.user.controller;
+package darkoverload.itzip.feature.user.controller;
 
 
 import darkoverload.itzip.feature.user.service.EmailService;

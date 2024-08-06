@@ -1,4 +1,4 @@
-package darkoverload.itzip.jwt.util;
+package darkoverload.itzip.feature.jwt.util;
 
 import darkoverload.itzip.feature.jwt.util.JwtTokenizer;
 import darkoverload.itzip.feature.user.entity.Authority;

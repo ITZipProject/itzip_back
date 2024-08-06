@@ -1,4 +1,4 @@
-package darkoverload.itzip.image.service;
+package darkoverload.itzip.feature.image.service;
 
 import darkoverload.itzip.feature.image.domain.Image;
 import darkoverload.itzip.feature.image.domain.ImageConst;
