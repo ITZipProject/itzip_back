@@ -23,6 +23,11 @@ import static darkoverload.itzip.feature.school.code.RegionType.fromRegionName;
 @Slf4j
 public class SchoolJsonUtil {
 
+    /**
+     * JSON 데이터에서 총 개수를 추출해준다.
+     * @param json JSON 데이터 문자열
+     * @return 총 개수
+     */
     public static String getTotalCount(String json){
         JSONParser parser = new JSONParser();
         JSONObject targetObject = null;
@@ -38,6 +43,13 @@ public class SchoolJsonUtil {
         }
     }
 
+
+    /**
+     * 각 구분에 대한 학교 정보 데이터를 가져와준다.
+     * @param json 학교 정보 JSON 데이터
+     * @param schoolType 학교 구분 타입
+     * @return 학교정보 엔티티 리스트
+     */
     public static List<SchoolEntity> getSchoolInfo(String json, SchoolType schoolType){
         JSONParser parser = new JSONParser();
         List<SchoolEntity> list = new ArrayList<>();

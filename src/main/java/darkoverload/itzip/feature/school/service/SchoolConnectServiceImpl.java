@@ -32,6 +32,9 @@ public class SchoolConnectServiceImpl implements SchoolConnectService {
 
     private final List<String> gubun_list = List.of("elem_list", "midd_list", "high_list", "univ_list", "seet_list");
 
+    /**
+     * 학교 정보 api 연결하여 저장해준다.
+     */
     @Override
     public void connectSchoolApi() {
 
@@ -47,6 +50,11 @@ public class SchoolConnectServiceImpl implements SchoolConnectService {
         }
     }
 
+    /**
+     * 총 페이지 개수를 구해준다
+     * @param totalCountList 모든 개수 리스트
+     * @return 학교 데이터 구분에 해당하는 부분을 업데이트 한다.
+     */
     public Map<String,Integer> calculatePageCount(List<String> totalCountList){
         Map<String, Integer> calcualteMap = new HashMap<>();
         for(int i=0; i<totalCountList.size(); i++) {
@@ -58,11 +66,18 @@ public class SchoolConnectServiceImpl implements SchoolConnectService {
         return calcualteMap;
     }
 
+    /**
+     * 학교정보 테이블 모든 데이터를 삭제 시켜준다.
+     */
     @Override
     public void deleteAll() {
         schoolRepository.deleteAll();
     }
 
+    /**
+     * 학교 테이블 총 개수를 구해준다.
+     * @return
+     */
     @Override
     public Long getTotalCount() {
         return schoolRepository.getTotalCount();

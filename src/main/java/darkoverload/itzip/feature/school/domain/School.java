@@ -49,6 +49,15 @@ public class School {
                 .build();
     }
 
+    /**
+     * 모든 학교 정보를 가져온다
+     * @param apiUrl api url 정보
+     * @param apiKey api key 정보
+     * @param page 페이지 개수
+     * @param perPage  페이지당 호출할 데이터
+     * @param gubun 학교 구분 정보
+     * @return School 정보 엔티티 리스트
+     */
     public static List<SchoolEntity> getSchoolInfoData(String apiUrl, String apiKey, int page, int perPage, String gubun) {
         final WebClientWrapper webClientWrapper = new WebClientWrapper(WebClient.builder());
         String url = apiUrl + "?apiKey=" + apiKey + "&svcType=api&svcCode=SCHOOL&contentType=json&gubun=" + gubun + "&thisPage="+ page + "&perPage=" + perPage;
@@ -66,7 +75,13 @@ public class School {
         return getSchoolInfo(schools, schoolType);
     }
 
-
+    /**
+     * 학교 정보 총 개수를 api에서 가져와준다.
+     * @param apiUrl url 정보
+     * @param apiKey key 정보
+     * @param gubun_list 학교 구분 리스트
+     * @return 총 개수 리스트 정보 반환
+     */
     public static List<String> getTotalCount(String apiUrl, String apiKey, List<String> gubun_list) {
         // 학교정보 url 리스트 만들기
         List<String> makeUrl_list = new ArrayList<>();
