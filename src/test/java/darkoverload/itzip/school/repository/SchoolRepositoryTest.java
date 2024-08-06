@@ -8,6 +8,7 @@ import darkoverload.itzip.global.config.response.exception.RestApiException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
@@ -16,6 +17,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @DataJpaTest
 @ContextConfiguration(classes = {TestQueryDslConfig.class})
+@ActiveProfiles("test")
 @SqlGroup({
         @Sql(value = "/sql/school/delete-school-data.sql", executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD),
         @Sql(value = "/sql/school/school-repository-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
