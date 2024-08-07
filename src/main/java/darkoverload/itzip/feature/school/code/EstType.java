@@ -2,6 +2,7 @@ package darkoverload.itzip.feature.school.code;
 
 import lombok.extern.slf4j.Slf4j;
 
+// 설립정보 ENUM
 @Slf4j
 public enum EstType {
     NATIONAL_SCHOOL("국립"), PUBLIC_SCHOOL("공립"), PRIVATE_SCHOOL("사립");

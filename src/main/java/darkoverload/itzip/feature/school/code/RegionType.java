@@ -2,6 +2,7 @@ package darkoverload.itzip.feature.school.code;
 
 import lombok.extern.slf4j.Slf4j;
 
+// 지역 정보 ENUM
 @Slf4j
 public enum RegionType {
     SEOUL("서울특별시"),BUSAN("부산광역시"),
