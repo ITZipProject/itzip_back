@@ -13,7 +13,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
 @ContextConfiguration(classes = {TestQueryDslConfig.class})
@@ -51,4 +54,20 @@ public class SchoolRepositoryTest {
         // when
         assertThat(totalCount).isEqualTo(2L);
     }
+
+    @Test
+    void 학교정보_api해당_이름_관련_리스트를_가져온다(){
+
+        //given
+
+        List<String> schoolList = schoolRepository.searchBySchoolName("가");
+
+        //when
+        //then
+        assertAll(()-> assertThat(schoolList.getFirst()).isEqualTo("가거도초등학교"),
+                ()->assertThat(schoolList.getLast()).isEqualTo("가경초등학교")
+        );
+
+    }
+
 }
