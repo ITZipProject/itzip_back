@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.school.scheduler;
 
-import darkoverload.itzip.feature.school.service.SchoolConnectService;
+import darkoverload.itzip.feature.school.service.connect.SchoolConnectService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
