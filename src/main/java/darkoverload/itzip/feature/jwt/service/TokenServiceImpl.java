@@ -23,14 +23,14 @@ public class TokenServiceImpl implements TokenService {
      */
     @Transactional
     public void saveOrUpdate(Token token) {
-        Token oldToken = tokenRepository.findByUserEntityId(token.getUser().getId()).convertToDomain();
+        Optional<Token> oldToken = tokenRepository.findByUserEntityId(token.getUser().getId()).map(TokenEntity::convertToDomain);
 
-        if (oldToken == null) {
+        if (oldToken.isEmpty()) {
             tokenRepository.save(token.convertToEntity());
         } else {
-            oldToken.update(token.getAccessToken(), token.getRefreshToken(), token.getGrantType());
+            oldToken.get().update(token.getAccessToken(), token.getRefreshToken(), token.getGrantType());
 
-            tokenRepository.save(oldToken.convertToEntity());
+            tokenRepository.save(oldToken.get().convertToEntity());
         }
     }
 
