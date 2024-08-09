@@ -21,7 +21,7 @@ public class User {
 
     private Authority authority;
 
-    public UserEntity coverToEntity(){
+    public UserEntity convertToEntity(){
         return UserEntity.builder()
                 .id(this.id)
                 .email(this.email)

@@ -34,7 +34,7 @@ public class TokenEntity extends AuditingFields {
     public Token convertToDomain() {
         return Token.builder()
                 .id(this.id)
-                .user(this.userEntity.coverToDomain())
+                .user(this.userEntity.convertToDomain())
                 .accessToken(this.accessToken)
                 .refreshToken(this.refreshToken)
                 .grantType(this.grantType)

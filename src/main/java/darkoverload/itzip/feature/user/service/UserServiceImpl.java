@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encryptedPassword);
         user.setNickname(getUniqueNickname());
 
-        userRepository.save(user.coverToEntity());
+        userRepository.save(user.convertToEntity());
     }
 
     /**
@@ -60,17 +60,17 @@ public class UserServiceImpl implements UserService {
 
     @Transactional(readOnly = true)
     public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email).map(UserEntity::coverToDomain);
+        return userRepository.findByEmail(email).map(UserEntity::convertToDomain);
     }
 
     @Transactional(readOnly = true)
     public Optional<User> findById(Long id) {
-        return userRepository.findById(id).map(UserEntity::coverToDomain);
+        return userRepository.findById(id).map(UserEntity::convertToDomain);
     }
 
     @Transactional(readOnly = true)
     public Optional<User> findByNickname(String nickname) {
-        return userRepository.findByNickname(nickname).map(UserEntity::coverToDomain);
+        return userRepository.findByNickname(nickname).map(UserEntity::convertToDomain);
     }
 
     /**
