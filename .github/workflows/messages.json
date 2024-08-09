@@ -1,0 +1,6 @@
+{
+    "korean": {
+        "PR_OPENED": "**{title}**\n새로운 PR이 생성되었습니다.\nby: {user}\n{url}",
+        "PUSH": "**{title}**\nmain 브랜치에 push 이벤트가 발생했습니다.\nby: {user}\n{url}"
+    }
+}
