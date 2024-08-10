@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.csQuiz.dto.quiz;
+package darkoverload.itzip.feature.csQuiz.controller.request;
 
 import darkoverload.itzip.feature.csQuiz.entity.QuizChoice;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,7 +15,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class QuizCreatedDto {
+public class QuizCreatedRequest {
     @Schema(description = "문제", required = true, example = "다음중 가잠 깜찍한 백엔드는?")
     private String questionText;
     @Schema(description = "난이도", required = true, example = "3")

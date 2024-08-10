@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.csQuiz.dto.quizcategory;
+package darkoverload.itzip.feature.csQuiz.controller.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuizCategoryFormDto {
+public class QuizCategoryFormRequest {
     @Schema(description = "카테고리 유형", required = true, example = "Itzip")
     private String categoryname;
 }

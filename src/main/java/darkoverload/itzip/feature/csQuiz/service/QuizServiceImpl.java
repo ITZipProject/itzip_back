@@ -1,7 +1,7 @@
 package darkoverload.itzip.feature.csQuiz.service;
 
-import darkoverload.itzip.feature.csQuiz.dto.SortBy;
-import darkoverload.itzip.feature.csQuiz.dto.quiz.QuizDetailDto;
+import darkoverload.itzip.feature.csQuiz.entity.SortBy;
+import darkoverload.itzip.feature.csQuiz.controller.response.QuizDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.QuizCategory;
 import darkoverload.itzip.feature.csQuiz.service.Impl.quizCategory.FindQuizCategory;
 import darkoverload.itzip.feature.csQuiz.service.Impl.quizzes.FindQiuzQuery;
@@ -35,7 +35,7 @@ public class QuizServiceImpl implements QuizService {
      * @return 필터링되고 정렬된 퀴즈 목록
      */
     @Override
-    public Page<QuizDetailDto> QuizzesByDifficultyAndCategoryIdAndUserId(
+    public Page<QuizDetailResponse> QuizzesByDifficultyAndCategoryIdAndUserId(
             Integer difficulty, Long categoryId,
             SortBy sortBy, Long userId, boolean solved, int page, int size) {
         return getFilteredAndSortedQuizzes.QuizzesByDifficultyAndCategoryIdAndUserId(

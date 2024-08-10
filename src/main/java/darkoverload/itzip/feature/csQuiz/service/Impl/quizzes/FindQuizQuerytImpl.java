@@ -1,7 +1,7 @@
 package darkoverload.itzip.feature.csQuiz.service.Impl.quizzes;
 
-import darkoverload.itzip.feature.csQuiz.dto.SortBy;
-import darkoverload.itzip.feature.csQuiz.dto.quiz.QuizDetailDto;
+import darkoverload.itzip.feature.csQuiz.entity.SortBy;
+import darkoverload.itzip.feature.csQuiz.controller.response.QuizDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.QuizEntity;
 import darkoverload.itzip.feature.csQuiz.repository.quiz.QuizRepository;
 import darkoverload.itzip.feature.csQuiz.repository.quizusersolvedmapping.QuizUserSolvedMappingRepository;
@@ -44,7 +44,7 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
      * @return 필터링되고 정렬된 퀴즈 목록
      */
     @Override
-    public Page<QuizDetailDto> QuizzesByDifficultyAndCategoryIdAndUserId(
+    public Page<QuizDetailResponse> QuizzesByDifficultyAndCategoryIdAndUserId(
             Integer difficulty, Long categoryId,
             SortBy sortBy, Long userId, boolean solved, int page, int size) {
         // 페이지 정보와 정렬 기준을 기반으로 Pageable 객체 생성
@@ -64,13 +64,13 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
         }
 
         Page<QuizEntity> quizzes;
-        List<QuizDetailDto> quizDetailDtos;
+        List<QuizDetailResponse> quizDetailDtos;
 
         if (solved) {
             //사용자가 풀지 않은 문제를 가져옴
             quizzes = quizRepository.findByDifficultyAndCategoryAndUserSolved(difficulty, categoryId, solvedProblemIds, pageable);//
             quizDetailDtos = quizzes.getContent().stream()
-                    .map(quizMapper::entitiestoDto)
+                    .map(quizMapper::entitiestoResponse)
                     .toList();
         } else {
             //사용자가 풀었는지에 관련이 없는 문제를 가져옴
@@ -78,7 +78,7 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
             //사용자가 푼문제라면 푼 문제라는 것을 표시함
             Set<String> setSovledProblemIds = new HashSet<>(solvedProblemIds);
             quizDetailDtos = quizzes.getContent().stream()
-                    .map(quiz -> quizMapper.entitiestoDto(quiz, setSovledProblemIds))
+                    .map(quiz -> quizMapper.entitiestoResponse(quiz, setSovledProblemIds))
                     .toList();
         }
 

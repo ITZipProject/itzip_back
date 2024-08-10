@@ -1,7 +1,7 @@
 package darkoverload.itzip.feature.csQuiz.controller;
 
-import darkoverload.itzip.feature.csQuiz.dto.SortBy;
-import darkoverload.itzip.feature.csQuiz.dto.quiz.QuizDetailDto;
+import darkoverload.itzip.feature.csQuiz.entity.SortBy;
+import darkoverload.itzip.feature.csQuiz.controller.response.QuizDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.QuizCategory;
 import darkoverload.itzip.feature.csQuiz.service.QuizService;
 import lombok.RequiredArgsConstructor;
@@ -28,11 +28,11 @@ public class CsQuizzesController {
      * @return 필터링되고 정렬된 퀴즈 목록
      */
     @GetMapping("/search")
-    public Page<QuizDetailDto> getFileredAndSortedQuizzes(
+    public Page<QuizDetailResponse> getFilteredAndSortedQuizzes(
             @RequestParam(required = false) Integer difficulty,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(required = false, defaultValue = "NEWEST")SortBy sortBy,
-            @RequestParam(required = false, defaultValue = "0") Long userId,
+            @RequestParam(required = false) Long userId,
             @RequestParam(required = false, defaultValue = "false") boolean inUserSolved,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size

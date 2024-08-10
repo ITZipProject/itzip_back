@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.csQuiz.dto.quiz;
+package darkoverload.itzip.feature.csQuiz.controller.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
@@ -9,7 +9,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuizAnswerDto {
+public class QuizAnswerRequest {
     @Schema(description = "문제 식별값", required = true, example = "1a2b3c4d5e6f7g8h9i0j")
     private String id;
     @Schema(description = "사용자가 선택한 정답 배열의 index값을 주면 된다.", required = true, example = "0")

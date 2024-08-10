@@ -1,7 +1,7 @@
 package darkoverload.itzip.feature.csQuiz.util;
 
-import darkoverload.itzip.feature.csQuiz.dto.quiz.QuizCreatedDto;
-import darkoverload.itzip.feature.csQuiz.dto.quiz.QuizDetailDto;
+import darkoverload.itzip.feature.csQuiz.controller.request.QuizCreatedRequest;
+import darkoverload.itzip.feature.csQuiz.controller.response.QuizDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.QuizEntity;
 import org.springframework.stereotype.Component;
 
@@ -16,14 +16,14 @@ public class QuizMapper {
      * @param userSolved 변환할 퀴즈 엔티티를 찾고있는 사용자가 풀었는지 확인하는 flag값
      * @return 사용자가 찾는 quizDetailDto를 반환한다.
      */
-    public QuizDetailDto entitytoDto(QuizEntity quizEntity, Boolean userSolved) {
+    public QuizDetailResponse entitytoResponse(QuizEntity quizEntity, Boolean userSolved) {
         if (quizEntity == null) {
             return null;
         }
         //문제의 정답률을 계산한다. 100분율로 정한다.
         double correctRate = ((double) quizEntity.getAcceptedUserCount() / quizEntity.getTriedUserCount()) * 100;
 
-        return QuizDetailDto.builder()
+        return QuizDetailResponse.builder()
                 .id(quizEntity.getId())
                 .questionText(quizEntity.getQuestionText())
                 .difficulty(quizEntity.getDifficulty())
@@ -44,14 +44,14 @@ public class QuizMapper {
      * @param userSolvedIds 사용자가 푼 문제 목록이 담겨있는 메서드
      * @return 사용자가 찾는 quizDetailDto를 반환한다.
      */
-    public QuizDetailDto entitiestoDto(QuizEntity quizEntity, Set<String> userSolvedIds) {
+    public QuizDetailResponse entitiestoResponse(QuizEntity quizEntity, Set<String> userSolvedIds) {
         if (quizEntity == null) {
             return null;
         }
         //문제의 정답률을 계산한다. 100분율로 정한다.
         double correctRate = ((double) quizEntity.getAcceptedUserCount() / quizEntity.getTriedUserCount()) * 100;
 
-        return QuizDetailDto.builder()
+        return QuizDetailResponse.builder()
                 .id(quizEntity.getId())
                 .questionText(quizEntity.getQuestionText())
                 .difficulty(quizEntity.getDifficulty())
@@ -71,14 +71,14 @@ public class QuizMapper {
      * @param quizEntity 변환할 퀴즈 엔티티들 받아온다.
      * @return 사용자가 찾는 quizDetailDto를 반환한다.
      */
-    public QuizDetailDto entitiestoDto(QuizEntity quizEntity) {
+    public QuizDetailResponse entitiestoResponse(QuizEntity quizEntity) {
         if (quizEntity == null) {
             return null;
         }
         //문제의 정답률을 계산한다. 100분율로 정한다.
         double correctRate = ((double) quizEntity.getAcceptedUserCount() / quizEntity.getTriedUserCount()) * 100;
 
-        return QuizDetailDto.builder()
+        return QuizDetailResponse.builder()
                 .id(quizEntity.getId())
                 .questionText(quizEntity.getQuestionText())
                 .difficulty(quizEntity.getDifficulty())
@@ -99,7 +99,7 @@ public class QuizMapper {
      * @param createdUserId 문제를 생성한 사용자 id
      * @return QuizEntity를 반환한다.
      */
-    public QuizEntity createdtoEntity(QuizCreatedDto dto, String categoryName, Long createdUserId) {
+    public QuizEntity requesttoEntity(QuizCreatedRequest dto, String categoryName, Long createdUserId) {
         if (dto == null) {
             return null;
         }
