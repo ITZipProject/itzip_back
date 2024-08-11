@@ -7,7 +7,8 @@ import darkoverload.itzip.feature.csQuiz.service.Impl.quizCategory.FindQuizCateg
 import darkoverload.itzip.feature.csQuiz.service.Impl.quizzes.FindQiuzQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.data.domain.Page;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
 
 //컨트롤러가 사용할 service계층 진입점 구현
@@ -27,15 +28,15 @@ public class QuizServiceImpl implements QuizService {
      *
      * @param difficulty 퀴즈 난이도 (선택 사항)
      * @param categoryId 카테고리 ID (선택 사항)
-     * @param sortBy 정렬 기준 (OLDEST 또는 NEWEST)
-     * @param userId 사용자 ID (0이면 모든 사용자)
-     * @param solved 사용자가 푼 문제만 조회할지 여부
-     * @param page 페이지 번호 (기본값: 0)
-     * @param size 페이지 크기 (기본값: 10)
+     * @param sortBy     정렬 기준 (OLDEST 또는 NEWEST)
+     * @param userId     사용자 ID (0이면 모든 사용자)
+     * @param solved     사용자가 푼 문제만 조회할지 여부
+     * @param page       페이지 번호 (기본값: 0)
+     * @param size       페이지 크기 (기본값: 10)
      * @return 필터링되고 정렬된 퀴즈 목록
      */
     @Override
-    public Page<QuizDetailResponse> QuizzesByDifficultyAndCategoryIdAndUserId(
+    public PagedModel<EntityModel<QuizDetailResponse>> QuizzesByDifficultyAndCategoryIdAndUserId(
             Integer difficulty, Long categoryId,
             SortBy sortBy, Long userId, boolean solved, int page, int size) {
         return getFilteredAndSortedQuizzes.QuizzesByDifficultyAndCategoryIdAndUserId(
