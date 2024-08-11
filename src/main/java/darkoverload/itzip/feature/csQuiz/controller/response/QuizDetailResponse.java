@@ -1,11 +1,13 @@
 package darkoverload.itzip.feature.csQuiz.controller.response;
 
 import darkoverload.itzip.feature.csQuiz.entity.QuizChoice;
+import darkoverload.itzip.feature.csQuiz.entity.UserQuizStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
 
@@ -15,7 +17,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuizDetailResponse {
+public class QuizDetailResponse extends RepresentationModel<QuizDetailResponse> {
     @Schema(description = "문제 식별값", example = "1a2b3c4d5e6f7g8h9i0j")
     private String id;
     @Schema(description = "문제", example = "다음중 가잠 깜찍한 백엔드는?")
@@ -34,8 +36,8 @@ public class QuizDetailResponse {
     private double correctRate;
     @Schema(description = "사용자들이 평가함 점수", example = "100")
     private Integer points;
-    @Schema(description = "검색을 시도한 사용자가 풀었는지 나타내는 값", example = "False")
-    private Boolean userSolved;
+    @Schema(description = "검색을 시도한 사용자가 풀었는지 나타내는 값", example = "UnSolved")
+    private UserQuizStatus userQuizStatus;
     @Schema(description = "정답지 모음")
     private List<QuizChoice> choices;
 }
