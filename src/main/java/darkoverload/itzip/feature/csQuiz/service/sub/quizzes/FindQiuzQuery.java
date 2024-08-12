@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.csQuiz.service.Impl.quizzes;
+package darkoverload.itzip.feature.csQuiz.service.sub.quizzes;
 
 import darkoverload.itzip.feature.csQuiz.entity.SortBy;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizDetailResponse;

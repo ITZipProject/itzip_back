@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.csQuiz.service.Impl.quizzes;
+package darkoverload.itzip.feature.csQuiz.service.sub.quizzes;
 
 import darkoverload.itzip.feature.csQuiz.entity.QuizUserSolvedMapping;
 import darkoverload.itzip.feature.csQuiz.entity.SortBy;
