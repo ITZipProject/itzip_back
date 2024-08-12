@@ -1,7 +1,7 @@
 drop TABLE quiz_user_solved_mapping;
 
 CREATE TABLE quiz_user_solved_mapping (
-    id BIGINT NOT NULL,
+    id BIGSERIAL NOT NULL,
     user_id BIGINT NOT NULL,
     _id VARCHAR(50) NOT NULL,
     time_stamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
