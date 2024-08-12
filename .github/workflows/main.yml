@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - name: Discord Github Notification
-      uses: Aleph-Kim/discord-github-notification@v1.2.0
+      uses: Aleph-Kim/discord-github-notification@v1.2.1
       with:
         discord-webhook-url: ${{ secrets.DISCORD_WEBHOOK_URL }} # secret key에 저장한 discord webhook url
         custom: true
