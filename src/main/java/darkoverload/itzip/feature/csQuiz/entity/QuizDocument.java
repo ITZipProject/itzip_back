@@ -1,6 +1,7 @@
 package darkoverload.itzip.feature.csQuiz.entity;
 
 import lombok.AllArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,7 +19,7 @@ public class QuizDocument {
     //문제의 id값
     @Id
     @Field("_id")
-    private String id;
+    private ObjectId id;
 
     //문제
     @Field("questionText")
