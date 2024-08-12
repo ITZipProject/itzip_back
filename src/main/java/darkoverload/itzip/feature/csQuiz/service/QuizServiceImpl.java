@@ -1,8 +1,11 @@
 package darkoverload.itzip.feature.csQuiz.service;
 
+import darkoverload.itzip.feature.csQuiz.controller.response.QuizCategoryDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.SortBy;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.QuizCategory;
+import darkoverload.itzip.feature.csQuiz.entity.UserQuizStatus;
+import darkoverload.itzip.feature.csQuiz.service.Impl.quiz.CheckAnswer;
 import darkoverload.itzip.feature.csQuiz.service.Impl.quizCategory.FindQuizCategory;
 import darkoverload.itzip.feature.csQuiz.service.Impl.quizzes.FindQiuzQuery;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +13,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 //컨트롤러가 사용할 service계층 진입점 구현
 @Service
@@ -19,9 +24,11 @@ public class QuizServiceImpl implements QuizService {
     @Qualifier("findQuizQuerytImpl")
     private final FindQiuzQuery getFilteredAndSortedQuizzes;
 
-    //Impl지정
     @Qualifier("findQuizCategoryImpl")
     private final FindQuizCategory getQuizCategory;
+
+    @Qualifier("checkAnswerImpl")
+    private final CheckAnswer checkAnswer;
 
     /**
      * 주어진 필터와 정렬 기준, 사용자 정보를 기반으로 퀴즈 목록을 조회하는 메서드
@@ -52,5 +59,27 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public QuizCategory CategoryById(Long id) {
         return getQuizCategory.CategoryById(id);
+    }
+
+    /**
+     * 모든 카테고리 조회하는 메서드
+     *
+     * @return 모든 카테고리 리스트
+     */
+    @Override
+    public List<QuizCategoryDetailResponse> AllCategory() {
+        return getQuizCategory.AllCategory();
+    }
+
+    /**
+     * 퀴즈가 정답인지 알아보는 메서드
+     * @param quizId 퀴즈의 ID
+     * @param answer
+     * @param userId
+     * @return
+     */
+    @Override
+    public UserQuizStatus checkAnswer(String quizId, Integer answer, Long userId){
+        return checkAnswer.checkAnswer(quizId, answer, userId);
     }
 }

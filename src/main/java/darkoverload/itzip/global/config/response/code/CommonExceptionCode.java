@@ -68,6 +68,12 @@ public enum CommonExceptionCode implements ResponseCode {
     NOT_FOUND_USER(HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다."),
 
     /**
+     * Quiz Error
+     */
+    //퀴즈를 찾을 수 없음
+    NOT_FOUND_QUIZ(HttpStatus.NOT_FOUND, "문제를 찾을 수 없습니다."),
+
+    /**
      * 4** client
      */
     // 400

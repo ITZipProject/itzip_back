@@ -19,6 +19,7 @@ import java.util.Objects;
 @Table(name = "quiz_user_solved_mapping")
 public class QuizUserSolvedMapping{
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     //사용자의 id
@@ -71,5 +72,10 @@ public class QuizUserSolvedMapping{
     public int hashCode() {
         // `problemId`를 기반으로 해시 코드를 생성
         return Objects.hash(problemId);
+    }
+
+    // 푼시간과 정답을 바꾸는 메서드
+    public QuizUserSolvedMapping updateTimeStampAndIsCorrect(LocalDateTime timeStamp, UserQuizStatus isCorrect) {
+        return new QuizUserSolvedMapping(this.id, this.user, this.problemId, timeStamp, this.givenPoints, isCorrect);
     }
 }

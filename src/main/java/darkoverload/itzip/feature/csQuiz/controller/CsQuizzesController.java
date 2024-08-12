@@ -1,13 +1,18 @@
 package darkoverload.itzip.feature.csQuiz.controller;
 
+import darkoverload.itzip.feature.csQuiz.controller.request.QuizAnswerRequest;
+import darkoverload.itzip.feature.csQuiz.controller.response.QuizCategoryDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.SortBy;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.QuizCategory;
+import darkoverload.itzip.feature.csQuiz.entity.UserQuizStatus;
 import darkoverload.itzip.feature.csQuiz.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 //퀴즈들을 사용자가 찾을 수 있도록 하는엔드포인트 모음
 @RestController
@@ -41,6 +46,7 @@ public class CsQuizzesController {
         return quizService.QuizzesByDifficultyAndCategoryIdAndUserId(
                 difficulty, categoryId, sortBy, userId, inUserSolved, page, size);
     }
+
     /**
      * 주어진 카테고리 ID에 해당하는 카테고리 정보를 조회하는 메서드
      *
@@ -50,5 +56,25 @@ public class CsQuizzesController {
     @GetMapping("/{categoryId}")
     public QuizCategory getCategories(@PathVariable Long categoryId){
         return quizService.CategoryById(categoryId);
+    }
+
+    /**
+     * 모든 카테고리를 조회하는 엔드포인트
+     *
+     * @return 모든 카테고리 response 리스트
+     */
+    @GetMapping("/categories")
+    public List<QuizCategoryDetailResponse> getAllCategories(){
+        return quizService.AllCategory();
+    }
+
+    /**
+     * 문제의 정답을 제출하는 엔드포인트
+     * @param quizAnswerRequest 문제응 답을 받아오는 객체
+     * @return 맞췄으면 "CORRECT", 못맛췄으면 "INCORRECT"를 반환한다
+     */
+    @PostMapping("/submit-answer")
+    public UserQuizStatus submitAnswer(@RequestBody QuizAnswerRequest quizAnswerRequest) {
+        return quizService.checkAnswer(quizAnswerRequest.getQuizId(), quizAnswerRequest.getAnswer(), quizAnswerRequest.getUserId());
     }
 }
