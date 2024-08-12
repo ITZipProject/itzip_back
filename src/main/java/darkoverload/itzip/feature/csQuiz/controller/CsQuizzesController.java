@@ -1,6 +1,7 @@
 package darkoverload.itzip.feature.csQuiz.controller;
 
 import darkoverload.itzip.feature.csQuiz.controller.request.QuizAnswerRequest;
+import darkoverload.itzip.feature.csQuiz.controller.request.QuizPointRequest;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizCategoryDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.SortBy;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizDetailResponse;
@@ -73,8 +74,18 @@ public class CsQuizzesController {
      * @param quizAnswerRequest 문제응 답을 받아오는 객체
      * @return 맞췄으면 "CORRECT", 못맛췄으면 "INCORRECT"를 반환한다
      */
-    @PostMapping("/submit-answer")
+    @PostMapping("/answer")
     public UserQuizStatus submitAnswer(@RequestBody QuizAnswerRequest quizAnswerRequest) {
         return quizService.checkAnswer(quizAnswerRequest.getQuizId(), quizAnswerRequest.getAnswer(), quizAnswerRequest.getUserId());
+    }
+
+    /**
+     * 푼 문제에 점수를 줄때 사용하는 엔드포인트
+     * @param quizPointRequest 푼 문제에 점수를 줄때 사용할 객체
+     * @return 변한 문제의 점수 값
+     */
+    @PostMapping("/point")
+    public Integer sumPointToQuiz(@RequestBody QuizPointRequest quizPointRequest) {
+        return quizService.givenPointToQuiz(quizPointRequest);
     }
 }

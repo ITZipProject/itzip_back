@@ -59,4 +59,25 @@ public class QuizDocument {
 
     //문제 선택지 리스트
     private List<QuizChoice> choices;
+
+    /**
+     * 문제 points를 업데이트 하는 메서드
+     * @param points 더해질 포인트 (음수거나 양수여야한다.)
+     * @return 업데이트된 객체
+     */
+    public QuizDocument sumPoints(Integer points) {
+        return new QuizDocument(
+                this.id,
+                this.questionText,
+                this.difficulty,
+                this.categoryId,
+                this.category,
+                this.answer,
+                this.acceptedUserCount,
+                this.triedUserCount,
+                this.points + points,
+                this.createUserId,
+                this.choices
+        );
+    }
 }

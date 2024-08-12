@@ -78,4 +78,13 @@ public class QuizUserSolvedMapping{
     public QuizUserSolvedMapping updateTimeStampAndIsCorrect(LocalDateTime timeStamp, UserQuizStatus isCorrect) {
         return new QuizUserSolvedMapping(this.id, this.user, this.problemId, timeStamp, this.givenPoints, isCorrect);
     }
+
+    /**
+     * 문제를 풀고나서 맞췄을때 점수를 줄때 mappingtable을 변경하는 메서드
+     * @param givenPoints 준 점수
+     * @return 준점수가 업데이트된 새로운 객체를 생성한다.
+     */
+    public QuizUserSolvedMapping updateGivenPoints(Integer givenPoints) {
+        return new QuizUserSolvedMapping(this.id, this.user, this.problemId, this.timeStamp, givenPoints, this.isCorrect);
+    }
 }

@@ -1,11 +1,13 @@
 package darkoverload.itzip.feature.csQuiz.service;
 
+import darkoverload.itzip.feature.csQuiz.controller.request.QuizPointRequest;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizCategoryDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.SortBy;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.QuizCategory;
 import darkoverload.itzip.feature.csQuiz.entity.UserQuizStatus;
 import darkoverload.itzip.feature.csQuiz.service.sub.quiz.CheckAnswer;
+import darkoverload.itzip.feature.csQuiz.service.sub.quiz.GivenPointToQuiz;
 import darkoverload.itzip.feature.csQuiz.service.sub.quizCategory.FindQuizCategory;
 import darkoverload.itzip.feature.csQuiz.service.sub.quizzes.FindQiuzQuery;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +31,9 @@ public class QuizServiceImpl implements QuizService {
 
     @Qualifier("checkAnswerImpl")
     private final CheckAnswer checkAnswer;
+
+    @Qualifier("givenPointToQuizImpl")
+    private final GivenPointToQuiz givenPointToQuiz;
 
     /**
      * 주어진 필터와 정렬 기준, 사용자 정보를 기반으로 퀴즈 목록을 조회하는 메서드
@@ -81,5 +86,15 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public UserQuizStatus checkAnswer(String quizId, Integer answer, Long userId){
         return checkAnswer.checkAnswer(quizId, answer, userId);
+    }
+
+    /**
+     * 사용자가 문제에게 점수를 줄때 사용하는 메서드
+     * @param quizPointRequest 사용자한테서 받아오는 응답 코드
+     * @return 문제를 주는 것을 성공했을 경우 변경된 문제의 점수를 알려준다.
+     */
+    @Override
+    public Integer givenPointToQuiz(QuizPointRequest quizPointRequest){
+        return givenPointToQuiz.givenPointToQuiz(quizPointRequest);
     }
 }
