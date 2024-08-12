@@ -76,7 +76,7 @@ public class CsQuizzesController {
      */
     @PostMapping("/answer")
     public UserQuizStatus submitAnswer(@RequestBody QuizAnswerRequest quizAnswerRequest) {
-        return quizService.checkAnswer(quizAnswerRequest.getQuizId(), quizAnswerRequest.getAnswer(), quizAnswerRequest.getUserId());
+        return quizService.checkAnswer(quizAnswerRequest);
     }
 
     /**

@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.csQuiz.service.sub.quiz;
 
+import darkoverload.itzip.feature.csQuiz.controller.request.QuizAnswerRequest;
 import darkoverload.itzip.feature.csQuiz.entity.QuizDocument;
 import darkoverload.itzip.feature.csQuiz.entity.QuizUserSolvedMapping;
 import darkoverload.itzip.feature.csQuiz.entity.UserQuizStatus;
@@ -28,31 +29,36 @@ public class CheckAnswerImpl implements CheckAnswer {
 
     @Override
     @Transactional
-    public UserQuizStatus checkAnswer(String quizId, Integer answer, Long userId) {
+    public UserQuizStatus checkAnswer(QuizAnswerRequest quizAnswerRequest) {
         // 사용자가 존재하는지 확인
-        UserEntity userEntity = userRepository.findById(userId).orElseThrow(
+        UserEntity userEntity = userRepository.findById(quizAnswerRequest.getUserId()).orElseThrow(
                 () -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)
         );
 
         // 제출된 퀴즈가 존재하는지 확인
-        ObjectId objectQuizId = new ObjectId(quizId);
+        ObjectId objectQuizId = new ObjectId(quizAnswerRequest.getQuizId());
         QuizDocument quizDocument = quizRepository.findById(objectQuizId).orElseThrow(
                 () -> new RestApiException(CommonExceptionCode.NOT_FOUND_QUIZ)
         );
 
         // 정답 여부 확인
-        boolean isCorrect = quizDocument.getAnswer().equals(answer);
+        boolean isCorrect = quizDocument.getAnswer().equals(quizAnswerRequest.getAnswer());
         UserQuizStatus quizStatus = isCorrect ? UserQuizStatus.CORRECT : UserQuizStatus.INCORRECT;
 
         // 기존에 푼 문제인지 확인
-        QuizUserSolvedMapping quizUserSolvedMapping = quizUserSolvedMappingRepository.findByUserAndProblemId(userEntity, quizId)
+        QuizUserSolvedMapping quizUserSolvedMapping = quizUserSolvedMappingRepository.findByUserAndProblemId(userEntity, quizAnswerRequest.getQuizId())
                 .orElseGet(() -> QuizUserSolvedMapping.builder()
                         .user(userEntity)
-                        .problemId(quizId)
+                        .problemId(quizAnswerRequest.getQuizId())
                         .timeStamp(LocalDateTime.now())
                         .givenPoints(0) // 기본 점수 설정
                         .isCorrect(UserQuizStatus.UNSOLVED) // 기본 상태 설정
                         .build());
+
+        //이미 문제를 맞췄을 경우 또 못 풀게 함
+        if (quizUserSolvedMapping.getIsCorrect().equals(UserQuizStatus.CORRECT)) {
+            throw new RestApiException(CommonExceptionCode.ALREADY_CORRECT);
+        }
 
         quizUserSolvedMapping = quizUserSolvedMapping.updateTimeStampAndIsCorrect(LocalDateTime.now(), quizStatus);
 

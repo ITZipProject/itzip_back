@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.csQuiz.service;
 
+import darkoverload.itzip.feature.csQuiz.controller.request.QuizAnswerRequest;
 import darkoverload.itzip.feature.csQuiz.controller.request.QuizPointRequest;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizCategoryDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.SortBy;
@@ -78,14 +79,12 @@ public class QuizServiceImpl implements QuizService {
 
     /**
      * 퀴즈가 정답인지 알아보는 메서드
-     * @param quizId 퀴즈의 ID
-     * @param answer
-     * @param userId
-     * @return
+     * @param quizAnswerRequest 퀴즈 정답을 맞출때 사용하는 객체
+     * @return 맞췄는짐 못맞췄는지 알려준다.
      */
     @Override
-    public UserQuizStatus checkAnswer(String quizId, Integer answer, Long userId){
-        return checkAnswer.checkAnswer(quizId, answer, userId);
+    public UserQuizStatus checkAnswer(QuizAnswerRequest quizAnswerRequest){
+        return checkAnswer.checkAnswer(quizAnswerRequest);
     }
 
     /**

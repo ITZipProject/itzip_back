@@ -78,6 +78,8 @@ public enum CommonExceptionCode implements ResponseCode {
     ANSWER_NOT_CORRECT(HttpStatus.BAD_REQUEST, "정답을 맞춘 적이 없습니다."),
     //이미 퀴즈에 포인트를 줬음
     POINT_ALREADY_GIVEN(HttpStatus.BAD_REQUEST, "이미 이 퀴즈에 포인트를 부여했습니다."),
+    //이미 정답을 맞췄음
+    ALREADY_CORRECT(HttpStatus.BAD_REQUEST, "이미 정답을 맞췄습니다."),
 
     /**
      * 4** client
