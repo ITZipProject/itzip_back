@@ -12,7 +12,7 @@ import java.util.Set;
 //퀴즈 Dto와 Entity사이의 변환로직을 가지고 있는 class
 @Component
 public class QuizMapper {
-    /** TODO
+    /**
      * quizEntity 한개를 quizDto로 변환하는 메서드
      * @param quizDocument 변환할 퀴즈 엔티티들 받아온다.
      * @param userSolved 변환할 퀴즈 엔티티를 찾고있는 사용자가 풀었는지 확인하는 flag값
@@ -103,27 +103,26 @@ public class QuizMapper {
 
     /**
      * 사용자가 생성한 문제 DTO를 엔티티로 반환해줄 메서드
-     * @param dto 사용자가 생성한 문제 DTO
+     * @param request 사용자가 생성한 문제 DTO
      * @param categoryName 사용자가 생성한 문제 카테고리 이름
-     * @param createdUserId 문제를 생성한 사용자 id
      * @return QuizEntity를 반환한다.
      */
-    public QuizDocument requestToDocument(QuizCreatedRequest dto, String categoryName, Long createdUserId) {
-        if (dto == null) {
+    public QuizDocument requestToDocument(QuizCreatedRequest request, String categoryName) {
+        if (request == null) {
             return null;
         }
 
         return QuizDocument.builder()
-                .questionText(dto.getQuestionText())
-                .difficulty(dto.getDifficulty())
-                .categoryId(dto.getCategoryId())
+                .questionText(request.getQuestionText())
+                .difficulty(request.getDifficulty())
+                .categoryId(request.getCategoryId())
                 .category(categoryName)
-                .answer(dto.getAnswer())
+                .answer(request.getAnswer())
                 .acceptedUserCount(0)
                 .triedUserCount(0)
                 .points(0)
-                .createUserId(createdUserId)
-                .choices(dto.getChoices())
+                .createUserId(request.getUserId())
+                .choices(request.getChoices())
                 .build();
     }
 }

@@ -1,6 +1,7 @@
 package darkoverload.itzip.feature.csQuiz.service;
 
 import darkoverload.itzip.feature.csQuiz.controller.request.QuizAnswerRequest;
+import darkoverload.itzip.feature.csQuiz.controller.request.QuizCreatedRequest;
 import darkoverload.itzip.feature.csQuiz.controller.request.QuizPointRequest;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizCategoryDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.SortBy;
@@ -8,6 +9,7 @@ import darkoverload.itzip.feature.csQuiz.controller.response.QuizDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.QuizCategory;
 import darkoverload.itzip.feature.csQuiz.entity.UserQuizStatus;
 import darkoverload.itzip.feature.csQuiz.service.sub.quiz.CheckAnswer;
+import darkoverload.itzip.feature.csQuiz.service.sub.quiz.CreateQuiz;
 import darkoverload.itzip.feature.csQuiz.service.sub.quiz.GivenPointToQuiz;
 import darkoverload.itzip.feature.csQuiz.service.sub.quizCategory.FindQuizCategory;
 import darkoverload.itzip.feature.csQuiz.service.sub.quizzes.FindQiuzQuery;
@@ -35,6 +37,9 @@ public class QuizServiceImpl implements QuizService {
 
     @Qualifier("givenPointToQuizImpl")
     private final GivenPointToQuiz givenPointToQuiz;
+
+    @Qualifier("createQuizImpl")
+    private final CreateQuiz createQuiz;
 
     /**
      * 주어진 필터와 정렬 기준, 사용자 정보를 기반으로 퀴즈 목록을 조회하는 메서드
@@ -95,5 +100,14 @@ public class QuizServiceImpl implements QuizService {
     @Override
     public Integer givenPointToQuiz(QuizPointRequest quizPointRequest){
         return givenPointToQuiz.givenPointToQuiz(quizPointRequest);
+    }
+
+    /**
+     * 퀴즈를 생성할 때 사용하는 메서드
+     * @param quizCreatedRequest 사용자한테서 받아오는 퀴즈 생성 코드 퀴즈 생성자 아이디도 들어있다.
+     */
+    @Override
+    public void createQuiz(QuizCreatedRequest quizCreatedRequest){
+        createQuiz.createQuiz(quizCreatedRequest);
     }
 }

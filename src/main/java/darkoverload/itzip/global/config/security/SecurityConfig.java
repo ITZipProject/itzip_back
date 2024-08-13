@@ -41,6 +41,7 @@ public class SecurityConfig {
 
             //quiz 임시 허용
             "/cs-quizzes/**",
+            "/cs-quiz/**"
     };
 
     // 비로그인 유저 허용 페이지

@@ -80,6 +80,14 @@ public enum CommonExceptionCode implements ResponseCode {
     POINT_ALREADY_GIVEN(HttpStatus.BAD_REQUEST, "이미 이 퀴즈에 포인트를 부여했습니다."),
     //이미 정답을 맞췄음
     ALREADY_CORRECT(HttpStatus.BAD_REQUEST, "이미 정답을 맞췄습니다."),
+    //카테고리가 없음
+    NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "카테고리가 없습니다."),
+
+    /**
+     * MongoDb
+     */
+    //몽고 저장소 에러
+    MONGO_DB_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "몽고 저장소에서 에러가 생겼습니다."),
 
     /**
      * 4** client
