@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.csQuiz.repository.quiz.custom;
 
-import darkoverload.itzip.feature.csQuiz.entity.QuizEntity;
+import darkoverload.itzip.feature.csQuiz.entity.QuizDocument;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -25,46 +25,32 @@ public class CustomQuizRepositoryImpl implements CustomQuizRepository {
      * @return 페이징 처리된 퀴즈 목록
      */
     @Override
-    public Page<QuizEntity> findByDifficultyAndCategoryAndUserSolved(Integer difficulty, Long categoryId, List<String> userSolved, Pageable pageable) {
-        Query query = new Query()
-                // 난이도에 맞는 기준 추가
-                .addCriteria(Criteria.where("difficulty").is(difficulty))
-                // 카테고리 ID에 맞는 기준 추가
-                .addCriteria(Criteria.where("categoryId").is(categoryId))
-                // 사용자가 푼 퀴즈를 제외하는 기준 추가
-                .addCriteria(Criteria.where("id").nin(userSolved))
-                .with(pageable);
+    public Page<QuizDocument> findByDifficultyAndCategoryAndUserSolved(Integer difficulty, Long categoryId, List<String> userSolved, Pageable pageable, boolean inUserSolved) {
+        Query query = new Query();
+
+        // 필터 조건이 존재할 경우에만 해당 기준 추가
+        //난이도 필터가 있을경우 추가
+        if (difficulty != null) {
+            query.addCriteria(Criteria.where("difficulty").is(difficulty));
+        }
+
+        //카테고리 필터가 있을 경우 추가
+        if (categoryId != null) {
+            query.addCriteria(Criteria.where("categoryId").is(categoryId));
+        }
+
+        //사용자 문제를 제외하냐 조건이 있으면 추가 (사용자가 푼문제가 있고, 사용자 푼문제를 포함하지 않으면 제외함)
+        if (userSolved != null && !userSolved.isEmpty() && !inUserSolved) {
+            query.addCriteria(Criteria.where("_id").nin(userSolved));
+        }
+
+        //쿼리에 page적용
+        query.with(pageable);
 
         // 쿼리를 실행하여 퀴즈 목록을 가져옴
-        List<QuizEntity> quizzes = mongoTemplate.find(query, QuizEntity.class);
+        List<QuizDocument> quizzes = mongoTemplate.find(query, QuizDocument.class);
         // 쿼리에 맞는 총 퀴즈 개수 계산
-        long count = mongoTemplate.count(query, QuizEntity.class);
-
-        // 결과를 Page 객체로 반환
-        return new PageImpl<>(quizzes, pageable, count);
-    }
-
-    /**
-     * 주어진 난이도와 카테고리 ID를 기준으로 퀴즈를 조회하는 메서드
-     *
-     * @param difficulty 퀴즈 난이도
-     * @param categoryId 카테고리 ID
-     * @param pageable 페이지 정보
-     * @return 페이징 처리된 퀴즈 목록
-     */
-    @Override
-    public Page<QuizEntity> findByDifficultyAndCategory(Integer difficulty, Long categoryId, Pageable pageable) {
-        Query query = new Query()
-                // 난이도에 맞는 기준 추가
-                .addCriteria(Criteria.where("difficulty").is(difficulty))
-                // 카테고리 ID에 맞는 기준 추가
-                .addCriteria(Criteria.where("categoryId").is(categoryId))
-                .with(pageable);
-
-        // 쿼리를 실행하여 퀴즈 목록을 가져옴
-        List<QuizEntity> quizzes = mongoTemplate.find(query, QuizEntity.class);
-        // 쿼리에 맞는 총 퀴즈 개수 계산
-        long count = mongoTemplate.count(query, QuizEntity.class);
+        long count = mongoTemplate.count(query, QuizDocument.class);
 
         // 결과를 Page 객체로 반환
         return new PageImpl<>(quizzes, pageable, count);

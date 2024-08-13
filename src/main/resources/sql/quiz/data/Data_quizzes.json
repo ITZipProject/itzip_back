@@ -1,6 +1,6 @@
 [
   {
-    "_id": "64cbf28d10aebf6d60f7bbae",
+    "_id": {"$oid": "64cbf28d10aebf6d60f7bbae"},
     "questionText": "컴퓨터 아키텍처에서 파이프라이닝의 주요 목적은 무엇인가요?",
     "difficulty": 2,
     "categoryId": 1,
@@ -18,7 +18,7 @@
     ]
   },
   {
-    "_id": "64cbf28d10aebf6d60f7bbaf",
+    "_id": {"$oid": "64cbf28d10aebf6d60f7bbaf"},
     "questionText": "스택 자료구조의 주요 특징은 무엇인가요?",
     "difficulty": 1,
     "categoryId": 2,
@@ -36,7 +36,7 @@
     ]
   },
   {
-    "_id": "64cbf28d10aebf6d60f7bbb0",
+    "_id": {"$oid": "64cbf28d10aebf6d60f7bbb0"},
     "questionText": "데이터베이스에서 인덱스의 주요 목적은 무엇인가요?",
     "difficulty": 2,
     "categoryId": 3,
@@ -54,7 +54,7 @@
     ]
   },
   {
-    "_id": "64cbf28d10aebf6d60f7bbb1",
+    "_id": {"$oid": "64cbf28d10aebf6d60f7bbb1"},
     "questionText": "네트워크 계층에서 사용하는 프로토콜은 무엇인가요?",
     "difficulty": 3,
     "categoryId": 4,
@@ -72,7 +72,7 @@
     ]
   },
   {
-    "_id": "64cbf28d10aebf6d60f7bbb2",
+    "_id": {"$oid": "64cbf28d10aebf6d60f7bbb2"},
     "questionText": "운영체제에서 멀티태스킹의 주요 이점은 무엇인가요?",
     "difficulty": 1,
     "categoryId": 5,

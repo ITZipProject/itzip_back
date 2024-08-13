@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.csQuiz.dto.quizcategory;
+package darkoverload.itzip.feature.csQuiz.controller.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class QuizCategoryDetailDto {
+public class QuizCategoryDetailResponse {
     @Schema(description = "카테고리 id", example = "5")
     private int id;
     @Schema(description = "카테고리 유형", example = "Itzip")
