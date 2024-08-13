@@ -1,11 +1,13 @@
 package darkoverload.itzip.feature.csQuiz.controller;
 
 import darkoverload.itzip.feature.csQuiz.controller.request.QuizAnswerRequest;
+import darkoverload.itzip.feature.csQuiz.controller.request.QuizCreatedRequest;
 import darkoverload.itzip.feature.csQuiz.controller.request.QuizPointRequest;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizCategoryDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.QuizCategory;
 import darkoverload.itzip.feature.csQuiz.entity.UserQuizStatus;
 import darkoverload.itzip.feature.csQuiz.service.QuizService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,5 +59,16 @@ public class CsQuizController {
     @PostMapping("/answer")
     public UserQuizStatus submitAnswer(@RequestBody QuizAnswerRequest quizAnswerRequest) {
         return quizService.checkAnswer(quizAnswerRequest);
+    }
+
+    /**
+     * 문제를 생성할 때 사용하는 엔드포인트
+     * @param quizCreatedRequest 문제를 생설할 때 사용하는 객체
+     * @return
+     */
+    @PostMapping("/")
+    public String createQuiz(@Valid @RequestBody QuizCreatedRequest quizCreatedRequest) {
+        quizService.createQuiz(quizCreatedRequest);
+        return "문제를 생성했습니다.";
     }
 }
