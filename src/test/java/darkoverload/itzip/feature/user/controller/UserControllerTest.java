@@ -20,7 +20,7 @@ class UserControllerTest {
     private final EmailService emailService;
     private final VerificationService verificationService;
     private final String email = "test@naver.com"; // 여러분의 이메일을 넣어서 테스트 해보세요^^
-    private String authCode; // 여러분의 이메일을 넣어서 테스트 해보세요^^
+    private String authCode;
 
     @Autowired
     UserControllerTest(UserService userService, EmailService emailService, VerificationService verificationService) {
@@ -53,6 +53,7 @@ class UserControllerTest {
     @Test
     @DisplayName("인증번호 검증 Test")
     void checkAuthEmail() {
+        authCode = RandomAuthCode.generate();
         boolean isVerified = verificationService.verifyCode(email, authCode);
         log.info(isVerified ? "인증이 완료되었습니다." : "인증번호를 확인해주세요.");
     }
