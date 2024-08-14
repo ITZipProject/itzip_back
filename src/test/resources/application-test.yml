@@ -84,6 +84,3 @@ jwt:
 school:
   api-url: ${TEST_SCHOOL_API_URL}
   api-key: ${TEST_SCHOOL_API_KEY}
-
-elastic:
-  info: ${TEST_ELASTICSEARCH}
