@@ -20,7 +20,9 @@ spring:
       host: ${TEST_REDIS_HOST}
       port: ${TEST_REDIS_PORT}
       password: ${TEST_REDIS_PASSWORD}
-
+    elasticsearch:
+      repositories:
+        enabled: true
     properties:
       mail:
         smtp:
@@ -51,6 +53,10 @@ spring:
           starttls:
             enable: true
 
+  elasticsearch:
+    username: ${TEST_ELASTICSEARCH_USER}
+    password: ${TEST_ELASTICSEARCH_PASSWORD}
+    uris: ${TEST_ELASTICSEARCH}
 cloud:
   aws:
     credentials:
@@ -78,3 +84,6 @@ jwt:
 school:
   api-url: ${TEST_SCHOOL_API_URL}
   api-key: ${TEST_SCHOOL_API_KEY}
+
+elastic:
+  info: ${TEST_ELASTICSEARCH}

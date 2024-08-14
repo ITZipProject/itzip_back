@@ -1,21 +1,24 @@
 package darkoverload.itzip.feature.school.service;
 
-import darkoverload.itzip.feature.school.code.RegionType;
-import darkoverload.itzip.feature.school.code.SchoolType;
+
 import darkoverload.itzip.feature.school.controller.response.SearchResponse;
-import darkoverload.itzip.feature.school.domain.School;
-import darkoverload.itzip.feature.school.repository.SchoolRepository;
+import darkoverload.itzip.feature.school.entity.SchoolDocument;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
+import org.springframework.data.elasticsearch.core.query.Criteria;
+import org.springframework.data.elasticsearch.core.query.CriteriaQuery;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class SchoolServiceImpl implements SchoolService{
 
-    private final SchoolRepository schoolRepository;
+    private final ElasticsearchOperations elasticsearchOperations;
 
     /**
      * 학교 이름 기준으로 학교 정보 이름을 가져온다
@@ -24,13 +27,19 @@ public class SchoolServiceImpl implements SchoolService{
      */
     @Override
     public SearchResponse searchSchool(String schoolName) {
-        // 학교 정보 DB에서 조회하여 가져오는 부분 10개만 가져옴
-        List<String> schooList = schoolRepository.searchBySchoolName(schoolName);
+        final int size = 10;
+        Criteria criteria = new Criteria("school_name").contains(schoolName);
+        PageRequest pageRequest = PageRequest.of(0, size);
+        CriteriaQuery query = new CriteriaQuery(criteria, pageRequest);
 
-        SearchResponse response = SearchResponse.builder()
-                .schoolList(schooList)
+        // 검색 수행
+        List<String> schoolList = elasticsearchOperations.search(query, SchoolDocument.class)
+                .stream()
+                .map(hit->hit.getContent().getSchoolName())
+                .collect(Collectors.toList());
+
+        return SearchResponse.builder()
+                .schoolList(schoolList)
                 .build();
-
-        return response;
     }
 }

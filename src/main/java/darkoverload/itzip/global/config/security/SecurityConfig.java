@@ -41,7 +41,11 @@ public class SecurityConfig {
 
             //quiz 임시 허용
             "/cs-quizzes/**",
-            "/cs-quiz/**"
+            "/cs-quiz/**",
+
+            // 학교 정보 검색 허용
+            "/schoolsearch"
+
     };
 
     // 비로그인 유저 허용 페이지

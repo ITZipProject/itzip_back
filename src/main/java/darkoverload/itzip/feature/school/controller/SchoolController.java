@@ -1,9 +1,6 @@
 package darkoverload.itzip.feature.school.controller;
 
-import darkoverload.itzip.feature.school.code.RegionType;
-import darkoverload.itzip.feature.school.code.SchoolType;
 import darkoverload.itzip.feature.school.controller.response.SearchResponse;
-import darkoverload.itzip.feature.school.domain.School;
 import darkoverload.itzip.feature.school.service.SchoolService;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.swagger.ResponseCodeAnnotation;
@@ -24,7 +21,7 @@ public class SchoolController {
 
     @GetMapping("")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
-    public ResponseEntity<SearchResponse> findSchool(@RequestParam(value = "schoolName") String schoolName){
+    public ResponseEntity<SearchResponse> searchSchool(@RequestParam(value = "schoolName") String schoolName){
         // 학교정보를 10개 정도만 가져와 준다.
         SearchResponse searchResponse = schoolService.searchSchool(schoolName);
 

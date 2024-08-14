@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,6 +44,7 @@ public class SchoolConnectServiceImpl implements SchoolConnectService {
         for(String gubun:gubun_list) {
             int pages = calculateMap.get(gubun);
             for(int i=1; i<=pages; i++){
+                log.info("pages :: {}", i);
                 schoolRepository.saveAll(getSchoolInfoData(apiUrl, apiKey, i, 500, gubun));
             }
         }
@@ -80,6 +80,6 @@ public class SchoolConnectServiceImpl implements SchoolConnectService {
      */
     @Override
     public Long getTotalCount() {
-        return schoolRepository.getTotalCount();
+        return schoolRepository.count();
     }
 }

@@ -2,7 +2,7 @@ package darkoverload.itzip.feature.school;
 
 
 import darkoverload.itzip.feature.school.domain.School;
-import darkoverload.itzip.feature.school.entity.SchoolEntity;
+import darkoverload.itzip.feature.school.entity.SchoolDocument;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,7 +29,7 @@ public class SchoolWebClientTest {
     @Test
     void 학교_정보_외부API를_가져온다() {
         //given
-        List<SchoolEntity> list = getSchoolInfoData(apiUrl, apiKey, 1, 1, "elem_list");
+        List<SchoolDocument> list = getSchoolInfoData(apiUrl, apiKey, 1, 1, "elem_list");
         //when
         School school = list.getFirst().convertDomain();
         //then

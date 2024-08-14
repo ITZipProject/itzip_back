@@ -10,6 +10,9 @@ spring:
       host: ${LOC_REDIS_HOST}
       port: ${LOC_REDIS_PORT}
       password: ${LOC_REDIS_PASSWORD}
+    elasticsearch:
+      repositories:
+        enabled: true
 
     mongodb:
       host: ${LOC_MONGO_HOST}
@@ -32,6 +35,11 @@ spring:
           timeout: 5000
           starttls:
             enable: true
+  elasticsearch:
+    username: ${LOC_ELASTICSEARCH_USER}
+    password: ${LOC_ELASTICSEARCH_PASSWORD}
+    uris: ${LOC_ELASTICSEARCH}
+
 cloud:
   aws:
     credentials:
@@ -54,3 +62,5 @@ jwt:
   refreshSecret: ${LOC_JWT_REFRESH_SECRET}
   accessTokenExpire: ${LOC_JWT_ACCESS_EXPIRE}
   refreshTokenExpire: ${LOC_JWT_REFRESH_EXPIRE}
+
+
