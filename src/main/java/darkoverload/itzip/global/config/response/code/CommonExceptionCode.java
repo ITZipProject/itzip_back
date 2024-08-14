@@ -68,6 +68,28 @@ public enum CommonExceptionCode implements ResponseCode {
     NOT_FOUND_USER(HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다."),
 
     /**
+     * Quiz Error
+     */
+    //퀴즈를 찾을 수 없음
+    NOT_FOUND_QUIZ(HttpStatus.NOT_FOUND, "문제를 찾을 수 없습니다."),
+    //퀴즈를 풀지 않았음
+    QUIZ_UNSOLVED(HttpStatus.NOT_FOUND, "퀴즈가 풀리지 않았습니다."),
+    //정답을 맞춘적 없음
+    ANSWER_NOT_CORRECT(HttpStatus.BAD_REQUEST, "정답을 맞춘 적이 없습니다."),
+    //이미 퀴즈에 포인트를 줬음
+    POINT_ALREADY_GIVEN(HttpStatus.BAD_REQUEST, "이미 이 퀴즈에 포인트를 부여했습니다."),
+    //이미 정답을 맞췄음
+    ALREADY_CORRECT(HttpStatus.BAD_REQUEST, "이미 정답을 맞췄습니다."),
+    //카테고리가 없음
+    NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "카테고리가 없습니다."),
+
+    /**
+     * MongoDb
+     */
+    //몽고 저장소 에러
+    MONGO_DB_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "몽고 저장소에서 에러가 생겼습니다."),
+
+    /**
      * 4** client
      */
     // 400
