@@ -3,6 +3,8 @@ package darkoverload.itzip.global.config.swagger;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.response.response.SuccessResponse;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import io.swagger.v3.oas.models.Operation;
 import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
@@ -21,6 +23,16 @@ import java.util.Optional;
 
 @Slf4j
 @Configuration
+@SecurityScheme(
+        //보안 스키마 이름
+        name = "Cookie Token",
+        //인증 방식
+        scheme = "bearer",
+        //보안 유형
+        type = SecuritySchemeType.HTTP,
+        //Bearer Token의 형식 지정
+        bearerFormat = "JWT"
+)
 public class SwaggerConfig {
 
     /**
