@@ -1,8 +1,6 @@
 package darkoverload.itzip.feature.school.service;
 
 
-
-
 import darkoverload.itzip.feature.school.controller.response.SearchResponse;
 import darkoverload.itzip.feature.school.entity.SchoolDocument;
 import lombok.RequiredArgsConstructor;

@@ -5,7 +5,6 @@ package darkoverload.itzip.feature.school.util;
 import darkoverload.itzip.feature.school.code.SchoolType;
 import darkoverload.itzip.feature.school.domain.School;
 import darkoverload.itzip.feature.school.entity.SchoolDocument;
-import darkoverload.itzip.feature.school.entity.SchoolEntity;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +12,6 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import java.util.ArrayList;
 import java.util.List;
 

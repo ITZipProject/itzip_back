@@ -1,9 +1,6 @@
 package darkoverload.itzip.feature.school.controller;
 
-import darkoverload.itzip.feature.school.code.RegionType;
-import darkoverload.itzip.feature.school.code.SchoolType;
 import darkoverload.itzip.feature.school.controller.response.SearchResponse;
-import darkoverload.itzip.feature.school.domain.School;
 import darkoverload.itzip.feature.school.service.SchoolService;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.swagger.ResponseCodeAnnotation;

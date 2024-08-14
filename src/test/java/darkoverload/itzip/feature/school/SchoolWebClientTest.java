@@ -3,7 +3,6 @@ package darkoverload.itzip.feature.school;
 
 import darkoverload.itzip.feature.school.domain.School;
 import darkoverload.itzip.feature.school.entity.SchoolDocument;
-import darkoverload.itzip.feature.school.entity.SchoolEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;

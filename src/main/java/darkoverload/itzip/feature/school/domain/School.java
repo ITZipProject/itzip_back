@@ -14,8 +14,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static darkoverload.itzip.feature.school.domain.School.getSchoolInfoData;
 import static darkoverload.itzip.feature.school.util.SchoolJsonUtil.getSchoolInfo;
 
 
