@@ -3,16 +3,19 @@ package darkoverload.itzip.feature.school.domain;
 import darkoverload.itzip.feature.school.code.EstType;
 import darkoverload.itzip.feature.school.code.RegionType;
 import darkoverload.itzip.feature.school.code.SchoolType;
+import darkoverload.itzip.feature.school.entity.SchoolDocument;
 import darkoverload.itzip.feature.school.entity.SchoolEntity;
 import darkoverload.itzip.feature.school.util.SchoolJsonUtil;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import org.springframework.data.elasticsearch.core.suggest.Completion;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import static darkoverload.itzip.feature.school.domain.School.getSchoolInfoData;
 import static darkoverload.itzip.feature.school.util.SchoolJsonUtil.getSchoolInfo;
 
 
@@ -20,6 +23,7 @@ import static darkoverload.itzip.feature.school.util.SchoolJsonUtil.getSchoolInf
 @ToString
 @Getter
 public class School {
+
     private String schoolName;
 
     private String gubun;
@@ -39,6 +43,23 @@ public class School {
 
     public SchoolEntity convertToEntity(){
         return SchoolEntity.builder()
+
+                .schoolName(this.schoolName)
+                .gubun(this.gubun)
+                .schoolType(this.schoolType)
+                .address(this.address)
+                .campusName(this.campusName)
+                .estType(this.estType)
+                .region(this.region)
+                .build();
+    }
+
+    public SchoolDocument covertToDocument(){
+
+        Completion suggest = new Completion(new String[]{this.schoolName});
+
+        return SchoolDocument.builder()
+                .schoolNameSuggest(suggest)
                 .schoolName(this.schoolName)
                 .gubun(this.gubun)
                 .schoolType(this.schoolType)
@@ -58,7 +79,7 @@ public class School {
      * @param gubun 학교 구분 정보
      * @return School 정보 엔티티 리스트
      */
-    public static List<SchoolEntity> getSchoolInfoData(String apiUrl, String apiKey, int page, int perPage, String gubun) {
+    public static List<SchoolDocument> getSchoolInfoData(String apiUrl, String apiKey, int page, int perPage, String gubun) {
         final WebClientWrapper webClientWrapper = new WebClientWrapper(WebClient.builder());
         String url = apiUrl + "?apiKey=" + apiKey + "&svcType=api&svcCode=SCHOOL&contentType=json&gubun=" + gubun + "&thisPage="+ page + "&perPage=" + perPage;
         String schools = webClientWrapper.get().uri(url).retrieve().bodyToMono(String.class).block();

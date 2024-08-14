@@ -24,7 +24,7 @@ public class SchoolController {
 
     @GetMapping("")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
-    public ResponseEntity<SearchResponse> findSchool(@RequestParam(value = "schoolName") String schoolName){
+    public ResponseEntity<SearchResponse> searchSchool(@RequestParam(value = "schoolName") String schoolName){
         // 학교정보를 10개 정도만 가져와 준다.
         SearchResponse searchResponse = schoolService.searchSchool(schoolName);
 

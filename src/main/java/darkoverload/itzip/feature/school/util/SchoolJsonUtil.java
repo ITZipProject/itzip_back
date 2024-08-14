@@ -4,6 +4,7 @@ package darkoverload.itzip.feature.school.util;
 
 import darkoverload.itzip.feature.school.code.SchoolType;
 import darkoverload.itzip.feature.school.domain.School;
+import darkoverload.itzip.feature.school.entity.SchoolDocument;
 import darkoverload.itzip.feature.school.entity.SchoolEntity;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
@@ -50,9 +51,9 @@ public class SchoolJsonUtil {
      * @param schoolType 학교 구분 타입
      * @return 학교정보 엔티티 리스트
      */
-    public static List<SchoolEntity> getSchoolInfo(String json, SchoolType schoolType){
+    public static List<SchoolDocument> getSchoolInfo(String json, SchoolType schoolType){
         JSONParser parser = new JSONParser();
-        List<SchoolEntity> list = new ArrayList<>();
+        List<SchoolDocument> list = new ArrayList<>();
         try {
             JSONObject targetObject = (JSONObject) parser.parse(json);
             JSONObject dataSearch = (JSONObject) targetObject.get("dataSearch");
@@ -91,7 +92,7 @@ public class SchoolJsonUtil {
 
                 log.info("school insert data : {} ", school);
 
-                list.add(school.convertToEntity());
+                list.add(school.covertToDocument());
 
             }
 

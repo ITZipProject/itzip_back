@@ -45,6 +45,7 @@ public class SchoolConnectServiceImpl implements SchoolConnectService {
         for(String gubun:gubun_list) {
             int pages = calculateMap.get(gubun);
             for(int i=1; i<=pages; i++){
+                log.info("pages :: {}", i);
                 schoolRepository.saveAll(getSchoolInfoData(apiUrl, apiKey, i, 500, gubun));
             }
         }
@@ -80,6 +81,6 @@ public class SchoolConnectServiceImpl implements SchoolConnectService {
      */
     @Override
     public Long getTotalCount() {
-        return schoolRepository.getTotalCount();
+        return schoolRepository.count();
     }
 }
