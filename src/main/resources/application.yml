@@ -20,3 +20,6 @@ spring:
 school:
   api-url: ${SCHOOL_API_URL}
   api-key: ${SCHOOL_API_KEY}
+server:
+    servlet:
+      context-path: /api
