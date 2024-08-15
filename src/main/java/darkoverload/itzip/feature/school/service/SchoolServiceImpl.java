@@ -3,6 +3,7 @@ package darkoverload.itzip.feature.school.service;
 
 import darkoverload.itzip.feature.school.controller.response.SearchResponse;
 import darkoverload.itzip.feature.school.entity.SchoolDocument;
+import darkoverload.itzip.feature.school.repository.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SchoolServiceImpl implements SchoolService{
 
-    private final ElasticsearchOperations elasticsearchOperations;
+    private final SchoolRepository repository;
 
     /**
      * 학교 이름 기준으로 학교 정보 이름을 가져온다
@@ -27,16 +28,8 @@ public class SchoolServiceImpl implements SchoolService{
      */
     @Override
     public SearchResponse searchSchool(String schoolName) {
-        final int size = 10;
-        Criteria criteria = new Criteria("school_name").contains(schoolName);
-        PageRequest pageRequest = PageRequest.of(0, size);
-        CriteriaQuery query = new CriteriaQuery(criteria, pageRequest);
 
-        // 검색 수행
-        List<String> schoolList = elasticsearchOperations.search(query, SchoolDocument.class)
-                .stream()
-                .map(hit->hit.getContent().getSchoolName())
-                .collect(Collectors.toList());
+        List<String> schoolList = repository.searchSchool(schoolName);
 
         return SearchResponse.builder()
                 .schoolList(schoolList)

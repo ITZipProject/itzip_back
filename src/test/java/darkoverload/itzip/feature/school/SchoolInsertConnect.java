@@ -12,23 +12,21 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.util.ReflectionTestUtils;
 
-//@Slf4j
-//@ExtendWith(MockitoExtension.class)
-//@ActiveProfiles("test")
-//@SpringBootTest
+/*
+@Slf4j
+@ExtendWith(MockitoExtension.class)
+@ActiveProfiles("test")
+@SpringBootTest
+@deprecated  field error 내용 반환이 불필요하여 미사용 처리
+*/
 //public class SchoolInsertConnect {
-//   @Autowired
+//    @Autowired
 //    private SchoolConnectServiceImpl schoolConnectService;
 //
-//     @Autowired
+//    @Autowired
 //    private SchoolRepository repository;
-
-//    @InjectMocks
-//    private SchoolConnectServiceImpl schoolConnectService;
 //
-//    @Mock
-//    private SchoolRepository repository;
-
+//
 //    @BeforeEach
 //    void SetUp() {
 //        ReflectionTestUtils.setField(schoolConnectService, "apiUrl", "https://www.career.go.kr/cnet/openapi/getOpenApi");
