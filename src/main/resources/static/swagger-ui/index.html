@@ -1,0 +1,51 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Swagger UI</title>
+  <!-- Swagger UI의 CSS 파일을 절대 경로로 불러옵니다 -->
+  <link rel="stylesheet" type="text/css" href="./swagger-ui.css" />
+  <!-- Swagger UI의 메인 자바스크립트 파일을 절대 경로로 불러옵니다 -->
+  <script src="./swagger-ui-bundle.js" charset="UTF-8"> </script>
+  <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
+  <script>
+    // 페이지가 로드되었을 때 실행되는 함수
+    window.onload = function() {
+      const ui = SwaggerUIBundle({
+        url: "/v3/api-docs", // Swagger 문서의 절대 경로를 지정합니다
+        dom_id: '#swagger-ui', // Swagger UI가 렌더링될 DOM 요소를 지정합니다
+        presets: [
+          SwaggerUIBundle.presets.apis,
+          SwaggerUIStandalonePreset
+        ],
+        layout: "StandaloneLayout", // Swagger UI의 레이아웃을 설정합니다
+        onComplete: function() {
+          const authBtn = document.querySelector('.swagger-ui .authorize');
+          authBtn.addEventListener('click', function() {
+            // 모달이 나타난 후 이벤트를 기다리기 위해 setTimeout 사용
+            setTimeout(function() {
+              const authModal = document.querySelector('.swagger-ui .modal-ux');
+              if (authModal) {
+                const inputField = authModal.querySelector('input[type="text"]');
+                const authButton = authModal.querySelector('button.modal-btn.auth');
+                if (inputField && authButton) {
+                  // 모달의 Authorize 버튼 클릭 시 쿠키 설정
+                  authButton.addEventListener('click', function() {
+                    const token = inputField.value.replace('Bearer ', '');
+                    document.cookie = `accessToken=${token};path=/;SameSite=Lax;`;
+                    alert('JWT 토큰이 쿠키에 설정되었습니다.');
+                    console.log(`Set Cookie: accessToken=${token}`);
+                  });
+                }
+              }
+            }, 100); // 모달이 완전히 로드되도록 지연 시간 설정
+          });
+        }
+      });
+    }
+  </script>
+</head>
+<body>
+<!-- Swagger UI가 렌더링될 영역 -->
+<div id="swagger-ui"></div>
+</body>
+</html>

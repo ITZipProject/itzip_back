@@ -20,3 +20,17 @@ spring:
 school:
   api-url: ${SCHOOL_API_URL}
   api-key: ${SCHOOL_API_KEY}
+
+##정적 리소스을 제공할 것인가
+resources:
+  chain:
+    strategy:
+      content:
+        enabled: true
+    mime-mappings:
+      js: application/javascript
+
+##기본적으로 있는 Swagger를 비활성화해서 custom을 사용하도록함
+springdoc:
+  swagger-ui:
+    enabled: false
