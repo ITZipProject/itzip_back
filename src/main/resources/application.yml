@@ -20,7 +20,7 @@ spring:
 school:
   api-url: ${SCHOOL_API_URL}
   api-key: ${SCHOOL_API_KEY}
-
+  
 ##정적 리소스을 제공할 것인가
 resources:
   chain:
@@ -34,3 +34,7 @@ resources:
 springdoc:
   swagger-ui:
     enabled: false
+
+server:
+    servlet:
+      context-path: /api
