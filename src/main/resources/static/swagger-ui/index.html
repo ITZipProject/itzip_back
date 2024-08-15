@@ -8,39 +8,47 @@
   <script src="./swagger-ui-bundle.js" charset="UTF-8"> </script>
   <script src="./swagger-ui-standalone-preset.js" charset="UTF-8"> </script>
   <script>
-    // 페이지가 로드되었을 때 실행되는 함수
     window.onload = function() {
       const ui = SwaggerUIBundle({
-        url: "/v3/api-docs", // Swagger 문서의 절대 경로를 지정합니다
-        dom_id: '#swagger-ui', // Swagger UI가 렌더링될 DOM 요소를 지정합니다
+        url: "/api/v3/api-docs", //Swagger 문서의 경로 설정
+        dom_id: '#swagger-ui', // Swagger UI가 렌더링될 DOM 요소
         presets: [
           SwaggerUIBundle.presets.apis,
           SwaggerUIStandalonePreset
         ],
-        layout: "StandaloneLayout", // Swagger UI의 레이아웃을 설정합니다
-        onComplete: function() {
-          const authBtn = document.querySelector('.swagger-ui .authorize');
-          authBtn.addEventListener('click', function() {
-            // 모달이 나타난 후 이벤트를 기다리기 위해 setTimeout 사용
-            setTimeout(function() {
-              const authModal = document.querySelector('.swagger-ui .modal-ux');
-              if (authModal) {
-                const inputField = authModal.querySelector('input[type="text"]');
-                const authButton = authModal.querySelector('button.modal-btn.auth');
-                if (inputField && authButton) {
-                  // 모달의 Authorize 버튼 클릭 시 쿠키 설정
-                  authButton.addEventListener('click', function() {
-                    const token = inputField.value.replace('Bearer ', '');
-                    document.cookie = `accessToken=${token};path=/;SameSite=Lax;`;
-                    alert('JWT 토큰이 쿠키에 설정되었습니다.');
-                    console.log(`Set Cookie: accessToken=${token}`);
-                  });
-                }
-              }
-            }, 100); // 모달이 완전히 로드되도록 지연 시간 설정
-          });
-        }
+        layout: "StandaloneLayout", // Swagger 레이아웃
+        onComplete: addAuthModalEventListener //Swagger UI 로딩후 실행될 함수
       });
+    }
+
+    // 'Authorize' 버튼에 이벤트 리스너 추가하는 함수
+    function addAuthModalEventListener() {
+      const authBtn = document.querySelector('.swagger-ui .authorize'); // 'Authorize' 버튼 선택
+      if (authBtn) {
+        authBtn.addEventListener('click', handleAuthButtonClick); //클릭 이벤트 리스너 추가
+      }
+    }
+
+    // 'Authorize' 버큰 클릭 시 실행되는 함수
+    function handleAuthButtonClick() {
+      // 모달이 로드될 시간을 주기 위해 setTimeout 사용 (클릭 연타 방지)
+      setTimeout(() => {
+        const authButton = document.querySelector('.swagger-ui .modal-ux button.modal-btn.auth');
+        if (authButton) {
+          authButton.addEventListener('click', setAuthTokenCookie); // 클릭 이벤트 리스너 추가
+        }
+      }, 100); // 0.1초 지연
+    }
+
+    // JWT 토큰 쿠키 저장 함수
+    function setAuthTokenCookie() {
+      const authModal = document.querySelector('.swagger-ui .modal-ux'); // 모달 요소 선택
+      if (authModal) {
+        let inputField = authModal.querySelector('input[type="text"]'); // 토큰 입력 필드 선택
+        let token = inputField.value.replace('Bearer ', ''); //토큰의 Bearer 문자열 제거
+        document.cookie = `accessToken=${token};path=/;SameSite=Lax;`; // 쿠키에 토큰 저장
+        alert(`JWT 토큰이 쿠키에 설정되었습니다. accessToken=${token}`); // 사용자에게 알림
+      }
     }
   </script>
 </head>
