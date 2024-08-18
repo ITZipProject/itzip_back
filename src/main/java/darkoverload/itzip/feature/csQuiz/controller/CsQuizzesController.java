@@ -34,6 +34,7 @@ public class CsQuizzesController {
      * @param inUserSolved 사용자가 푼 퀴즈 포함 여부 (기본값: false)
      * @param page         페이지 번호 (기본값: 0)
      * @param size         페이지 크기 (기본값: 10)
+     * @param keyword      검색할 던어
      * @return 필터링되고 정렬된 퀴즈 목록
      */
     @Operation(
@@ -50,8 +51,9 @@ public class CsQuizzesController {
             @Parameter(description = "사용자 식별값 입력칸") @RequestParam(required = false) Long userId,
             @Parameter(description = "사용자가 푼 문제를 포함 하는지 true면 포함 false면 미포함") @RequestParam(required = false, defaultValue = "false") boolean inUserSolved,
             @Parameter(description = "문제 페이지 0부터 시작") @RequestParam(defaultValue = "0") int page,
-            @Parameter(description = "가져올 문제 수") @RequestParam(defaultValue = "10") int size) {
+            @Parameter(description = "가져올 문제 수") @RequestParam(defaultValue = "10") int size,
+            @Parameter(description = "검색할 단어") @RequestParam(required = false) String keyword ) {
         return quizService.QuizzesByDifficultyAndCategoryIdAndUserId(
-                difficulty, categoryId, sortBy, userId, inUserSolved, page, size);
+                difficulty, categoryId, sortBy, userId, inUserSolved, page, size, keyword);
     }
 }

@@ -55,7 +55,7 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
     @Transactional
     public PagedModel<EntityModel<QuizDetailResponse>> QuizzesByDifficultyAndCategoryIdAndUserId(
             Integer difficulty, Long categoryId,
-            SortBy sortBy, Long userId, boolean inUserSolved, int page, int size) {
+            SortBy sortBy, Long userId, boolean inUserSolved, int page, int size, String keyword) {
         // 페이지 정보와 정렬 기준을 기반으로 Pageable 객체 생성
         Pageable pageable = PageRequest.of(page, size, getSort(sortBy));
 
@@ -83,7 +83,7 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
 
         //page된 quiz들을 받아옴
         Page<QuizDocument> quizzes = quizRepository.findByDifficultyAndCategoryAndUserSolved(
-                difficulty, categoryId, solvedProblemIds, pageable, inUserSolved);
+                difficulty, categoryId, solvedProblemIds, pageable, inUserSolved, keyword);
 
 
         //solved가 Ture면 사용자가 푼문제를 포함하니 푼문제인지 표시를 해줘야함 아닐경우 그냥 dto 변환

@@ -9,5 +9,5 @@ import org.springframework.hateoas.PagedModel;
 public interface FindQiuzQuery {
     PagedModel<EntityModel<QuizDetailResponse>> QuizzesByDifficultyAndCategoryIdAndUserId(
             Integer difficulty, Long categoryId,
-            SortBy sortBy, Long userId, boolean solved, int page, int size);
+            SortBy sortBy, Long userId, boolean solved, int page, int size, String keyword);
 }
