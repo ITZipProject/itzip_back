@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 public abstract class MongoAuditingFields {
 
     /**
-     * create_date 엔티티 생성 시 자동 생성, 수정 불가
+     * 다큐먼트 생성 시 create_date 자동 생성 및 수정 불가
      */
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @CreatedDate
@@ -25,7 +25,7 @@ public abstract class MongoAuditingFields {
     protected LocalDateTime createDate;
 
     /**
-     * modify_date 엔티티 수정 시 자동 업데이트
+     * 다큐먼트 수정 시 modify_date 자동 업데이트
      */
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @LastModifiedDate
