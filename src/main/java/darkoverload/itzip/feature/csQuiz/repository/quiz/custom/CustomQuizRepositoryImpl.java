@@ -25,7 +25,7 @@ public class CustomQuizRepositoryImpl implements CustomQuizRepository {
      * @return 페이징 처리된 퀴즈 목록
      */
     @Override
-    public Page<QuizDocument> findByDifficultyAndCategoryAndUserSolved(Integer difficulty, Long categoryId, List<String> userSolved, Pageable pageable, boolean inUserSolved) {
+    public Page<QuizDocument> findByDifficultyAndCategoryAndUserSolved(Integer difficulty, Long categoryId, List<String> userSolved, Pageable pageable, boolean inUserSolved, String keyword) {
         Query query = new Query();
 
         // 필터 조건이 존재할 경우에만 해당 기준 추가
@@ -42,6 +42,14 @@ public class CustomQuizRepositoryImpl implements CustomQuizRepository {
         //사용자 문제를 제외하냐 조건이 있으면 추가 (사용자가 푼문제가 있고, 사용자 푼문제를 포함하지 않으면 제외함)
         if (userSolved != null && !userSolved.isEmpty() && !inUserSolved) {
             query.addCriteria(Criteria.where("_id").nin(userSolved));
+        }
+
+        // 키워드 검색 로직 추가 (문제와 카테고리 이름에서 검색)
+        if (keyword != null && !keyword.isEmpty()) {
+            query.addCriteria(new Criteria().orOperator(
+                    Criteria.where("questionText").regex(keyword, "i"),    // 문제에서 검색
+                    Criteria.where("category").regex(keyword, "i")         // 카테고리 이름에서 검색
+            ));
         }
 
         //쿼리에 page적용
