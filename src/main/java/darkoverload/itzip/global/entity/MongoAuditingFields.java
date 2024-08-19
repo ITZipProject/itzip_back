@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.ToString;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -11,8 +12,8 @@ import java.time.LocalDateTime;
 /**
  * create, modify date 추상 클래스
  */
-@ToString
 @Getter
+@ToString
 public abstract class MongoAuditingFields {
 
     /**
@@ -20,6 +21,7 @@ public abstract class MongoAuditingFields {
      */
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @CreatedDate
+    @Field("create_date")
     protected LocalDateTime createDate;
 
     /**
@@ -27,5 +29,6 @@ public abstract class MongoAuditingFields {
      */
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     @LastModifiedDate
+    @Field("modify_date")
     protected LocalDateTime modifyDate;
 }
