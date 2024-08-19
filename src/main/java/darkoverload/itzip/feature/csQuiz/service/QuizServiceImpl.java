@@ -51,14 +51,15 @@ public class QuizServiceImpl implements QuizService {
      * @param solved     사용자가 푼 문제만 조회할지 여부
      * @param page       페이지 번호 (기본값: 0)
      * @param size       페이지 크기 (기본값: 10)
+     * @param keyword    검색할 던어
      * @return 필터링되고 정렬된 퀴즈 목록
      */
     @Override
     public PagedModel<EntityModel<QuizDetailResponse>> QuizzesByDifficultyAndCategoryIdAndUserId(
             Integer difficulty, Long categoryId,
-            SortBy sortBy, Long userId, boolean solved, int page, int size) {
+            SortBy sortBy, Long userId, boolean solved, int page, int size, String keyword) {
         return getFilteredAndSortedQuizzes.QuizzesByDifficultyAndCategoryIdAndUserId(
-                difficulty, categoryId, sortBy, userId, solved, page, size);
+                difficulty, categoryId, sortBy, userId, solved, page, size, keyword);
     }
 
     /**

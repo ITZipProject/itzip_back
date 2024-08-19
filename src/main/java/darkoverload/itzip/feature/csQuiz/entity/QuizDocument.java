@@ -33,7 +33,7 @@ public class QuizDocument {
     @Field("categoryId")
     private Long categoryId;
 
-    //문제 유형 번호
+    //문제 카테고리 이름
     @Field("category")
     private String category;
 

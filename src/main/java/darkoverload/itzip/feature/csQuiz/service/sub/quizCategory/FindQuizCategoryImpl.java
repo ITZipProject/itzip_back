@@ -4,6 +4,8 @@ import darkoverload.itzip.feature.csQuiz.controller.response.QuizCategoryDetailR
 import darkoverload.itzip.feature.csQuiz.entity.QuizCategory;
 import darkoverload.itzip.feature.csQuiz.repository.quizcategory.QuizCategoryRepository;
 import darkoverload.itzip.feature.csQuiz.util.CategoryMapper;
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +24,9 @@ public class FindQuizCategoryImpl implements FindQuizCategory {
      * @return 카테고리 정보, 해당 ID에 대한 카테고리가 존재하지 않는 경우 null 반환
      */
     public QuizCategory CategoryById(Long id) {
-        return quizCategoryRepository.findById(id).orElse(null);
+        return quizCategoryRepository.findById(id).orElseThrow(
+                () -> new RestApiException(CommonExceptionCode.NOT_FOUND_CATEGORY)
+        );
     }
 
     /**
