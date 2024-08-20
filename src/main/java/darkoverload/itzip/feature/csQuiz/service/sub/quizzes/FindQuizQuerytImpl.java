@@ -53,7 +53,7 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
      */
     @Override
     @Transactional
-    public PagedModel<EntityModel<QuizDetailResponse>> QuizzesByDifficultyAndCategoryIdAndUserId(
+    public PagedModel<EntityModel<QuizDetailResponse>> findQuizzesByQuery(
             Integer difficulty, Long categoryId,
             SortBy sortBy, Long userId, boolean inUserSolved, int page, int size, String keyword) {
         // 페이지 정보와 정렬 기준을 기반으로 Pageable 객체 생성

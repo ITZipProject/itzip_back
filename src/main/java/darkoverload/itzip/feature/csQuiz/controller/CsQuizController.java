@@ -44,7 +44,7 @@ public class CsQuizController {
     @ExceptionCodeAnnotations(CommonExceptionCode.NOT_FOUND_CATEGORY)
     @GetMapping("/category/{categoryId}")
     public QuizCategory getCategories(@Parameter(description = "카테고리 ID", required = true) @PathVariable Long categoryId){
-        return quizService.CategoryById(categoryId);
+        return quizService.findCategoryById(categoryId);
     }
 
     /**
@@ -58,7 +58,7 @@ public class CsQuizController {
     )
     @GetMapping("/categories")
     public List<QuizCategoryDetailResponse> getAllCategories(){
-        return quizService.AllCategory();
+        return quizService.findAllCategory();
     }
 
 

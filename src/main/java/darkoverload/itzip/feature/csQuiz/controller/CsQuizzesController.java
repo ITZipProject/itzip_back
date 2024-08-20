@@ -53,7 +53,7 @@ public class CsQuizzesController {
             @Parameter(description = "문제 페이지 0부터 시작") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "가져올 문제 수") @RequestParam(defaultValue = "10") int size,
             @Parameter(description = "검색할 단어") @RequestParam(required = false) String keyword ) {
-        return quizService.QuizzesByDifficultyAndCategoryIdAndUserId(
+        return quizService.findQuizzesByQuery(
                 difficulty, categoryId, sortBy, userId, inUserSolved, page, size, keyword);
     }
 }

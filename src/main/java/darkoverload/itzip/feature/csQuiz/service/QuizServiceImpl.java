@@ -55,10 +55,10 @@ public class QuizServiceImpl implements QuizService {
      * @return 필터링되고 정렬된 퀴즈 목록
      */
     @Override
-    public PagedModel<EntityModel<QuizDetailResponse>> QuizzesByDifficultyAndCategoryIdAndUserId(
+    public PagedModel<EntityModel<QuizDetailResponse>> findQuizzesByQuery(
             Integer difficulty, Long categoryId,
             SortBy sortBy, Long userId, boolean solved, int page, int size, String keyword) {
-        return getFilteredAndSortedQuizzes.QuizzesByDifficultyAndCategoryIdAndUserId(
+        return getFilteredAndSortedQuizzes.findQuizzesByQuery(
                 difficulty, categoryId, sortBy, userId, solved, page, size, keyword);
     }
 
@@ -69,8 +69,8 @@ public class QuizServiceImpl implements QuizService {
      * @return 카테고리 정보, 해당 ID에 대한 카테고리가 존재하지 않는 경우 null 반환
      */
     @Override
-    public QuizCategory CategoryById(Long id) {
-        return getQuizCategory.CategoryById(id);
+    public QuizCategory findCategoryById(Long id) {
+        return getQuizCategory.findCategoryById(id);
     }
 
     /**
@@ -79,8 +79,8 @@ public class QuizServiceImpl implements QuizService {
      * @return 모든 카테고리 리스트
      */
     @Override
-    public List<QuizCategoryDetailResponse> AllCategory() {
-        return getQuizCategory.AllCategory();
+    public List<QuizCategoryDetailResponse> findAllCategory() {
+        return getQuizCategory.findAllCategory();
     }
 
     /**

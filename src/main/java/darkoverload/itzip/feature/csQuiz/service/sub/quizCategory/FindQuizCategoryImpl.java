@@ -23,7 +23,7 @@ public class FindQuizCategoryImpl implements FindQuizCategory {
      * @param id 카테고리 ID
      * @return 카테고리 정보, 해당 ID에 대한 카테고리가 존재하지 않는 경우 null 반환
      */
-    public QuizCategory CategoryById(Long id) {
+    public QuizCategory findCategoryById(Long id) {
         return quizCategoryRepository.findById(id).orElseThrow(
                 () -> new RestApiException(CommonExceptionCode.NOT_FOUND_CATEGORY)
         );
@@ -34,7 +34,7 @@ public class FindQuizCategoryImpl implements FindQuizCategory {
      *
      * @return 모든 카테고리 리스트
      */
-    public List<QuizCategoryDetailResponse> AllCategory() {
+    public List<QuizCategoryDetailResponse> findAllCategory() {
         List<QuizCategory> categories = quizCategoryRepository.findAll();
         return CategoryMapper.entitiesToResponseList(categories);
     }
