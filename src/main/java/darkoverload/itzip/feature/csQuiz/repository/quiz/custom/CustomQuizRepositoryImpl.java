@@ -51,14 +51,14 @@ public class CustomQuizRepositoryImpl implements CustomQuizRepository {
                     Criteria.where("category").regex(keyword, "i")         // 카테고리 이름에서 검색
             ));
         }
+        // 쿼리에 맞는 총 퀴즈 개수 계산 (페이지네이션 적용 전)
+        long count = mongoTemplate.count(query, QuizDocument.class);
 
         //쿼리에 page적용
         query.with(pageable);
 
         // 쿼리를 실행하여 퀴즈 목록을 가져옴
         List<QuizDocument> quizzes = mongoTemplate.find(query, QuizDocument.class);
-        // 쿼리에 맞는 총 퀴즈 개수 계산
-        long count = mongoTemplate.count(query, QuizDocument.class);
 
         // 결과를 Page 객체로 반환
         return new PageImpl<>(quizzes, pageable, count);

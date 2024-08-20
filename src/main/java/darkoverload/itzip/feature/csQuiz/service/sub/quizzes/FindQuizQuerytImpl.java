@@ -94,10 +94,18 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
                 })
                 .toList();
 
-        Page<QuizDetailResponse> quizDetailPage = new PageImpl<>(quizDetailDtos, pageable, quizzes.getTotalElements());
-
-        // PagedModel 생성
-        return pagedResourcesAssembler.toModel(quizDetailPage);
+        //link를 없엔 page로 반환
+        return PagedModel.of(
+                quizDetailDtos.stream()
+                        .map(EntityModel::of)
+                        .toList(),
+                new PagedModel.PageMetadata(
+                        pageable.getPageSize(),
+                        pageable.getPageNumber(),
+                        quizzes.getTotalElements(),
+                        quizzes.getTotalPages()
+                )
+        );
     }
 
     /**
