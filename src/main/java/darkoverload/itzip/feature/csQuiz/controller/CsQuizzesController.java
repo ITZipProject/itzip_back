@@ -48,7 +48,7 @@ public class CsQuizzesController {
     public PagedModel<EntityModel<QuizDetailResponse>> getFilteredAndSortedQuizzes(
             @Parameter(description = "퀴즈 난이도 입력칸 1~3") @RequestParam(required = false) Integer difficulty,
             @Parameter(description = "카테고리 식별값 입력칸") @RequestParam(required = false) Long categoryId,
-            @Parameter(description = "NEWEST 새로운 순, OLDEST 오래된 순") @RequestParam(required = false, defaultValue = "NEWEST") SortBy sortBy,
+            @Parameter(description = "NEWEST 새로운 순, OLDEST 오래된 순, RECOMMENED 추천순 아무것도 없으면 새로운순") @RequestParam(required = false, defaultValue = "NEWEST") SortBy sortBy,
             @Parameter(description = "사용자 식별값 입력칸") @RequestParam(required = false) Long userId,
             @Parameter(description = "사용자가 푼 문제를 포함 하는지 true면 포함 false면 미포함") @RequestParam(required = false, defaultValue = "false") boolean inUserSolved,
             @Parameter(description = "문제 페이지 0부터 시작") @RequestParam(defaultValue = "0") int page,

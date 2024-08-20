@@ -103,7 +103,7 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
     /**
      * 주어진 정렬 기준에 따라 정렬 객체를 생성하는 메서드
      *
-     * @param sortBy 정렬 기준 (OLDEST 또는 NEWEST)
+     * @param sortBy 정렬 기준 (OLDEST 또는 NEWEST 또는 RECOMMENDED)
      * @return 주어진 정렬 기준에 따라 생성된 Sort 객체
      */
     private Sort getSort(SortBy sortBy) {
@@ -111,9 +111,11 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
             case OLDEST:
                 // OLDEST 기준으로 정렬: 시간순 오름차순
                 return Sort.by(Sort.Direction.ASC, "timeStamp");
-            case NEWEST:
+                // 추천순으로 정렬
+            case RECOMMENDED:
+                return Sort.by(Sort.Direction.DESC, "points");
             default:
-                // NEWEST 기준으로 정렬: 시간순 내림차순
+                // NEWEST 기준으로 정렬: 시간순 내림차순 (새로운순을 기본값으로 하기위함)
                 return Sort.by(Sort.Direction.DESC, "timeStamp");
         }
     }
