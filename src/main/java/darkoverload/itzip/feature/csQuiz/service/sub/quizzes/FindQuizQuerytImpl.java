@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.csQuiz.service.sub.quizzes;
 
+import darkoverload.itzip.feature.csQuiz.controller.request.QuizQueryRequest;
 import darkoverload.itzip.feature.csQuiz.entity.QuizUserSolvedMapping;
 import darkoverload.itzip.feature.csQuiz.entity.SortBy;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizDetailResponse;
@@ -42,22 +43,14 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
     /**
      * 주어진 필터와 정렬 기준, 사용자 정보를 기반으로 퀴즈 목록을 조회하는 메서드
      *
-     * @param difficulty 퀴즈 난이도 (선택 사항)
-     * @param categoryId 카테고리 ID (선택 사항)
-     * @param sortBy     정렬 기준 (OLDEST 또는 NEWEST)
-     * @param userId     사용자 ID (0이면 모든 사용자)
-     * @param inUserSolved     사용자가 푼 문제만 조회할지 여부
-     * @param page       페이지 번호 (기본값: 0)
-     * @param size       페이지 크기 (기본값: 10)
+     * @param quizQueryRequest 사용자가 보내주는 퀴즈 쿼리 객체
      * @return 필터링되고 정렬된 퀴즈 목록
      */
     @Override
     @Transactional
-    public PagedModel<EntityModel<QuizDetailResponse>> findQuizzesByQuery(
-            Integer difficulty, Long categoryId,
-            SortBy sortBy, Long userId, boolean inUserSolved, int page, int size, String keyword) {
+    public PagedModel<EntityModel<QuizDetailResponse>> findQuizzesByQuery(QuizQueryRequest quizQueryRequest) {
         // 페이지 정보와 정렬 기준을 기반으로 Pageable 객체 생성
-        Pageable pageable = PageRequest.of(page, size, getSort(sortBy));
+        Pageable pageable = PageRequest.of(quizQueryRequest.getPage(), quizQueryRequest.getSize(), getSort(quizQueryRequest.getSortBy()));
 
         // 사용자가 푼 문제의 목록을 저장할 리스트 초기화
         List<QuizUserSolvedMapping> solvedProblemsEntity = List.of();
@@ -65,9 +58,9 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
         List<String> solvedProblemIds = new ArrayList<>();
 
         // 사용자가 있으면 사용자가 푼 문제를 가져옴
-        if (userId != null) {
+        if (quizQueryRequest.getUserId() != null) {
             //사용자를 찾고 사용자가 없을시 사용자가 없음 예외 출력
-            UserEntity userEntity = userRepository.findById(userId).orElse(null);
+            UserEntity userEntity = userRepository.findById(quizQueryRequest.getUserId()).orElse(null);
             if (userEntity == null) {
                 throw new RestApiException(CommonExceptionCode.NOT_FOUND_USER);
             }
@@ -83,13 +76,17 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
 
         //page된 quiz들을 받아옴
         Page<QuizDocument> quizzes = quizRepository.findByDifficultyAndCategoryAndUserSolved(
-                difficulty, categoryId, solvedProblemIds, pageable, inUserSolved, keyword);
-
+                quizQueryRequest.getDifficulty(),
+                quizQueryRequest.getCategoryId(),
+                solvedProblemIds,
+                pageable,
+                quizQueryRequest.isInUserSolved(),
+                quizQueryRequest.getKeyword());
 
         //solved가 Ture면 사용자가 푼문제를 포함하니 푼문제인지 표시를 해줘야함 아닐경우 그냥 dto 변환
         List<QuizDetailResponse> quizDetailDtos = quizzes.getContent().stream()
                 .map(quiz -> {
-                    if (inUserSolved) {
+                    if (quizQueryRequest.isInUserSolved()) {
                         return quizMapper.documentsToResponse(quiz, solvedProblemsSet);
                     } else {
                         return quizMapper.documentsToResponse(quiz);

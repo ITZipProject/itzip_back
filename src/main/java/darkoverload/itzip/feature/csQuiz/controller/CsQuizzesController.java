@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.csQuiz.controller;
 
+import darkoverload.itzip.feature.csQuiz.controller.request.QuizQueryRequest;
 import darkoverload.itzip.feature.csQuiz.entity.SortBy;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizDetailResponse;
 import darkoverload.itzip.feature.csQuiz.service.QuizService;
@@ -53,7 +54,16 @@ public class CsQuizzesController {
             @Parameter(description = "문제 페이지 0부터 시작") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "가져올 문제 수") @RequestParam(defaultValue = "10") int size,
             @Parameter(description = "검색할 단어") @RequestParam(required = false) String keyword ) {
-        return quizService.findQuizzesByQuery(
-                difficulty, categoryId, sortBy, userId, inUserSolved, page, size, keyword);
+        QuizQueryRequest quizQueryRequest = QuizQueryRequest.builder()
+                .difficulty(difficulty)
+                .categoryId(categoryId)
+                .sortBy(sortBy)
+                .userId(userId)
+                .inUserSolved(inUserSolved)
+                .page(page)
+                .size(size)
+                .keyword(keyword)
+                .build();
+        return quizService.findQuizzesByQuery(quizQueryRequest);
     }
 }
