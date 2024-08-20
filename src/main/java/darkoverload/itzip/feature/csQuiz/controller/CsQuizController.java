@@ -11,13 +11,13 @@ import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.swagger.ExceptionCodeAnnotations;
 import darkoverload.itzip.global.config.swagger.ResponseCodeAnnotation;
+import darkoverload.itzip.global.config.swagger.SwaggerRequestBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +30,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CsQuizController {
     private final QuizService quizService;
-
     /**
      * 주어진 카테고리 ID에 해당하는 카테고리 정보를 조회하는 메서드
      *
@@ -45,7 +44,7 @@ public class CsQuizController {
     @ExceptionCodeAnnotations(CommonExceptionCode.NOT_FOUND_CATEGORY)
     @GetMapping("/category/{categoryId}")
     public QuizCategory getCategories(@Parameter(description = "카테고리 ID", required = true) @PathVariable Long categoryId){
-        return quizService.CategoryById(categoryId);
+        return quizService.findCategoryById(categoryId);
     }
 
     /**
@@ -59,7 +58,7 @@ public class CsQuizController {
     )
     @GetMapping("/categories")
     public List<QuizCategoryDetailResponse> getAllCategories(){
-        return quizService.AllCategory();
+        return quizService.findAllCategory();
     }
 
 
@@ -71,8 +70,8 @@ public class CsQuizController {
     @Operation(summary = "점수 부여", description = "푼 문제에 점수를 부여하는 엔드포인트")
     @PostMapping("/point")
     public Integer sumPointToQuiz(
-            @RequestBody(description = "점수를 부여할 문제의 정보와 점수", required = true, content = @Content(schema = @Schema(implementation = QuizPointRequest.class)))
-            QuizPointRequest quizPointRequest) {
+            @SwaggerRequestBody(description = "점수를 부여할 문제의 정보와 점수", content = @Content(schema = @Schema(implementation = QuizPointRequest.class)))
+            @RequestBody QuizPointRequest quizPointRequest) {
         return quizService.givenPointToQuiz(quizPointRequest);
     }
 
@@ -87,10 +86,10 @@ public class CsQuizController {
     )
     @PostMapping("/answer")
     public UserQuizStatus submitAnswer(
-            @RequestBody(description = "제출할 문제의 정답 정보", required = true, content = @Content(
+            @SwaggerRequestBody(description = "제출할 문제의 정답 정보", required = true, content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = QuizAnswerRequest.class)
-            )) QuizAnswerRequest quizAnswerRequest) {
+            )) @RequestBody QuizAnswerRequest quizAnswerRequest) {
         return quizService.checkAnswer(quizAnswerRequest);
     }
 
@@ -105,10 +104,10 @@ public class CsQuizController {
     )
     @PostMapping("/")
     public String createQuiz(
-            @Valid @RequestBody(description = "생성할 문제에 대한 정보", required = true, content = @Content(
+            @SwaggerRequestBody(description = "생성할 문제에 대한 정보", required = true, content = @Content(
                     mediaType = "application/json",
                     schema = @Schema(implementation = QuizCreatedRequest.class)
-            )) QuizCreatedRequest quizCreatedRequest) {
+            )) @RequestBody QuizCreatedRequest quizCreatedRequest) {
         quizService.createQuiz(quizCreatedRequest);
         return "문제를 생성했습니다.";
     }

@@ -59,6 +59,23 @@ public class SwaggerConfig {
                 }
             }
 
+            // SwaggerRequestBody 커스텀 어노테이션 처리 추가
+            SwaggerRequestBody swaggerRequestBody = handlerMethod.getMethodAnnotation(SwaggerRequestBody.class);
+            if (swaggerRequestBody != null) {
+                // 리퀘스트 바디디부분 문서화 추가
+                io.swagger.v3.oas.models.parameters.RequestBody requestBody = new io.swagger.v3.oas.models.parameters.RequestBody()
+                        .description(swaggerRequestBody.description())
+                        .required(swaggerRequestBody.required());
+
+                Content content = new Content();
+                MediaType mediaType = new MediaType();
+                mediaType.setSchema(new Schema<>());
+                content.addMediaType("application/json", mediaType);
+                requestBody.setContent(content);
+
+                operation.setRequestBody(requestBody);
+            }
+
             return operation;
         };
     }
