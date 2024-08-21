@@ -35,7 +35,6 @@ public class MongoConfig {
     @Bean
     public MongoMappingContext mongoMappingContext() {
         MongoMappingContext mappingContext = new MongoMappingContext();
-        mappingContext.setAutoIndexCreation(true);
         return mappingContext;
     }
 }
