@@ -1,10 +1,14 @@
 package darkoverload.itzip.feature.resume.entity;
 
 
+import darkoverload.itzip.feature.resume.code.PublicOnOff;
+import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.util.StringListConverter;
 import darkoverload.itzip.global.entity.AuditingFields;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Builder
@@ -17,8 +21,8 @@ public class ResumeEntity extends AuditingFields {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="user_id", nullable = false, insertable = false)
-    private String userId;
+    @Column(name="user_id", nullable = false, updatable = false)
+    private Long userId;
 
     private String email;
 
@@ -36,5 +40,13 @@ public class ResumeEntity extends AuditingFields {
     private String address;
 
     @Convert(converter = StringListConverter.class)
-    private String links;
+    private List<String> links;
+
+    private String combination;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name="public_on_off", nullable = false)
+    private PublicOnOff publicOnOff;
+
+
 }

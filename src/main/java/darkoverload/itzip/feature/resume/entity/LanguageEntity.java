@@ -20,10 +20,10 @@ public class LanguageEntity extends AuditingFields {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="user_id", nullable = false, insertable = false)
+    @Column(name="user_id", nullable = false, updatable = false)
     private Long userId;
 
-    @Column(name="resume_id", nullable = false, insertable = false, updatable = false)
+    @Column(name="resume_id", nullable = false, updatable = false)
     private Long resumeId;
 
     @Column(length = 50, nullable = false)

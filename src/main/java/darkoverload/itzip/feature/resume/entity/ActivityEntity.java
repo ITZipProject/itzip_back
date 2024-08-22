@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name="achievements")
-public class AchievementEntity extends AuditingFields {
+@Table(name="activites")
+public class ActivityEntity extends AuditingFields {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,18 +23,15 @@ public class AchievementEntity extends AuditingFields {
     @Column(name="user_id", nullable = false, updatable = false)
     private Long userId;
 
-    @Column(name="resume_id", nullable = false, updatable = false)
+    @Column(name="resume_id", nullable = false,  updatable = false)
     private Long resumeId;
 
-    @Column(length=50)
-    private String name;
-
-    @Column(name="organization", length=100)
-    private String organization;
-
-    @Column(name="achievement_date")
-    private LocalDateTime achievementDate;
-
     private String content;
+
+    @Column(name="start_date")
+    private LocalDateTime startDate;
+
+    @Column(name="end_date")
+    private LocalDateTime endDate;
 
 }
