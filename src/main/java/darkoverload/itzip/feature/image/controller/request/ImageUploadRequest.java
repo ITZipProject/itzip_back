@@ -11,7 +11,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public class ImageUploadRequest {
     private List<String> imagePaths;
 
