@@ -20,11 +20,12 @@ public class EducationEntity extends AuditingFields {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="user_id", nullable = false, updatable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="resume_id", nullable = false, updatable = false)
+    private ResumeEntity resume;
 
-    @Column(name="resume_id", nullable = false, updatable = false)
-    private Long resumeId;
+    @Column(name="school_name")
+    private String schoolName;
 
     @Column(length=50)
     private String major;

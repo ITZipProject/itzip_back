@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Builder
 @AllArgsConstructor
@@ -19,16 +21,20 @@ public class QualificationEntity extends AuditingFields {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="resume_id", nullable = false, updatable = false)
-    private Long resumeId;
-
-    @Column(name="organization", length=100)
-    private String organization;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="resume_id", nullable = false, updatable = false)
+    private ResumeEntity resume;
 
     @Column(length=50)
     private String name;
 
     private int score;
+
+    @Column(length=100)
+    private String organization;
+
+    @Column(name="qualification_date", nullable = false)
+    private LocalDateTime qualificationDate;
 
     @Column(length=5)
     private String level;

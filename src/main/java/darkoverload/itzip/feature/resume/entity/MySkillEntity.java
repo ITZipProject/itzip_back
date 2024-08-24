@@ -18,11 +18,9 @@ public class MySkillEntity extends AuditingFields {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="user_id", nullable = false, updatable = false)
-    private Long userId;
-
-    @Column(name="resume_id", nullable = false, updatable = false)
-    private Long resumeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="resume_id", nullable = false, updatable = false)
+    private ResumeEntity resume;
 
     private String name;
 

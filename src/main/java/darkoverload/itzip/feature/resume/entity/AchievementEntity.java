@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -20,11 +19,9 @@ public class AchievementEntity extends AuditingFields {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="user_id", nullable = false, updatable = false)
-    private Long userId;
-
-    @Column(name="resume_id", nullable = false, updatable = false)
-    private Long resumeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="resume_id", nullable = false, updatable = false)
+    private ResumeEntity resume;
 
     @Column(length=50)
     private String name;

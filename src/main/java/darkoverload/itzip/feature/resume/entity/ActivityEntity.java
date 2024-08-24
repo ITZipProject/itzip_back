@@ -20,11 +20,11 @@ public class ActivityEntity extends AuditingFields {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="user_id", nullable = false, updatable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="resume_id",nullable = false, updatable = false)
+    private ResumeEntity resume;
 
-    @Column(name="resume_id", nullable = false,  updatable = false)
-    private Long resumeId;
+    private String name;
 
     private String content;
 

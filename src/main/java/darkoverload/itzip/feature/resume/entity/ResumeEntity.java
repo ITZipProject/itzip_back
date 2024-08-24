@@ -2,17 +2,17 @@ package darkoverload.itzip.feature.resume.entity;
 
 
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
-import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.util.StringListConverter;
 import darkoverload.itzip.global.entity.AuditingFields;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Builder
 @AllArgsConstructor
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name="resumes")
 public class ResumeEntity extends AuditingFields {
@@ -39,14 +39,12 @@ public class ResumeEntity extends AuditingFields {
 
     private String address;
 
-    @Convert(converter = StringListConverter.class)
-    private List<String> links;
 
-    private String combination;
+    @Convert(converter = StringListConverter.class)
+    private List<String> links = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     @Column(name="public_on_off", nullable = false)
     private PublicOnOff publicOnOff;
-
 
 }
