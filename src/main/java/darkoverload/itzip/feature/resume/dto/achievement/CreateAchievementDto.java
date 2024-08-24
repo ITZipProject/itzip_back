@@ -1,20 +1,18 @@
 package darkoverload.itzip.feature.resume.dto.achievement;
 
-import darkoverload.itzip.feature.resume.domain.achievement.Achievement;
-import jakarta.validation.constraints.NotBlank;
+import darkoverload.itzip.feature.resume.domain.achievement.CreateAchievement;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.time.LocalDateTime;
 
-@ToString
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AchievementDto {
+public class CreateAchievementDto {
+
 
     // 수상명
     private String name;
@@ -29,13 +27,13 @@ public class AchievementDto {
     @Size(max = 255, message = "내용을 255 글자 이상 입력 할 수 없습니다.")
     private String content;
 
-
-    public Achievement toDomain() {
-        return Achievement.builder()
-                .name(name)
-                .organization(organization)
-                .achievementDate(achievementDate)
-                .content(content)
+    public CreateAchievement create() {
+        return CreateAchievement.builder()
+                .name(this.name)
+                .organization(this.organization)
+                .achievementDate(this.achievementDate)
+                .content(this.content)
+                .content(this.content)
                 .build();
     }
 }

@@ -1,16 +1,17 @@
 package darkoverload.itzip.feature.resume.dto.resume;
 
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
-import darkoverload.itzip.feature.resume.domain.resume.Resume;
+import darkoverload.itzip.feature.resume.domain.resume.CreateResume;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ToString
 @Getter
-public class ResumeDto {
+public class CreateResumeDto {
 
     // 이메일
     @Pattern(regexp = "^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}$",
@@ -31,7 +32,7 @@ public class ResumeDto {
     private PublicOnOff publicOnOff;
 
     // 링크
-    private List<String> link;
+    private List<String> links;
 
     // 이미지
     private String imageUrl;
@@ -39,20 +40,16 @@ public class ResumeDto {
     // 유저 아이디
     private Long userId;
 
-    // 이력서 조합
-    private String combination;
-    public Resume toSaveDomain(Long userId, String combination) {
-
-        return Resume.builder()
+    public CreateResume create(Long userId) {
+        return CreateResume.builder()
                 .email(this.email)
                 .phone(this.phone)
                 .subject(this.subject)
                 .introduction(this.introduction)
                 .publicOnOff(this.publicOnOff)
-                .link(this.link)
+                .links(this.links)
                 .imageUrl(this.imageUrl)
                 .userId(userId)
-                .combination(combination)
                 .build();
     }
 }

@@ -4,6 +4,8 @@ import darkoverload.itzip.feature.resume.code.PublicOnOff;
 import darkoverload.itzip.feature.resume.entity.ResumeEntity;
 import lombok.*;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 @ToString
@@ -12,7 +14,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Resume {
+public class CreateResume {
 
     // 이메일
     private String email;
@@ -30,16 +32,14 @@ public class Resume {
     private PublicOnOff publicOnOff;
 
     // 링크
-    private List<String> link;
+    @Builder.Default
+    private List<String> links = new ArrayList<>();
 
     // 이미지
     private String imageUrl;
 
     // 유저아이디
     private Long userId;
-
-    // 이력서 조합
-    private String combination;
 
     public ResumeEntity toEntity() {
         return ResumeEntity.builder()
@@ -50,9 +50,8 @@ public class Resume {
                 .publicOnOff(this.publicOnOff)
                 .userId(this.userId)
                 .imageUrl(this.imageUrl)
-                .links(this.link)
-                .combination(this.combination)
+                .links(this.links)
                 .build();
-    }
 
+    }
 }

@@ -4,6 +4,6 @@ import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
 
 public interface ResumeService {
 
-    Long save(CreateResumeRequest request);
+    void create(CreateResumeRequest request);
 
 }
