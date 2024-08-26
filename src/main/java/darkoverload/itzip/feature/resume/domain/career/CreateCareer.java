@@ -1,6 +1,5 @@
 package darkoverload.itzip.feature.resume.domain.career;
 
-import darkoverload.itzip.feature.resume.code.CareerStatus;
 import darkoverload.itzip.feature.resume.entity.CareerEntity;
 import darkoverload.itzip.feature.resume.entity.ResumeEntity;
 import lombok.*;
@@ -20,9 +19,6 @@ public class CreateCareer {
     // 회사명
     private String companyName;
 
-    // 상태
-    private CareerStatus careerStatus;
-
     // 직책
     private String careerPosition;
 
@@ -39,7 +35,6 @@ public class CreateCareer {
         return CareerEntity.builder()
                 .resume(this.resume)
                 .companyName(this.companyName)
-                .careerStatus(this.careerStatus)
                 .careerPosition(this.careerPosition)
                 .department(this.department)
                 .startDate(this.startDate)

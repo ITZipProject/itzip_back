@@ -1,7 +1,6 @@
 package darkoverload.itzip.feature.resume.entity;
 
 
-import darkoverload.itzip.feature.resume.code.CareerStatus;
 import darkoverload.itzip.global.entity.AuditingFields;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -28,9 +27,6 @@ public class CareerEntity extends AuditingFields {
 
     @Column(name = "company_name",length = 50, nullable = false)
     private String companyName;
-
-    @Column(name= "career_status", nullable = false)
-    private CareerStatus careerStatus;
 
     @Column(name="career_position",length = 50 ,nullable = false)
     private String careerPosition;

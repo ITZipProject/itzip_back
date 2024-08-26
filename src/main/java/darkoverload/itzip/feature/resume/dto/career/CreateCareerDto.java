@@ -1,8 +1,6 @@
 package darkoverload.itzip.feature.resume.dto.career;
 
-import darkoverload.itzip.feature.resume.code.CareerStatus;
 import darkoverload.itzip.feature.resume.domain.career.CreateCareer;
-import darkoverload.itzip.feature.resume.entity.ResumeEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -16,9 +14,6 @@ public class CreateCareerDto {
 
     // 회사명
     private String companyName;
-
-    // 상태
-    private CareerStatus careerStatus;
 
     // 직책
     private String careerPosition;
@@ -35,7 +30,6 @@ public class CreateCareerDto {
     public CreateCareer create(){
         return CreateCareer.builder()
                 .companyName(this.companyName)
-                .careerStatus(this.careerStatus)
                 .careerPosition(this.careerPosition)
                 .department(this.department)
                 .startDate(this.startDate)
