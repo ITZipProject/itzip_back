@@ -19,7 +19,7 @@ import java.util.List;
 public class CreateResumeRequest {
 
     @ResumeConditional
-    private List<CreateAchievementDto> achievements = new ArrayList<>();//=> null  // 애 없을 수도 있음.
+    private List<CreateAchievementDto> achievements = new ArrayList<>();
 
     @ResumeConditional
     private final List<CreateQualificationDto> qualifications = new ArrayList<>();
