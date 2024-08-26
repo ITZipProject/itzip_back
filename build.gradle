@@ -116,6 +116,9 @@ dependencies {
     //Spring HATEOAS
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 
+    // logback
+    implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
+
 }
 // QueryDsl Test Code 실행 시, QClass 생성
 sourceSets {
