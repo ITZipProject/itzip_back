@@ -47,8 +47,10 @@ public class SecurityConfig {
             "/cs-quiz/**",
 
             // 학교 정보 검색 허용
-            "/schoolsearch"
+            "/schoolsearch",
 
+            // 이력서 임시 허용
+            "/resume"
     };
 
     // 비로그인 유저 허용 페이지
