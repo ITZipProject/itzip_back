@@ -199,7 +199,7 @@ public class UserController {
     @PostMapping("/authEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.FILED_ERROR)
-    public ResponseEntity<String> sendAuthEmail(@RequestBody @Valid EmailSendRequest emailSendDto, BindingResult bindingResult) {
+    public ResponseEntity<String> sendAuthEmail(@RequestBody @Valid EmailSendRequest emailSendRequest, BindingResult bindingResult) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
@@ -207,10 +207,15 @@ public class UserController {
 
         // 랜덤 인증 코드 생성
         String authCode = RandomAuthCode.generate();
+
         // redis에 인증 코드 저장
-        verificationService.saveCode(emailSendDto.getEmail(), authCode);
+        verificationService.saveCode(emailSendRequest.getEmail(), authCode);
+
+        // 메일 제목
+        String subject = "[ITZIP] 이메일 인증번호 : " + authCode;
+
         // 메일 발송
-        emailService.sendSimpleMessage(emailSendDto.getEmail(), "test", authCode);
+        emailService.sendSimpleMessage(emailSendRequest.getEmail(), subject, authCode);
         return ResponseEntity.ok("인증 메일이 발송되었습니다.");
     }
 

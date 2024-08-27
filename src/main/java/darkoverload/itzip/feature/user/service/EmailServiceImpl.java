@@ -1,6 +1,7 @@
 package darkoverload.itzip.feature.user.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,9 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Value("${LOC_GMAIL_USERNAME}")
+    private String fromEmail;
+
     /**
      * 간단한 이메일 메시지를 보내는 메소드
      *
@@ -22,6 +26,7 @@ public class EmailServiceImpl implements EmailService {
     public void sendSimpleMessage(String to, String subject, String text) {
         // SimpleMailMessage 객체 생성 및 설정
         SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(String.format("ITZIP <%s>", fromEmail)); // 수신자 설정
         message.setTo(to); // 수신자 설정
         message.setSubject(subject); // 제목 설정
         message.setText(text); // 본문 설정
