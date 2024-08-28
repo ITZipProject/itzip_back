@@ -1,6 +1,7 @@
 package darkoverload.itzip.feature.user.service;
 
-import darkoverload.itzip.feature.user.controller.request.EmailSendRequest;
+import darkoverload.itzip.feature.user.controller.request.AuthEmailSendRequest;
+import darkoverload.itzip.feature.user.controller.request.DuplicateEmailRequest;
 import darkoverload.itzip.feature.user.controller.request.UserJoinRequest;
 import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.UserEntity;
@@ -90,7 +91,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity<String> sendAuthEmail(EmailSendRequest emailSendRequest, BindingResult bindingResult) {
+    public ResponseEntity<String> sendAuthEmail(AuthEmailSendRequest emailSendRequest, BindingResult bindingResult) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
@@ -111,6 +112,27 @@ public class UserServiceImpl implements UserService {
         // 메일 발송
         emailService.sendFormMail(emailSendRequest.getEmail(), subject, body);
         return ResponseEntity.ok("인증 메일이 발송되었습니다.");
+    }
+
+    /**
+     * 사용 중인 이메일인지 체크하는 메소드
+     *
+     * @param request
+     * @param bindingResult
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> checkDuplicateEmail(DuplicateEmailRequest request, BindingResult bindingResult) {
+        // 필드 에러 확인
+        if (bindingResult.hasErrors()) {
+            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
+        }
+
+        // 중복 이메일 체크
+        userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
+            throw new RestApiException(CommonExceptionCode.EXIST_EMAIL_ERROR);
+        });
+        return ResponseEntity.ok("사용 가능한 이메일입니다.");
     }
 
 }

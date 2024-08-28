@@ -1,6 +1,7 @@
 package darkoverload.itzip.feature.user.service;
 
-import darkoverload.itzip.feature.user.controller.request.EmailSendRequest;
+import darkoverload.itzip.feature.user.controller.request.AuthEmailSendRequest;
+import darkoverload.itzip.feature.user.controller.request.DuplicateEmailRequest;
 import darkoverload.itzip.feature.user.controller.request.UserJoinRequest;
 import darkoverload.itzip.feature.user.domain.User;
 import org.springframework.http.ResponseEntity;
@@ -19,5 +20,7 @@ public interface UserService {
 
     Optional<User> findByNickname(String nickname);
 
-    ResponseEntity<String> sendAuthEmail(EmailSendRequest emailSendRequest, BindingResult bindingResult);
+    ResponseEntity<String> sendAuthEmail(AuthEmailSendRequest emailSendRequest, BindingResult bindingResult);
+
+    ResponseEntity<String> checkDuplicateEmail(DuplicateEmailRequest request, BindingResult bindingResult);
 }

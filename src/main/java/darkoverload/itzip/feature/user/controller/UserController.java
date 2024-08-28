@@ -3,10 +3,7 @@ package darkoverload.itzip.feature.user.controller;
 import darkoverload.itzip.feature.jwt.domain.Token;
 import darkoverload.itzip.feature.jwt.service.TokenService;
 import darkoverload.itzip.feature.jwt.util.JwtTokenizer;
-import darkoverload.itzip.feature.user.controller.request.EmailCheckRequest;
-import darkoverload.itzip.feature.user.controller.request.EmailSendRequest;
-import darkoverload.itzip.feature.user.controller.request.UserJoinRequest;
-import darkoverload.itzip.feature.user.controller.request.UserLoginRequest;
+import darkoverload.itzip.feature.user.controller.request.*;
 import darkoverload.itzip.feature.user.controller.response.UserLoginResponse;
 import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.Authority;
@@ -203,8 +200,8 @@ public class UserController {
     @PostMapping("/authEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.FILED_ERROR)
-    public ResponseEntity<String> sendAuthEmail(@RequestBody @Valid EmailSendRequest emailSendRequest, BindingResult bindingResult) {
-        return userService.sendAuthEmail(emailSendRequest, bindingResult);
+    public ResponseEntity<String> sendAuthEmail(@RequestBody @Valid AuthEmailSendRequest request, BindingResult bindingResult) {
+        return userService.sendAuthEmail(request, bindingResult);
     }
 
     /**
@@ -213,17 +210,31 @@ public class UserController {
     @GetMapping("/authEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_MATCH_AUTH_CODE})
-    public ResponseEntity<String> checkAuthEmail(@RequestBody @Valid EmailCheckRequest emailCheckDto, BindingResult bindingResult) {
+    public ResponseEntity<String> checkAuthEmail(@RequestBody @Valid AuthEmailCheckRequest request, BindingResult bindingResult) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
         }
 
         // redis에 저장된 인증번호와 비교하여 확인
-        if (!verificationService.verifyCode(emailCheckDto.getEmail(), emailCheckDto.getAuthCode())) {
+        if (!verificationService.verifyCode(request.getEmail(), request.getAuthCode())) {
             throw new RestApiException(CommonExceptionCode.NOT_MATCH_AUTH_CODE);
         }
 
         return ResponseEntity.ok("인증이 완료되었습니다.");
+    }
+
+    /**
+     * 이메일 중복 체크 메소드
+     */
+    @Operation(
+            summary = "이메일 중복 체크",
+            description = "회원가입 시 중복된 이메일인지 확인합니다."
+    )
+    @GetMapping("/checkDuplicateEmail")
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR})
+    public ResponseEntity<String> checkDuplicateEmail(@RequestBody @Valid DuplicateEmailRequest request, BindingResult bindingResult) {
+        return userService.checkDuplicateEmail(request, bindingResult);
     }
 }
