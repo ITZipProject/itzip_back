@@ -18,6 +18,8 @@ import darkoverload.itzip.global.config.response.exception.RestApiException;
 import darkoverload.itzip.global.config.swagger.ExceptionCodeAnnotations;
 import darkoverload.itzip.global.config.swagger.ResponseCodeAnnotation;
 import io.jsonwebtoken.Claims;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,6 +32,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "User", description = "회원 기능 API")
 @RestController
 @RequestMapping("/user")
 @Slf4j
@@ -193,6 +196,10 @@ public class UserController {
     /**
      * 인증번호 발송 메소드
      */
+    @Operation(
+            summary = "인증메일 발송",
+            description = "회원가입 시 인증메일을 발송합니다."
+    )
     @PostMapping("/authEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.FILED_ERROR)
