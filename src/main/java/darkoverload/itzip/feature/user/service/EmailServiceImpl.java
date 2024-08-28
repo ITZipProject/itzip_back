@@ -11,8 +11,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 @Service
 public class EmailServiceImpl implements EmailService {
@@ -66,17 +66,21 @@ public class EmailServiceImpl implements EmailService {
 
     /**
      * 인증메일 폼에 인증코드를 추가하여 반환하는 메소드
+     *
      * @param authcode 인증코드
      * @return 인증코드를 추가한 인증메일 폼
      */
     public String setAuthForm(String authcode) {
         // 인증메일 폼 경로 설정
-        String templatePath = "src/main/resources/templates/authMailForm.html";
+        String templatePath = "/templates/authMailForm.html";
 
         // 인증메일 폼 읽어오기
         String htmlContent = null;
-        try {
-            htmlContent = new String(Files.readAllBytes(Paths.get(templatePath)));
+        try (InputStream inputStream = getClass().getResourceAsStream(templatePath)) {
+            if (inputStream == null) {
+                throw new RestApiException(CommonExceptionCode.INTERNAL_SERVER_ERROR);
+            }
+            htmlContent = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
         } catch (IOException e) {
             throw new RestApiException(CommonExceptionCode.INTERNAL_SERVER_ERROR);
         }
