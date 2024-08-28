@@ -1,16 +1,20 @@
 package darkoverload.itzip.feature.user.service;
 
+import darkoverload.itzip.feature.user.controller.request.EmailSendRequest;
 import darkoverload.itzip.feature.user.controller.request.UserJoinRequest;
 import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.UserEntity;
 import darkoverload.itzip.feature.user.repository.UserRepository;
+import darkoverload.itzip.feature.user.util.RandomAuthCode;
 import darkoverload.itzip.feature.user.util.RandomNickname;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.BindingResult;
 
 import java.util.Optional;
 
@@ -20,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RandomNickname randomNickname;
     private final VerificationService verificationService;
+    private final EmailService emailService;
 
     @Transactional
     public void save(UserJoinRequest userJoinDto) {
@@ -83,4 +88,29 @@ public class UserServiceImpl implements UserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(password);
     }
+
+    @Transactional(readOnly = true)
+    public ResponseEntity<String> sendAuthEmail(EmailSendRequest emailSendRequest, BindingResult bindingResult) {
+        // 필드 에러 확인
+        if (bindingResult.hasErrors()) {
+            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
+        }
+
+        // 랜덤 인증 코드 생성
+        String authCode = RandomAuthCode.generate();
+
+        // redis에 인증 코드 저장
+        verificationService.saveCode(emailSendRequest.getEmail(), authCode);
+
+        // 메일 제목
+        String subject = "[ITZIP] 이메일 인증번호 : " + authCode;
+
+        // 메일 본문
+        String body = emailService.setAuthForm(authCode);
+
+        // 메일 발송
+        emailService.sendFormMail(emailSendRequest.getEmail(), subject, body);
+        return ResponseEntity.ok("인증 메일이 발송되었습니다.");
+    }
+
 }
