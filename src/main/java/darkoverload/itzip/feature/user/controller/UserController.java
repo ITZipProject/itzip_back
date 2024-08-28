@@ -10,10 +10,8 @@ import darkoverload.itzip.feature.user.controller.request.UserLoginRequest;
 import darkoverload.itzip.feature.user.controller.response.UserLoginResponse;
 import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.Authority;
-import darkoverload.itzip.feature.user.service.EmailService;
 import darkoverload.itzip.feature.user.service.UserService;
 import darkoverload.itzip.feature.user.service.VerificationService;
-import darkoverload.itzip.feature.user.util.RandomAuthCode;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
@@ -39,7 +37,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
     private final TokenService tokenService;
-    private final EmailService emailService;
     private final VerificationService verificationService;
 
     private final PasswordEncoder passwordEncoder;
@@ -200,23 +197,7 @@ public class UserController {
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.FILED_ERROR)
     public ResponseEntity<String> sendAuthEmail(@RequestBody @Valid EmailSendRequest emailSendRequest, BindingResult bindingResult) {
-        // 필드 에러 확인
-        if (bindingResult.hasErrors()) {
-            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
-        }
-
-        // 랜덤 인증 코드 생성
-        String authCode = RandomAuthCode.generate();
-
-        // redis에 인증 코드 저장
-        verificationService.saveCode(emailSendRequest.getEmail(), authCode);
-
-        // 메일 제목
-        String subject = "[ITZIP] 이메일 인증번호 : " + authCode;
-
-        // 메일 발송
-        emailService.sendSimpleMessage(emailSendRequest.getEmail(), subject, authCode);
-        return ResponseEntity.ok("인증 메일이 발송되었습니다.");
+        return userService.sendAuthEmail(emailSendRequest, bindingResult);
     }
 
     /**
