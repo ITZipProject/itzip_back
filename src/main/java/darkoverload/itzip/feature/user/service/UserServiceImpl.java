@@ -241,7 +241,7 @@ public class UserServiceImpl implements UserService {
      * 인증번호 검증
      */
     @Override
-    public ResponseEntity<String> checkAuthEmail(EmailCheckRequest request, BindingResult bindingResult) {
+    public ResponseEntity<String> checkAuthEmail(AuthEmailCheckRequest request, BindingResult bindingResult) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
