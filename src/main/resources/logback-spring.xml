@@ -1,0 +1,66 @@
+<configuration>
+    <!-- Console logging (optional) -->
+    <!-- 콘솔(Appender)로 로그를 출력하는 설정 -->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <!-- 로그 출력 형식을 정의(기본 형식)
+                 %d: 로그의 날짜와 시간 (밀리초 단위)
+                 %thread: 로그를 기록하는 스레드 이름
+                 %-5level: 로그 레벨 (INFO, DEBUG 등)
+                 %logger{36}: 로그를 발생시킨 로거 이름 (최대 36자)
+                 %msg: 로그 메시지
+                 %n: 줄 바꿈 -->
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 개발 환경 설정 -->
+    <springProfile name="dev">
+        <!-- 기본 로거 설정 -->
+        <root level="INFO">
+            <appender-ref ref="console"/>   <!-- 콘솔로 로그 출력 -->
+        </root>
+    </springProfile>
+
+    <!-- 서비스 환경 설정 -->
+    <springProfile name="local">
+        <!-- 환경변수 설정 -->
+        <property resource="properties/env.properties"/>
+
+        <!-- 기본 로거 설정 -->
+        <root level="INFO">
+            <appender-ref ref="console"/>   <!-- 콘솔로 로그 출력 -->
+            <appender-ref ref="logstash"/>  <!-- Logstash로 로그 전송 -->
+        </root>
+
+        <!-- Logstash TCP Appender -->
+        <!-- Logstash 서버로 로그를 전송하는 설정
+             TCP 소켓을 통해 로그를 JSON 형식으로 인코딩하여 전송 -->
+        <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+            <!-- Logstash 서버 IP:포트 -->
+            <destination>${LOC_LOGSTASH_HOST}:${LOC_LOGSTASH_PORT}</destination>
+            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+                <!-- JSON 로그 형식을 정의하는 프로바이더 목록 -->
+                <providers>
+                    <timestamp/>  <!-- 타임스탬프 -->
+                    <logLevel/>   <!-- 로그 레벨 -->
+                    <threadName/> <!-- 로그를 기록한 스레드 이름 -->
+                    <loggerName/> <!-- 로그를 발생시킨 로거 이름 -->
+                    <message/>    <!-- 로그 메시지 -->
+                    <stackTrace/> <!-- 예외 발생 시 스택 트레이스 -->
+                    <mdc/>        <!-- Mapped Diagnostic Context 데이터 -->
+                </providers>
+            </encoder>
+        </appender>
+
+        <!-- Hibernate SQL 로그 처리 로거 -->
+        <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+            <appender-ref ref="logstash"/>  <!-- Logstash로 SQL 로그 전송 -->
+        </logger>
+
+        <!-- Error 로그 처리 로거 -->
+        <logger name="ERROR" level="ERROR" additivity="false">
+            <appender-ref ref="logstash"/>  <!-- Logstash로 Error 로그 전송 -->
+        </logger>
+    </springProfile>
+</configuration>

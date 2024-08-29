@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 public enum CommonExceptionCode implements ResponseCode {
 
     /**
-     *
+     * school Error
      */
     SCHOOL_NOT_FOUND(HttpStatus.NOT_FOUND, "학교 정보를 찾을 수 없습니다"),
 
@@ -84,10 +84,18 @@ public enum CommonExceptionCode implements ResponseCode {
     NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "카테고리가 없습니다."),
 
     /**
+     * Resume Error
+     */
+
+    // 이력서 생성 오류
+    INSERT_FAIL_RESUME(HttpStatus.BAD_REQUEST, "이력서 생성 오류"),
+
+    /**
      * MongoDb
      */
     //몽고 저장소 에러
     MONGO_DB_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "몽고 저장소에서 에러가 생겼습니다."),
+
 
     /**
      * 4** client

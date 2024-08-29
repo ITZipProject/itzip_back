@@ -33,6 +33,7 @@ public class SecurityConfig {
             "/test/**", // 테스트 페이지
             "/user/refreshToken", // 토큰 재발급 페이지
             "/user/authEmail", // 인증 메일 페이지
+            "/user/checkDuplicateEmail", // 이메일 중복 체크 페이지
             "/swagger-ui/**", // Swagger UI
             "/v3/api-docs/**", // Swagger API docs
             "/swagger-resources/**", // Swagger resources
@@ -47,8 +48,10 @@ public class SecurityConfig {
             "/cs-quiz/**",
 
             // 학교 정보 검색 허용
-            "/schoolsearch"
+            "/schoolsearch",
 
+            // 이력서 임시 허용
+            "/resume"
     };
 
     // 비로그인 유저 허용 페이지
