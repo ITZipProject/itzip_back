@@ -29,6 +29,10 @@ public class UserController {
     /**
      * 로그인
      */
+    @Operation(
+            summary = "이메일 로그인",
+            description = "이메일과 비밀번호를 입력받아 jwt 토큰을 발급합니다."
+    )
     @PostMapping("/login")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_MATCH_PASSWORD})
@@ -39,6 +43,10 @@ public class UserController {
     /**
      * 로그아웃
      */
+    @Operation(
+            summary = "로그아웃",
+            description = "저장된 jwt 토큰을 제거합니다."
+    )
     @DeleteMapping("/logout")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
@@ -48,6 +56,10 @@ public class UserController {
     /**
      * 리프레시 토큰으로 엑세스 토큰 갱신
      */
+    @Operation(
+            summary = "엑세스 토큰 재발급",
+            description = "저장된 리프레시 토큰으로 엑세스 토큰을 재발급합니다."
+    )
     @PatchMapping("/refreshToken")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.JWT_UNKNOWN_ERROR, CommonExceptionCode.NOT_FOUND_USER})
@@ -59,6 +71,10 @@ public class UserController {
      * 회원가입
      */
     @PostMapping("/join")
+    @Operation(
+            summary = "이메일 회원가입",
+            description = "회원 데이터를 추가합니다."
+    )
     @ResponseCodeAnnotation(CommonResponseCode.CREATED)
     @ExceptionCodeAnnotations(CommonExceptionCode.FILED_ERROR)
     public ResponseEntity<String> join(@RequestBody @Valid UserJoinRequest request, BindingResult bindingResult) {
@@ -82,6 +98,10 @@ public class UserController {
     /**
      * 인증번호 검증
      */
+    @Operation(
+            summary = "인증번호 검증",
+            description = "입력받은 인증번호와 서버에 저장된 인증번호를 대조하여 이메일을 인증 처리 합니다."
+    )
     @GetMapping("/authEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_MATCH_AUTH_CODE})
