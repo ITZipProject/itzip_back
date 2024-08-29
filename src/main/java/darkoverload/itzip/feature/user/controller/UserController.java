@@ -1,9 +1,6 @@
 package darkoverload.itzip.feature.user.controller;
 
-import darkoverload.itzip.feature.user.controller.request.EmailCheckRequest;
-import darkoverload.itzip.feature.user.controller.request.EmailSendRequest;
-import darkoverload.itzip.feature.user.controller.request.UserJoinRequest;
-import darkoverload.itzip.feature.user.controller.request.UserLoginRequest;
+import darkoverload.itzip.feature.user.controller.request.*;
 import darkoverload.itzip.feature.user.controller.response.UserLoginResponse;
 import darkoverload.itzip.feature.user.service.UserService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
@@ -78,7 +75,7 @@ public class UserController {
     @PostMapping("/authEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.FILED_ERROR)
-    public ResponseEntity<String> sendAuthEmail(@RequestBody @Valid EmailSendRequest request, BindingResult bindingResult) {
+    public ResponseEntity<String> sendAuthEmail(@RequestBody @Valid AuthEmailSendRequest request, BindingResult bindingResult) {
         return userService.sendAuthEmail(request, bindingResult);
     }
 
@@ -88,7 +85,21 @@ public class UserController {
     @GetMapping("/authEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_MATCH_AUTH_CODE})
-    public ResponseEntity<String> checkAuthEmail(@RequestBody @Valid EmailCheckRequest request, BindingResult bindingResult) {
+    public ResponseEntity<String> checkAuthEmail(@RequestBody @Valid AuthEmailCheckRequest request, BindingResult bindingResult) {
         return userService.checkAuthEmail(request, bindingResult);
+    }
+
+    /**
+     * 이메일 중복 체크 메소드
+     */
+    @Operation(
+            summary = "이메일 중복 체크",
+            description = "회원가입 시 중복된 이메일인지 확인합니다."
+    )
+    @GetMapping("/checkDuplicateEmail")
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR})
+    public ResponseEntity<String> checkDuplicateEmail(@RequestBody @Valid DuplicateEmailRequest request, BindingResult bindingResult) {
+        return userService.checkDuplicateEmail(request, bindingResult);
     }
 }

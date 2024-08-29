@@ -3,10 +3,7 @@ package darkoverload.itzip.feature.user.service;
 import darkoverload.itzip.feature.jwt.domain.Token;
 import darkoverload.itzip.feature.jwt.service.TokenService;
 import darkoverload.itzip.feature.jwt.util.JwtTokenizer;
-import darkoverload.itzip.feature.user.controller.request.EmailCheckRequest;
-import darkoverload.itzip.feature.user.controller.request.EmailSendRequest;
-import darkoverload.itzip.feature.user.controller.request.UserJoinRequest;
-import darkoverload.itzip.feature.user.controller.request.UserLoginRequest;
+import darkoverload.itzip.feature.user.controller.request.*;
 import darkoverload.itzip.feature.user.controller.response.UserLoginResponse;
 import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.Authority;
@@ -215,11 +212,9 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
 
-    /**
-     * 인증번호 발송
-     */
+    
     @Transactional(readOnly = true)
-    public ResponseEntity<String> sendAuthEmail(EmailSendRequest emailSendRequest, BindingResult bindingResult) {
+    public ResponseEntity<String> sendAuthEmail(AuthEmailSendRequest emailSendRequest, BindingResult bindingResult) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
@@ -258,6 +253,27 @@ public class UserServiceImpl implements UserService {
         }
 
         return ResponseEntity.ok("인증이 완료되었습니다.");
+    }
+
+    /**
+     * 사용 중인 이메일인지 체크하는 메소드
+     *
+     * @param request
+     * @param bindingResult
+     * @return
+     */
+    @Override
+    public ResponseEntity<String> checkDuplicateEmail(DuplicateEmailRequest request, BindingResult bindingResult) {
+        // 필드 에러 확인
+        if (bindingResult.hasErrors()) {
+            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
+        }
+
+        // 중복 이메일 체크
+        userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
+            throw new RestApiException(CommonExceptionCode.EXIST_EMAIL_ERROR);
+        });
+        return ResponseEntity.ok("사용 가능한 이메일입니다.");
     }
 
     /**

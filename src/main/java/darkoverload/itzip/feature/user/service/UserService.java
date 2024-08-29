@@ -1,9 +1,6 @@
 package darkoverload.itzip.feature.user.service;
 
-import darkoverload.itzip.feature.user.controller.request.EmailCheckRequest;
-import darkoverload.itzip.feature.user.controller.request.EmailSendRequest;
-import darkoverload.itzip.feature.user.controller.request.UserJoinRequest;
-import darkoverload.itzip.feature.user.controller.request.UserLoginRequest;
+import darkoverload.itzip.feature.user.controller.request.*;
 import darkoverload.itzip.feature.user.controller.response.UserLoginResponse;
 import darkoverload.itzip.feature.user.domain.User;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,9 +19,11 @@ public interface UserService {
 
     ResponseEntity<String> save(UserJoinRequest userJoinDto, BindingResult bindingResult);
 
-    ResponseEntity<String> sendAuthEmail(EmailSendRequest emailSendRequest, BindingResult bindingResult);
+    ResponseEntity<String> sendAuthEmail(AuthEmailSendRequest emailSendRequest, BindingResult bindingResult);
 
     ResponseEntity<String> checkAuthEmail(EmailCheckRequest request, BindingResult bindingResult);
+
+    ResponseEntity<String> checkDuplicateEmail(DuplicateEmailRequest request, BindingResult bindingResult);
 
     String getUniqueNickname();
 
