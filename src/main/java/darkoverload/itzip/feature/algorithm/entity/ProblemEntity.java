@@ -2,8 +2,6 @@ package darkoverload.itzip.feature.algorithm.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import darkoverload.itzip.feature.algorithm.domain.Problem;
-import darkoverload.itzip.feature.algorithm.domain.ProblemTagMapping;
-import darkoverload.itzip.feature.algorithm.domain.UserProblemMapping;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +9,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 //solvedac문제를 저장할 엔티티
@@ -40,7 +37,7 @@ public class ProblemEntity {
     @JsonIgnore
     private Set<UserProblemMappingEntity> userProblemMappings;
 
-    @OneToMany(mappedBy = "problem", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "problemEntity", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<ProblemTagMappingEntity> problemTagMappings = new HashSet<>();
 
