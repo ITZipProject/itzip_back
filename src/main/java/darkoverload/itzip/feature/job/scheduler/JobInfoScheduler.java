@@ -33,12 +33,17 @@ public class JobInfoScheduler {
 
         List<JobInfo> apiDataList = service.jobInfoConnect();
 
+        Long deletedCount = service.jobInfoDelete(apiDataList, dbList);
 
-        service.jobInfoDelete(apiDataList, dbList);
+        log.debug("==== Saramin API Data deleteCount :: {} ====", deletedCount);
 
+        Long updatedCount = service.jobInfoUpdate(apiDataList, dbList);
 
-        service.jobInfoUpdate(apiDataList, dbList);
+        log.debug("==== Saramin API Data updateCount :: {} ====", updatedCount);
 
+        Long savedCount = service.jobInfoSave(apiDataList, dbList);
+
+        log.debug("==== Saramin API Data updateCount :: {} ====", savedCount);
 
     }
 }

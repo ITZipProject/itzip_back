@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -50,24 +51,27 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
     }
 
     /**
-     * 주어진 API 데이터 목록과 데이터베이스 목록을 비교하여, API 목록에 없는 데이터베이스의 JobInfo 항목들을 삭제합니다.
+     * API에서 가져온 JobInfo 데이터와 데이터베이스에 저장된 JobInfo 데이터를 비교하여,
+     * 데이터베이스에만 존재하는 데이터를 삭제하고, 삭제된 데이터의 수를 반환합니다.
      *
      * @param apiDataList API로부터 가져온 최신 JobInfo 데이터 목록
      * @param dbList 데이터베이스에서 조회한 기존 JobInfo 데이터 목록
-     * @return
+     * @return 삭제된 JobInfo 항목의 총 개수
      */
     @Override
-    public void jobInfoDelete(List<JobInfo> apiDataList, List<JobInfo> dbList) {
+    public Long jobInfoDelete(List<JobInfo> apiDataList, List<JobInfo> dbList) {
         // dbList가 비어있을 경우, 즉시 반환하여 추가 작업을 방지
-        if(dbList.isEmpty()) return ;
+        if(dbList.isEmpty()) return 0L;
 
         // 데이터베이스에 있는 JobInfo들의 Position ID를 Set에 저장
-        Set<Long> dbIdSet =  new HashSet<>();
-        for(JobInfo jobInfo : dbList) dbIdSet.add(jobInfo.getPositionId());
+        Set<Long> dbIdSet = dbList.stream()
+                .map(JobInfo::getPositionId)
+                .collect(Collectors.toSet());
 
         // API에서 가져온 JobInfo들의 Position ID를 Set에 저장
-        Set<Long> apiSet = new HashSet<>();
-        for(JobInfo jobInfo : apiDataList) apiSet.add(jobInfo.getPositionId());
+        Set<Long> apiSet = apiDataList.stream()
+                .map(JobInfo::getPositionId)
+                .collect(Collectors.toSet());
 
         // 데이터베이스에 있지만 API에는 없는 Position ID들을 추려내어 삭제 대상 리스트를 만듦
        List<Long> deleteList = dbIdSet.stream()
@@ -75,52 +79,85 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
                .toList();
 
 
-
-
+        long totalDeletedCount = 0L;
         // batchSize를 설정하여 500개씩 나누어 삭제 작업을 수행 (대량 삭제 시 성능 최적화)
        for(int i=0; i < deleteList.size(); i+= 500){
            List<Long> batch = deleteList.subList(i, Math.min(i + 500, deleteList.size()));
-           jobInfoRepository.bulkDeleteByPositionIds(batch);
+           totalDeletedCount += jobInfoRepository.bulkDeleteByPositionIds(batch);
        }
 
-
+       // 최종적으로 삭제된 레코드의 총 개수를 반환
+       return totalDeletedCount;
     }
 
     /**
-     * 주어진 API 데이터 목록과 데이터베이스 목록을 비교하여, 변경된 JobInfo 객체를 업데이트 리스트에 추가합니다.
+     * 주어진 API 데이터 목록과 데이터베이스 목록을 비교하여, 변경된 JobInfo 객체를 업데이트 리스트에 추가하고,
+     * 해당 리스트를 데이터베이스에 업데이트합니다. 업데이트된 레코드의 총 개수를 반환합니다.
      *
      * @param apiDataList API로부터 가져온 최신 JobInfo 데이터 목록
      * @param dbList 데이터베이스에서 조회한 기존 JobInfo 데이터 목록
+     * @return 업데이트된 레코드의 총 개수
      */
     @Override
-    public void jobInfoUpdate(List<JobInfo> apiDataList, List<JobInfo> dbList) {
+    public Long jobInfoUpdate(List<JobInfo> apiDataList, List<JobInfo> dbList) {
         // API 데이터 목록을 Position ID를 키로 하는 맵으로 변환하여, 빠른 조회가 가능하도록 함
-        Map<Long, JobInfo> apiDataMap = new HashMap<>();
-        for(JobInfo apiData : apiDataList) apiDataMap.put(apiData.getPositionId(), apiData);
+        Map<Long, JobInfo> apiDataMap = apiDataList.stream()
+                .collect(Collectors.toMap(JobInfo::getPositionId, jobInfo -> jobInfo));
 
-        // 업데이트가 필요한 JobInfo 객체를 담을 리스트
-        List<JobInfo> updateList = new ArrayList<>();
+        // 데이터베이스에서 조회한 각 JobInfo 객체와 API 데이터를 비교하여 업데이트가 필요한 리스트 생성
+        List<JobInfoEntity> updateList = dbList.stream()
+                .filter(dbJobInfo -> {
+                    JobInfo apiJobInfo = apiDataMap.get(dbJobInfo.getPositionId());
+                    return apiJobInfo != null && checkNotEquals(dbJobInfo, apiJobInfo);
+                })
+                .map(JobInfo::toIdEntity)
+                .collect(Collectors.toList());
 
-        // 데이터베이스에서 조회한 각 JobInfo 객체와 API 데이터를 비교
-        dbList.stream().forEach(dbJobInfo -> {
-           Long positionId = dbJobInfo.getPositionId();
+        // 총 업데이트된 레코드 수를 누적
+        long totalUpdatedCount = 0L;
 
-            // 동일한 Position ID를 가진 API 데이터를 가져옴
-           JobInfo apiJobInfo = apiDataMap.get(positionId);
-
-            // DB 데이터와 API 데이터가 다를 경우, 업데이트 리스트에 추가
-           if(apiJobInfo != null && checkNotEquals(dbJobInfo, apiJobInfo)) updateList.add(dbJobInfo);
-
-        });
-
+        // 배치 단위로 500개씩 나누어 업데이트 작업을 수행
         for(int i=0; i< updateList.size(); i+=500){
-            List<JobInfo> batch = updateList.subList(i, Math.min(i + 500, updateList.size()));
+            List<JobInfoEntity> batch = updateList.subList(i, Math.min(i + 500, updateList.size()));
 
-            List<JobInfoEntity> jobInfoEntities = batch.stream().map(JobInfo::toIdEntity).toList();
-
-            jobInfoRepository.saveAll(jobInfoEntities);
+            totalUpdatedCount += jobInfoRepository.saveAll(batch).size();
         }
 
+        // 최종적으로 업데이트된 레코드의 총 개수를 반환
+        return totalUpdatedCount;
+    }
+
+    /**
+     * 주어진 API 데이터 목록과 데이터베이스 목록을 비교하여, 데이터베이스에 없는 새로운 JobInfo 객체들을
+     * 저장하고, 저장된 레코드의 총 개수를 반환합니다.
+     *
+     * @param apiDataList API로부터 가져온 최신 JobInfo 데이터 목록
+     * @param dbList 데이터베이스에서 조회한 기존 JobInfo 데이터 목록
+     * @return 저장된 레코드의 총 개수
+     */
+    @Override
+    public Long jobInfoSave(List<JobInfo> apiDataList, List<JobInfo> dbList) {
+        // 데이터베이스에 있는 JobInfo들의 Position ID를 Set에 저장
+        Set<Long> dbSet = new HashSet<>();
+        dbList.stream().map(JobInfo::getPositionId).forEach(dbSet::add);
+
+        // API 데이터 중에서 DB에 존재하지 않는 JobInfo들을 필터링하여 저장할 리스트 생성
+        List<JobInfoEntity> insertList = apiDataList.stream()
+                .filter(jobInfo -> !dbSet.contains(jobInfo.getPositionId()))
+                .map(JobInfo::toEntity)
+                .collect(Collectors.toList());
+
+        long totalSaveCount = 0L;
+
+        // 배치 단위로 500개씩 나누어 저장 작업을 수행
+        for(int i=0; i < insertList.size() ; i+=500) {
+            List<JobInfoEntity> batch =insertList.subList(i, Math.min(i + 500, insertList.size()));
+
+            totalSaveCount += jobInfoRepository.saveAll(batch).size();
+        }
+
+        // 배치 단위로 500개씩 나누어 저장 작업을 수행
+        return totalSaveCount;
     }
 
     /**

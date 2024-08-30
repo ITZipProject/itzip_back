@@ -157,4 +157,40 @@ public class JobInfo {
                 .closeTypeName(this.closeTypeName)
                 .build();
     }
+
+    public JobInfoEntity toEntity(){
+        return JobInfoEntity.builder()
+                .positionId(this.positionId)
+                .companyName(this.companyName)
+                .companyHref(this.companyHref)
+                .url(this.url)
+                .active(this.active)
+                .title(this.title)
+                .industryCode(this.industryCode)
+                .industryName(this.industryName)
+                .locationCode(this.locationCode)
+                .locationName(this.locationName)
+                .jobTypeCode(this.jobTypeCode)
+                .jobTypeName(this.jobTypeName)
+                .jobMidCode(this.jobMidCode)
+                .jobMidName(this.jobMidName)
+                .jobName(this.jobName)
+                .jobCode(this.jobCode)
+                .experienceCode(this.experienceCode)
+                .experienceMin(this.experienceMin)
+                .experienceMax(this.experienceMax)
+                .experienceName(this.experienceName)
+                .requiredEducationCode(this.requiredEducationCode)
+                .requiredEducationName(this.requiredEducationName)
+                .keyword(this.keyword)
+                .applyCnt(this.applyCnt)
+                .readCnt(this.readCnt)
+                .salaryCode(this.salaryCode)
+                .salaryName(this.salaryName)
+                .postingDate(this.postingDate)
+                .expirationDate(this.expirationDate)
+                .closeTypeCode(this.closeTypeCode)
+                .closeTypeName(this.closeTypeName)
+                .build();
+    }
 }

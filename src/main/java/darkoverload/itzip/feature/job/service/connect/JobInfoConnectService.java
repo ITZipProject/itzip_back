@@ -7,7 +7,9 @@ import java.util.List;
 public interface JobInfoConnectService {
     List<JobInfo> jobInfoConnect();
 
-    void jobInfoDelete(List<JobInfo> apiDataList, List<JobInfo> dbList);
+    Long jobInfoDelete(List<JobInfo> apiDataList, List<JobInfo> dbList);
 
-    void jobInfoUpdate(List<JobInfo> apiDataList, List<JobInfo> dbList);
+    Long jobInfoUpdate(List<JobInfo> apiDataList, List<JobInfo> dbList);
+
+    Long jobInfoSave(List<JobInfo> apiDataList, List<JobInfo> dbList);
 }
