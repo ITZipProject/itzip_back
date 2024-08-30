@@ -44,7 +44,7 @@ public class JobInfoEntity extends AuditingFields {
     private String title;
 
     //업종 코드
-    @Column(name="industry_code", length=2)
+    @Column(name="industry_code", length=50)
     private String industryCode;
 
     //업종 명
@@ -53,32 +53,32 @@ public class JobInfoEntity extends AuditingFields {
 
     // 지역 코드
     @ElementCollection
-    @Column(name="location_code", length=7)
+    @Column(name="location_code")
     private List<String> locationCode;
 
     // 지역명
     @ElementCollection
-    @Column(name="location_name", length=50)
+    @Column(name="location_name")
     private List<String> locationName;
 
     // 근무형태 코드
     @ElementCollection
-    @Column(name="job_type_code", length=2)
+    @Column(name="job_type_code")
     private List<String> jobTypeCode;
 
     // 근무형태명
     @ElementCollection
-    @Column(name="job_type_name", length=50)
+    @Column(name="job_type_name")
     private List<String> jobTypeName;
 
     // 상위 직무 코드
     @ElementCollection
-    @Column(name="job_mid_code", length=2)
+    @Column(name="job_mid_code")
     private List<String> jobMidCode;
 
     // 상위 직무 명
     @ElementCollection
-    @Column(name="job_mid_name", length=50)
+    @Column(name="job_mid_name")
     private List<String> jobMidName;
 
     // 직무명
@@ -87,11 +87,11 @@ public class JobInfoEntity extends AuditingFields {
 
     // 직종 코드
     @ElementCollection
-    @Column(name="job_code", length=50)
+    @Column(name="job_code")
     private List<String> jobCode;
 
     // 경력 코드 (1: 신입, 2: 경력, 3: 신입/경력, 0: 경력무관)
-    @Column(name="experience_code", length=2)
+    @Column(name="experience_code")
     private String experienceCode;
 
     // 경력 최소 값
@@ -107,7 +107,7 @@ public class JobInfoEntity extends AuditingFields {
     private String experienceName;
 
     // 학력 코드 (표 참고)
-    @Column(name="required_education_code", length=2)
+    @Column(name="required_education_code", length=100)
     private String requiredEducationCode;
 
     // 학력명
@@ -118,16 +118,8 @@ public class JobInfoEntity extends AuditingFields {
     @ElementCollection
     private List<String> keyword;
 
-    // 지원자수
-    @Column(name="apply_cnt")
-    private Long applyCnt;
-
-    // 조회수
-    @Column(name="read_cnt")
-    private Long readCnt;
-
     // 연봉코드
-    @Column(name="salary_code", length=4)
+    @Column(name="salary_code", length=50)
     private String salaryCode;
 
     // 연봉명
@@ -143,7 +135,7 @@ public class JobInfoEntity extends AuditingFields {
     private LocalDateTime expirationDate;
 
     // 마감일 코드
-    @Column(name="close_type_code", length=2)
+    @Column(name="close_type_code", length=50)
     private String closeTypeCode;
 
     // 마감일 명
@@ -176,8 +168,6 @@ public class JobInfoEntity extends AuditingFields {
                 .requiredEducationName(this.requiredEducationName)
                 .requiredEducationCode(this.requiredEducationCode)
                 .keyword(this.keyword)
-                .applyCnt(this.applyCnt)
-                .readCnt(this.readCnt)
                 .salaryCode(this.salaryCode)
                 .salaryName(this.salaryName)
                 .postingDate(this.postingDate)

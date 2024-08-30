@@ -93,14 +93,6 @@ public class JobInfo {
     // 키워드
     private List<String> keyword;
 
-    // 지원자수
-    @Column(name="apply_cnt")
-    private Long applyCnt;
-
-    // 조회수
-    @Column(name="read_cnt")
-    private Long readCnt;
-
     // 연봉코드
     @Column(name="salary_code", length=4)
     private String salaryCode;
@@ -147,8 +139,6 @@ public class JobInfo {
                 .requiredEducationCode(this.requiredEducationCode)
                 .requiredEducationName(this.requiredEducationName)
                 .keyword(this.keyword)
-                .applyCnt(this.applyCnt)
-                .readCnt(this.readCnt)
                 .salaryCode(this.salaryCode)
                 .salaryName(this.salaryName)
                 .postingDate(this.postingDate)
@@ -183,8 +173,6 @@ public class JobInfo {
                 .requiredEducationCode(this.requiredEducationCode)
                 .requiredEducationName(this.requiredEducationName)
                 .keyword(this.keyword)
-                .applyCnt(this.applyCnt)
-                .readCnt(this.readCnt)
                 .salaryCode(this.salaryCode)
                 .salaryName(this.salaryName)
                 .postingDate(this.postingDate)
