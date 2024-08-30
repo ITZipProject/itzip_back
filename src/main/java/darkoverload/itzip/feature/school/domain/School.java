@@ -6,6 +6,7 @@ import darkoverload.itzip.feature.school.code.SchoolType;
 import darkoverload.itzip.feature.school.entity.SchoolDocument;
 import darkoverload.itzip.feature.school.entity.SchoolEntity;
 import darkoverload.itzip.feature.school.util.SchoolJsonUtil;
+import darkoverload.itzip.global.config.webclient.WebClientWrapper;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
