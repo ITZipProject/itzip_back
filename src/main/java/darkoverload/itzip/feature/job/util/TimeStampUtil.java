@@ -22,7 +22,7 @@ public class TimeStampUtil {
         // 변환된 long 타입 타임스탬프를 Instant로 변환한 후, 이를 Asia/Seoul 시간대의 LocalDateTime으로 변환
         LocalDateTime dateTime = LocalDateTime.ofInstant(Instant.ofEpochSecond(timestamp), ZoneId.of("Asia/Seoul"));
 
-        log.debug("Convert Time :: {} ", dateTime);
+        log.info("Convert Time :: {} ", dateTime);
 
         return dateTime;
     }

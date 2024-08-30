@@ -2,12 +2,18 @@ package darkoverload.itzip.feature.job.domain;
 
 import darkoverload.itzip.feature.job.util.JobInfoJsonUtil;
 import darkoverload.itzip.global.config.webclient.WebClientWrapper;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 
 
+@Builder
+@ToString
+@Getter
 @Slf4j
 public class ConnectJobInfo {
     private static final WebClientWrapper webClientWrapper = new WebClientWrapper(WebClient.builder());
@@ -23,13 +29,11 @@ public class ConnectJobInfo {
         // API 호출을 위한 URL을 생성, 파라미터로 액세스 키와 필요한 필터 조건을 추가
         String makeUrl = apiUrl+"?access-key="+apiKey+"&ind_cd=3&job_mid_cd=2&start=0&count=10";
 
-        log.info("makeUrl :: {}", makeUrl);
         // WebClient를 사용하여 API에 요청을 보내고, 응답을 JSON 문자열로 받아옴
         String json = webClientWrapper.get().uri(makeUrl).retrieve().bodyToMono(String.class).block();
 
         // 받아온 JSON 데이터를 파싱하여 총 데이터 수를 추출
         int totalCount = JobInfoJsonUtil.getTotalCount(json);
-        log.info("totalCount :: {}", totalCount);
 
         // 총 데이터 수를 반환
         return totalCount;
