@@ -3,6 +3,7 @@ package darkoverload.itzip.feature.job.util;
 import darkoverload.itzip.feature.job.domain.JobInfo;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
+import lombok.extern.slf4j.Slf4j;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,18 +14,39 @@ import java.util.List;
 
 import static darkoverload.itzip.feature.job.util.TimeStampUtil.convertToLocalDateTime;
 
+@Slf4j
 public class JobInfoJsonUtil {
+
+    /**
+     * 주어진 JSON 문자열에서 총 카운트를 추출하여 정수로 반환합니다.
+     *
+     * @param json 총 카운트를 포함하는 JSON 문자열
+     * @return 총 카운트를 나타내는 정수 값
+     * @throws RestApiException JSON 파싱 중 오류가 발생하거나 총 카운트가 정수로 변환될 수 없는 경우 발생
+     */
     public static int getTotalCount(String json){
+        // JSONParser 인스턴스를 생성하여 JSON 문자열을 파싱할 준비를 함
         JSONParser parser = new JSONParser();
+
+
         JSONObject targetObject = null;
         String total = null;
         try {
+
+            // 주어진 JSON 문자열을 파싱하여 JSONObject로 변환
             targetObject = (JSONObject) parser.parse(json);
+
+            // "jobs" 키에 해당하는 JSONObject를 추출
             JSONObject jobObject = (JSONObject) targetObject.get("jobs");
+
+            // "total" 키에 해당하는 값을 문자열로 추출
             total = (String) jobObject.get("total");
         } catch (ParseException e) {
+            // JSON 파싱 중 오류가 발생하면 RestApiException을 던짐
             throw new RestApiException(CommonExceptionCode.INTERNAL_SERVER_ERROR);
         }
+
+        // "total" 문자열을 정수로 변환하여 반환
         return Integer.parseInt(total);
     }
 
@@ -171,7 +193,7 @@ public class JobInfoJsonUtil {
                 .salaryCode(salaryCode)
                 .salaryName(salaryName)
                 .expirationDate(convertToLocalDateTime(expirationTimeStamp))
-                .expirationDate(convertToLocalDateTime(postingTimeStamp))
+                .postingDate(convertToLocalDateTime(postingTimeStamp))
                 .closeTypeCode(closeTypeCode)
                 .closeTypeName(closeTypeName)
                 .build();
