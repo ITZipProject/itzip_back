@@ -63,6 +63,7 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
         // dbList가 비어있을 경우, 즉시 반환하여 추가 작업을 방지
         if(dbList.isEmpty()) return 0L;
 
+
         // 데이터베이스에 있는 JobInfo들의 Position ID를 Set에 저장
         Set<Long> dbIdSet = dbList.stream()
                 .map(JobInfo::getPositionId)
@@ -102,7 +103,11 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
     public Long jobInfoUpdate(List<JobInfo> apiDataList, List<JobInfo> dbList) {
         // API 데이터 목록을 Position ID를 키로 하는 맵으로 변환하여, 빠른 조회가 가능하도록 함
         Map<Long, JobInfo> apiDataMap = apiDataList.stream()
-                .collect(Collectors.toMap(JobInfo::getPositionId, jobInfo -> jobInfo));
+                .collect(Collectors.toMap(
+                        JobInfo::getPositionId,
+                        jobInfo -> jobInfo,
+                        (existing, replacement) -> replacement
+                ));
 
         // 데이터베이스에서 조회한 각 JobInfo 객체와 API 데이터를 비교하여 업데이트가 필요한 리스트 생성
         List<JobInfoEntity> updateList = dbList.stream()
