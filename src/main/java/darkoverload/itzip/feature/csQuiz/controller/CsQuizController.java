@@ -87,7 +87,6 @@ public class CsQuizController {
     @PostMapping("/answer")
     public UserQuizStatus submitAnswer(
             @SwaggerRequestBody(description = "제출할 문제의 정답 정보", required = true, content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = QuizAnswerRequest.class)
             )) @RequestBody QuizAnswerRequest quizAnswerRequest) {
         return quizService.checkAnswer(quizAnswerRequest);
@@ -105,7 +104,6 @@ public class CsQuizController {
     @PostMapping("/")
     public String createQuiz(
             @SwaggerRequestBody(description = "생성할 문제에 대한 정보", required = true, content = @Content(
-                    mediaType = "application/json",
                     schema = @Schema(implementation = QuizCreatedRequest.class)
             )) @RequestBody QuizCreatedRequest quizCreatedRequest) {
         quizService.createQuiz(quizCreatedRequest);
