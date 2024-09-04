@@ -1,13 +1,12 @@
 package darkoverload.itzip.feature.job.util;
 
 import lombok.extern.slf4j.Slf4j;
-
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 @Slf4j
-public class JobInfoStringUtil {
+public class CustomStringUtil {
 
 
     /**
@@ -19,7 +18,6 @@ public class JobInfoStringUtil {
      *         문자열이 null이거나 비어 있는 경우 빈 리스트를 반환합니다.
      */
     public static List<String> convertList(String targetStr) {
-
         // 문자열이 null이거나 빈 문자열인 경우 빈 리스트를 반환
         if (targetStr == null || targetStr.trim().isEmpty()) {
             log.info("targetStr is null or empty, returning an empty list");

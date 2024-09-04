@@ -8,10 +8,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import static darkoverload.itzip.feature.job.util.TimeStampUtil.convertToLocalDateTime;
 
 @Slf4j
@@ -175,21 +173,21 @@ public class JobInfoJsonUtil {
                 .title(title)
                 .industryCode(industryCode)
                 .industryName(industryName)
-                .locationCode(JobInfoStringUtil.convertList(locationCode))
-                .locationName(JobInfoStringUtil.convertList(locationName))
-                .jobTypeCode(JobInfoStringUtil.convertList(jobTypeCode))
-                .jobTypeName(JobInfoStringUtil.convertList(jobTypeName))
-                .jobMidCode(JobInfoStringUtil.convertList(jobMidCode))
-                .jobMidName(JobInfoStringUtil.convertList(jobMidName))
-                .jobName(JobInfoStringUtil.convertList(jobName))
-                .jobCode(JobInfoStringUtil.convertList(jobCode))
+                .locationCode(locationCode)
+                .locationName(locationName)
+                .jobTypeCode(jobTypeCode)
+                .jobTypeName(jobTypeName)
+                .jobMidCode(jobMidCode)
+                .jobMidName(jobMidName)
+                .jobName(jobName)
+                .jobCode(jobCode)
                 .experienceCode(String.valueOf(experienceLevelCode))
                 .experienceMax(experienceLevelMax)
                 .experienceMin(experienceLevelMin)
                 .experienceName(experienceLevelName)
                 .requiredEducationCode(requiredEducationLevelCode)
                 .requiredEducationName(requiredEducationLevelName)
-                .keyword(JobInfoStringUtil.convertList(keyword))
+                .keyword(keyword)
                 .salaryCode(salaryCode)
                 .salaryName(salaryName)
                 .expirationDate(convertToLocalDateTime(expirationTimeStamp))

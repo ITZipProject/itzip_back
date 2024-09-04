@@ -167,15 +167,15 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
 
     /**
      * 주어진 총 아이템 수(totalCount)를 기준으로 페이지 수를 계산합니다.
-     * 한 페이지에 500개의 아이템이 포함된다고 가정합니다.
+     * 한 페이지에 110개의 아이템이 포함된다고 가정합니다.
      *
      * @param totalCount 전체 아이템 수
      * @return 필요한 총 페이지 수
      */
     private int calculatePageCount(int totalCount) {
 
-        // 전체 아이템 수를 500으로 나누어 페이지 수를 계산하고, 나머지가 있으면 추가 페이지를 고려
-        int pages = totalCount / 500 + 1;
+        // 전체 아이템 수를 110으로 나누어 페이지 수를 계산하고, 나머지가 있으면 추가 페이지를 고려
+        int pages = totalCount / 110 + 1;
 
         return pages;
     }
@@ -206,7 +206,6 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
                 || !dbJobInfo.getJobCode().equals(apiJobInfo.getJobCode()) // 직무 코드 비교
                 || !dbJobInfo.getExperienceCode().equals(apiJobInfo.getExperienceCode()) // 경력 코드 비교
                 || !dbJobInfo.getExperienceName().equals(apiJobInfo.getExperienceName()) // 경력 이름 비교
-                || !dbJobInfo.getKeyword().equals(apiJobInfo.getKeyword()) // 키워드 비교
                 || !dbJobInfo.getSalaryName().equals(apiJobInfo.getSalaryName()) // 급여 이름 비교
                 || !dbJobInfo.getPostingDate().equals(apiJobInfo.getPostingDate()) // 게시 날짜 비교
                 || !dbJobInfo.getExpirationDate().equals(apiJobInfo.getExpirationDate()) // 만료 날짜 비교
