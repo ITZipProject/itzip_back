@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.school.domain;
+package darkoverload.itzip.global.config.webclient;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;

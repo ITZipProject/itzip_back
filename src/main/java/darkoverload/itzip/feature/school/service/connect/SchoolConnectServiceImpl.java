@@ -1,7 +1,7 @@
 package darkoverload.itzip.feature.school.service.connect;
 
 import darkoverload.itzip.feature.school.domain.School;
-import darkoverload.itzip.feature.school.domain.WebClientWrapper;
+import darkoverload.itzip.global.config.webclient.WebClientWrapper;
 import darkoverload.itzip.feature.school.repository.SchoolRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
