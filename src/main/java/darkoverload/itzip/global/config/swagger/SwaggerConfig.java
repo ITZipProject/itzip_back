@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.MethodParameter;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -60,24 +61,50 @@ public class SwaggerConfig {
             }
 
             // SwaggerRequestBody 커스텀 어노테이션 처리 추가
-            SwaggerRequestBody swaggerRequestBody = handlerMethod.getMethodAnnotation(SwaggerRequestBody.class);
-            if (swaggerRequestBody != null) {
-                // 리퀘스트 바디디부분 문서화 추가
-                io.swagger.v3.oas.models.parameters.RequestBody requestBody = new io.swagger.v3.oas.models.parameters.RequestBody()
-                        .description(swaggerRequestBody.description())
-                        .required(swaggerRequestBody.required());
+            // 메서드의 모든 파라미터를 반복하며 SwaggerRequestBody 어노테이션이 있는지 확인
+            for (MethodParameter parameter : handlerMethod.getMethodParameters()) {
+                SwaggerRequestBody swaggerRequestBody = parameter.getParameterAnnotation(SwaggerRequestBody.class);
+                if (swaggerRequestBody != null) {
+                    // 리퀘스트 바디 부분 문서화 추가
+                    io.swagger.v3.oas.models.parameters.RequestBody requestBody = new io.swagger.v3.oas.models.parameters.RequestBody()
+                            .description(swaggerRequestBody.description())
+                            .required(swaggerRequestBody.required());
 
-                Content content = new Content();
-                MediaType mediaType = new MediaType();
-                mediaType.setSchema(new Schema<>());
-                content.addMediaType("application/json", mediaType);
-                requestBody.setContent(content);
+                    Content content = getContent(swaggerRequestBody);
+                    requestBody.setContent(content);
 
-                operation.setRequestBody(requestBody);
+                    operation.setRequestBody(requestBody);
+                    break; // 필요한 어노테이션을 찾았으면 반복을 종료
+                }
             }
 
             return operation;
         };
+    }
+
+    /**
+     * SwaggerRequestBody 어노테이션에서 content 정보를 추출하여 Content 객체를 생성
+     *
+     * @param swaggerRequestBody SwaggerRequestBody 어노테이션 인스턴스
+     * @return Swagger에서 사용할 Content 객체
+     */
+    private static Content getContent(SwaggerRequestBody swaggerRequestBody) {
+        Content content = new Content();
+        MediaType mediaType = new MediaType();
+
+        // @schema 스키마가 있을경우만 가져옴으로서 에러를 방지
+        if (swaggerRequestBody.content().length > 0 && swaggerRequestBody.content()[0].schema() != null) {
+            // 커스텀 어노테이션의 첫 번째 content에서 schema 설정 가져오기
+            Schema<?> schema = new Schema<>();
+            // Schema 구현 클래스를 반영
+            Class<?> schemaImplementation = swaggerRequestBody.content()[0].schema().implementation();
+            schema.set$ref(schemaImplementation.getSimpleName()); // 클래스 이름을 참고하도록 설정
+            mediaType.setSchema(schema);
+        }
+
+        // 미디어 타입 지정을 안해줘도 알아서 적도록 변경
+        content.addMediaType("application/json", mediaType);
+        return content;
     }
 
     /**
