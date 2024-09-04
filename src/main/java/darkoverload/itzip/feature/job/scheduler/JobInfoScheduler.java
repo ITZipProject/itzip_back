@@ -31,7 +31,7 @@ public class JobInfoScheduler {
      * @Transactional 트랜잭션이 보장되는 환경에서 실행되며, 작업이 완료될 때까지
      * 트랜잭션이 유지됩니다. 오류가 발생하면 모든 작업이 롤백됩니다.
      *
-     * @Scheduled(cron = "0 30 0 * * *") 크론 표현식을 사용하여 매일 00:30에 실행됩니다.
+     * @Scheduled(cron = "1 30 0 * * *") 크론 표현식을 사용하여 매일 01:30에 실행됩니다.
      */
     @Transactional
     @Scheduled(cron = "1 30 0 * * *")
