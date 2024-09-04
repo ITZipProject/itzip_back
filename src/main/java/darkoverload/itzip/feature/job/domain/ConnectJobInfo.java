@@ -52,7 +52,7 @@ public class ConnectJobInfo {
         // WebClientWrapper 인스턴스를 생성하여 WebClient를 초기화
         final WebClientWrapper webClientWrapper = new WebClientWrapper(WebClient.builder());
 
-        // API 호출을 위한 URL을 생성, 파라미터로 액세스 키, 산업 코드, 중간 직무 코드, 시작 인덱스 및 최대 500개의 데이터를 가져오도록 설정
+        // API 호출을 위한 URL을 생성, 파라미터로 액세스 키, 산업 코드, 중간 직무 코드, 시작 인덱스 및 최대 110개의 데이터를 가져오도록 설정
         String makeUrl = apiUrl+"?access-key="+apiKey+"&ind_cd=3&job_mid_cd=2&start="+start+"&count=110";
 
         // WebClient를 사용하여 API에 요청을 보내고, 응답을 JSON 문자열로 받아옴
