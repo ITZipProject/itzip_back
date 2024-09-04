@@ -52,43 +52,37 @@ public class JobInfoEntity extends AuditingFields {
     private String industryName;
 
     // 지역 코드
-    @ElementCollection
+
     @Column(name="location_code")
-    private List<String> locationCode;
+    private String locationCode;
 
     // 지역명
-    @ElementCollection
     @Column(name="location_name")
-    private List<String> locationName;
+    private String locationName;
 
     // 근무형태 코드
-    @ElementCollection
     @Column(name="job_type_code")
-    private List<String> jobTypeCode;
+    private String jobTypeCode;
 
     // 근무형태명
-    @ElementCollection
     @Column(name="job_type_name")
-    private List<String> jobTypeName;
+    private String jobTypeName;
 
     // 상위 직무 코드
-    @ElementCollection
     @Column(name="job_mid_code")
-    private List<String> jobMidCode;
+    private String jobMidCode;
 
     // 상위 직무 명
-    @ElementCollection
     @Column(name="job_mid_name")
-    private List<String> jobMidName;
+    private String jobMidName;
 
     // 직무명
-    @ElementCollection
-    private List<String> jobName;
+    @Column(name="job_name", length = 5000)
+    private String jobName;
 
     // 직종 코드
-    @ElementCollection
-    @Column(name="job_code")
-    private List<String> jobCode;
+    @Column(name="job_code", length = 5000)
+    private String jobCode;
 
     // 경력 코드 (1: 신입, 2: 경력, 3: 신입/경력, 0: 경력무관)
     @Column(name="experience_code")
@@ -115,8 +109,8 @@ public class JobInfoEntity extends AuditingFields {
     private String requiredEducationName;
 
     // 키워드
-    @ElementCollection
-    private List<String> keyword;
+    @Column(length=5000)
+    private String keyword;
 
     // 연봉코드
     @Column(name="salary_code", length=50)

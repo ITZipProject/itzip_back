@@ -43,28 +43,28 @@ public class JobInfo {
     private String industryName;
 
     // 지역 코드
-    private List<String> locationCode;
+    private String locationCode;
 
     // 지역명
-    private List<String> locationName;
+    private String locationName;
 
     // 근무형태 코드
-    private List<String> jobTypeCode;
+    private String jobTypeCode;
 
     // 근무형태명
-    private List<String> jobTypeName;
+    private String jobTypeName;
 
     // 상위 직무 코드
-    private List<String> jobMidCode;
+    private String jobMidCode;
 
     // 상위 직무 명
-    private List<String> jobMidName;
+    private String jobMidName;
 
     // 직무명
-    private List<String> jobName;
+    private String jobName;
 
     // 직종 코드
-    private List<String> jobCode;
+    private String jobCode;
 
     // 경력 코드 (1: 신입, 2: 경력, 3: 신입/경력, 0: 경력무관)
     @Column(name="experience_code", length=2)
@@ -91,7 +91,7 @@ public class JobInfo {
     private String requiredEducationName;
 
     // 키워드
-    private List<String> keyword;
+    private String keyword;
 
     // 연봉코드
     @Column(name="salary_code", length=4)
