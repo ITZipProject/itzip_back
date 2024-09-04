@@ -51,7 +51,10 @@ public class SecurityConfig {
             "/schoolsearch",
 
             // 이력서 임시 허용
-            "/resume"
+            "/resume",
+
+            // 직업 정보 임시 허용
+            "/job-info"
     };
 
     // 비로그인 유저 허용 페이지
