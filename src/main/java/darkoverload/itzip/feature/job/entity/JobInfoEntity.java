@@ -4,9 +4,7 @@ import darkoverload.itzip.feature.job.domain.JobInfo;
 import darkoverload.itzip.global.entity.AuditingFields;
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
 @Getter

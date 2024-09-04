@@ -3,9 +3,7 @@ package darkoverload.itzip.feature.job.domain;
 import darkoverload.itzip.feature.job.entity.JobInfoEntity;
 import jakarta.persistence.Column;
 import lombok.*;
-
 import java.time.LocalDateTime;
-import java.util.List;
 
 @ToString
 @Getter
