@@ -26,12 +26,19 @@ public class JobInfoSearchResponse {
 
     private String experienceName;
 
-    public JobInfoSearchResponse(String title, String industryName, String locationName,String jobName, LocalDateTime expirationDate, String experienceName) {
+    private Long experienceMin;
+
+    private Long experienceMax;
+
+    public JobInfoSearchResponse(String title, String industryName, String locationName,String jobName, LocalDateTime expirationDate, String experienceName, Long experienceMin, Long experienceMax) {
         this.title = title;
         this.industryName = industryName;
         this.locationName = CustomStringUtil.convertList(locationName);
         this.jobName = CustomStringUtil.convertList(jobName);
         this.expirationDate = expirationDate;
         this.experienceName = experienceName;
+        this.experienceMin = experienceMin;
+        this.experienceMax = experienceMax;
     }
+
 }

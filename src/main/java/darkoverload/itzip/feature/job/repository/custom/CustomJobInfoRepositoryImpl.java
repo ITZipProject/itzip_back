@@ -43,7 +43,9 @@ public class CustomJobInfoRepositoryImpl implements CustomJobInfoRepository{
                         jobInfoEntity.locationName,
                         jobInfoEntity.jobName,
                         jobInfoEntity.expirationDate,
-                        jobInfoEntity.experienceName
+                        jobInfoEntity.experienceName,
+                        jobInfoEntity.experienceMin,
+                        jobInfoEntity.experienceMax
                 ))
                 .from(jobInfoEntity)
                 .where(
@@ -83,7 +85,7 @@ public class CustomJobInfoRepositoryImpl implements CustomJobInfoRepository{
 
     // 기술명 조건
     private BooleanExpression categoryEq(String category) {
-        return hasText(category) ? jobInfoEntity.jobName.eq(category) : null;
+        return hasText(category) ? jobInfoEntity.jobName.contains(category) : null;
     }
 
 

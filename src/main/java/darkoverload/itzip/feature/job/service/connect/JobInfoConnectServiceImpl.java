@@ -64,20 +64,7 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
         if(dbList.isEmpty()) return 0L;
 
 
-        // 데이터베이스에 있는 JobInfo들의 Position ID를 Set에 저장
-        Set<Long> dbIdSet = dbList.stream()
-                .map(JobInfo::getPositionId)
-                .collect(Collectors.toSet());
-
-        // API에서 가져온 JobInfo들의 Position ID를 Set에 저장
-        Set<Long> apiSet = apiDataList.stream()
-                .map(JobInfo::getPositionId)
-                .collect(Collectors.toSet());
-
-        // 데이터베이스에 있지만 API에는 없는 Position ID들을 추려내어 삭제 대상 리스트를 만듦
-       List<Long> deleteList = dbIdSet.stream()
-               .filter(id-> !apiSet.contains(id))
-               .toList();
+        List<Long> deleteList = makeDeleteList(apiDataList, dbList);
 
 
         long totalDeletedCount = 0L;
@@ -91,9 +78,10 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
        return totalDeletedCount;
     }
 
+
     /**
-     * 주어진 API 데이터 목록과 데이터베이스 목록을 비교하여, 변경된 JobInfo 객체를 업데이트 리스트에 추가하고,
-     * 해당 리스트를 데이터베이스에 업데이트합니다. 업데이트된 레코드의 총 개수를 반환합니다.
+     * API에서 가져온 최신 JobInfo 데이터와 데이터베이스에 저장된 기존 데이터를 비교하여,
+     * 변경된 JobInfo 객체들을 찾아 업데이트를 수행합니다. 업데이트된 레코드의 총 개수를 반환합니다.
      *
      * @param apiDataList API로부터 가져온 최신 JobInfo 데이터 목록
      * @param dbList 데이터베이스에서 조회한 기존 JobInfo 데이터 목록
@@ -101,36 +89,27 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
      */
     @Override
     public Long jobInfoUpdate(List<JobInfo> apiDataList, List<JobInfo> dbList) {
-        // API 데이터 목록을 Position ID를 키로 하는 맵으로 변환하여, 빠른 조회가 가능하도록 함
-        Map<Long, JobInfo> apiDataMap = apiDataList.stream()
-                .collect(Collectors.toMap(
-                        JobInfo::getPositionId,
-                        jobInfo -> jobInfo,
-                        (existing, replacement) -> replacement
-                ));
+        // 변경된 JobInfo 객체들을 찾기 위한 리스트 생성
+        List<JobInfoEntity> updateList = makeUpdateList(apiDataList, dbList);
 
-        // 데이터베이스에서 조회한 각 JobInfo 객체와 API 데이터를 비교하여 업데이트가 필요한 리스트 생성
-        List<JobInfoEntity> updateList = dbList.stream()
-                .filter(dbJobInfo -> {
-                    JobInfo apiJobInfo = apiDataMap.get(dbJobInfo.getPositionId());
-                    return apiJobInfo != null && checkNotEquals(dbJobInfo, apiJobInfo);
-                })
-                .map(JobInfo::toIdEntity)
-                .collect(Collectors.toList());
-
-        // 총 업데이트된 레코드 수를 누적
+        // 업데이트된 레코드의 총 개수를 저장할 변수
         long totalUpdatedCount = 0L;
 
-        // 배치 단위로 500개씩 나누어 업데이트 작업을 수행
+        // 업데이트 작업을 배치 단위로 나누어 처리 (500개씩)
         for(int i=0; i< updateList.size(); i+=500){
+
+            // 500개씩 잘라낸 부분 리스트를 배치로 처리
             List<JobInfoEntity> batch = updateList.subList(i, Math.min(i + 500, updateList.size()));
 
+            // 현재 배치를 데이터베이스에 저장하고, 저장된 레코드 수를 총 개수에 누적
             totalUpdatedCount += jobInfoRepository.saveAll(batch).size();
         }
 
         // 최종적으로 업데이트된 레코드의 총 개수를 반환
         return totalUpdatedCount;
     }
+
+
 
     /**
      * 주어진 API 데이터 목록과 데이터베이스 목록을 비교하여, 데이터베이스에 없는 새로운 JobInfo 객체들을
@@ -142,15 +121,7 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
      */
     @Override
     public Long jobInfoSave(List<JobInfo> apiDataList, List<JobInfo> dbList) {
-        // 데이터베이스에 있는 JobInfo들의 Position ID를 Set에 저장
-        Set<Long> dbSet = new HashSet<>();
-        dbList.stream().map(JobInfo::getPositionId).forEach(dbSet::add);
-
-        // API 데이터 중에서 DB에 존재하지 않는 JobInfo들을 필터링하여 저장할 리스트 생성
-        List<JobInfoEntity> insertList = apiDataList.stream()
-                .filter(jobInfo -> !dbSet.contains(jobInfo.getPositionId()))
-                .map(JobInfo::toEntity)
-                .collect(Collectors.toList());
+        List<JobInfoEntity> insertList = makeSaveList(apiDataList, dbList);
 
         long totalSaveCount = 0L;
 
@@ -213,4 +184,83 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
                 || !dbJobInfo.getCloseTypeName().equals(apiJobInfo.getCloseTypeName()); // 마감 유형 이름 비교
 
     }
+
+    /**
+     * API로부터 가져온 데이터와 데이터베이스에 저장된 데이터를 비교하여,
+     * API 데이터에는 존재하지 않지만 데이터베이스에는 존재하는 JobInfo 객체들의 Position ID 리스트를 생성합니다.
+     *
+     * @param apiDataList API로부터 가져온 최신 JobInfo 데이터 목록
+     * @param dbList 데이터베이스에서 조회한 기존 JobInfo 데이터 목록
+     * @return 삭제해야 할 JobInfo 객체들의 Position ID 리스트 (API 데이터에 존재하지 않는 ID들)
+     */
+    protected static List<Long> makeDeleteList(List<JobInfo> apiDataList, List<JobInfo> dbList) {
+        // 데이터베이스에 있는 JobInfo들의 Position ID를 Set에 저장
+        Set<Long> dbIdSet = dbList.stream()
+                .map(JobInfo::getPositionId)
+                .collect(Collectors.toSet());
+
+        // API에서 가져온 JobInfo들의 Position ID를 Set에 저장
+        Set<Long> apiSet = apiDataList.stream()
+                .map(JobInfo::getPositionId)
+                .collect(Collectors.toSet());
+
+        // 데이터베이스에 있지만 API에는 없는 Position ID들을 추려내어 삭제 대상 리스트를 만듦
+        List<Long> deleteList = dbIdSet.stream()
+                .filter(id-> !apiSet.contains(id))
+                .toList();
+        return deleteList;
+    }
+
+    /**
+     * API에서 가져온 최신 데이터와 데이터베이스에 저장된 데이터를 비교하여,
+     * 업데이트가 필요한 JobInfoEntity 리스트를 생성합니다.
+     *
+     * @param apiDataList API로부터 가져온 최신 JobInfo 데이터 목록
+     * @param dbList 데이터베이스에서 조회한 기존 JobInfo 데이터 목록
+     * @return 업데이트가 필요한 JobInfoEntity 객체들의 리스트
+     */
+    protected List<JobInfoEntity> makeUpdateList(List<JobInfo> apiDataList, List<JobInfo> dbList) {
+        // API 데이터 목록을 Position ID를 키로 하는 맵으로 변환하여, 빠른 조회가 가능하도록 함
+        Map<Long, JobInfo> apiDataMap = apiDataList.stream()
+                .collect(Collectors.toMap(
+                        JobInfo::getPositionId,
+                        jobInfo -> jobInfo,
+                        (existing, replacement) -> replacement
+                ));
+        List<JobInfoEntity> updateList = new ArrayList<>();
+
+        // 데이터베이스의 JobInfo와 API 데이터를 비교하여 업데이트가 필요한 항목을 리스트에 추가
+        dbList.forEach(dbJobInfo -> {
+            JobInfo apiJobInfo = apiDataMap.get(dbJobInfo.getPositionId()); // 동일한 Position ID를 가진 API 데이터 조회
+            // API 데이터가 존재하고, 해당 데이터가 기존 데이터와 다를 경우 업데이트 리스트에 추가
+            if (apiJobInfo != null && checkNotEquals(dbJobInfo, apiJobInfo)) {
+                updateList.add(apiJobInfo.toIdEntity()); // API 데이터를 엔티티로 변환하여 리스트에 추가
+            }
+        });
+
+
+        return updateList;
+    }
+
+    /**
+     * API 데이터와 데이터베이스 데이터를 비교하여 새로 저장해야 할 JobInfoEntity 리스트를 생성합니다.
+     *
+     * @param apiDataList API로부터 가져온 최신 JobInfo 데이터 목록
+     * @param dbList 데이터베이스에서 조회한 기존 JobInfo 데이터 목록
+     * @return 저장할 새로운 JobInfoEntity 객체들의 리스트
+     */
+    protected static List<JobInfoEntity> makeSaveList(List<JobInfo> apiDataList, List<JobInfo> dbList) {
+        // 데이터베이스에 있는 JobInfo들의 Position ID를 Set에 저장
+        Set<Long> dbSet = new HashSet<>();
+        dbList.stream().map(JobInfo::getPositionId).forEach(dbSet::add);
+
+        // API 데이터 중에서 DB에 존재하지 않는 JobInfo들을 필터링하여 저장할 리스트 생성
+        List<JobInfoEntity> insertList = apiDataList.stream()
+                .filter(jobInfo -> !dbSet.contains(jobInfo.getPositionId()))
+                .map(JobInfo::toEntity)
+                .collect(Collectors.toList());
+
+        return insertList;
+    }
+
 }
