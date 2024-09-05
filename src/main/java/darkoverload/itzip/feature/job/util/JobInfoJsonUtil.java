@@ -44,6 +44,8 @@ public class JobInfoJsonUtil {
             throw new RestApiException(CommonExceptionCode.INTERNAL_SERVER_ERROR);
         }
 
+        if(total == null) throw new RestApiException(CommonExceptionCode.INTERNAL_SERVER_ERROR);
+
         // "total" 문자열을 정수로 변환하여 반환
         return Integer.parseInt(total);
     }
