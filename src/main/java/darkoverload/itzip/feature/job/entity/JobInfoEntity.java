@@ -134,7 +134,7 @@ public class JobInfoEntity extends AuditingFields {
     @Column(name="close_type_name", length=50)
     private String closeTypeName;
 
-    public JobInfo toDomain() {
+    public JobInfo convertToDomain() {
         return JobInfo.builder()
                 .id(this.id)
                 .positionId(this.positionId)
