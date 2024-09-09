@@ -1,13 +1,17 @@
 package darkoverload.itzip.feature.job.controller;
 
+import darkoverload.itzip.feature.job.controller.request.JobInfoScrapRequest;
 import darkoverload.itzip.feature.job.controller.response.JobInfoSearchResponse;
 import darkoverload.itzip.feature.job.service.JobInfoService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.swagger.ExceptionCodeAnnotations;
 import darkoverload.itzip.global.config.swagger.ResponseCodeAnnotation;
+import darkoverload.itzip.global.config.swagger.SwaggerRequestBody;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -37,5 +41,16 @@ public class JobInfoController {
 
         return jobInfoService.searchJobInfo(search, category, experienceMin, experienceMax ,pageable);
     }
+
+    @Operation(
+            summary = "스크랩, 스크랩 취소"
+    )
+    @PostMapping("/scrap")
+    public String scrapJobInfo(@SwaggerRequestBody(description = "채용정보 스크립에 대한 정보", required = true, content = @Content(schema = @Schema(implementation = JobInfoScrapRequest.class)
+    )) @RequestBody JobInfoScrapRequest request) {
+
+        return jobInfoService.jobInfoScrap(request);
+    }
+
 
 }

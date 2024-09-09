@@ -111,6 +111,9 @@ public class JobInfo {
     // 마감일 명
     private String closeTypeName;
 
+    // 스크랩 횟수
+    private Integer scrapCount;
+
     public JobInfoEntity toIdEntity(){
         return JobInfoEntity.builder()
                 .id(this.id)
@@ -177,6 +180,7 @@ public class JobInfo {
                 .expirationDate(this.expirationDate)
                 .closeTypeCode(this.closeTypeCode)
                 .closeTypeName(this.closeTypeName)
+                .scrapCount(this.scrapCount)
                 .build();
     }
 }

@@ -55,6 +55,7 @@ public class SecurityConfig {
 
             // 직업 정보 임시 허용
             "/job-info",
+            "/job-info/scrap",
 
             // 기술 정보 임시 허용
             "/tech"
