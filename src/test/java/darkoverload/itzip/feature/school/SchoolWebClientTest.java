@@ -4,10 +4,13 @@ package darkoverload.itzip.feature.school;
 import darkoverload.itzip.feature.school.domain.School;
 import darkoverload.itzip.feature.school.entity.SchoolDocument;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.reactive.function.client.WebClientRequestException;
 import java.util.List;
 
@@ -17,7 +20,8 @@ import static org.assertj.core.api.Assertions.*;
 
 @Slf4j
 @SpringBootTest
-@ActiveProfiles("test")
+@ActiveProfiles(profiles = "test")
+@TestPropertySource(locations = "classpath:application-test.yml")
 public class SchoolWebClientTest {
 
     @Value("${school.api-url}")
@@ -25,6 +29,8 @@ public class SchoolWebClientTest {
 
     @Value("${school.api-key}")
     private String apiKey;
+
+
 
     @Test
     void 학교_정보_외부API를_가져온다() {
