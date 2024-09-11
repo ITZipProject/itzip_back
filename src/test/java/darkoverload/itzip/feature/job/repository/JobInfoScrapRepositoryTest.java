@@ -1,10 +1,7 @@
 package darkoverload.itzip.feature.job.repository;
 
-import darkoverload.itzip.feature.job.entity.JobInfoEntity;
 import darkoverload.itzip.feature.job.entity.JobInfoScrapEntity;
-import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.global.config.querydsl.TestQueryDslConfig;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -12,8 +9,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
-
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -29,12 +24,6 @@ class JobInfoScrapRepositoryTest {
     @Autowired
     private JobInfoScrapRepository jobInfoScrapRepository;
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private JobInfoRepository jobInfoRepository;
-
     @Test
     void 채용공고_스크랩_확인(){
 
@@ -44,7 +33,7 @@ class JobInfoScrapRepositoryTest {
 
 
         // then
-        assertEquals(jobInfo.getId(), 1L);
+        assertEquals(jobInfo.getId(), 100L);
     }
 
 
