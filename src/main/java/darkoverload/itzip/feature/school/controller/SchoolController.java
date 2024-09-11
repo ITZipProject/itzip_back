@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/schoolsearch")
+@RequestMapping("/school")
 public class SchoolController {
 
     private final SchoolService schoolService;
 
-    @GetMapping("")
+    @GetMapping("/search")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     public ResponseEntity<SearchResponse> searchSchool(@RequestParam(value = "schoolName") String schoolName){
         // 학교정보를 10개 정도만 가져와 준다.
