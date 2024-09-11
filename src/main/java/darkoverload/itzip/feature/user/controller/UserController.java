@@ -8,6 +8,7 @@ import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.swagger.ExceptionCodeAnnotations;
 import darkoverload.itzip.global.config.swagger.ResponseCodeAnnotation;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -105,8 +106,12 @@ public class UserController {
     @GetMapping("/authEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_MATCH_AUTH_CODE})
-    public ResponseEntity<String> checkAuthEmail(@RequestBody @Valid AuthEmailCheckRequest request, BindingResult bindingResult) {
-        return userService.checkAuthEmail(request, bindingResult);
+    public ResponseEntity<String> checkAuthEmail(
+            @Parameter(description = "이메일") @RequestParam(required = false) String email,
+            @Parameter(description = "이메일 인증 코드") @RequestParam(required = false) String authCode
+
+    ) {
+        return userService.checkAuthEmail(email, authCode);
     }
 
     /**
@@ -119,7 +124,9 @@ public class UserController {
     @GetMapping("/checkDuplicateEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR})
-    public ResponseEntity<String> checkDuplicateEmail(@RequestBody @Valid DuplicateEmailRequest request, BindingResult bindingResult) {
-        return userService.checkDuplicateEmail(request, bindingResult);
+    public ResponseEntity<String> checkDuplicateEmail(
+            @Parameter(description = "이메일") @RequestParam(required = false) String email
+    ) {
+        return userService.checkDuplicateEmail(email);
     }
 }
