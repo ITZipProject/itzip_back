@@ -29,7 +29,7 @@ class JobInfoScrapRepositoryTest {
 
         // given
         // when
-        JobInfoScrapEntity jobInfo = jobInfoScrapRepository.findByJobInfoId(2L, "test@test.com").get();
+        JobInfoScrapEntity jobInfo = jobInfoScrapRepository.findByJobInfoId(12L, "test@test.com").get();
 
 
         // then
