@@ -174,7 +174,7 @@ public class JobInfoConnectServiceTest {
         List<JobInfoEntity> jobInfoEntities = service.makeSaveList(apiData, dbData);
 
         // when
-        JobInfo jobInfo = jobInfoEntities.getFirst().toDomain();
+        JobInfo jobInfo = jobInfoEntities.getFirst().convertToDomain();
 
         // then
         assertEquals(jobInfo.getPositionId(),48952926L);
@@ -200,7 +200,7 @@ public class JobInfoConnectServiceTest {
         List<JobInfoEntity> jobInfoEntities = service.makeUpdateList(apiData, dbData);
 
         // when
-        JobInfo jobInfo = jobInfoEntities.getFirst().toDomain();
+        JobInfo jobInfo = jobInfoEntities.getFirst().convertToDomain();
 
 
         // then

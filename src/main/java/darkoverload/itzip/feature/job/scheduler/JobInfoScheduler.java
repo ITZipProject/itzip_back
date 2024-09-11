@@ -32,7 +32,7 @@ public class JobInfoScheduler {
     @Scheduled(cron = "1 30 0 * * *")
     public void jobInfoConnectApi() {
         // 데이터베이스에서 모든 JobInfo 데이터를 조회하고, 도메인 객체 리스트로 변환
-        List<JobInfo> dbList = jobInfoRepository.findAll().stream().map(JobInfoEntity::toDomain).toList();
+        List<JobInfo> dbList = jobInfoRepository.findAll().stream().map(JobInfoEntity::convertToDomain).toList();
 
         // Saramin API를 호출하여 최신 JobInfo 데이터를 가져옴
         List<JobInfo> apiDataList = service.jobInfoConnect();

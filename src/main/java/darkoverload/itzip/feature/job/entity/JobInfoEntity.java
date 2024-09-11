@@ -6,8 +6,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
+@ToString
 @Entity
-@Getter
+@Getter @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
@@ -134,7 +135,12 @@ public class JobInfoEntity extends AuditingFields {
     @Column(name="close_type_name", length=50)
     private String closeTypeName;
 
-    public JobInfo toDomain() {
+
+    @Column(name="scrap_count", columnDefinition = "INTEGER DEFAULT 0")
+    private Integer scrapCount;
+
+
+    public JobInfo convertToDomain() {
         return JobInfo.builder()
                 .id(this.id)
                 .positionId(this.positionId)
@@ -166,6 +172,7 @@ public class JobInfoEntity extends AuditingFields {
                 .expirationDate(this.expirationDate)
                 .closeTypeCode(this.closeTypeCode)
                 .closeTypeName(this.closeTypeName)
+                .scrapCount(this.scrapCount)
                 .build();
     }
 }

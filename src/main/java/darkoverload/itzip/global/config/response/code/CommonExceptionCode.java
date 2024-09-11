@@ -12,6 +12,12 @@ import org.springframework.http.HttpStatus;
 public enum CommonExceptionCode implements ResponseCode {
 
     /**
+     * job_info error
+     */
+    JOB_INFO_NOT_FOUND(HttpStatus.NOT_FOUND, "채용 정보를 찾을 수 없습니다."),
+
+
+    /**
      * school Error
      */
     SCHOOL_NOT_FOUND(HttpStatus.NOT_FOUND, "학교 정보를 찾을 수 없습니다"),

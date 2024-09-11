@@ -14,6 +14,8 @@ import java.util.List;
 @NoArgsConstructor
 public class JobInfoSearchResponse {
 
+    private Long id;
+
     private String title;
 
     private String industryName;
@@ -30,7 +32,8 @@ public class JobInfoSearchResponse {
 
     private Long experienceMax;
 
-    public JobInfoSearchResponse(String title, String industryName, String locationName,String jobName, LocalDateTime expirationDate, String experienceName, Long experienceMin, Long experienceMax) {
+    public JobInfoSearchResponse(Long id, String title, String industryName, String locationName,String jobName, LocalDateTime expirationDate, String experienceName, Long experienceMin, Long experienceMax) {
+        this.id = id;
         this.title = title;
         this.industryName = industryName;
         this.locationName = CustomStringUtil.convertList(locationName);

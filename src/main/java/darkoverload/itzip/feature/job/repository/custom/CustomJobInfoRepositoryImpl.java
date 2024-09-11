@@ -38,6 +38,7 @@ public class CustomJobInfoRepositoryImpl implements CustomJobInfoRepository{
 
         List<JobInfoSearchResponse> content = queryFactory.select(Projections.constructor(
                         JobInfoSearchResponse.class,
+                        jobInfoEntity.id,
                         jobInfoEntity.title,
                         jobInfoEntity.industryName,
                         jobInfoEntity.locationName,
@@ -66,6 +67,7 @@ public class CustomJobInfoRepositoryImpl implements CustomJobInfoRepository{
 
         return new PageImpl<>(content, pageable, total);
     }
+
 
     // 공통된 where 절을 생성하는 메서드
     private BooleanExpression createWhereClause(String search, String category, Integer experienceMin, Integer experienceMax) {
