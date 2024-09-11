@@ -21,9 +21,9 @@ public interface UserService {
 
     ResponseEntity<String> sendAuthEmail(AuthEmailSendRequest emailSendRequest, BindingResult bindingResult);
 
-    ResponseEntity<String> checkAuthEmail(AuthEmailCheckRequest request, BindingResult bindingResult);
+    ResponseEntity<String> checkAuthEmail(String email, String authCode);
 
-    ResponseEntity<String> checkDuplicateEmail(DuplicateEmailRequest request, BindingResult bindingResult);
+    ResponseEntity<String> checkDuplicateEmail(String email);
 
     String getUniqueNickname();
 
