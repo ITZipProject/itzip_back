@@ -8,6 +8,7 @@ import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.swagger.ExceptionCodeAnnotations;
 import darkoverload.itzip.global.config.swagger.ResponseCodeAnnotation;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -121,5 +122,21 @@ public class UserController {
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR})
     public ResponseEntity<String> checkDuplicateEmail(@RequestBody @Valid DuplicateEmailRequest request, BindingResult bindingResult) {
         return userService.checkDuplicateEmail(request, bindingResult);
+    }
+
+    /**
+     * 이메일 중복 체크 메소드
+     */
+    @Operation(
+            summary = "닉네임 중복 체크",
+            description = "유저 정보 수정 시 중복된 닉네임인지 확인합니다."
+    )
+    @GetMapping("/checkDuplicateNickname")
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR})
+    public ResponseEntity<String> checkDuplicateNickname(
+            @Parameter(description = "사용할 닉네임") @RequestParam(required = false) String nickname
+    ) {
+        return userService.checkDuplicateNickname(nickname);
     }
 }

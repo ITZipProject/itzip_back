@@ -25,6 +25,8 @@ public interface UserService {
 
     ResponseEntity<String> checkDuplicateEmail(DuplicateEmailRequest request, BindingResult bindingResult);
 
+    ResponseEntity<String> checkDuplicateNickname(String nickname);
+
     String getUniqueNickname();
 
     Optional<User> findByEmail(String email);

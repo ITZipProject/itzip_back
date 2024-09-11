@@ -64,6 +64,8 @@ public enum CommonExceptionCode implements ResponseCode {
      */
     // 사용 중인 이메일
     EXIST_EMAIL_ERROR(HttpStatus.BAD_REQUEST, "이미 사용 중인 이메일입니다."),
+    // 사용 중인 닉네임
+    EXIST_NICKNAME_ERROR(HttpStatus.BAD_REQUEST, "이미 사용 중인 닉네임입니다."),
     // 올바르지 않은 요청값
     FILED_ERROR(HttpStatus.BAD_REQUEST, "요청값이 올바르지 않습니다."),
     // 이메일 인증번호 불일치

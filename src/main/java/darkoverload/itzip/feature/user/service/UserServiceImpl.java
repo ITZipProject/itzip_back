@@ -276,6 +276,20 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok("사용 가능한 이메일입니다.");
     }
 
+    @Override
+    public ResponseEntity<String> checkDuplicateNickname(String nickname) {
+        // 닉네임을 입력하지 않은 경우
+        if (nickname == null){
+            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
+        }
+
+        // 사용 중인 닉네임일 경우
+        if (findByNickname(nickname).isPresent()){
+            throw new RestApiException(CommonExceptionCode.EXIST_NICKNAME_ERROR);
+        }
+        return ResponseEntity.ok("사용 가능한 닉네임입니다.");
+    }
+
     /**
      * 중복되지 않은 랜덤 닉네임 생성
      *
