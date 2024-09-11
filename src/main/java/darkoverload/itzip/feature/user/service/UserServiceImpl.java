@@ -241,14 +241,16 @@ public class UserServiceImpl implements UserService {
      * 인증번호 검증
      */
     @Override
-    public ResponseEntity<String> checkAuthEmail(AuthEmailCheckRequest request, BindingResult bindingResult) {
-        // 필드 에러 확인
-        if (bindingResult.hasErrors()) {
+    public ResponseEntity<String> checkAuthEmail(String email, String authCode) {
+        String emailPattern = "^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}$";
+
+        // 입력값이 비정상적일 경우
+        if (email == null || authCode == null || !email.matches(emailPattern)) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
         }
 
         // redis에 저장된 인증번호와 비교하여 확인
-        if (!verificationService.verifyCode(request.getEmail(), request.getAuthCode())) {
+        if (!verificationService.verifyCode(email, authCode)) {
             throw new RestApiException(CommonExceptionCode.NOT_MATCH_AUTH_CODE);
         }
 
@@ -256,24 +258,36 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 사용 중인 이메일인지 체크하는 메소드
-     *
-     * @param request
-     * @param bindingResult
-     * @return
+     * 사용 중인 이메일인지 체크
      */
     @Override
-    public ResponseEntity<String> checkDuplicateEmail(DuplicateEmailRequest request, BindingResult bindingResult) {
-        // 필드 에러 확인
-        if (bindingResult.hasErrors()) {
+    public ResponseEntity<String> checkDuplicateEmail(String email) {
+        String emailPattern = "^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}$";
+
+        // 이메일 패턴이 아닐 경우
+        if (email == null || !email.matches(emailPattern)) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
         }
 
         // 중복 이메일 체크
-        userRepository.findByEmail(request.getEmail()).ifPresent(user -> {
+        userRepository.findByEmail(email).ifPresent(user -> {
             throw new RestApiException(CommonExceptionCode.EXIST_EMAIL_ERROR);
         });
         return ResponseEntity.ok("사용 가능한 이메일입니다.");
+    }
+
+    @Override
+    public ResponseEntity<String> checkDuplicateNickname(String nickname) {
+        // 닉네임을 입력하지 않은 경우
+        if (nickname == null){
+            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
+        }
+
+        // 사용 중인 닉네임일 경우
+        if (findByNickname(nickname).isPresent()){
+            throw new RestApiException(CommonExceptionCode.EXIST_NICKNAME_ERROR);
+        }
+        return ResponseEntity.ok("사용 가능한 닉네임입니다.");
     }
 
     /**
