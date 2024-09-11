@@ -75,7 +75,8 @@ public class JobInfoServiceImpl implements JobInfoService{
 
         // 3. 스크랩이 존재하지 않으면 채용 정보와 사용자 정보를 조회하여 새로운 스크랩 생성
         JobInfoEntity entity = jobInfoRepository.findById(request.getId()).orElseThrow(() -> new RestApiException(CommonExceptionCode.JOB_INFO_NOT_FOUND));
-        UserEntity user = userRepository.findByEmail(request.getEmail()).get();
+
+        UserEntity user = userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
 
         // 4. 채용 정보의 스크랩 카운트를 1 증가
         entity.setScrapCount(entity.getScrapCount() + 1);
