@@ -34,4 +34,6 @@ public interface UserService {
     User getById(Long id);
 
     Optional<User> findByNickname(String nickname);
+
+    String encryptPassword(String password);
 }

@@ -311,7 +311,7 @@ public class UserServiceImpl implements UserService {
      * @param password 비밀번호
      * @return 암호화된 비밀번호
      */
-    private String encryptPassword(String password) {
+    public String encryptPassword(String password) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(password);
     }

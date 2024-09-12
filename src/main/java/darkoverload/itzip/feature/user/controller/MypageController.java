@@ -2,6 +2,7 @@ package darkoverload.itzip.feature.user.controller;
 
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.user.controller.request.ChangeNicknameRequest;
+import darkoverload.itzip.feature.user.controller.request.ChangePasswordRequest;
 import darkoverload.itzip.feature.user.service.MypageService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
@@ -58,5 +59,23 @@ public class MypageController {
             BindingResult bindingResult
     ) {
         return mypageService.changeNickname(userDetails, request, bindingResult);
+    }
+
+    /**
+     * 비밀번호 변경 기능
+     */
+    @Operation(
+            summary = "비밀번호 변경 기능",
+            description = "유저 정보 수정 시 비밀번호를 변경합니다."
+    )
+    @PatchMapping("/password")
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_FOUND_USER})
+    public ResponseEntity<String> changePassword(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestBody @Valid ChangePasswordRequest request,
+            BindingResult bindingResult
+    ) {
+        return mypageService.changePassword(userDetails, request, bindingResult);
     }
 }
