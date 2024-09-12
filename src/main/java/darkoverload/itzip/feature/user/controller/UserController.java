@@ -109,7 +109,6 @@ public class UserController {
     public ResponseEntity<String> checkAuthEmail(
             @Parameter(description = "이메일") @RequestParam(required = false) String email,
             @Parameter(description = "이메일 인증 코드") @RequestParam(required = false) String authCode
-
     ) {
         return userService.checkAuthEmail(email, authCode);
     }
