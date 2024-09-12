@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.springframework.util.StringUtils.hasText;
-@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class CustomJobInfoRepositoryImpl implements CustomJobInfoRepository{
