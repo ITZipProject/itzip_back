@@ -2,12 +2,17 @@ package darkoverload.itzip.global.config.response;
 
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Getter;
+import lombok.Setter;
+import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
+import javax.naming.ServiceUnavailableException;
 import java.util.*;
 
 @RestController
@@ -85,5 +90,38 @@ public class TestController {
         response.put("field1", "field1Value");
         response.put("field2", "field2Value");
         return response;
+    }
+
+    @GetMapping("/clientAbortException")
+    public void throwClientAbortException() throws ClientAbortException {
+        throw new ClientAbortException("요청 시간이 초과되었습니다");
+    }
+
+    @GetMapping("/serviceUnavailable")
+    public void throwServiceUnavailableException() throws ServiceUnavailableException {
+        throw new ServiceUnavailableException("서비스를 사용할 수 없습니다");
+    }
+
+    @PostMapping("/validation")
+    public ResponseEntity<String> validateDto(@Valid @RequestBody TestDto dto) {
+        return ResponseEntity.ok("");
+    }
+
+    @GetMapping("/missingParameter")
+    public ResponseEntity<String> validateMissingParameter(@RequestParam String id) {
+        return ResponseEntity.ok("");
+    }
+
+    @GetMapping("/validateMethod")
+    public ResponseEntity<String> validateMethod(@Validated @RequestParam @Min(0) int age) {
+        return ResponseEntity.ok("");
+    }
+
+    @Getter
+    @Setter
+    public static class TestDto {
+
+        @NotEmpty(message = "위기를 꺼꾸로 하면 뭔지 아시나요? 기위입니다. 즉 아무것도 아닙니다.")
+        private String name;
     }
 }
