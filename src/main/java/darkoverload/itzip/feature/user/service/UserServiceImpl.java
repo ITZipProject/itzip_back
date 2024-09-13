@@ -1,10 +1,11 @@
 package darkoverload.itzip.feature.user.service;
 
 import darkoverload.itzip.feature.jwt.domain.Token;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.jwt.service.TokenService;
 import darkoverload.itzip.feature.jwt.util.JwtTokenizer;
 import darkoverload.itzip.feature.user.controller.request.*;
-import darkoverload.itzip.feature.user.controller.response.UserLoginResponse;
+import darkoverload.itzip.feature.user.controller.response.*;
 import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.Authority;
 import darkoverload.itzip.feature.user.entity.UserEntity;
@@ -43,6 +44,26 @@ public class UserServiceImpl implements UserService {
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email).map(UserEntity::convertToDomain);
+    }
+
+    /**
+     * 로그인 유저 정보 반환
+     */
+    @Override
+    public ResponseEntity<UserInfoResponse> getUserInfo(CustomUserDetails userDetails) {
+        // 로그인한 유저의 이메일과 일치하는 유저 데이터 가져오기
+        User user = findByEmail(userDetails.getEmail()).orElseThrow(
+                () -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)
+        );
+
+        // 이메일, 닉네임, 프로필 이미지 url 반환
+        UserInfoResponse userInfoResponse = UserInfoResponse.builder()
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .imageUrl(user.getImageUrl())
+                .build();
+
+        return new ResponseEntity<>(userInfoResponse, HttpStatus.OK);
     }
 
     /**

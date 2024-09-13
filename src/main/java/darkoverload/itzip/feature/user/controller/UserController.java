@@ -1,6 +1,8 @@
 package darkoverload.itzip.feature.user.controller;
 
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.user.controller.request.*;
+import darkoverload.itzip.feature.user.controller.response.UserInfoResponse;
 import darkoverload.itzip.feature.user.controller.response.UserLoginResponse;
 import darkoverload.itzip.feature.user.service.UserService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
@@ -16,6 +18,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,6 +29,20 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+
+    /**
+     * 로그인 중인 유저 정보 반환
+     */
+    @Operation(
+            summary = "로그인 유저 정보",
+            description = "현재 로그인 되어있는 유저의 정보를 반환합니다."
+    )
+    @GetMapping
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations(CommonExceptionCode.NOT_FOUND_USER)
+    public ResponseEntity<UserInfoResponse> getUserInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return userService.getUserInfo(userDetails);
+    }
 
     /**
      * 로그인

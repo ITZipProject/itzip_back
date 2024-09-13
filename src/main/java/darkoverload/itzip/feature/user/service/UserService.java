@@ -1,6 +1,8 @@
 package darkoverload.itzip.feature.user.service;
 
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.user.controller.request.*;
+import darkoverload.itzip.feature.user.controller.response.UserInfoResponse;
 import darkoverload.itzip.feature.user.controller.response.UserLoginResponse;
 import darkoverload.itzip.feature.user.domain.User;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,6 +13,8 @@ import org.springframework.validation.BindingResult;
 import java.util.Optional;
 
 public interface UserService {
+    ResponseEntity<UserInfoResponse> getUserInfo(CustomUserDetails userDetails);
+
     ResponseEntity<UserLoginResponse> login(UserLoginRequest request, BindingResult bindingResult, HttpServletResponse httpServletResponse);
 
     ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response);
