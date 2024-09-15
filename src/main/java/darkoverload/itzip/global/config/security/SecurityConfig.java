@@ -83,6 +83,12 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
         );
 
+        // 예외처리 구성
+        http.exceptionHandling(exceptionHandling ->
+                // 인증 실패 시 호출하는 AuthenticationEntryPoint 설정
+                exceptionHandling.authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+        );
+
         // 세션 관리 Stateless 설정(서버가 클라이언트 상태 저장x)
         http.sessionManagement(auth -> auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
