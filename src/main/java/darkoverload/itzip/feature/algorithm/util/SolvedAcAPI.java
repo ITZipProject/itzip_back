@@ -8,8 +8,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Component
 public class SolvedAcAPI {
@@ -43,12 +41,9 @@ public class SolvedAcAPI {
 
 
     //백준 문제 숫자열로 가져오기
-    public String getProblemByArray(List<Integer> problemIds) {
-        String problemIdsParam = problemIds.stream()
-                .map(String::valueOf)
-                .collect(Collectors.joining(","));
+    public String getProblemByPage(int page) {
 
-        return solvedAcUrL + "problem/lookup?problemIds=" + problemIdsParam;
+        return solvedAcUrL + "search/problem?query&direction=asc&sort=id&page=" + page;
     }
 
     //문제 tag들 가져오기

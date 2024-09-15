@@ -28,7 +28,7 @@ public class ProblemEntity {
     private Integer level; // 문제 난이도
 
     @Column(name = "accepted_user_count")
-    private Integer acceptedUserCount; // 문제를 푼 유저 수
+    private Long acceptedUserCount; // 문제를 푼 유저 수
 
     private Integer averageTries; // 평균 시도 횟수
 
