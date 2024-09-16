@@ -3,7 +3,6 @@ package darkoverload.itzip.feature.algorithm.service.tag;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import darkoverload.itzip.feature.algorithm.domain.ProblemTag;
 import darkoverload.itzip.feature.algorithm.entity.ProblemTagEntity;
 import darkoverload.itzip.feature.algorithm.repository.tag.ProblemTagRepository;
 import darkoverload.itzip.feature.algorithm.util.SolvedAcAPI;
@@ -28,6 +27,7 @@ public class SaveTagsImpl implements SaveTags {
      * Solved.ac API를 호출하여 문제 태그 정보를 가져와 데이터베이스에 저장하는 메서드.
      * 1페이지부터 5페이지까지의 태그 데이터를 가져와 파싱 후 저장한다.
      * 각 태그의 한국어 이름을 우선적으로 사용하며, 한국어 이름이 없을 경우 첫 번째 이름을 사용한다.
+     * 예외 발생 시, RestApiException으로 변환하여 처리
      */
     @Override
     public void saveProblemTags() {

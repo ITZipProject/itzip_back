@@ -96,6 +96,8 @@ public enum CommonExceptionCode implements ResponseCode {
      */
     //sovledac TAG를 받는중 에러가 생김
     SOLVED_TAG_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "solved Tag를 업데이트하는중 문제가 생겼습니다."),
+    //sovledac problem을 받는중 에러가 생김
+    SOLVED_PROBLEM_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "solved problem를 업데이트하는중 문제가 생겼습니다."),
 
     /**
      * Resume Error
