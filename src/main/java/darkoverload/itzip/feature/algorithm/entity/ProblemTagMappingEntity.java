@@ -1,6 +1,7 @@
 package darkoverload.itzip.feature.algorithm.entity;
 
 import darkoverload.itzip.feature.algorithm.domain.ProblemTagMapping;
+import darkoverload.itzip.feature.algorithm.entity.embedded.ProblemTagMappingId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,21 +17,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProblemTagMappingEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 매핑 ID
+    @EmbeddedId
+    private ProblemTagMappingId problemTagMappingId;
 
     @ManyToOne
+    @MapsId("problemId")
     @JoinColumn(name = "problem_id", nullable = false)
     private ProblemEntity problemEntity; // 문제 ID (외래 키)
 
     @ManyToOne
+    @MapsId("problemTagId")
     @JoinColumn(name = "boj_tag_id", nullable = false)
     private ProblemTagEntity problemTagEntity; // 태그 ID (외래 키)
 
     public ProblemTagMapping convertToDomain() {
         return ProblemTagMapping.builder()
-                .id(this.id)
+                .problemTagMappingId(problemTagMappingId)
                 .problemEntity(this.problemEntity.convertToDomain())
                 .problemTagEntity(this.problemTagEntity.convertToDomain())
                 .build();
