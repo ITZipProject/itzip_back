@@ -98,6 +98,10 @@ public enum CommonExceptionCode implements ResponseCode {
     SOLVED_TAG_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "solved Tag를 업데이트하는중 문제가 생겼습니다."),
     //sovledac problem을 받는중 에러가 생김
     SOLVED_PROBLEM_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "solved problem를 업데이트하는중 문제가 생겼습니다."),
+    //solvedac 사용자가 푼 문제를 받는중 에러가 생김
+    SOLVED_USER_SOLVED_PROBLEM_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "solvedac 사용자가 푼 문제를 받는중 에러가 생겼습니댜."),
+    //sovledac Id를 등록해야 합니다.
+    NOT_FOUND_SOLVEDAC_USER(HttpStatus.INTERNAL_SERVER_ERROR, "solvedac user를 등록해주세요"),
 
     /**
      * Resume Error
