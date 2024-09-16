@@ -1,6 +1,7 @@
 package darkoverload.itzip.feature.algorithm.entity;
 
 import darkoverload.itzip.feature.algorithm.domain.SolvedacUser;
+import darkoverload.itzip.feature.user.entity.UserEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,6 +21,10 @@ public class SolvedacUserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId; // 유저 ID
+
+    @OneToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")  // 외부 키로 매핑 (UserEntity와의 관계 설정)
+    private UserEntity userEntity;
 
     @Column(nullable = false)
     private String username; // 유저 이름
