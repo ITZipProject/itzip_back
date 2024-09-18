@@ -26,20 +26,25 @@ public class SolvedacUserEntity {
     @JoinColumn(name = "user_id", referencedColumnName = "id")  // 외부 키로 매핑 (UserEntity와의 관계 설정)
     private UserEntity userEntity;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "username")
     private String username; // 유저 이름
 
+    @Column(name = "rating")
     private Integer rating; // 솔브드 ac 레이팅
 
+    @Column(name = "rank")
     private Integer rank; // 솔브드 ac 랭킹
 
     @Column(name = "update_time")
     private LocalDateTime updateTime; // 문제 업데이트 시간
 
+    @Column(name = "profile_image_url")
     private String profileImageUrl;
 
+    @Column(name = "class")
     private Integer solvedClass;
 
+    @Column(name = "tier")
     private Integer tier;
 
     public SolvedacUser convertToDomain() {
