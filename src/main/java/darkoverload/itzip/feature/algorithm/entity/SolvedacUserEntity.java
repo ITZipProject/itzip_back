@@ -23,7 +23,7 @@ public class SolvedacUserEntity {
     private Long userId; // 유저 ID
 
     @OneToOne
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")  // 외부 키로 매핑 (UserEntity와의 관계 설정)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")  // 외부 키로 매핑 (UserEntity와의 관계 설정)
     private UserEntity userEntity;
 
     @Column(nullable = false)
@@ -36,6 +36,12 @@ public class SolvedacUserEntity {
     @Column(name = "update_time")
     private LocalDateTime updateTime; // 문제 업데이트 시간
 
+    private String profileImageUrl;
+
+    private Integer solvedClass;
+
+    private Integer tier;
+
     public SolvedacUser convertToDomain() {
         return SolvedacUser.builder()
                 .userId(this.userId)
@@ -43,6 +49,9 @@ public class SolvedacUserEntity {
                 .rating(this.rating)
                 .rank(this.rank)
                 .updateTime(this.updateTime)
+                .profileImageUrl(this.profileImageUrl)
+                .solvedClass(this.solvedClass)
+                .tier(this.tier)
                 .build();
     }
 }

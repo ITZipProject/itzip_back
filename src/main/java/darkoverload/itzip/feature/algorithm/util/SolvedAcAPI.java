@@ -30,7 +30,7 @@ public class SolvedAcAPI {
 
     //사용자 이름으로 사용자 정보 가져오기
     public String getUserByName(String User) {
-        return solvedAcUrL + "search/user?query=" + User;
+        return solvedAcUrL + "user/show?handle=" + User;
     }
 
 
