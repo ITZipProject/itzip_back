@@ -8,5 +8,6 @@ public interface StorageService {
 
     Image imageUpload(String imagePath, String featureDir);
 
+    Image imageUpload(MultipartFile multipartFile, String featureDir);
     void imageDelete(String imagePath, String featureDir);
 }
