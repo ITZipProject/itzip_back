@@ -9,6 +9,7 @@ import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -28,6 +29,7 @@ public class UpdateUserSolvedProfileAndProblemImpl implements UpdateUserSolvedPr
      * 시간에 제한이 있다.
      */
     @Override
+    @Transactional
     public void updateUserSolvedProfileAndProblem(Long userId) {
         SolvedacUser solvedacUser = solvedacUserRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_SOLVEDAC_USER))

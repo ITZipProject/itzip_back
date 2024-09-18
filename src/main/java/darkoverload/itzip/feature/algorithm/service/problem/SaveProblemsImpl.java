@@ -14,6 +14,7 @@ import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
@@ -38,6 +39,7 @@ public class SaveProblemsImpl implements SaveProblems {
      * 예외 발생 시, RestApiException으로 변환하여 처리
      */
     @Override
+    @Transactional
     public void saveProblems() {
         int start = 1;
         int batchSize = 50;
