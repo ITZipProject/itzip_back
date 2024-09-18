@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.algorithm.service.user;
+package darkoverload.itzip.feature.algorithm.util;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
@@ -10,20 +10,19 @@ import darkoverload.itzip.feature.algorithm.entity.UserProblemMappingEntity;
 import darkoverload.itzip.feature.algorithm.entity.embedded.UserProblemMappingId;
 import darkoverload.itzip.feature.algorithm.repository.mapping.UserProblemMappingRepository;
 import darkoverload.itzip.feature.algorithm.repository.user.SolvedacUserRepository;
-import darkoverload.itzip.feature.algorithm.util.SolvedAcAPI;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service
+@Component
 @RequiredArgsConstructor
-public class SaveUserSolvedProblemImpl implements SaveUserSolvedProblem {
+public class SaveUserSolvedProblem {
     private final SolvedAcAPI solvedAcAPI;
 
     private final SolvedacUserRepository solvedacUserRepository;
@@ -34,7 +33,6 @@ public class SaveUserSolvedProblemImpl implements SaveUserSolvedProblem {
      *
      * @param userId Solved.ac 사용자 ID
      */
-    @Override
     public void saveUserSolvedProblem(Long userId) {
         SolvedacUser solvedacUser = solvedacUserRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_SOLVEDAC_USER))
