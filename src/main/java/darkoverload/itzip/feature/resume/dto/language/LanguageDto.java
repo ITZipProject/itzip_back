@@ -1,8 +1,6 @@
 package darkoverload.itzip.feature.resume.dto.language;
 
 import darkoverload.itzip.feature.resume.domain.language.CreateLanguage;
-import darkoverload.itzip.feature.resume.entity.LanguageEntity;
-import darkoverload.itzip.feature.resume.entity.ResumeEntity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateLanguageDto {
+public class LanguageDto {
 
     // 어학시험명
     private String name;

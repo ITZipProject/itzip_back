@@ -1,6 +1,9 @@
 package darkoverload.itzip.feature.resume.controller;
 
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
+import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
+import darkoverload.itzip.feature.resume.controller.response.UpdateResumeResponse;
 import darkoverload.itzip.feature.resume.service.resume.ResumeService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
@@ -10,10 +13,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
 
 
 @Slf4j
@@ -39,5 +41,11 @@ public class ResumeController {
         return "이력서 저장을 성공하였습니다.";
     }
 
+    @PatchMapping("")
+    public UpdateResumeResponse updateResume(@Valid @RequestBody UpdateResumeRequest request) {
 
+        service.update(request);
+
+        return null;
+    }
 }

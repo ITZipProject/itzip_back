@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateQualificationDto {
+public class QualificationDto {
 
     // 발급기관
     private String organization;

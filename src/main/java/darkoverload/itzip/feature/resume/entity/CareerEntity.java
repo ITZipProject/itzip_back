@@ -1,6 +1,7 @@
 package darkoverload.itzip.feature.resume.entity;
 
 
+import darkoverload.itzip.feature.resume.domain.career.Career;
 import darkoverload.itzip.global.entity.AuditingFields;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -40,4 +41,15 @@ public class CareerEntity extends AuditingFields {
     @Column(name="end_date")
     private LocalDateTime endDate;
 
+    public Career convertToDomain(){
+        return Career.builder()
+                .careerId(this.id)
+                .resume(this.resume)
+                .companyName(this.companyName)
+                .careerPosition(this.careerPosition)
+                .department(this.department)
+                .startDate(this.startDate)
+                .endDate(this.endDate)
+                .build();
+    }
 }

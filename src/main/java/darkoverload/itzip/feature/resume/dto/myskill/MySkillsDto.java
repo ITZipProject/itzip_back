@@ -10,7 +10,7 @@ import lombok.ToString;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateMySkillsDto {
+public class MySkillsDto {
 
     // 이름
     private String name;

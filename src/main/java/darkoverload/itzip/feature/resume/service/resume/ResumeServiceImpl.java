@@ -1,14 +1,15 @@
 package darkoverload.itzip.feature.resume.service.resume;
 
 import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
-import darkoverload.itzip.feature.resume.domain.achievement.CreateAchievement;
-import darkoverload.itzip.feature.resume.domain.activity.CreateActivity;
-import darkoverload.itzip.feature.resume.domain.career.CreateCareer;
+import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
+import darkoverload.itzip.feature.resume.domain.achievement.Achievement;
+import darkoverload.itzip.feature.resume.domain.activity.Activity;
+import darkoverload.itzip.feature.resume.domain.career.Career;
 import darkoverload.itzip.feature.resume.domain.education.CreateEducation;
 import darkoverload.itzip.feature.resume.domain.language.CreateLanguage;
 import darkoverload.itzip.feature.resume.domain.myskill.CreateMySkill;
 import darkoverload.itzip.feature.resume.domain.qualification.CreateQualification;
-import darkoverload.itzip.feature.resume.domain.resume.CreateResume;
+import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.entity.*;
 import darkoverload.itzip.feature.resume.repository.Activity.ActivityRepository;
 import darkoverload.itzip.feature.resume.repository.achievement.AchievementRepository;
@@ -18,6 +19,8 @@ import darkoverload.itzip.feature.resume.repository.language.LanguageRepository;
 import darkoverload.itzip.feature.resume.repository.myskill.MySkillRepository;
 import darkoverload.itzip.feature.resume.repository.qualification.QualificationRepository;
 import darkoverload.itzip.feature.resume.repository.resume.ResumeRepository;
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -44,7 +47,7 @@ public class ResumeServiceImpl implements ResumeService{
     public void create(CreateResumeRequest request) {
 
         //"career", "skill", "language", "qualification", "education", "activity", "achievement"
-        CreateResume resume = request.getResume().create(request.getUserId());
+        Resume resume = Resume.create(request.getResume(), request.getUserId());
 
         // 이력서 저장
         ResumeEntity resumeEntity = resumeRepository.save(resume.toEntity());
@@ -54,14 +57,68 @@ public class ResumeServiceImpl implements ResumeService{
 
     }
 
+    @Transactional
+    @Override
+    public void update(UpdateResumeRequest request) {
 
+        Resume updateResume = Resume.update(request.getResume(), request.getResumeId(), request.getUserId());
+
+        Long resumeUpdate = resumeRepository.update(updateResume);
+
+        if(resumeUpdate < 0) throw new RestApiException(CommonExceptionCode.UPDATE_FAIL_RESUME);
+
+        ResumeEntity resume = resumeRepository.getReferenceById(request.getResumeId());
+
+        update(request, resume);
+    }
+
+
+    private void update(UpdateResumeRequest request, ResumeEntity resume) {
+
+        if(!request.getCareers().isEmpty()){
+            List<CareerEntity> careerEntities = request.getCareers().stream().map(careerDto -> {
+                    Career update = Career.update(careerDto, resume);
+                    return update.toEntity();
+            }).toList();
+
+            careerRepository.saveAll(careerEntities);
+        }
+
+        if(!request.getAchievements().isEmpty()) {
+            List<AchievementEntity> achievementEntities = request.getAchievements().stream().map(achievementDto -> {
+                Achievement update = Achievement.update(achievementDto, resume);
+                return  update.toEntity();
+            }).toList();
+
+            achievementRepository.saveAll(achievementEntities);
+        }
+
+        if(!request.getActivities().isEmpty()) {
+            List<ActivityEntity> activityEntities = request.getActivities().stream().map(activityDto -> {
+
+                Activity update = Activity.update(activityDto, resume);
+                return update.toEntity();
+            }).toList();
+
+            activityRepository.saveAll(activityEntities);
+        }
+
+        
+    }
+
+
+    /**
+     *
+     * @param request
+     * @param resumeEntity
+     */
     private void create(CreateResumeRequest request, ResumeEntity resumeEntity) {
 
         if (!request.getCareers().isEmpty()) {
             List<CareerEntity> careerEntities = request.getCareers().stream().map(createCareerDto -> {
-                CreateCareer createCareer = createCareerDto.create();
-                createCareer.setResume(resumeEntity);
-                return createCareer.toEntity();
+                Career career = createCareerDto.create();
+                career.setResume(resumeEntity);
+                return career.toEntity();
             }).toList();
 
             careerRepository.saveAll(careerEntities);
@@ -69,9 +126,9 @@ public class ResumeServiceImpl implements ResumeService{
 
         if (!request.getAchievements().isEmpty()) {
             List<AchievementEntity> achievementEntities = request.getAchievements().stream().map(createAchievementDto -> {
-                CreateAchievement createAchievement = createAchievementDto.create();
-                createAchievement.setResume(resumeEntity);
-                return createAchievement.toEntity();
+                Achievement achievement = createAchievementDto.create();
+                achievement.setResume(resumeEntity);
+                return achievement.toEntity();
             }).toList();
 
             achievementRepository.saveAll(achievementEntities);
@@ -79,9 +136,9 @@ public class ResumeServiceImpl implements ResumeService{
 
         if (!request.getActivities().isEmpty()) {
             List<ActivityEntity> activityEntities = request.getActivities().stream().map(createActivityDto -> {
-                CreateActivity createActivity = createActivityDto.create();
-                createActivity.setResume(resumeEntity);
-                return createActivity.toEntity();
+                Activity activity = createActivityDto.create();
+                activity.setResume(resumeEntity);
+                return activity.toEntity();
             }).toList();
 
             activityRepository.saveAll(activityEntities);
@@ -130,5 +187,7 @@ public class ResumeServiceImpl implements ResumeService{
         }
 
     }
+
+
 
 }

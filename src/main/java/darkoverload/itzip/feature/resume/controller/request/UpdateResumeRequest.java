@@ -9,14 +9,15 @@ import darkoverload.itzip.feature.resume.dto.myskill.MySkillsDto;
 import darkoverload.itzip.feature.resume.dto.qualification.QualificationDto;
 import darkoverload.itzip.feature.resume.dto.resume.ResumeDto;
 import darkoverload.itzip.feature.resume.util.ResumeConditional;
-import lombok.*;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ToString
 @Getter
-public class CreateResumeRequest {
+public class UpdateResumeRequest {
 
     @ResumeConditional
     private List<AchievementDto> achievements = new ArrayList<>();
@@ -42,4 +43,6 @@ public class CreateResumeRequest {
     private ResumeDto resume;
 
     private Long userId;
+
+    private Long resumeId;
 }

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateEducationDto {
+public class EducationDto {
 
     // 학교명
     private String schoolName;

@@ -1,6 +1,7 @@
 package darkoverload.itzip.feature.resume.domain.achievement;
 
 
+import darkoverload.itzip.feature.resume.dto.achievement.AchievementDto;
 import darkoverload.itzip.feature.resume.entity.AchievementEntity;
 import darkoverload.itzip.feature.resume.entity.ResumeEntity;
 import lombok.*;
@@ -12,7 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateAchievement {
+public class Achievement {
 
     // 이력서
     private ResumeEntity resume;
@@ -29,6 +30,20 @@ public class CreateAchievement {
     // 설명
     private String content;
 
+    // 아이디값
+    private Long achievementId;
+
+    public static Achievement update(AchievementDto achievementDto, ResumeEntity resume) {
+        return Achievement.builder()
+                .resume(resume)
+                .name(achievementDto.getName())
+                .organization(achievementDto.getOrganization())
+                .content(achievementDto.getContent())
+                .achievementId(achievementDto.getAchievementId())
+                .build();
+
+    }
+
     public AchievementEntity toEntity() {
         return AchievementEntity.builder()
                 .resume(this.resume)
@@ -36,6 +51,7 @@ public class CreateAchievement {
                 .organization(this.organization)
                 .achievementDate(this.achievementDate)
                 .content(this.content)
+                .id(this.achievementId)
                 .build();
     }
 }

@@ -97,6 +97,8 @@ public enum CommonExceptionCode implements ResponseCode {
 
     // 이력서 생성 오류
     INSERT_FAIL_RESUME(HttpStatus.BAD_REQUEST, "이력서 생성 오류"),
+    // 이력서 업데이트 오류
+    UPDATE_FAIL_RESUME(HttpStatus.BAD_REQUEST, "이력서 업데이트 오류"),
 
     /**
      * MongoDb
