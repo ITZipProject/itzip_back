@@ -1,5 +1,7 @@
 package darkoverload.itzip.feature.algorithm.util;
 
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -25,7 +27,14 @@ public class SolvedAcAPI {
                 .GET()
                 .build();
 
-        return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+        HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
+        // 상태 코드가 200이 아닌 경우 예외 처리
+        if (response.statusCode() != 200) {
+            throw new RestApiException(CommonExceptionCode.SOLVEDAC_API_ERROR);
+        }
+
+        return response;
     }
 
     //사용자 이름으로 사용자 정보 가져오기
