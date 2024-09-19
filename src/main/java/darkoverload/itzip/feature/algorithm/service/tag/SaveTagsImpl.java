@@ -3,7 +3,6 @@ package darkoverload.itzip.feature.algorithm.service.tag;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import darkoverload.itzip.feature.algorithm.entity.ProblemTagEntity;
 import darkoverload.itzip.feature.algorithm.repository.tag.ProblemTagRepository;
 import darkoverload.itzip.feature.algorithm.util.SolvedAcAPI;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
@@ -31,7 +30,7 @@ public class SaveTagsImpl implements SaveTags {
      */
     @Override
     public void saveProblemTags() {
-        List<ProblemTagEntity> problemTags = IntStream.range(1, 6)  // page 1부터 5까지 반복
+        List<Object[]> tagsToSave = IntStream.range(1, 6)  // page 1부터 5까지 반복
                 .mapToObj(page -> {
                     try {
                         HttpResponse<String> response = solvedAcAPI.solvedacAPIRequest(solvedAcAPI.getTag(page));
@@ -55,11 +54,7 @@ public class SaveTagsImpl implements SaveTags {
                                     String nameSort = displayName.has("short") ? displayName.get("short").getAsString() : "";
 
                                     // ProblemTag 객체 생성
-                                    return ProblemTagEntity.builder()
-                                            .bojTagId(item.get("bojTagId").getAsLong())
-                                            .displayName(name)
-                                            .displayNameSort(nameSort)
-                                            .build();
+                                    return new Object[]{item.get("bojTagId").getAsLong(), name, nameSort};
                                 }).toList();
                     } catch (IOException e) {
                         throw new RestApiException(CommonExceptionCode.SOLVED_TAG_ERROR);
@@ -72,6 +67,6 @@ public class SaveTagsImpl implements SaveTags {
                 .toList();
 
         // DB에 저장
-        problemTagRepository.saveAll(problemTags);
+        problemTagRepository.batchInsertTags(tagsToSave);
     }
 }

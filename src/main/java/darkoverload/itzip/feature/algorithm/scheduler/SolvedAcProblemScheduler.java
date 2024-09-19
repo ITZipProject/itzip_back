@@ -1,6 +1,7 @@
 package darkoverload.itzip.feature.algorithm.scheduler;
 
 import darkoverload.itzip.feature.algorithm.service.AlgorithmService;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -20,12 +21,12 @@ public class SolvedAcProblemScheduler {
         log.info("==== solved.ac 작업시작 ====");
         algorithmService.saveProblemTags();
         log.info("==== tag 저장완료 ====");
-        algorithmService.saveProblems();
+//        algorithmService.saveProblems();
         log.info("==== problem 저장완료 ====");
     }
 // 디버깅용 코드
-//    @PostConstruct
-//    public void runOnceOnStartup() {
-//        solvedProblemUpdate();
-//    }
+    @PostConstruct
+    public void runOnceOnStartup() {
+        solvedProblemUpdate();
+    }
 }
