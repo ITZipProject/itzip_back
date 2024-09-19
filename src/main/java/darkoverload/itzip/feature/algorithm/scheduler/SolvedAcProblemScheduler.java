@@ -17,8 +17,15 @@ public class SolvedAcProblemScheduler {
      */
     @Scheduled(cron = "${SOLVED_AC_SCHEDULER_CRON}")
     public void solvedProblemUpdate(){
-        log.info("==== 작업시작 ====");
+        log.info("==== solved.ac 작업시작 ====");
+        algorithmService.saveProblemTags();
+        log.info("==== tag 저장완료 ====");
         algorithmService.saveProblems();
-        log.info("==== 작업완료 ====");
+        log.info("==== problem 저장완료 ====");
     }
+// 디버깅용 코드
+//    @PostConstruct
+//    public void runOnceOnStartup() {
+//        solvedProblemUpdate();
+//    }
 }
