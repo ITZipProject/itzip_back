@@ -15,7 +15,7 @@ CREATE TABLE problems (
                           title VARCHAR(255),
                           level INTEGER,
                           accepted_user_count INTEGER,
-                          averageTries INTEGER
+                          average_tries INTEGER
 );
 
 CREATE TABLE problem_tags (
