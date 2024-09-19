@@ -19,7 +19,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class SolvedacUserEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId; // 유저 ID
 
     @OneToOne

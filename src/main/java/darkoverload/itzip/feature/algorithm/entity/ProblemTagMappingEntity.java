@@ -20,12 +20,12 @@ public class ProblemTagMappingEntity {
     @EmbeddedId
     private ProblemTagMappingId problemTagMappingId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("problemId")
     @JoinColumn(name = "problem_id", nullable = false)
     private ProblemEntity problemEntity; // 문제 ID (외래 키)
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("problemTagId")
     @JoinColumn(name = "boj_tag_id", nullable = false)
     private ProblemTagEntity problemTagEntity; // 태그 ID (외래 키)

@@ -3,10 +3,6 @@ package darkoverload.itzip.feature.algorithm.service.problem;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import darkoverload.itzip.feature.algorithm.entity.ProblemEntity;
-import darkoverload.itzip.feature.algorithm.entity.ProblemTagEntity;
-import darkoverload.itzip.feature.algorithm.entity.ProblemTagMappingEntity;
-import darkoverload.itzip.feature.algorithm.entity.embedded.ProblemTagMappingId;
 import darkoverload.itzip.feature.algorithm.repository.mapping.ProblemTagMappingRepository;
 import darkoverload.itzip.feature.algorithm.repository.problem.ProblemRepository;
 import darkoverload.itzip.feature.algorithm.util.SolvedAcAPI;
@@ -44,8 +40,8 @@ public class SaveProblemsImpl implements SaveProblems {
         int start = 1;
         int batchSize = 50;
 
-        List<ProblemEntity> problemsToSave = new ArrayList<>();
-        List<ProblemTagMappingEntity> mappingsToSave = new ArrayList<>();
+        List<Object[]> problemsToSave = new ArrayList<>();
+        List<Object[]> mappingsToSave = new ArrayList<>();
         try {
             // 총 문제 수 확인 후 페이지 계산
             HttpResponse<String> response = solvedAcAPI.solvedacAPIRequest(solvedAcAPI.getProblemByPage(1));
@@ -55,51 +51,46 @@ public class SaveProblemsImpl implements SaveProblems {
             // 문제 데이터를 한 번에 처리
             for (int i = start; i <= totalPages; i++) {
                 HttpResponse<String> problemsResponse = solvedAcAPI.solvedacAPIRequest(solvedAcAPI.getProblemByPage(i));
-                JsonArray jsonProblems = JsonParser.parseString(problemsResponse.body()).getAsJsonArray();
+                JsonObject jsonObject = JsonParser.parseString(problemsResponse.body()).getAsJsonObject();
+                JsonArray jsonProblems = jsonObject.getAsJsonArray("items");
 
-                jsonProblems.forEach(problemElement -> {
-                    JsonObject jsonProblem = problemElement.getAsJsonObject();
+                if (jsonProblems != null && !jsonProblems.isEmpty()) {
+                    jsonProblems.forEach(problemElement -> {
+                        JsonObject jsonProblem = problemElement.getAsJsonObject();
 
-                    // 문제 제목 처리
-                    String problemTitle = StreamSupport.stream(jsonProblem.getAsJsonArray("titles").spliterator(), false)
-                            .map(JsonObject.class::cast)
-                            .filter(title -> title.get("language").getAsString().equals("ko"))
-                            .findFirst()
-                            .orElse(jsonProblem.getAsJsonArray("titles").get(0).getAsJsonObject())
-                            .get("title").getAsString();
+                        JsonArray titlesArray = jsonProblem.getAsJsonArray("titles");
+                        if (!titlesArray.isEmpty()){
+                            // 문제 제목 처리
+                            String problemTitle = StreamSupport.stream(titlesArray.spliterator(), false)
+                                    .map(JsonObject.class::cast)
+                                    .filter(title -> title.get("language").getAsString().equals("ko"))
+                                    .findFirst()
+                                    .orElse(jsonProblem.getAsJsonArray("titles").get(0).getAsJsonObject())
+                                    .get("title").getAsString();
 
-                    // ProblemEntity 생성
-                    ProblemEntity problemEntity = ProblemEntity.builder()
-                            .problemId(jsonProblem.get("problemId").getAsLong())
-                            .level(jsonProblem.get("level").getAsInt())
-                            .acceptedUserCount(jsonProblem.get("acceptedUserCount").getAsLong())
-                            .title(problemTitle)
-                            .averageTries(jsonProblem.get("averageTries").getAsInt())
-                            .build();
+                            long problemId = jsonProblem.get("problemId").getAsLong();
+                            int level = jsonProblem.get("level").getAsInt();
+                            long acceptedUserCount = jsonProblem.get("acceptedUserCount").getAsLong();
+                            int averageTries = jsonProblem.get("averageTries").getAsInt();
 
-                    problemsToSave.add(problemEntity);
+                            problemsToSave.add(new Object[]{
+                                    problemId, problemTitle, level, acceptedUserCount, averageTries
+                            });
 
-                    // 태그 처리
-                    JsonArray tags = jsonProblem.getAsJsonArray("tags");
-                    tags.forEach(tagElement -> {
-                        JsonObject tag = tagElement.getAsJsonObject();
-                        Long tagId = tag.get("bojTagId").getAsLong();
-
-                        // 매핑 생성
-                        ProblemTagMappingEntity mapping = ProblemTagMappingEntity.builder()
-                                .problemTagMappingId(ProblemTagMappingId.builder()
-                                        .problemTagId(tagId)
-                                        .problemId(problemEntity.getProblemId())
-                                        .build())
-                                .problemTagEntity(ProblemTagEntity.builder()
-                                        .bojTagId(tagId)
-                                        .build())
-                                .problemEntity(problemEntity)
-                                .build();
-
-                        mappingsToSave.add(mapping);
+                            // 태그 처리
+                            JsonArray tags = jsonProblem.getAsJsonArray("tags");
+                            if (!tags.isEmpty()) {
+                                tags.forEach(tagElement -> {
+                                    JsonObject tag = tagElement.getAsJsonObject();
+                                    long boj_tag_id = tag.get("bojTagId").getAsLong();
+                                    mappingsToSave.add(new Object[]{
+                                            problemId, boj_tag_id
+                                    });
+                                });
+                            }
+                        }
                     });
-                });
+                }
             }
         } catch (IOException e) {
             throw new RestApiException(CommonExceptionCode.SOLVED_PROBLEM_ERROR);
@@ -109,7 +100,7 @@ public class SaveProblemsImpl implements SaveProblems {
         }
 
         // 문제와 태그 매핑을 한 번에 저장
-        problemRepository.saveAll(problemsToSave);
-        problemTagMappingRepository.saveAll(mappingsToSave);
+        problemRepository.batchInsertProblems(problemsToSave);
+        problemTagMappingRepository.batchInsertProblemsAndTagsMapping(mappingsToSave);
     }
 }

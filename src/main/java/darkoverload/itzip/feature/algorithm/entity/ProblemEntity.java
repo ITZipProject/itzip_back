@@ -20,7 +20,6 @@ import java.util.Set;
 @NoArgsConstructor
 public class ProblemEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "problem_id")
     private Long problemId; // 문제 ID
 

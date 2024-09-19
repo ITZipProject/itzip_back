@@ -106,6 +106,8 @@ public enum CommonExceptionCode implements ResponseCode {
     NOT_FOUND_SOLVEDAC_USER(HttpStatus.BAD_REQUEST, "solvedac user를 등록해주세요"),
     //업데이트 하려면 기다려야 합니다.
     UPDATE_COOLDOWN(HttpStatus.CONFLICT, "마지막 업데이트로부터 시간이 지나지 않았습니다."),
+    //solved.ac 서버로부터 api를 받아올수 없습니다.
+    SOLVEDAC_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "solved.ac로부터 오류를 보냈습니다."),
 
     /**
      * Resume Error

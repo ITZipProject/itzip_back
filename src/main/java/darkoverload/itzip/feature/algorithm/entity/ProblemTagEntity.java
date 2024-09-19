@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 public class ProblemTagEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "boj_tag_id")
     private Long bojTagId; // 태그 ID
 
