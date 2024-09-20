@@ -16,6 +16,7 @@ import java.util.List;
 @NoArgsConstructor
 public class Resume {
 
+
     // 이메일
     private String email;
 

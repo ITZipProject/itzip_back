@@ -3,11 +3,11 @@ package darkoverload.itzip.feature.resume.domain.career;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.dto.career.CareerDto;
 import darkoverload.itzip.feature.resume.entity.CareerEntity;
-import darkoverload.itzip.feature.resume.entity.ResumeEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
+@ToString
 @Setter
 @Getter
 @Builder
@@ -16,7 +16,7 @@ import java.time.LocalDateTime;
 public class Career {
 
     // 이력서
-    private ResumeEntity resume;
+    private Resume resume;
 
     // 회사명
     private String companyName;
@@ -36,7 +36,7 @@ public class Career {
     // 커리어 아이디
     private Long careerId;
 
-    public static Career update(CareerDto career, ResumeEntity resume) {
+    public static Career update(CareerDto career, Resume resume) {
         return Career.builder()
                 .resume(resume)
                 .careerId(career.getCareerId())
@@ -50,7 +50,7 @@ public class Career {
 
     public CareerEntity toEntity() {
         return CareerEntity.builder()
-                .resume(this.resume)
+                .resume(this.resume.toEntity())
                 .companyName(this.companyName)
                 .careerPosition(this.careerPosition)
                 .department(this.department)

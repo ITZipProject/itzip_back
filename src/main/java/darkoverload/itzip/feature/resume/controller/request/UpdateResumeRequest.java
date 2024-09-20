@@ -9,6 +9,7 @@ import darkoverload.itzip.feature.resume.dto.myskill.MySkillsDto;
 import darkoverload.itzip.feature.resume.dto.qualification.QualificationDto;
 import darkoverload.itzip.feature.resume.dto.resume.ResumeDto;
 import darkoverload.itzip.feature.resume.util.ResumeConditional;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -26,6 +27,7 @@ public class UpdateResumeRequest {
     private final List<QualificationDto> qualifications = new ArrayList<>();
 
     @ResumeConditional
+    @Schema(description = "기술 정보 값", example = "")
     private final List<MySkillsDto> mySkills= new ArrayList<>();
 
     @ResumeConditional

@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.resume.dto.myskill;
 
-import darkoverload.itzip.feature.resume.domain.myskill.CreateMySkill;
+import darkoverload.itzip.feature.resume.domain.myskill.MySkill;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,9 +15,13 @@ public class MySkillsDto {
     // 이름
     private String name;
 
-    public CreateMySkill create() {
-        return CreateMySkill.builder()
+    // 아이디
+    private Long mySkillId;
+
+    public MySkill create() {
+        return MySkill.builder()
                 .name(this.name)
+                .mySkillId(this.mySkillId)
                 .build();
     }
 }

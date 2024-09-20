@@ -16,4 +16,5 @@ public class QuizPointRequest {
 
     @Schema(description = "사용자가 문제에 준 점수", example = "2")
     private Integer points;
+
 }

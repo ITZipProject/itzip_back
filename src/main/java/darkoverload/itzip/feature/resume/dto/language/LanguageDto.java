@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.resume.dto.language;
 
-import darkoverload.itzip.feature.resume.domain.language.CreateLanguage;
+import darkoverload.itzip.feature.resume.domain.language.Language;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,12 +26,16 @@ public class LanguageDto {
     // 취득일
     private LocalDateTime acquisitionDate;
 
-    public CreateLanguage create(){
-        return CreateLanguage.builder()
+    // 아이디
+    private Long languageId;
+
+    public Language create(){
+        return Language.builder()
                 .name(this.name)
                 .level(this.level)
                 .score(this.score)
                 .acquisitionDate(this.acquisitionDate)
+                .languageId(this.languageId)
                 .build();
     }
 }

@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.resume.dto.education;
 
-import darkoverload.itzip.feature.resume.domain.education.CreateEducation;
+import darkoverload.itzip.feature.resume.domain.education.Education;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,9 +26,11 @@ public class EducationDto {
     // 졸업일
     private LocalDateTime endDate;
 
+    // 아이디
+    private Long educationId;
 
-    public CreateEducation create(){
-        return CreateEducation.builder()
+    public Education create(){
+        return Education.builder()
                 .schoolName(this.schoolName)
                 .major(this.major)
                 .startDate(this.startDate)

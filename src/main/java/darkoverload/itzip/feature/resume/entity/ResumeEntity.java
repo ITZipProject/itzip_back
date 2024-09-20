@@ -38,9 +38,6 @@ public class ResumeEntity extends AuditingFields {
     @Column(length=5000)
     private String introduction;
 
-    private String address;
-
-
     @Convert(converter = StringListConverter.class)
     private List<String> links = new ArrayList<>();
 
@@ -58,7 +55,8 @@ public class ResumeEntity extends AuditingFields {
                 .subject(this.subject)
                 .phone(this.phone)
                 .introduction(this.introduction)
-
+                .links(this.links)
+                .publicOnOff(this.publicOnOff)
                 .build();
     }
 }
