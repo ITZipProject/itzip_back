@@ -8,6 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import darkoverload.itzip.feature.job.controller.response.JobInfoSearchResponse;
 import darkoverload.itzip.feature.job.entity.QJobInfoEntity;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.springframework.util.StringUtils.hasText;
-
 @Repository
 @RequiredArgsConstructor
 public class CustomJobInfoRepositoryImpl implements CustomJobInfoRepository{
@@ -68,7 +68,9 @@ public class CustomJobInfoRepositoryImpl implements CustomJobInfoRepository{
                         jobInfoEntity.experienceName,
                         jobInfoEntity.experienceMin,
                         jobInfoEntity.experienceMax,
-                        jobInfoEntity.scrapCount
+                        jobInfoEntity.scrapCount,
+                        jobInfoEntity.companyName,
+                        jobInfoEntity.url
                 ))
                 .from(jobInfoEntity)
                 .where(
@@ -134,7 +136,6 @@ public class CustomJobInfoRepositoryImpl implements CustomJobInfoRepository{
                 .map(order -> {
                     // 필드명에 따라 정렬 기준을 다르게 설정
                     switch (order.getProperty()) {
-
                         case "modifyDate":
                             return order.isAscending() ? jobInfoEntity.modifyDate.asc() : jobInfoEntity.modifyDate.desc();
                         case "scrap":

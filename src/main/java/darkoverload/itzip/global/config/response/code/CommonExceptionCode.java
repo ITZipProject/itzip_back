@@ -118,6 +118,8 @@ public enum CommonExceptionCode implements ResponseCode {
     FORBIDDEN(HttpStatus.FORBIDDEN, "접근 권한이 없습니다"),
     // 404
     NOT_FOUND(HttpStatus.NOT_FOUND, "리소스를 찾을 수 없습니다"),
+    // 405
+    METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "지원되지 않는 메서드입니다"),
     // 408
     REQUEST_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "요청 시간이 초과되었습니다"),
     // 415

@@ -45,6 +45,8 @@ public class JobInfoController {
     @Operation(
             summary = "스크랩, 스크랩 취소"
     )
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations({CommonExceptionCode.JOB_INFO_NOT_FOUND, CommonExceptionCode.NOT_FOUND_USER})
     @PostMapping("/scrap")
     public String scrapJobInfo(@SwaggerRequestBody(description = "채용정보 스크립에 대한 정보", required = true, content = @Content(schema = @Schema(implementation = JobInfoScrapRequest.class)
     )) @RequestBody JobInfoScrapRequest request) {
