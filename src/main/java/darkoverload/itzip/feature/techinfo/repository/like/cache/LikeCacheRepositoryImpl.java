@@ -26,7 +26,10 @@ public class LikeCacheRepositoryImpl implements LikeCacheRepository {
     @Override
     public Boolean getLikeStatus(Long userId, String postId) {
         String redisKey = buildRedisKey(userId, postId); // Redis 키 생성
-        return (Boolean) redisTemplate.opsForValue().get(redisKey); // Redis에서 좋아요 상태 조회
+        String isLikedString = (String) redisTemplate.opsForValue().get(redisKey); // Redis에서 좋아요 상태를 문자열로 조회
+
+        // 문자열을 Boolean으로 변환, null 처리 포함
+        return isLikedString != null ? Boolean.valueOf(isLikedString) : null;
     }
 
     // 캐시에 특정 유저의 포스트에 대한 좋아요 상태를 저장
@@ -45,9 +48,10 @@ public class LikeCacheRepositoryImpl implements LikeCacheRepository {
 
         // 각 키에 대해 좋아요 상태를 가져와 리스트에 추가
         for (String key : keys) {
-            Boolean isLiked = (Boolean) redisTemplate.opsForValue().get(key); // Redis에서 좋아요 상태 조회
+            String isLikedString = (String) redisTemplate.opsForValue().get(key); // Redis에서 좋아요 상태를 문자열로 조회
 
-            if (isLiked != null) { // 좋아요 상태가 null이 아니면 처리
+            if (isLikedString != null) { // 좋아요 상태가 null이 아니면 처리
+                Boolean isLiked = Boolean.valueOf(isLikedString); // 문자열을 Boolean으로 변환
                 String[] parts = key.split(":"); // 키를 ":"로 분할하여 포스트ID와 유저ID 추출
                 String postId = parts[1]; // 포스트ID 추출
                 Long userId = Long.valueOf(parts[3]); // 유저ID 추출
