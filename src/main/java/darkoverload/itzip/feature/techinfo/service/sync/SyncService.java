@@ -31,14 +31,22 @@ public class SyncService {
         List<LikeStatusDto> cachedLikes = likeCacheRepository.getAllLikeStatuses(); // 캐시에서 모든 좋아요 상태 조회
 
         for (LikeStatusDto likeStatus : cachedLikes) {
-            if (likeStatus.getIsLiked()) {
-                Like like = likeStatus.convertToDomain(); // DTO를 도메인 객체로 변환
+            ObjectId postId = new ObjectId(likeStatus.getPostId());
+            Long userId = likeStatus.getUserId();
 
-                likeRepository.save(like.convertToDocumentWithoutLikeId()); // 좋아요 추가
-                postRepository.updateLikeCount(new ObjectId(like.getPostId()), 1); // 포스트 좋아요 수 증가
+            if (likeStatus.getIsLiked()) {
+                // 좋아요 추가
+                if (!likeRepository.existsByUserIdAndPostId(userId, postId)) {  // 좋아요가 이미 있는지 확인
+                    Like like = likeStatus.convertToDomain(); // DTO를 도메인 객체로 변환
+                    likeRepository.save(like.convertToDocumentWithoutLikeId()); // 좋아요 추가
+                    postRepository.updateLikeCount(postId, 1); // 포스트 좋아요 수 증가
+                }
             } else {
-                likeRepository.deleteByUserIdAndPostId(likeStatus.getUserId(), new ObjectId(likeStatus.getPostId())); // 좋아요 취소
-                postRepository.updateLikeCount(new ObjectId(likeStatus.getPostId()), -1); // 포스트 좋아요 수 감소
+                // 좋아요 취소
+                if (likeRepository.existsByUserIdAndPostId(userId, postId)) { // 좋아요가 이미 존재하는지 확인
+                    likeRepository.deleteByUserIdAndPostId(userId, postId); // 좋아요 취소
+                    postRepository.updateLikeCount(postId, -1); // 포스트 좋아요 수 감소
+                }
             }
         }
     }
