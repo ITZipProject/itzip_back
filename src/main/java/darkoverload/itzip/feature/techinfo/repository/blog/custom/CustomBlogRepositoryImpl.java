@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-import static darkoverload.itzip.feature.techinfo.model.QBlogEntity.blogEntity;
+import static darkoverload.itzip.feature.techinfo.model.entity.QBlogEntity.blogEntity;
 
 @Repository
 @RequiredArgsConstructor
