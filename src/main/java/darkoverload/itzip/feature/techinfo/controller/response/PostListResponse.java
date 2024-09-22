@@ -6,8 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Schema(
         description = "포스트 목록을 반환하는 응답 객체로, 각 포스트의 ID, 제목, 생성일을 포함합니다."
 )
@@ -24,5 +22,5 @@ public class PostListResponse {
     private String title;
 
     @Schema(description = "포스트 생성일", example = "2024-09-18T00:40:29.282")
-    private LocalDateTime createDate;
+    private String createDate;
 }
