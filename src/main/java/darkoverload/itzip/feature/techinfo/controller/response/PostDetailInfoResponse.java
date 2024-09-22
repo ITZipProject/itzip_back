@@ -47,7 +47,7 @@ public class PostDetailInfoResponse {
     private Integer likeCount;
 
     @Schema(description = "포스트 생성일", example = "2024-09-16T03:18:13.734")
-    private LocalDateTime createDate;
+    private String createDate;
 
     @Schema(description = "포스트 작성자의 닉네임", example = "hyoseung")
     private String author;
