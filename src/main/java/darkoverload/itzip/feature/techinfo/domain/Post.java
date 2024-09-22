@@ -150,6 +150,7 @@ public class Post {
                 .content(this.content)
                 .likeCount(this.likeCount)
                 .author(user.getNickname())
+                // .profileImagePath() // 추가적으로 프로필 이미지 경로를 설정할 수 있음
                 .createDate(this.createDate.toString())
                 .thumbnailImagePath(this.thumbnailImagePath)
                 .build();
@@ -164,18 +165,18 @@ public class Post {
      */
     public PostDetailInfoResponse convertToPostDetailInfoResponse(User user, Boolean isLiked) {
         return PostDetailInfoResponse.builder()
-                .postId(this.getId())
-                .blogId(this.getBlogId())
-                .categoryId(this.getCategoryId())
-                .title(this.getTitle())
-                .content(this.getContent())
-                .viewCount(this.getViewCount())
-                .likeCount(this.getLikeCount())
-                .createDate(this.getCreateDate())
+                .postId(this.id)
+                .blogId(this.blogId)
+                .categoryId(this.categoryId)
+                .title(this.title)
+                .content(this.content)
+                .viewCount(this.viewCount)
+                .likeCount(this.likeCount)
+                .createDate(this.createDate.toString())
                 .author(user.getNickname())
                 // .profileImagePath() // 추가적으로 프로필 이미지 경로를 설정할 수 있음
-                .thumbnailImagePath(this.getThumbnailImagePath())
-                .contentImagePaths(this.getContentImagePaths())
+                .thumbnailImagePath(this.thumbnailImagePath)
+                .contentImagePaths(this.contentImagePaths)
                 .isLiked(isLiked)
                 .build();
     }
@@ -189,7 +190,7 @@ public class Post {
         return PostListResponse.builder()
                 .postId(this.id)
                 .title(this.title)
-                .createDate(this.getCreateDate())
+                .createDate(this.createDate.toString())
                 .build();
     }
 }
