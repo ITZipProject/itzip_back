@@ -3,11 +3,12 @@ package darkoverload.itzip.feature.csQuiz.service;
 import darkoverload.itzip.feature.csQuiz.controller.request.QuizAnswerRequest;
 import darkoverload.itzip.feature.csQuiz.controller.request.QuizCreatedRequest;
 import darkoverload.itzip.feature.csQuiz.controller.request.QuizPointRequest;
+import darkoverload.itzip.feature.csQuiz.controller.request.QuizQueryRequest;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizCategoryDetailResponse;
-import darkoverload.itzip.feature.csQuiz.entity.SortBy;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.QuizCategory;
 import darkoverload.itzip.feature.csQuiz.entity.UserQuizStatus;
+import darkoverload.itzip.feature.csQuiz.repository.quiz.QuizRepository;
 import darkoverload.itzip.feature.csQuiz.service.sub.quiz.CheckAnswer;
 import darkoverload.itzip.feature.csQuiz.service.sub.quiz.CreateQuiz;
 import darkoverload.itzip.feature.csQuiz.service.sub.quiz.GivenPointToQuiz;
@@ -40,25 +41,17 @@ public class QuizServiceImpl implements QuizService {
 
     @Qualifier("createQuizImpl")
     private final CreateQuiz createQuiz;
+    private final QuizRepository quizRepository;
 
     /**
      * 주어진 필터와 정렬 기준, 사용자 정보를 기반으로 퀴즈 목록을 조회하는 메서드
      *
-     * @param difficulty 퀴즈 난이도 (선택 사항)
-     * @param categoryId 카테고리 ID (선택 사항)
-     * @param sortBy     정렬 기준 (OLDEST 또는 NEWEST)
-     * @param userId     사용자 ID (0이면 모든 사용자)
-     * @param solved     사용자가 푼 문제만 조회할지 여부
-     * @param page       페이지 번호 (기본값: 0)
-     * @param size       페이지 크기 (기본값: 10)
+     * @param quizQueryRequest 사용자가 보내는 퀴즈 쿼리를 담는 객체
      * @return 필터링되고 정렬된 퀴즈 목록
      */
     @Override
-    public PagedModel<EntityModel<QuizDetailResponse>> QuizzesByDifficultyAndCategoryIdAndUserId(
-            Integer difficulty, Long categoryId,
-            SortBy sortBy, Long userId, boolean solved, int page, int size) {
-        return getFilteredAndSortedQuizzes.QuizzesByDifficultyAndCategoryIdAndUserId(
-                difficulty, categoryId, sortBy, userId, solved, page, size);
+    public PagedModel<EntityModel<QuizDetailResponse>> findQuizzesByQuery(QuizQueryRequest quizQueryRequest) {
+        return getFilteredAndSortedQuizzes.findQuizzesByQuery(quizQueryRequest);
     }
 
     /**
@@ -68,8 +61,8 @@ public class QuizServiceImpl implements QuizService {
      * @return 카테고리 정보, 해당 ID에 대한 카테고리가 존재하지 않는 경우 null 반환
      */
     @Override
-    public QuizCategory CategoryById(Long id) {
-        return getQuizCategory.CategoryById(id);
+    public QuizCategory findCategoryById(Long id) {
+        return getQuizCategory.findCategoryById(id);
     }
 
     /**
@@ -78,8 +71,8 @@ public class QuizServiceImpl implements QuizService {
      * @return 모든 카테고리 리스트
      */
     @Override
-    public List<QuizCategoryDetailResponse> AllCategory() {
-        return getQuizCategory.AllCategory();
+    public List<QuizCategoryDetailResponse> findAllCategory() {
+        return getQuizCategory.findAllCategory();
     }
 
     /**

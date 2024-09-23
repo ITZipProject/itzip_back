@@ -1,0 +1,1 @@
+delete from job_infos where 1;

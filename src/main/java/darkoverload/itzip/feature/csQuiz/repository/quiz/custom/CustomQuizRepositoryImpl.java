@@ -25,7 +25,7 @@ public class CustomQuizRepositoryImpl implements CustomQuizRepository {
      * @return 페이징 처리된 퀴즈 목록
      */
     @Override
-    public Page<QuizDocument> findByDifficultyAndCategoryAndUserSolved(Integer difficulty, Long categoryId, List<String> userSolved, Pageable pageable, boolean inUserSolved) {
+    public Page<QuizDocument> findByDifficultyAndCategoryAndUserSolved(Integer difficulty, Long categoryId, List<String> userSolved, Pageable pageable, boolean inUserSolved, String keyword) {
         Query query = new Query();
 
         // 필터 조건이 존재할 경우에만 해당 기준 추가
@@ -44,13 +44,21 @@ public class CustomQuizRepositoryImpl implements CustomQuizRepository {
             query.addCriteria(Criteria.where("_id").nin(userSolved));
         }
 
+        // 키워드 검색 로직 추가 (문제와 카테고리 이름에서 검색)
+        if (keyword != null && !keyword.isEmpty()) {
+            query.addCriteria(new Criteria().orOperator(
+                    Criteria.where("questionText").regex(keyword, "i"),    // 문제에서 검색
+                    Criteria.where("category").regex(keyword, "i")         // 카테고리 이름에서 검색
+            ));
+        }
+        // 쿼리에 맞는 총 퀴즈 개수 계산 (페이지네이션 적용 전)
+        long count = mongoTemplate.count(query, QuizDocument.class);
+
         //쿼리에 page적용
         query.with(pageable);
 
         // 쿼리를 실행하여 퀴즈 목록을 가져옴
         List<QuizDocument> quizzes = mongoTemplate.find(query, QuizDocument.class);
-        // 쿼리에 맞는 총 퀴즈 개수 계산
-        long count = mongoTemplate.count(query, QuizDocument.class);
 
         // 결과를 Page 객체로 반환
         return new PageImpl<>(quizzes, pageable, count);

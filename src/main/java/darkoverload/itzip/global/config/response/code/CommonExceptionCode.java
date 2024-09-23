@@ -12,7 +12,13 @@ import org.springframework.http.HttpStatus;
 public enum CommonExceptionCode implements ResponseCode {
 
     /**
-     *
+     * job_info error
+     */
+    JOB_INFO_NOT_FOUND(HttpStatus.NOT_FOUND, "채용 정보를 찾을 수 없습니다."),
+
+
+    /**
+     * school Error
      */
     SCHOOL_NOT_FOUND(HttpStatus.NOT_FOUND, "학교 정보를 찾을 수 없습니다"),
 
@@ -58,6 +64,8 @@ public enum CommonExceptionCode implements ResponseCode {
      */
     // 사용 중인 이메일
     EXIST_EMAIL_ERROR(HttpStatus.BAD_REQUEST, "이미 사용 중인 이메일입니다."),
+    // 사용 중인 닉네임
+    EXIST_NICKNAME_ERROR(HttpStatus.BAD_REQUEST, "이미 사용 중인 닉네임입니다."),
     // 올바르지 않은 요청값
     FILED_ERROR(HttpStatus.BAD_REQUEST, "요청값이 올바르지 않습니다."),
     // 이메일 인증번호 불일치
@@ -102,10 +110,20 @@ public enum CommonExceptionCode implements ResponseCode {
     NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "카테고리가 없습니다."),
 
     /**
+     * Resume Error
+     */
+
+    // 이력서 생성 오류
+    INSERT_FAIL_RESUME(HttpStatus.BAD_REQUEST, "이력서 생성 오류"),
+    // 이력서 업데이트 오류
+    UPDATE_FAIL_RESUME(HttpStatus.BAD_REQUEST, "이력서 업데이트 오류"),
+
+    /**
      * MongoDb
      */
     //몽고 저장소 에러
     MONGO_DB_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "몽고 저장소에서 에러가 생겼습니다."),
+
 
     /**
      * 4** client
@@ -118,6 +136,8 @@ public enum CommonExceptionCode implements ResponseCode {
     FORBIDDEN(HttpStatus.FORBIDDEN, "접근 권한이 없습니다"),
     // 404
     NOT_FOUND(HttpStatus.NOT_FOUND, "리소스를 찾을 수 없습니다"),
+    // 405
+    METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "지원되지 않는 메서드입니다"),
     // 408
     REQUEST_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "요청 시간이 초과되었습니다"),
     // 415

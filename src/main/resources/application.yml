@@ -10,6 +10,7 @@ spring:
       ddl-auto: update
     properties:
       hibernate:
+        format_sql: true
         jdbc:
           batch_size: 500
         order_inserts: true
@@ -17,10 +18,22 @@ spring:
   mongodb:
     embedded:
       version: 4.0.21
+
 school:
   api-url: ${SCHOOL_API_URL}
   api-key: ${SCHOOL_API_KEY}
-  
+
+job:
+  api-url: ${JOB_API_URL}
+  api-key: ${JOB_API_KEY}
+
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: DEBUG
+
 ##정적 리소스을 제공할 것인가
 resources:
   chain:

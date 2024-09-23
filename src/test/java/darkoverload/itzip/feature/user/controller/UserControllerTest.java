@@ -44,7 +44,7 @@ class UserControllerTest {
         // redis에 인증 코드 저장
         verificationService.saveCode(email, authCode);
         // 메일 발송
-        emailService.sendSimpleMessage(email, "test", authCode);
+        emailService.sendFormMail(email, "test", authCode);
 
         log.info("인증 메일이 발송되었습니다.");
         log.info("인증번호 : {}", authCode);

@@ -11,6 +11,9 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
  * Spring Security 설정 클래스
@@ -30,6 +33,7 @@ public class SecurityConfig {
             "/test/**", // 테스트 페이지
             "/user/refreshToken", // 토큰 재발급 페이지
             "/user/authEmail", // 인증 메일 페이지
+            "/user/checkDuplicateEmail", // 이메일 중복 체크 페이지
             "/swagger-ui/**", // Swagger UI
             "/v3/api-docs/**", // Swagger API docs
             "/swagger-resources/**", // Swagger resources
@@ -47,8 +51,17 @@ public class SecurityConfig {
             "/tech-info/**",
 
             // 학교 정보 검색 허용
-            "/schoolsearch"
+            "/schoolsearch",
 
+            // 이력서 임시 허용
+            "/resume",
+
+            // 직업 정보 임시 허용
+            "/job-info",
+            "/job-info/scrap",
+
+            // 기술 정보 임시 허용
+            "/tech"
     };
 
     // 비로그인 유저 허용 페이지
@@ -73,12 +86,18 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
         );
 
+        // 예외처리 구성
+        http.exceptionHandling(exceptionHandling ->
+                // 인증 실패 시 호출하는 AuthenticationEntryPoint 설정
+                exceptionHandling.authenticationEntryPoint(new JwtAuthenticationEntryPoint())
+        );
+
         // 세션 관리 Stateless 설정(서버가 클라이언트 상태 저장x)
         http.sessionManagement(auth -> auth.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         // cors 허용
         http.csrf(csrf -> csrf.disable());
-
+        http.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()));
         // 로그인 폼 비활성화
         http.formLogin(auth -> auth.disable());
 
@@ -95,5 +114,20 @@ public class SecurityConfig {
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowCredentials(true);
+        configuration.addAllowedOriginPattern("*");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 }

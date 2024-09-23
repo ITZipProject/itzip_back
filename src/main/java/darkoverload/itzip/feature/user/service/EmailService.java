@@ -1,5 +1,9 @@
 package darkoverload.itzip.feature.user.service;
 
 public interface EmailService {
-    void sendSimpleMessage(String to, String subject, String text);
+    void sendSimpleMail(String to, String subject, String text);
+
+    void sendFormMail(String to, String subject, String body);
+
+    String setAuthForm(String authCode);
 }
