@@ -1,16 +1,15 @@
 package darkoverload.itzip.feature.resume.entity;
 
+import darkoverload.itzip.feature.resume.domain.language.Language;
 import darkoverload.itzip.global.entity.AuditingFields;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="languages")
@@ -35,4 +34,15 @@ public class LanguageEntity extends AuditingFields {
     @Column(name="acquisition_date", nullable = false)
     private LocalDateTime acquisitionDate;
 
+
+    public Language convertToDomain(){
+        return Language.builder()
+                .languageId(this.id)
+                .resume(this.resume.convertToDomain())
+                .name(this.name)
+                .level(this.level)
+                .score(this.score)
+                .acquisitionDate(this.acquisitionDate)
+                .build();
+    }
 }
