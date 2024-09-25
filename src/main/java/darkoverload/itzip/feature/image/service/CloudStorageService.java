@@ -108,7 +108,7 @@ public class CloudStorageService implements StorageService {
             }
 
             Image originImage = Image.createImage(multipartFile, featureDir);
-            inputStream = resizeImage(originImage.getImageName(), multipartFile, 150);
+//            inputStream = resizeImage(originImage.getImageName(), multipartFile, 150);
             AWSFile awsFile = null;
             try {
                 // aws 실질적으로 upload
