@@ -8,6 +8,7 @@ import darkoverload.itzip.feature.algorithm.repository.user.SolvedacUserReposito
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 //사용자의 tier 기준으로 문제를 추천해주는 서비스
@@ -31,7 +32,7 @@ public class FindProblemsByUserImpl implements FindProblemsByUser {
         //사용자 tier 불러오기
         int tier = solvedacUserEntity.convertToDomain().getTier();
         return ProblemListResponse.builder()
-                .problems(problemRepository.findProblemsByUser(userId , tier).stream()
+                .problems(problemRepository.findProblemsByUser(userId , tier, PageRequest.of(0, 10)).stream()
                         .map(ProblemEntity::convertToDomain)
                         .toList())
                 .build();

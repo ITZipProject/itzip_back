@@ -9,6 +9,7 @@ import darkoverload.itzip.feature.algorithm.util.SolvedTierCalculator;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,7 +39,7 @@ public class FindProblemsByTagAndUserImpl implements FindProblemsByTagAndUser{
         int tier = solvedacUserEntity.convertToDomain().getTier();
         int averageTier = (userTagRating + tier) / 2;
         return ProblemListResponse.builder()
-                .problems(problemRepository.findProblemsByTagExcludingUserSolved(userId, tagId, averageTier).stream()
+                .problems(problemRepository.findProblemsByTagExcludingUserSolved(userId, tagId, averageTier, PageRequest.of(0, 10)).stream()
                         .map(ProblemEntity::convertToDomain)
                         .toList())
                 .build();

@@ -1,6 +1,7 @@
 package darkoverload.itzip.feature.algorithm.repository.problem.custom;
 
 import darkoverload.itzip.feature.algorithm.entity.ProblemEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -12,5 +13,5 @@ public interface FindProblemByUser {
     @Query("SELECT p FROM ProblemEntity p WHERE p.level BETWEEN :tier - 2 AND :tier + 2 " +
             "AND p.problemId NOT IN (SELECT upm.problemEntity.problemId FROM UserProblemMappingEntity upm WHERE upm.solvedacUserEntity.userId = :userId) " +
             "ORDER BY p.acceptedUserCount DESC")
-    List<ProblemEntity> findProblemsByUser(@Param("userId") Long userId, @Param("tier") int tier);
+    List<ProblemEntity> findProblemsByUser(@Param("userId") Long userId, @Param("tier") int tier, Pageable pageable);
 }
