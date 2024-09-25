@@ -43,7 +43,7 @@ public class UpdateUserSolvedProfileAndProblemImpl implements UpdateUserSolvedPr
             //사용자가 푼 문제들 저장
             saveUserSolvedProblem.saveUserSolvedProblem(userId);
         } else {
-            throw new RestApiException(CommonExceptionCode.SOLVED_USER_SOLVED_ERROR);
+            throw new RestApiException(CommonExceptionCode.UPDATE_COOLDOWN);
         }
     }
 }

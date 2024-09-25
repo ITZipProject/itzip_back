@@ -8,7 +8,7 @@ import java.util.List;
 @Component
 public class SolvedTierCalculator {
     //(문제 난이도 합 * 2) + (200 * [1 - 0.99**사용자가 푼 문제수]) 문제들이 주어지면 레이팅 계산하는 메서드(tag전용)
-    public static int tagRatingCalculator(List<Problem> solvedProblems){
+    public int tagRatingCalculator(List<Problem> solvedProblems){
         return ((solvedProblems.stream().mapToInt(Problem::getLevel).sum() * 2) +
                 (int) (200 * (1 - Math.pow(0.99, solvedProblems.size()))));
     }

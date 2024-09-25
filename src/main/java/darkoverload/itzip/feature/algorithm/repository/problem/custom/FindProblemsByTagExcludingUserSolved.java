@@ -1,7 +1,6 @@
 package darkoverload.itzip.feature.algorithm.repository.problem.custom;
 
 import darkoverload.itzip.feature.algorithm.entity.ProblemEntity;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -14,5 +13,5 @@ public interface FindProblemsByTagExcludingUserSolved {
             "WHERE ptm.problemTagEntity.bojTagId = :tagId AND p.problemId NOT IN " +
             "(SELECT upm.problemEntity.problemId FROM UserProblemMappingEntity upm WHERE upm.solvedacUserEntity.userId = :userId) " +
             "ORDER BY ABS(p.level - :averageTier) ASC, p.acceptedUserCount DESC")
-    List<ProblemEntity> findProblemsByTagExcludingUserSolved(@Param("userId") Long userId, @Param("tagId") Long tagId, @Param("averageTier") int averageTier, Pageable pageable);
+    List<ProblemEntity> findProblemsByTagExcludingUserSolved(@Param("userId") Long userId, @Param("tagId") Long tagId, @Param("averageTier") int averageTier);
 }

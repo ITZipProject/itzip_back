@@ -23,7 +23,7 @@ public class FindProblemsByUserImpl implements FindProblemsByUser {
      * @return 문제 응답 객체
      */
     @Override
-    public ProblemListResponse findProblemsByUser(Long userId){
+    public ProblemListResponse findProblemsByUser(Long userId) {
         //사용자 정보 찾기
         SolvedacUserEntity solvedacUserEntity = solvedacUserRepository.findById(userId).orElseThrow(() ->
             new RestApiException(CommonExceptionCode.NOT_FOUND_SOLVEDAC_USER)
