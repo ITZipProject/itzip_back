@@ -9,6 +9,7 @@ import darkoverload.itzip.feature.user.entity.QUserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -28,6 +29,13 @@ public class CustomJobInfoScrapRepositoryImpl implements CustomJobInfoScrapRepos
                 ).fetchOne();
 
         return Optional.ofNullable(scrap);
+    }
+
+    @Override
+    public Long deleteDeleteByPositionIds(List<Long> positionIds) {
+        return queryFactory.delete(jobInfoScrapEntity)
+                .where(jobInfoScrapEntity.jobInfo.positionId.in(positionIds))
+                .execute();
     }
 
 

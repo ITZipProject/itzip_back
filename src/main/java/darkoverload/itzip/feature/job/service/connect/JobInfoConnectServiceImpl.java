@@ -2,8 +2,10 @@ package darkoverload.itzip.feature.job.service.connect;
 
 import darkoverload.itzip.feature.job.domain.ConnectJobInfo;
 import darkoverload.itzip.feature.job.domain.JobInfo;
+import darkoverload.itzip.feature.job.domain.JobInfoScrap;
 import darkoverload.itzip.feature.job.entity.JobInfoEntity;
 import darkoverload.itzip.feature.job.repository.JobInfoRepository;
+import darkoverload.itzip.feature.job.repository.JobInfoScrapRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +19,7 @@ import java.util.stream.Collectors;
 public class JobInfoConnectServiceImpl implements JobInfoConnectService {
 
     private final JobInfoRepository jobInfoRepository;
-
+    private final JobInfoScrapRepository jobInfoScrapRepository;
     @Value("${job.api-url}")
     private String jobUrl;
 
@@ -71,6 +73,7 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
         // batchSize를 설정하여 500개씩 나누어 삭제 작업을 수행 (대량 삭제 시 성능 최적화)
        for(int i=0; i < deleteList.size(); i+= 500){
            List<Long> batch = deleteList.subList(i, Math.min(i + 500, deleteList.size()));
+           jobInfoScrapRepository.deleteDeleteByPositionIds(batch);
            totalDeletedCount += jobInfoRepository.bulkDeleteByPositionIds(batch);
        }
 
