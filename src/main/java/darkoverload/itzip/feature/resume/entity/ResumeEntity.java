@@ -2,6 +2,7 @@ package darkoverload.itzip.feature.resume.entity;
 
 
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
+import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.util.StringListConverter;
 import darkoverload.itzip.global.entity.AuditingFields;
 import jakarta.persistence.*;
@@ -37,9 +38,6 @@ public class ResumeEntity extends AuditingFields {
     @Column(length=5000)
     private String introduction;
 
-    private String address;
-
-
     @Convert(converter = StringListConverter.class)
     private List<String> links = new ArrayList<>();
 
@@ -47,4 +45,18 @@ public class ResumeEntity extends AuditingFields {
     @Column(name="public_on_off", nullable = false)
     private PublicOnOff publicOnOff;
 
+
+    public Resume convertToDomain(){
+        return Resume.builder()
+                .resumeId(this.id)
+                .userId(this.userId)
+                .email(this.email)
+                .imageUrl(this.imageUrl)
+                .subject(this.subject)
+                .phone(this.phone)
+                .introduction(this.introduction)
+                .links(this.links)
+                .publicOnOff(this.publicOnOff)
+                .build();
+    }
 }

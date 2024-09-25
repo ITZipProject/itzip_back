@@ -24,8 +24,10 @@ public class ResumeValidatorCheck implements ConstraintValidator<ResumeCondition
             for(Method method : methods) {
                 if(method.getName().startsWith("get")) {
                     try {
+                        if(method.getName().endsWith("Id")) continue;
 
                         Object field = method.invoke(obj);
+
                         if(field == null)  {
                             log.info("not found method field {}", method.getName());
                             context.disableDefaultConstraintViolation();
