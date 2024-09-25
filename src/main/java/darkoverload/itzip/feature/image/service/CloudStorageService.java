@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static darkoverload.itzip.feature.image.util.FileUtil.getInputStreamSize;
 import static darkoverload.itzip.feature.image.util.FileUtil.resizeImage;
 
 @Slf4j
@@ -108,7 +109,9 @@ public class CloudStorageService implements StorageService {
             }
 
             Image originImage = Image.createImage(multipartFile, featureDir);
-//            inputStream = resizeImage(originImage.getImageName(), multipartFile, 150);
+            inputStream = resizeImage(originImage.getImageName(), multipartFile, 150);
+            originImage.setImageSize(getInputStreamSize(inputStream));
+
             AWSFile awsFile = null;
             try {
                 // aws 실질적으로 upload

@@ -88,6 +88,7 @@ public class FileUtil {
      */
     public static InputStream resizeImage(String fileFormatName, MultipartFile originalImage, int targetWidth) {
 
+
         try{
             // MultipartFile -> BufferedImageConvert
             BufferedImage image = ImageIO.read(originalImage.getInputStream());
@@ -122,4 +123,23 @@ public class FileUtil {
 
     }
 
+
+    public static long getInputStreamSize(InputStream inputstream) {
+        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+        try{
+
+            byte[] data = new byte[1024];
+
+            int byesRead;
+            while((byesRead = inputstream.read(data, 0 , data.length)) != -1) {
+                buffer.write(data, 0 , byesRead);
+            }
+            buffer.flush();
+
+        } catch (IOException e) {
+            throw new RestApiException(CommonExceptionCode.IMAGE_RESIZE_ERROR);
+        }
+
+        return buffer.size();
+    }
 }

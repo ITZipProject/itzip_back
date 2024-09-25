@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @ToString
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
