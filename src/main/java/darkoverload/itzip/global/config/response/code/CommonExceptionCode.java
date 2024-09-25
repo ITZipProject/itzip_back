@@ -76,6 +76,24 @@ public enum CommonExceptionCode implements ResponseCode {
     NOT_FOUND_USER(HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다."),
 
     /**
+     * TechInfo Error
+     */
+    // ID에 해당하는 블로그를 찾을 수 없는 경우
+    NOT_FOUND_BLOG(HttpStatus.NOT_FOUND, "블로그를 찾을 수 없습니다."),
+    // ID에 해당하는 게시물를 찾을 수 없는 경우
+    NOT_FOUND_POST(HttpStatus.NOT_FOUND, "포스트를 찾을 수 없습니다."),
+    // ID에 해당하는 댓글을 찾을 수 없는 경우
+    NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
+    // 해당 블로그에 게시물이 없는 경우
+    NOT_FOUND_POSTS_FOR_BLOG(HttpStatus.NOT_FOUND, "해당 블로그에 대한 게시물을 찾을 수 없습니다."),
+    // 해당 카테고리에 게시물이 없는 경우
+    NOT_FOUND_POSTS_FOR_CATEGORY(HttpStatus.NOT_FOUND, "해당 카테고리에 대한 게시물을 찾을 수 없습니다."),
+    // 잘못된 형식의 카테고리 ID가 입력된 경우
+    INVALID_CATEGORY_ID(HttpStatus.BAD_REQUEST, "잘못된 카테고리 ID 형식입니다."),
+    // 잘못된 형식의 포스트 ID가 입력된 경우
+    INVALID_POST_ID(HttpStatus.BAD_REQUEST, "잘못된 POST ID 형식입니다."),
+
+    /**
      * Quiz Error
      */
     //퀴즈를 찾을 수 없음
