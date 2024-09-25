@@ -75,7 +75,7 @@ public class ImageController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/direct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/direct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public Image imageUpload(@RequestParam("file") MultipartFile file, @RequestParam String featureDir){
 
         return storageService.imageUpload(file, featureDir);
