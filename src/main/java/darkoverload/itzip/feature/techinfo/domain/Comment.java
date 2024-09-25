@@ -93,7 +93,7 @@ public class Comment {
         return CommentResponse.builder()
                 .commentId(this.id)
                 .content(this.content)
-                .author(user.getNickname())
+                .nickname(user.getNickname())
                 .createDate(this.createDate.toString())
                 // .profileImagePath() // 추가적으로 프로필 이미지 경로를 설정할 수 있음
                 .build();

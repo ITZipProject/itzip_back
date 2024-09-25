@@ -15,8 +15,8 @@ public class BlogBasicInfoResponse {
     @Schema(description = "블로그의 고유 ID", example = "1")
     private Long blogId;
 
-    @Schema(description = "블로그 소유자의 이름", example = "hyoseung")
-    private String author;
+    @Schema(description = "블로그 소유자의 닉네임", example = "hyoseung")
+    private String nickname;
 
     @Schema(description = "블로그 소유자의 이메일 주소", example = "dev.hyoseung@gmail.com")
     private String email;
