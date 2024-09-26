@@ -54,7 +54,7 @@ public class SaveTagsImpl implements SaveTags {
                                     String nameSort = displayName.has("short") ? displayName.get("short").getAsString() : "";
 
                                     // ProblemTag 객체 생성
-                                    return new Object[]{item.get("bojTagId").getAsLong(), name, nameSort};
+                                    return new Object[]{item.get("bojTagId").getAsLong(), name, nameSort, item.get("problemCount").getAsInt()};
                                 }).toList();
                     } catch (IOException e) {
                         throw new RestApiException(CommonExceptionCode.SOLVED_TAG_ERROR);

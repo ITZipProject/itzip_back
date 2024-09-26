@@ -21,7 +21,8 @@ CREATE TABLE problems (
 CREATE TABLE problem_tags (
                               boj_tag_id BIGSERIAL PRIMARY KEY,
                               display_name VARCHAR(255),
-                              display_name_sort VARCHAR(255)
+                              display_name_sort VARCHAR(255),
+                              problem_count Integer
 );
 
 CREATE TABLE user_problem_mapping (

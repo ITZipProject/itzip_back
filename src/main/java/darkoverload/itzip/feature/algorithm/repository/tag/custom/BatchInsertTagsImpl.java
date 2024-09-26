@@ -13,7 +13,7 @@ public class BatchInsertTagsImpl implements BatchInsertTags {
 
     @Override
     public void batchInsertTags(List<Object[]> tagsToSave){
-        String insertTagSql = "INSERT INTO problem_tags (boj_tag_id, display_name, display_name_sort) VALUES (?, ?, ?) " +
+        String insertTagSql = "INSERT INTO problem_tags (boj_tag_id, display_name, display_name_sort, problem_count) VALUES (?, ?, ?, ?) " +
                 "ON CONFLICT (boj_tag_id) DO NOTHING";
         jdbcTemplate.batchUpdate(insertTagSql, tagsToSave);
     }
