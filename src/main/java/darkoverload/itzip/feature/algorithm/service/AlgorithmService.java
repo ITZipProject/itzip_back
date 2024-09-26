@@ -4,6 +4,7 @@ import darkoverload.itzip.feature.algorithm.service.problem.FindProblemsByTagAnd
 import darkoverload.itzip.feature.algorithm.service.problem.FindProblemsByUser;
 import darkoverload.itzip.feature.algorithm.service.problem.SaveProblems;
 import darkoverload.itzip.feature.algorithm.service.tag.SaveTags;
+import darkoverload.itzip.feature.algorithm.service.user.FindUserSolvedProfile;
 import darkoverload.itzip.feature.algorithm.service.user.SaveUserSolvedProfile;
 import darkoverload.itzip.feature.algorithm.service.user.UpdateUserSolvedProfileAndProblem;
 
@@ -13,5 +14,6 @@ public interface AlgorithmService extends
         SaveUserSolvedProfile,
         UpdateUserSolvedProfileAndProblem,
         FindProblemsByUser,
-        FindProblemsByTagAndUser
+        FindProblemsByTagAndUser,
+        FindUserSolvedProfile
 {}

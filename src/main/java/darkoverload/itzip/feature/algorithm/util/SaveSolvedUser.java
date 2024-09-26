@@ -2,6 +2,7 @@ package darkoverload.itzip.feature.algorithm.util;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import darkoverload.itzip.feature.algorithm.domain.SolvedacUser;
 import darkoverload.itzip.feature.algorithm.entity.SolvedacUserEntity;
 import darkoverload.itzip.feature.algorithm.repository.user.SolvedacUserRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
@@ -25,12 +26,12 @@ public class SaveSolvedUser {
      * @param userId 사용자 id
      * @param username 사용자 이름
      */
-    public void saveSolvedUser(Long userId, String username) {
+    public SolvedacUser saveSolvedUser(Long userId, String username) {
         try{
             HttpResponse<String> response = solvedAcAPI.solvedacAPIRequest(solvedAcAPI.getUserByName(username));
             JsonObject jsonObject = JsonParser.parseString(response.body()).getAsJsonObject();
 
-            solvedacUserRepository.save(SolvedacUserEntity.builder()
+            SolvedacUserEntity solvedacUserEntity = SolvedacUserEntity.builder()
                     .userId(userId)
                     .username(username)
                     .rating(jsonObject.get("rating").getAsInt())
@@ -39,7 +40,9 @@ public class SaveSolvedUser {
                     .profileImageUrl(jsonObject.get("profileImageUrl").getAsString())
                     .solvedClass(jsonObject.get("class").getAsInt())
                     .tier(jsonObject.get("tier").getAsInt())
-                    .build());
+                    .build();
+            solvedacUserRepository.save(solvedacUserEntity);
+            return solvedacUserEntity.convertToDomain();
         }catch (IOException e) {
             throw new RestApiException(CommonExceptionCode.SOLVED_USER_SOLVED_ERROR);
         } catch (InterruptedException e) {

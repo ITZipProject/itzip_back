@@ -1,10 +1,12 @@
 package darkoverload.itzip.feature.algorithm.service;
 
 import darkoverload.itzip.feature.algorithm.controller.response.ProblemListResponse;
+import darkoverload.itzip.feature.algorithm.controller.response.SolvedUserResponse;
 import darkoverload.itzip.feature.algorithm.service.problem.FindProblemsByTagAndUser;
 import darkoverload.itzip.feature.algorithm.service.problem.FindProblemsByUser;
 import darkoverload.itzip.feature.algorithm.service.problem.SaveProblems;
 import darkoverload.itzip.feature.algorithm.service.tag.SaveTags;
+import darkoverload.itzip.feature.algorithm.service.user.FindUserSolvedProfile;
 import darkoverload.itzip.feature.algorithm.service.user.SaveUserSolvedProfile;
 import darkoverload.itzip.feature.algorithm.service.user.UpdateUserSolvedProfileAndProblem;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -18,6 +20,7 @@ public class AlgorithmServiceImpl implements AlgorithmService {
     private final UpdateUserSolvedProfileAndProblem updateUserSolvedProfileAndProblem;
     private final FindProblemsByUser findProblemsByUser;
     private final FindProblemsByTagAndUser findProblemsByTagAndUser;
+    private final FindUserSolvedProfile findUserSolvedProfile;
 
     public AlgorithmServiceImpl(
             @Qualifier("saveTagsImpl") SaveTags saveTags,
@@ -25,14 +28,16 @@ public class AlgorithmServiceImpl implements AlgorithmService {
             @Qualifier("saveUserSolvedProfileImpl") SaveUserSolvedProfile saveUserSolvedProfile,
             @Qualifier("updateUserSolvedProfileAndProblemImpl") UpdateUserSolvedProfileAndProblem updateUserSolvedProfileAndProblem,
             @Qualifier("findProblemsByUserImpl") FindProblemsByUser findProblemsByUser,
-            @Qualifier("findProblemsByTagAndUserImpl") FindProblemsByTagAndUser findProblemsByTagAndUser
-    ) {
+            @Qualifier("findProblemsByTagAndUserImpl") FindProblemsByTagAndUser findProblemsByTagAndUser,
+            @Qualifier("findUserSolvedProfileImpl") FindUserSolvedProfile findUserSolvedProfile
+            ) {
         this.saveTags = saveTags;
         this.saveProblems = saveProblems;
         this.saveUserSolvedProfile = saveUserSolvedProfile;
         this.updateUserSolvedProfileAndProblem = updateUserSolvedProfileAndProblem;
         this.findProblemsByUser = findProblemsByUser;
         this.findProblemsByTagAndUser = findProblemsByTagAndUser;
+        this.findUserSolvedProfile = findUserSolvedProfile;
     }
 
     @Override
@@ -51,8 +56,8 @@ public class AlgorithmServiceImpl implements AlgorithmService {
     }
 
     @Override
-    public void updateUserSolvedProfileAndProblem(Long userId) {
-        updateUserSolvedProfileAndProblem.updateUserSolvedProfileAndProblem(userId);
+    public SolvedUserResponse updateUserSolvedProfileAndProblem(Long userId) {
+        return updateUserSolvedProfileAndProblem.updateUserSolvedProfileAndProblem(userId);
     }
 
     @Override
@@ -63,5 +68,10 @@ public class AlgorithmServiceImpl implements AlgorithmService {
     @Override
     public ProblemListResponse findProblemsByTagAndUser(Long userId, Long tagId) {
         return findProblemsByTagAndUser.findProblemsByTagAndUser(userId, tagId);
+    }
+
+    @Override
+    public SolvedUserResponse findUserSolvedProfile(Long userId) {
+        return findUserSolvedProfile.findUserSolvedProfile(userId);
     }
 }

@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.algorithm.service.user;
 
+import darkoverload.itzip.feature.algorithm.controller.response.SolvedUserResponse;
 import darkoverload.itzip.feature.algorithm.domain.SolvedacUser;
 import darkoverload.itzip.feature.algorithm.repository.user.SolvedacUserRepository;
 import darkoverload.itzip.feature.algorithm.util.SaveSolvedUser;
@@ -22,15 +23,18 @@ public class UpdateUserSolvedProfileAndProblemImpl implements UpdateUserSolvedPr
 
     private final SolvedacUserRepository solvedacUserRepository;
 
-    @Value("${SOLVED_AC_USER_UPDATE_COOLDOWN_HOURS}")
-    private long updateCooldownHours;
+    /** todo
+     *     디버깅 단계에서는 10초로 하기로함 ver1시에 다시 변경함
+     */
+//    @Value("${SOLVED_AC_USER_UPDATE_COOLDOWN_HOURS}")
+    private long updateCooldownHours = 1 / 360L;
     /**
      * 사용자의 sovledac계정과 username을 업데이트하는 메서드
      * 시간에 제한이 있다.
      */
     @Override
     @Transactional
-    public void updateUserSolvedProfileAndProblem(Long userId) {
+    public SolvedUserResponse updateUserSolvedProfileAndProblem(Long userId) {
         SolvedacUser solvedacUser = solvedacUserRepository.findById(userId)
                 .orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_SOLVEDAC_USER))
                 .convertToDomain();
@@ -39,9 +43,13 @@ public class UpdateUserSolvedProfileAndProblemImpl implements UpdateUserSolvedPr
         LocalDateTime currentTime = LocalDateTime.now();
         Duration duration = Duration.between(solvedacUser.getUpdateTime(), currentTime);
         if (duration.toHours() > updateCooldownHours){
-            saveSolvedUser.saveSolvedUser(userId, solvedacUser.getUsername());
             //사용자가 푼 문제들 저장
             saveUserSolvedProblem.saveUserSolvedProblem(userId);
+
+            //업데이트된 사용자 정보를 저장하고 return
+            return SolvedUserResponse.builder()
+                    .solvedacUser(saveSolvedUser.saveSolvedUser(userId, solvedacUser.getUsername()))
+                    .build();
         } else {
             throw new RestApiException(CommonExceptionCode.UPDATE_COOLDOWN);
         }
