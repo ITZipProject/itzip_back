@@ -19,6 +19,7 @@ public class User {
     @Setter
     private String password;
 
+    @Setter
     private String imageUrl;
 
     private Authority authority;

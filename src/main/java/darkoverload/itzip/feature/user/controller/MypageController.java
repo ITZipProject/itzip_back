@@ -14,10 +14,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "Mypage", description = "마이페이지 기능 API")
 @RestController
@@ -77,5 +79,21 @@ public class MypageController {
             BindingResult bindingResult
     ) {
         return mypageService.changePassword(userDetails, request, bindingResult);
+    }
+
+    /**
+     * 프로필 이미지 변경 기능
+     */
+    @Operation(
+            summary = "프로필 이미지 변경 기능",
+            description = "유저 정보 수정 시 프로필 이미지를 변경합니다."
+    )
+    @PatchMapping(value = "/profileImage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_FOUND_USER})
+    public ResponseEntity<String> changeImageUrl(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            @RequestParam("file") MultipartFile file) {
+        return mypageService.changeImageUrl(userDetails, file);
     }
 }
