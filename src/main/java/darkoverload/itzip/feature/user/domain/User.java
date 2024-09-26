@@ -19,6 +19,9 @@ public class User {
     @Setter
     private String password;
 
+    @Setter
+    private String imageUrl;
+
     private Authority authority;
 
     public UserEntity convertToEntity(){
@@ -27,6 +30,7 @@ public class User {
                 .email(this.email)
                 .nickname(this.nickname)
                 .password(this.password)
+                .imageUrl(this.imageUrl)
                 .authority(this.authority)
                 .build();
     }

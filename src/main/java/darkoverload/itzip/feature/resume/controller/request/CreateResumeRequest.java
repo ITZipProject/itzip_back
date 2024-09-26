@@ -1,13 +1,13 @@
 package darkoverload.itzip.feature.resume.controller.request;
 
-import darkoverload.itzip.feature.resume.dto.achievement.CreateAchievementDto;
-import darkoverload.itzip.feature.resume.dto.activity.CreateActivityDto;
-import darkoverload.itzip.feature.resume.dto.career.CreateCareerDto;
-import darkoverload.itzip.feature.resume.dto.education.CreateEducationDto;
-import darkoverload.itzip.feature.resume.dto.language.CreateLanguageDto;
-import darkoverload.itzip.feature.resume.dto.myskill.CreateMySkillsDto;
-import darkoverload.itzip.feature.resume.dto.qualification.CreateQualificationDto;
-import darkoverload.itzip.feature.resume.dto.resume.CreateResumeDto;
+import darkoverload.itzip.feature.resume.dto.achievement.AchievementDto;
+import darkoverload.itzip.feature.resume.dto.activity.ActivityDto;
+import darkoverload.itzip.feature.resume.dto.career.CareerDto;
+import darkoverload.itzip.feature.resume.dto.education.EducationDto;
+import darkoverload.itzip.feature.resume.dto.language.LanguageDto;
+import darkoverload.itzip.feature.resume.dto.myskill.MySkillsDto;
+import darkoverload.itzip.feature.resume.dto.qualification.QualificationDto;
+import darkoverload.itzip.feature.resume.dto.resume.ResumeDto;
 import darkoverload.itzip.feature.resume.util.ResumeConditional;
 import lombok.*;
 
@@ -19,27 +19,27 @@ import java.util.List;
 public class CreateResumeRequest {
 
     @ResumeConditional
-    private List<CreateAchievementDto> achievements = new ArrayList<>();
+    private List<AchievementDto> achievements = new ArrayList<>();
 
     @ResumeConditional
-    private final List<CreateQualificationDto> qualifications = new ArrayList<>();
+    private final List<QualificationDto> qualifications = new ArrayList<>();
 
     @ResumeConditional
-    private final List<CreateMySkillsDto> mySkills= new ArrayList<>();
+    private final List<MySkillsDto> mySkills= new ArrayList<>();
 
     @ResumeConditional
-    private final List<CreateActivityDto> activities = new ArrayList<>(); // activity ==> save
+    private final List<ActivityDto> activities = new ArrayList<>(); // activity ==> save
 
     @ResumeConditional
-    private final List<CreateCareerDto> careers = new ArrayList<>(); // ==> save
+    private final List<CareerDto> careers = new ArrayList<>(); // ==> save
 
     @ResumeConditional
-    private final List<CreateEducationDto> educations = new ArrayList<>(); //
+    private final List<EducationDto> educations = new ArrayList<>(); //
 
     @ResumeConditional
-    private final List<CreateLanguageDto> languages = new ArrayList<>();
+    private final List<LanguageDto> languages = new ArrayList<>();
 
-    private CreateResumeDto resume;
+    private ResumeDto resume;
 
     private Long userId;
 }

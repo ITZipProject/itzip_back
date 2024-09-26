@@ -8,9 +8,11 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.catalina.connector.ClientAbortException;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.naming.ServiceUnavailableException;
 import java.util.*;
@@ -114,6 +116,16 @@ public class TestController {
 
     @GetMapping("/validateMethod")
     public ResponseEntity<String> validateMethod(@Validated @RequestParam @Min(0) int age) {
+        return ResponseEntity.ok("");
+    }
+
+    @PostMapping(value = "/validateMediaType", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> validateMediaType(@RequestParam("file") MultipartFile file) {
+        return ResponseEntity.ok("");
+    }
+
+    @PostMapping(value = "/validateFile")
+    public ResponseEntity<String> validateFile(@RequestParam("file") MultipartFile file) {
         return ResponseEntity.ok("");
     }
 

@@ -17,16 +17,15 @@ public class CustomErrorController implements ErrorController {
     public ResponseEntity<Object> handleError(HttpServletRequest request) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 
-        //NoHandlerFoundException 예외처리
-        if (status.equals(404)) {
-            return ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.NOT_FOUND);
-        }
-        //HttpRequestMethodNotSupportedException 예외처리
-        else if (status.equals(405)) {
-            return ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.METHOD_NOT_ALLOWED);
-        }
-
-        //404, 405에도 안잡히면 예상치 못한 예외처리
-        return ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.INTERNAL_SERVER_ERROR);
+        return switch (status.toString()) {
+            case "404" -> // NoHandlerFoundException 예외처리
+                    ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.NOT_FOUND);
+            case "405" -> // HttpRequestMethodNotSupportedException 예외처리
+                    ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.METHOD_NOT_ALLOWED);
+            case "415" -> // HttpMediaTypeNotSupportedException 예외처리
+                    ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.FILED_ERROR);
+            default -> // 404, 405에도 안잡히면 예상치 못한 예외처리
+                    ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.INTERNAL_SERVER_ERROR);
+        };
     }
 }

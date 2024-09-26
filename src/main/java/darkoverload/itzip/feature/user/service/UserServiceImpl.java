@@ -1,14 +1,16 @@
 package darkoverload.itzip.feature.user.service;
 
 import darkoverload.itzip.feature.jwt.domain.Token;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.jwt.service.TokenService;
 import darkoverload.itzip.feature.jwt.util.JwtTokenizer;
 import darkoverload.itzip.feature.user.controller.request.*;
-import darkoverload.itzip.feature.user.controller.response.UserLoginResponse;
+import darkoverload.itzip.feature.user.controller.response.*;
 import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.Authority;
 import darkoverload.itzip.feature.user.entity.UserEntity;
 import darkoverload.itzip.feature.user.repository.UserRepository;
+import darkoverload.itzip.feature.user.util.CookieUtils;
 import darkoverload.itzip.feature.user.util.RandomAuthCode;
 import darkoverload.itzip.feature.user.util.RandomNickname;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
@@ -42,6 +44,26 @@ public class UserServiceImpl implements UserService {
 
     public Optional<User> findByEmail(String email) {
         return userRepository.findByEmail(email).map(UserEntity::convertToDomain);
+    }
+
+    /**
+     * 로그인 유저 정보 반환
+     */
+    @Override
+    public ResponseEntity<UserInfoResponse> getUserInfo(CustomUserDetails userDetails) {
+        // 로그인한 유저의 이메일과 일치하는 유저 데이터 가져오기
+        User user = findByEmail(userDetails.getEmail()).orElseThrow(
+                () -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)
+        );
+
+        // 이메일, 닉네임, 프로필 이미지 url 반환
+        UserInfoResponse userInfoResponse = UserInfoResponse.builder()
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .imageUrl(user.getImageUrl())
+                .build();
+
+        return new ResponseEntity<>(userInfoResponse, HttpStatus.OK);
     }
 
     /**
@@ -105,24 +127,13 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
-        String accessToken = null;
+        // access token 가져오기
+        String accessToken = CookieUtils.findCookieValue(request, "accessToken").orElse(null);
 
-        // access / refresh token cookie 삭제
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                switch (cookie.getName()) {
-                    case "accessToken":
-                        accessToken = cookie.getValue();
-                    case "refreshToken":
-                        cookie.setValue("");
-                        cookie.setPath("/");
-                        cookie.setMaxAge(0);
-                        response.addCookie(cookie);
-                        break;
-                }
-            }
-        }
+        // access token 삭제
+        CookieUtils.deleteCookie(response, "accessToken");
+        // refresh token 삭제
+        CookieUtils.deleteCookie(response, "refreshToken");
 
         // tokens 데이터 삭제
         tokenService.deleteByAccessToken(accessToken);
@@ -136,21 +147,9 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public ResponseEntity<UserLoginResponse> refreshToken(HttpServletRequest request, HttpServletResponse response) {
         // cookie에서 refresh token  가져오기
-        String refreshToken = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("refreshToken".equals(cookie.getName())) {
-                    refreshToken = cookie.getValue();
-                    break;
-                }
-            }
-        }
-
-        // refresh token이 없을 경우
-        if (refreshToken == null) {
-            throw new RestApiException(CommonExceptionCode.JWT_UNKNOWN_ERROR);
-        }
+        String refreshToken = CookieUtils.findCookieValue(request, "refreshToken").orElseThrow(
+                () -> new RestApiException(CommonExceptionCode.JWT_UNKNOWN_ERROR)
+        );
 
         // refresh token 파싱
         Claims claims = jwtTokenizer.parseRefreshToken(refreshToken);
@@ -212,7 +211,7 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
 
-    
+
     @Transactional(readOnly = true)
     public ResponseEntity<String> sendAuthEmail(AuthEmailSendRequest emailSendRequest, BindingResult bindingResult) {
         // 필드 에러 확인
@@ -279,12 +278,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<String> checkDuplicateNickname(String nickname) {
         // 닉네임을 입력하지 않은 경우
-        if (nickname == null){
+        if (nickname == null) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
         }
 
         // 사용 중인 닉네임일 경우
-        if (findByNickname(nickname).isPresent()){
+        if (findByNickname(nickname).isPresent()) {
             throw new RestApiException(CommonExceptionCode.EXIST_NICKNAME_ERROR);
         }
         return ResponseEntity.ok("사용 가능한 닉네임입니다.");
@@ -333,7 +332,7 @@ public class UserServiceImpl implements UserService {
      * @param password 비밀번호
      * @return 암호화된 비밀번호
      */
-    private String encryptPassword(String password) {
+    public String encryptPassword(String password) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(password);
     }

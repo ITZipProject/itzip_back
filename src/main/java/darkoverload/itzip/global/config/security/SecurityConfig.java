@@ -47,6 +47,9 @@ public class SecurityConfig {
             "/cs-quizzes/**",
             "/cs-quiz/**",
 
+            // 기술 정보 허용
+            "/tech-info/**",
+
             // 학교 정보 검색 허용
             "/schoolsearch",
 

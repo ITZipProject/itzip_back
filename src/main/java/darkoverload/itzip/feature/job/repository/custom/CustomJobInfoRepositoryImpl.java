@@ -63,6 +63,7 @@ public class CustomJobInfoRepositoryImpl implements CustomJobInfoRepository{
                         jobInfoEntity.title,
                         jobInfoEntity.industryName,
                         jobInfoEntity.locationName,
+                        jobInfoEntity.locationCode,
                         jobInfoEntity.jobName,
                         jobInfoEntity.expirationDate,
                         jobInfoEntity.experienceName,
