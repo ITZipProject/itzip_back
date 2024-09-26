@@ -1,6 +1,7 @@
 package darkoverload.itzip.feature.algorithm.controller;
 
 import darkoverload.itzip.feature.algorithm.controller.response.ProblemListResponse;
+import darkoverload.itzip.feature.algorithm.controller.response.SolvedTagResponse;
 import darkoverload.itzip.feature.algorithm.controller.response.SolvedUserResponse;
 import darkoverload.itzip.feature.algorithm.service.AlgorithmService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
@@ -74,5 +75,15 @@ public class AlgorithmController {
     @GetMapping("/user/update")
     public SolvedUserResponse updateUserSolvedProfile(@RequestParam Long userId){
         return algorithmService.updateUserSolvedProfileAndProblem(userId);
+    }
+
+    @Operation(
+            summary = "테그 받아오기",
+            description = "tag를 받아온다 recommended가 ture면 추천된 tag만 아니면 전부다 받아온다."
+    )
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @GetMapping("/tag/recommend")
+    public SolvedTagResponse findSolvedAllTags(@RequestParam boolean recommended){
+        return algorithmService.findSolvedTags(recommended);
     }
 }

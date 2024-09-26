@@ -1,10 +1,12 @@
 package darkoverload.itzip.feature.algorithm.service;
 
 import darkoverload.itzip.feature.algorithm.controller.response.ProblemListResponse;
+import darkoverload.itzip.feature.algorithm.controller.response.SolvedTagResponse;
 import darkoverload.itzip.feature.algorithm.controller.response.SolvedUserResponse;
 import darkoverload.itzip.feature.algorithm.service.problem.FindProblemsByTagAndUser;
 import darkoverload.itzip.feature.algorithm.service.problem.FindProblemsByUser;
 import darkoverload.itzip.feature.algorithm.service.problem.SaveProblems;
+import darkoverload.itzip.feature.algorithm.service.tag.FindAllTags;
 import darkoverload.itzip.feature.algorithm.service.tag.SaveTags;
 import darkoverload.itzip.feature.algorithm.service.user.FindUserSolvedProfile;
 import darkoverload.itzip.feature.algorithm.service.user.SaveUserSolvedProfile;
@@ -21,6 +23,7 @@ public class AlgorithmServiceImpl implements AlgorithmService {
     private final FindProblemsByUser findProblemsByUser;
     private final FindProblemsByTagAndUser findProblemsByTagAndUser;
     private final FindUserSolvedProfile findUserSolvedProfile;
+    private final FindAllTags findAllTags;
 
     public AlgorithmServiceImpl(
             @Qualifier("saveTagsImpl") SaveTags saveTags,
@@ -29,7 +32,8 @@ public class AlgorithmServiceImpl implements AlgorithmService {
             @Qualifier("updateUserSolvedProfileAndProblemImpl") UpdateUserSolvedProfileAndProblem updateUserSolvedProfileAndProblem,
             @Qualifier("findProblemsByUserImpl") FindProblemsByUser findProblemsByUser,
             @Qualifier("findProblemsByTagAndUserImpl") FindProblemsByTagAndUser findProblemsByTagAndUser,
-            @Qualifier("findUserSolvedProfileImpl") FindUserSolvedProfile findUserSolvedProfile
+            @Qualifier("findUserSolvedProfileImpl") FindUserSolvedProfile findUserSolvedProfile,
+            @Qualifier("findAllTagsImpl") FindAllTags findAllTags
             ) {
         this.saveTags = saveTags;
         this.saveProblems = saveProblems;
@@ -38,6 +42,7 @@ public class AlgorithmServiceImpl implements AlgorithmService {
         this.findProblemsByUser = findProblemsByUser;
         this.findProblemsByTagAndUser = findProblemsByTagAndUser;
         this.findUserSolvedProfile = findUserSolvedProfile;
+        this.findAllTags = findAllTags;
     }
 
     @Override
@@ -73,5 +78,10 @@ public class AlgorithmServiceImpl implements AlgorithmService {
     @Override
     public SolvedUserResponse findUserSolvedProfile(Long userId) {
         return findUserSolvedProfile.findUserSolvedProfile(userId);
+    }
+
+    @Override
+    public SolvedTagResponse findSolvedTags(boolean recommended) {
+        return findAllTags.findSolvedTags(recommended);
     }
 }

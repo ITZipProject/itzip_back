@@ -19,7 +19,7 @@ public class SolvedAcProblemScheduler {
     @Scheduled(cron = "${SOLVED_AC_SCHEDULER_CRON}")
     public void solvedProblemUpdate(){
         log.info("==== solved.ac 작업시작 ====");
-        algorithmService.saveProblemTags();
+//        algorithmService.saveProblemTags();
         log.info("==== tag 저장완료 ====");
 //        algorithmService.saveProblems();
         log.info("==== problem 저장완료 ====");
