@@ -15,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
 
+import static darkoverload.itzip.feature.image.util.FileUtil.resizeImage;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -86,6 +88,42 @@ public class CloudStorageService implements StorageService {
                 .imageSeq(findImage.getImageSeq())
                 .imagePath(moveImagePath)
                 .build();
+
+        return result;
+    }
+
+    @Override
+    public Image imageUpload(MultipartFile multipartFile, String featureDir) {
+        if(multipartFile.isEmpty()) throw new RestApiException(CommonExceptionCode.IMAGE_NOT_FOUND);
+
+        InputStream inputStream = null;
+
+        Image result = null;
+        try {
+            inputStream = multipartFile.getInputStream();
+
+            // 이미지 확장자 체크 git, jpeg, jpg, png 허용
+            if(!FileUtil.imageExtensionCheck(multipartFile.getInputStream())){
+                throw new RestApiException(CommonExceptionCode.IMAGE_FORMAT_ERROR);
+            }
+
+            Image originImage = Image.createImage(multipartFile, featureDir);
+//            inputStream = resizeImage(originImage.getImageName(), multipartFile, 150);
+            AWSFile awsFile = null;
+            try {
+                // aws 실질적으로 upload
+                awsFile = awsService.upload(originImage, inputStream);
+            } catch (IOException e) {
+                throw new RestApiException(CommonExceptionCode.IMAGE_ERROR);
+            }
+
+            Image insertData = Image.awsFrom(awsFile);
+
+            // db 실질 저장
+            result = imageService.save(insertData);
+        } catch (IOException e) {
+            throw new RestApiException(CommonExceptionCode.IMAGE_ERROR);
+        }
 
         return result;
     }

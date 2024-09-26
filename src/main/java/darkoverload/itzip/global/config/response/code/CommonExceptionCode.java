@@ -76,6 +76,24 @@ public enum CommonExceptionCode implements ResponseCode {
     NOT_FOUND_USER(HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다."),
 
     /**
+     * TechInfo Error
+     */
+    // ID에 해당하는 블로그를 찾을 수 없는 경우
+    NOT_FOUND_BLOG(HttpStatus.NOT_FOUND, "블로그를 찾을 수 없습니다."),
+    // ID에 해당하는 게시물를 찾을 수 없는 경우
+    NOT_FOUND_POST(HttpStatus.NOT_FOUND, "포스트를 찾을 수 없습니다."),
+    // ID에 해당하는 댓글을 찾을 수 없는 경우
+    NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
+    // 해당 블로그에 게시물이 없는 경우
+    NOT_FOUND_POSTS_FOR_BLOG(HttpStatus.NOT_FOUND, "해당 블로그에 대한 게시물을 찾을 수 없습니다."),
+    // 해당 카테고리에 게시물이 없는 경우
+    NOT_FOUND_POSTS_FOR_CATEGORY(HttpStatus.NOT_FOUND, "해당 카테고리에 대한 게시물을 찾을 수 없습니다."),
+    // 잘못된 형식의 카테고리 ID가 입력된 경우
+    INVALID_CATEGORY_ID(HttpStatus.BAD_REQUEST, "잘못된 카테고리 ID 형식입니다."),
+    // 잘못된 형식의 포스트 ID가 입력된 경우
+    INVALID_POST_ID(HttpStatus.BAD_REQUEST, "잘못된 POST ID 형식입니다."),
+
+    /**
      * Quiz Error
      */
     //퀴즈를 찾을 수 없음
@@ -97,6 +115,8 @@ public enum CommonExceptionCode implements ResponseCode {
 
     // 이력서 생성 오류
     INSERT_FAIL_RESUME(HttpStatus.BAD_REQUEST, "이력서 생성 오류"),
+    // 이력서 업데이트 오류
+    UPDATE_FAIL_RESUME(HttpStatus.BAD_REQUEST, "이력서 업데이트 오류"),
 
     /**
      * MongoDb
@@ -116,6 +136,8 @@ public enum CommonExceptionCode implements ResponseCode {
     FORBIDDEN(HttpStatus.FORBIDDEN, "접근 권한이 없습니다"),
     // 404
     NOT_FOUND(HttpStatus.NOT_FOUND, "리소스를 찾을 수 없습니다"),
+    // 405
+    METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "지원되지 않는 메서드입니다"),
     // 408
     REQUEST_TIMEOUT(HttpStatus.REQUEST_TIMEOUT, "요청 시간이 초과되었습니다"),
     // 415

@@ -1,14 +1,13 @@
 package darkoverload.itzip.feature.resume.entity;
 
+import darkoverload.itzip.feature.resume.domain.myskill.MySkill;
 import darkoverload.itzip.global.entity.AuditingFields;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="MySkills")
@@ -23,5 +22,13 @@ public class MySkillEntity extends AuditingFields {
     private ResumeEntity resume;
 
     private String name;
+
+    public MySkill convertToDomain(){
+        return MySkill.builder()
+                .mySkillId(this.id)
+                .resume(this.resume.convertToDomain())
+                .name(this.name)
+                .build();
+    }
 
 }

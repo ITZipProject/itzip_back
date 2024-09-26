@@ -10,6 +10,7 @@ import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.swagger.ExceptionCodeAnnotations;
 import darkoverload.itzip.global.config.swagger.ResponseCodeAnnotation;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -72,6 +73,12 @@ public class ImageController {
         response.put("result", result);
 
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping(value = "/direct", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public Image imageUpload(@RequestParam("file") MultipartFile file, @RequestParam String featureDir){
+
+        return storageService.imageUpload(file, featureDir);
     }
 
     /**

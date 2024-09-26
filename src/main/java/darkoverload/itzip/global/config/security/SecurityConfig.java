@@ -47,6 +47,9 @@ public class SecurityConfig {
             "/cs-quizzes/**",
             "/cs-quiz/**",
 
+            // 기술 정보 허용
+            "/tech-info/**",
+
             // 학교 정보 검색 허용
             "/schoolsearch",
 
@@ -81,6 +84,12 @@ public class SecurityConfig {
                 .requestMatchers(allAllowPage).permitAll() // 모든 유저
                 .requestMatchers(notLoggedAllowPage).not().authenticated() // 비로그인 유저
                 .anyRequest().authenticated()
+        );
+
+        // 예외처리 구성
+        http.exceptionHandling(exceptionHandling ->
+                // 인증 실패 시 호출하는 AuthenticationEntryPoint 설정
+                exceptionHandling.authenticationEntryPoint(new JwtAuthenticationEntryPoint())
         );
 
         // 세션 관리 Stateless 설정(서버가 클라이언트 상태 저장x)
