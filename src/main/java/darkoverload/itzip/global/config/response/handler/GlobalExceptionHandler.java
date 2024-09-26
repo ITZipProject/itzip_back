@@ -11,6 +11,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import javax.naming.ServiceUnavailableException;
 
@@ -53,6 +54,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler({
             MethodArgumentNotValidException.class,
             MissingServletRequestParameterException.class,
+            MissingServletRequestPartException.class,
             HandlerMethodValidationException.class
     })
     public ResponseEntity<Object> handleValidationExceptions(Exception e) {
