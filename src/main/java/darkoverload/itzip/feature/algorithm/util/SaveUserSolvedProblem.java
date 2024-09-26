@@ -51,7 +51,8 @@ public class SaveUserSolvedProblem {
             // 각 페이지에 해당하는 문제 데이터를 Solved.ac API로부터 가져옴
             for (int i = start; i <= totalPages; i++) {
                 HttpResponse<String> problemsResponse = solvedAcAPI.solvedacAPIRequest(solvedAcAPI.getUserSolvedProblemByName(solvedacUser.getUsername(), i));
-                JsonArray jsonProblems = JsonParser.parseString(problemsResponse.body()).getAsJsonArray();
+                JsonObject jsonObject = JsonParser.parseString(problemsResponse.body()).getAsJsonObject();
+                JsonArray jsonProblems = jsonObject.getAsJsonArray("items");
 
                 jsonProblems.forEach(problemElement -> {
                     JsonObject jsonProblem = problemElement.getAsJsonObject();
