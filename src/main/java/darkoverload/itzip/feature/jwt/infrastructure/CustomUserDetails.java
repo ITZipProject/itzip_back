@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.jwt.infrastructure;
 
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,6 +10,7 @@ import java.util.List;
 /**
  * 사용자 인증 및 권한 관리를 위한 사용자 세부 정보 클래스
  */
+@Getter
 public class CustomUserDetails implements UserDetails {
     private final String email;  // 사용자 이름
     private final String password;  // 비밀번호
@@ -33,11 +35,6 @@ public class CustomUserDetails implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return authorities;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
     }
 
     @Override

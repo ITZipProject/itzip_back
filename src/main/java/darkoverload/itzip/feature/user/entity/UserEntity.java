@@ -27,6 +27,8 @@ public class UserEntity extends AuditingFields {
     @Column(nullable = false)
     private String password;
 
+    private String imageUrl;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Authority authority;
@@ -37,6 +39,7 @@ public class UserEntity extends AuditingFields {
                 .email(this.email)
                 .nickname(this.nickname)
                 .password(this.password)
+                .imageUrl(this.imageUrl)
                 .authority(this.authority)
                 .build();
     }
