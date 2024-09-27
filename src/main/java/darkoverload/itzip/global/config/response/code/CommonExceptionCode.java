@@ -104,6 +104,8 @@ public enum CommonExceptionCode implements ResponseCode {
     SOLVED_USER_SOLVED_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "solvedac 사용자 정보를 저장하는 중 에러가 생겼습니댜."),
     //sovledac Id를 등록해야 합니다.
     NOT_FOUND_SOLVEDAC_USER(HttpStatus.BAD_REQUEST, "solvedac user를 등록해주세요"),
+    //solvedac에서 username을 찾을 수 없음
+    NOT_FOUND_SOLVEDAC_USERNAME(HttpStatus.BAD_REQUEST, "solvedac에서 user이름을 찾을 수 없습니다."),
     //업데이트 하려면 기다려야 합니다.
     UPDATE_COOLDOWN(HttpStatus.CONFLICT, "마지막 업데이트로부터 시간이 지나지 않았습니다."),
     //solved.ac 서버로부터 api를 받아올수 없습니다.

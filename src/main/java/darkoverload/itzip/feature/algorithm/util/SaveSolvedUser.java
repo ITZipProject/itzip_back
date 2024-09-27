@@ -31,6 +31,10 @@ public class SaveSolvedUser {
             HttpResponse<String> response = solvedAcAPI.solvedacAPIRequest(solvedAcAPI.getUserByName(username));
             JsonObject jsonObject = JsonParser.parseString(response.body()).getAsJsonObject();
 
+            if (response.statusCode() == 400) {
+                throw new RestApiException(CommonExceptionCode.NOT_FOUND_SOLVEDAC_USERNAME);
+            }
+
             SolvedacUserEntity solvedacUserEntity = SolvedacUserEntity.builder()
                     .userId(userId)
                     .username(username)
