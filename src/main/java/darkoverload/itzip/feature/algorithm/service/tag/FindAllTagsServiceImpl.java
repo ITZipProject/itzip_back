@@ -29,21 +29,26 @@ public class FindAllTagsServiceImpl implements FindAllTagsService {
      */
     @Override
     public SolvedTagResponse findSolvedTags(boolean recommended) {
-        List<ProblemTag> tags;
-        //추천을 한것만 받아올 경우
-        if (recommended) {
-            tags = problemTagRepository.findAllById(recommendedTags).stream()
-                    .map(ProblemTagEntity::convertToDomain)
-                    .toList();
-        } else {
-            //모든걸 받아올 경우
-            tags = problemTagRepository.findAll().stream()
-                    .map(ProblemTagEntity::convertToDomain)
-                    .toList();
-        }
+        List<ProblemTag> tags = findTags(recommended);
 
         return SolvedTagResponse.builder()
                 .tags(tags)
                 .build();
+    }
+
+    /**
+     * recommended에 따라서 tag를 찾는 메서드
+     * @param recommended ture일 경우 추천된 것만 아닐경우 전부
+     * @return tag 리스트 목록
+     */
+    private List<ProblemTag> findTags(boolean recommended) {
+        if (recommended) {
+            return problemTagRepository.findAllById(recommendedTags).stream()
+                    .map(ProblemTagEntity::convertToDomain)
+                    .toList();
+        }
+        return problemTagRepository.findAll().stream()
+                .map(ProblemTagEntity::convertToDomain)
+                .toList();
     }
 }
