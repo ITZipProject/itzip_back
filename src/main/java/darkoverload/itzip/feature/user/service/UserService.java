@@ -40,4 +40,6 @@ public interface UserService {
     Optional<User> findByNickname(String nickname);
 
     String encryptPassword(String password);
+
+    ResponseEntity<String> tempUserOut(CustomUserDetails userDetails, HttpServletRequest request, HttpServletResponse response);
 }

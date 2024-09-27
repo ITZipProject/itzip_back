@@ -145,4 +145,22 @@ public class UserController {
     ) {
         return userService.checkDuplicateEmail(email);
     }
+
+    /**
+     * 임시 유저 탈퇴 메소드
+     */
+    @Operation(
+            summary = "임시 유저 탈퇴",
+            description = "현재 로그인 되어 있는 유저 데이터를 삭제합니다."
+    )
+    @DeleteMapping("/out")
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_FOUND_USER})
+    public ResponseEntity<String> tempUserOut(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        return userService.tempUserOut(userDetails, request, response);
+    }
 }
