@@ -95,7 +95,7 @@ public class SaveProblemsServiceImpl implements SaveProblemsService {
     }
 
     /**
-     * 문제에 있는 테그를 처리하는 메서드
+     * 문제에 있는 테그를 처리하는 메서드 문제랑 tag를 매핑한다.
      * @param jsonProblem 문제
      * @param problemId 문제 id값
      */

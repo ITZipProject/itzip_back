@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 import java.util.stream.StreamSupport;
@@ -22,6 +23,8 @@ public class SaveTagsServiceImpl implements SaveTagsService {
     private final SolvedAcAPI solvedAcAPI;
     private final ProblemTagRepository problemTagRepository;
 
+    private final List<Object[]> tagsToSave = new ArrayList<>();
+
     /**
      * Solved.ac API를 호출하여 문제 태그 정보를 가져와 데이터베이스에 저장하는 메서드.
      * 1페이지부터 5페이지까지의 태그 데이터를 가져와 파싱 후 저장한다.
@@ -30,43 +33,54 @@ public class SaveTagsServiceImpl implements SaveTagsService {
      */
     @Override
     public void saveProblemTags() {
-        List<Object[]> tagsToSave = IntStream.range(1, 6)  // page 1부터 5까지 반복
-                .mapToObj(page -> {
-                    try {
-                        HttpResponse<String> response = solvedAcAPI.solvedacAPIRequest(solvedAcAPI.getTag(page));
-                        JsonObject tags = JsonParser.parseString(response.body()).getAsJsonObject();
-                        JsonArray items = tags.get("items").getAsJsonArray();
-
-                        // items 배열을 스트림으로 변환하여 처리
-                        return StreamSupport.stream(items.spliterator(), false)
-                                .map(itemElement -> {
-                                    JsonObject item = itemElement.getAsJsonObject();
-
-                                    // displayNames에서 "ko" 찾아서 한국어 tag이름 붙이기 없으면 가장 첫번째꺼
-                                    JsonArray displayNames = item.getAsJsonArray("displayNames");
-                                    JsonObject displayName = StreamSupport.stream(displayNames.spliterator(), false)
-                                            .map(JsonObject.class::cast)
-                                            .filter(dn -> dn.get("language").getAsString().equals("ko"))
-                                            .findFirst()
-                                            .orElse(displayNames.get(0).getAsJsonObject());
-
-                                    String name = displayName.has("name") ? displayName.get("name").getAsString() : "";
-                                    String nameSort = displayName.has("short") ? displayName.get("short").getAsString() : "";
-
-                                    // ProblemTag 객체 생성
-                                    return new Object[]{item.get("bojTagId").getAsLong(), name, nameSort, item.get("problemCount").getAsInt()};
-                                }).toList();
-                    } catch (IOException e) {
-                        throw new RestApiException(CommonExceptionCode.SOLVED_TAG_ERROR);
-                    } catch (InterruptedException e) {
-                        Thread.currentThread().interrupt();
-                        throw new RestApiException(CommonExceptionCode.SOLVED_TAG_ERROR);
-                    }
-                })
-                .flatMap(List::stream)  // 각 페이지의 결과를 하나의 리스트로 합침
-                .toList();
+        IntStream.range(1, 6).forEach(this::processPage);
 
         // DB에 저장
         problemTagRepository.batchInsertTags(tagsToSave);
+    }
+
+    /**
+     * solved api에 있는 모둔 tag 페이지를 호출해주는 메서드
+     * @param page 각 페이지 번호
+     */
+    private void processPage(int page) {
+        try {
+            HttpResponse<String> response = solvedAcAPI.solvedacAPIRequest(solvedAcAPI.getTag(page));
+            JsonObject jsonObject = JsonParser.parseString(response.body()).getAsJsonObject();
+            JsonArray jsonTags = jsonObject.get("items").getAsJsonArray();
+            processTags(jsonTags);
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RestApiException(CommonExceptionCode.SOLVED_TAG_ERROR);
+        }
+    }
+
+    /**
+     * tags들에서 tag를 뽑아내는 메서드
+     * @param tags tag들을 받아온다.
+     */
+    private void processTags(JsonArray tags) {
+        StreamSupport.stream(tags.spliterator(), false)
+                .forEach(tag -> processTag(tag.getAsJsonObject()));
+    }
+
+    /**
+     * tag안에 있는 값들을 저장하는 메서드
+     * @param tag tag객체 한개
+     */
+    private void processTag(JsonObject tag) {
+        JsonArray displayNames = tag.getAsJsonArray("displayNames");
+        JsonObject displayName = StreamSupport.stream(displayNames.spliterator(), false)
+                .map(JsonObject.class::cast)
+                .filter(dn -> dn.get("language").getAsString().equals("ko"))
+                .findFirst()
+                .orElse(displayNames.get(0).getAsJsonObject());
+
+        String name = displayName.has("name") ? displayName.get("name").getAsString() : "";
+        String nameSort = displayName.has("short") ? displayName.get("short").getAsString() : "";
+
+        tagsToSave.add(new Object[]{
+                tag.get("bojTagId").getAsLong(), name, nameSort, tag.get("problemCount").getAsInt()
+        });
     }
 }
