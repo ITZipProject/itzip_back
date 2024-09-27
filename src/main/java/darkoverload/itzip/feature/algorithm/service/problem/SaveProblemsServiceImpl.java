@@ -20,7 +20,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
-public class SaveProblemsImpl implements SaveProblems {
+public class SaveProblemsServiceImpl implements SaveProblemsService {
     private final SolvedAcAPI solvedAcAPI;
     private final ProblemRepository problemRepository;
     private final ProblemTagMappingRepository problemTagMappingRepository;

@@ -3,85 +3,85 @@ package darkoverload.itzip.feature.algorithm.service;
 import darkoverload.itzip.feature.algorithm.controller.response.ProblemListResponse;
 import darkoverload.itzip.feature.algorithm.controller.response.SolvedTagResponse;
 import darkoverload.itzip.feature.algorithm.controller.response.SolvedUserResponse;
-import darkoverload.itzip.feature.algorithm.service.problem.FindProblemsByTagAndUser;
-import darkoverload.itzip.feature.algorithm.service.problem.FindProblemsByUser;
-import darkoverload.itzip.feature.algorithm.service.problem.SaveProblems;
-import darkoverload.itzip.feature.algorithm.service.tag.FindAllTags;
-import darkoverload.itzip.feature.algorithm.service.tag.SaveTags;
-import darkoverload.itzip.feature.algorithm.service.user.FindUserSolvedProfile;
-import darkoverload.itzip.feature.algorithm.service.user.SaveUserSolvedProfile;
-import darkoverload.itzip.feature.algorithm.service.user.UpdateUserSolvedProfileAndProblem;
+import darkoverload.itzip.feature.algorithm.service.problem.FindProblemsByTagAndUserService;
+import darkoverload.itzip.feature.algorithm.service.problem.FindProblemsByUserService;
+import darkoverload.itzip.feature.algorithm.service.problem.SaveProblemsService;
+import darkoverload.itzip.feature.algorithm.service.tag.FindAllTagsService;
+import darkoverload.itzip.feature.algorithm.service.tag.SaveTagsService;
+import darkoverload.itzip.feature.algorithm.service.user.FindUserSolvedProfileService;
+import darkoverload.itzip.feature.algorithm.service.user.SaveUserSolvedProfileService;
+import darkoverload.itzip.feature.algorithm.service.user.UpdateUserSolvedProfileAndProblemService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 @Service
 public class AlgorithmServiceImpl implements AlgorithmService {
-    private final SaveTags saveTags;
-    private final SaveProblems saveProblems;
-    private final SaveUserSolvedProfile saveUserSolvedProfile;
-    private final UpdateUserSolvedProfileAndProblem updateUserSolvedProfileAndProblem;
-    private final FindProblemsByUser findProblemsByUser;
-    private final FindProblemsByTagAndUser findProblemsByTagAndUser;
-    private final FindUserSolvedProfile findUserSolvedProfile;
-    private final FindAllTags findAllTags;
+    private final SaveTagsService saveTagsService;
+    private final SaveProblemsService saveProblemsService;
+    private final SaveUserSolvedProfileService saveUserSolvedProfileService;
+    private final UpdateUserSolvedProfileAndProblemService updateUserSolvedProfileAndProblemService;
+    private final FindProblemsByUserService findProblemsByUserService;
+    private final FindProblemsByTagAndUserService findProblemsByTagAndUserService;
+    private final FindUserSolvedProfileService findUserSolvedProfileService;
+    private final FindAllTagsService findAllTagsService;
 
     public AlgorithmServiceImpl(
-            @Qualifier("saveTagsImpl") SaveTags saveTags,
-            @Qualifier("saveProblemsImpl") SaveProblems saveProblems,
-            @Qualifier("saveUserSolvedProfileImpl") SaveUserSolvedProfile saveUserSolvedProfile,
-            @Qualifier("updateUserSolvedProfileAndProblemImpl") UpdateUserSolvedProfileAndProblem updateUserSolvedProfileAndProblem,
-            @Qualifier("findProblemsByUserImpl") FindProblemsByUser findProblemsByUser,
-            @Qualifier("findProblemsByTagAndUserImpl") FindProblemsByTagAndUser findProblemsByTagAndUser,
-            @Qualifier("findUserSolvedProfileImpl") FindUserSolvedProfile findUserSolvedProfile,
-            @Qualifier("findAllTagsImpl") FindAllTags findAllTags
+            @Qualifier("saveTagsServiceImpl") SaveTagsService saveTagsService,
+            @Qualifier("saveProblemsServiceImpl") SaveProblemsService saveProblemsService,
+            @Qualifier("saveUserSolvedProfileServiceImpl") SaveUserSolvedProfileService saveUserSolvedProfileService,
+            @Qualifier("updateUserSolvedProfileAndProblemServiceImpl") UpdateUserSolvedProfileAndProblemService updateUserSolvedProfileAndProblemService,
+            @Qualifier("findProblemsByUserServiceImpl") FindProblemsByUserService findProblemsByUserService,
+            @Qualifier("findProblemsByTagAndUserServiceImpl") FindProblemsByTagAndUserService findProblemsByTagAndUserService,
+            @Qualifier("findUserSolvedProfileServiceImpl") FindUserSolvedProfileService findUserSolvedProfileService,
+            @Qualifier("findAllTagsServiceImpl") FindAllTagsService findAllTagsService
             ) {
-        this.saveTags = saveTags;
-        this.saveProblems = saveProblems;
-        this.saveUserSolvedProfile = saveUserSolvedProfile;
-        this.updateUserSolvedProfileAndProblem = updateUserSolvedProfileAndProblem;
-        this.findProblemsByUser = findProblemsByUser;
-        this.findProblemsByTagAndUser = findProblemsByTagAndUser;
-        this.findUserSolvedProfile = findUserSolvedProfile;
-        this.findAllTags = findAllTags;
+        this.saveTagsService = saveTagsService;
+        this.saveProblemsService = saveProblemsService;
+        this.saveUserSolvedProfileService = saveUserSolvedProfileService;
+        this.updateUserSolvedProfileAndProblemService = updateUserSolvedProfileAndProblemService;
+        this.findProblemsByUserService = findProblemsByUserService;
+        this.findProblemsByTagAndUserService = findProblemsByTagAndUserService;
+        this.findUserSolvedProfileService = findUserSolvedProfileService;
+        this.findAllTagsService = findAllTagsService;
     }
 
     @Override
     public void saveProblemTags() {
-        saveTags.saveProblemTags();
+        saveTagsService.saveProblemTags();
     }
 
     @Override
     public void saveProblems() {
-        saveProblems.saveProblems();
+        saveProblemsService.saveProblems();
     }
 
     @Override
     public void saveUserSolvedProfile(Long userId, String username) {
-        saveUserSolvedProfile.saveUserSolvedProfile(userId, username);
+        saveUserSolvedProfileService.saveUserSolvedProfile(userId, username);
     }
 
     @Override
     public SolvedUserResponse updateUserSolvedProfileAndProblem(Long userId) {
-        return updateUserSolvedProfileAndProblem.updateUserSolvedProfileAndProblem(userId);
+        return updateUserSolvedProfileAndProblemService.updateUserSolvedProfileAndProblem(userId);
     }
 
     @Override
     public ProblemListResponse findProblemsByUser(Long userId) {
-        return findProblemsByUser.findProblemsByUser(userId);
+        return findProblemsByUserService.findProblemsByUser(userId);
     }
 
     @Override
     public ProblemListResponse findProblemsByTagAndUser(Long userId, Long tagId) {
-        return findProblemsByTagAndUser.findProblemsByTagAndUser(userId, tagId);
+        return findProblemsByTagAndUserService.findProblemsByTagAndUser(userId, tagId);
     }
 
     @Override
     public SolvedUserResponse findUserSolvedProfile(Long userId) {
-        return findUserSolvedProfile.findUserSolvedProfile(userId);
+        return findUserSolvedProfileService.findUserSolvedProfile(userId);
     }
 
     @Override
     public SolvedTagResponse findSolvedTags(boolean recommended) {
-        return findAllTags.findSolvedTags(recommended);
+        return findAllTagsService.findSolvedTags(recommended);
     }
 }

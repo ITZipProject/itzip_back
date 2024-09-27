@@ -1,5 +1,5 @@
 package darkoverload.itzip.feature.algorithm.service.problem;
 
-public interface SaveProblems {
+public interface SaveProblemsService {
     void saveProblems();
 }

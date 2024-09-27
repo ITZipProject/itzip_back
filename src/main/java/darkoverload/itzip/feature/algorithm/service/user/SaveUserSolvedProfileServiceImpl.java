@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 //처음 사용자가 solvedac username을 등록했을때 사용할 class
 @Service
 @RequiredArgsConstructor
-public class SaveUserSolvedProfileImpl implements SaveUserSolvedProfile {
+public class SaveUserSolvedProfileServiceImpl implements SaveUserSolvedProfileService {
     private final SaveSolvedUser saveSolvedUser;
     private final SaveUserSolvedProblem saveUserSolvedProblem;
 

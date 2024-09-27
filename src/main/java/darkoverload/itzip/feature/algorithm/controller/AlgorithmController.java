@@ -72,14 +72,14 @@ public class AlgorithmController {
             CommonExceptionCode.NOT_FOUND_SOLVEDAC_USER,
             CommonExceptionCode.SOLVEDAC_API_ERROR
     })
-    @GetMapping("/user/update")
+    @PatchMapping("/user")
     public SolvedUserResponse updateUserSolvedProfile(@RequestParam Long userId){
         return algorithmService.updateUserSolvedProfileAndProblem(userId);
     }
 
     @Operation(
-            summary = "테그 받아오기",
-            description = "tag를 받아온다 recommended가 ture면 추천된 tag만 아니면 전부다 받아온다."
+            summary = "태그 가져오기",
+            description = "태그를 가져온다. recommended가 true면 추천된 태그만, 그렇지 않으면 전부 다 가져온다."
     )
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @GetMapping("/tag/recommend")

@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 //모든 tag를 넘겨주는 서비스 로직
 @Service
 @RequiredArgsConstructor
-public class FindAllTagsImpl implements FindAllTags {
+public class FindAllTagsServiceImpl implements FindAllTagsService {
     private final ProblemTagRepository problemTagRepository;
 
     //프로그래머스 고득점 키트를 기준으로했음

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class FindProblemsByTagAndUserImpl implements FindProblemsByTagAndUser{
+public class FindProblemsByTagAndUserServiceImpl implements FindProblemsByTagAndUserService {
     private final ProblemRepository problemRepository;
     private final SolvedacUserRepository solvedacUserRepository;
 

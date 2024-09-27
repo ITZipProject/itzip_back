@@ -18,7 +18,7 @@ import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
-public class SaveTagsImpl implements SaveTags {
+public class SaveTagsServiceImpl implements SaveTagsService {
     private final SolvedAcAPI solvedAcAPI;
     private final ProblemTagRepository problemTagRepository;
 

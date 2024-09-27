@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 //사용자 정보를 보내주는 응답
 @Service
 @RequiredArgsConstructor
-public class FindUserSolvedProfileImpl implements FindUserSolvedProfile{
+public class FindUserSolvedProfileServiceImpl implements FindUserSolvedProfileService {
     private final SolvedacUserRepository solvedacUserRepository;
 
     /**

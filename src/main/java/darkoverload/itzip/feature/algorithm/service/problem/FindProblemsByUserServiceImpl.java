@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 //사용자의 tier 기준으로 문제를 추천해주는 서비스
 @Service
 @RequiredArgsConstructor
-public class FindProblemsByUserImpl implements FindProblemsByUser {
+public class FindProblemsByUserServiceImpl implements FindProblemsByUserService {
     private final ProblemRepository problemRepository;
     private final SolvedacUserRepository solvedacUserRepository;
 

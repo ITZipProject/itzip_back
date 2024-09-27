@@ -1,21 +1,21 @@
 package darkoverload.itzip.feature.algorithm.service;
 
-import darkoverload.itzip.feature.algorithm.service.problem.FindProblemsByTagAndUser;
-import darkoverload.itzip.feature.algorithm.service.problem.FindProblemsByUser;
-import darkoverload.itzip.feature.algorithm.service.problem.SaveProblems;
-import darkoverload.itzip.feature.algorithm.service.tag.FindAllTags;
-import darkoverload.itzip.feature.algorithm.service.tag.SaveTags;
-import darkoverload.itzip.feature.algorithm.service.user.FindUserSolvedProfile;
-import darkoverload.itzip.feature.algorithm.service.user.SaveUserSolvedProfile;
-import darkoverload.itzip.feature.algorithm.service.user.UpdateUserSolvedProfileAndProblem;
+import darkoverload.itzip.feature.algorithm.service.problem.FindProblemsByTagAndUserService;
+import darkoverload.itzip.feature.algorithm.service.problem.FindProblemsByUserService;
+import darkoverload.itzip.feature.algorithm.service.problem.SaveProblemsService;
+import darkoverload.itzip.feature.algorithm.service.tag.FindAllTagsService;
+import darkoverload.itzip.feature.algorithm.service.tag.SaveTagsService;
+import darkoverload.itzip.feature.algorithm.service.user.FindUserSolvedProfileService;
+import darkoverload.itzip.feature.algorithm.service.user.SaveUserSolvedProfileService;
+import darkoverload.itzip.feature.algorithm.service.user.UpdateUserSolvedProfileAndProblemService;
 
 public interface AlgorithmService extends
-        SaveTags,
-        SaveProblems,
-        SaveUserSolvedProfile,
-        UpdateUserSolvedProfileAndProblem,
-        FindProblemsByUser,
-        FindProblemsByTagAndUser,
-        FindUserSolvedProfile,
-        FindAllTags
+        SaveTagsService,
+        SaveProblemsService,
+        SaveUserSolvedProfileService,
+        UpdateUserSolvedProfileAndProblemService,
+        FindProblemsByUserService,
+        FindProblemsByTagAndUserService,
+        FindUserSolvedProfileService,
+        FindAllTagsService
 {}

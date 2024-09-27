@@ -8,7 +8,6 @@ import darkoverload.itzip.feature.algorithm.util.SaveUserSolvedProblem;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,7 +16,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class UpdateUserSolvedProfileAndProblemImpl implements UpdateUserSolvedProfileAndProblem {
+public class UpdateUserSolvedProfileAndProblemServiceImpl implements UpdateUserSolvedProfileAndProblemService {
     private final SaveSolvedUser saveSolvedUser;
     private final SaveUserSolvedProblem saveUserSolvedProblem;
 
