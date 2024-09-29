@@ -66,14 +66,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public BlogAdjacentPostsResponse getAdjacentPosts(Long blogId, LocalDateTime createDate) {
-        // 블로그에 속한 인접 포스트를 조회하여 응답
+        // 지정된 블로그 ID와 생성일을 기준으로 인접한 포스트들을 조회하여 응답 생성
         int limit = 4;
         String nickname = sharedService.getBlogById(blogId).getUser().getNickname();
 
+        // 인접한 포스트들을 조회하고, 각 포스트를 PostBasicResponse로 변환
         List<PostBasicResponse> postResponses = getAdjacentPostsByBlog(blogId, createDate, limit).stream()
                 .map(Post::convertToPostBasicResponse)
                 .toList();
 
+        // 닉네임과 조회된 포스트들을 포함한 응답 반환
         return BlogAdjacentPostsResponse.builder()
                 .nickname(nickname)
                 .posts(postResponses)
