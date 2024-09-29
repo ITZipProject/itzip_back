@@ -113,6 +113,41 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         return executeQueryWithCriteria(criteria, pageable, false); // 실행
     }
 
+
+
+    // 연간 포스트 데이터를 조회하는 메서드
+    @Override
+    public List<YearlyPostDto> findYearlyPostCounts(Long blogId) {
+
+        LocalDateTime oneYearAgo = LocalDateTime.now().minusYears(1); // 1년 전 날짜 설정
+
+        // Aggregation 파이프라인 설정
+        Aggregation aggregation = newAggregation(
+                match(new Criteria("create_date").gte(oneYearAgo)
+                        .and("is_public").is(true)
+                        .and("blog_id").is(blogId)), // 1년 이내, 공개된 포스트 조회
+                project()
+                        .andExpression("year(create_date)").as("year") // 연도 추출
+                        .andExpression("month(create_date)").as("month") // 월 추출
+                        .andExpression("1 + floor((dayOfMonth(create_date) - 1) / 7)").as("week"), // 주차 계산
+                group(fields().and("year").and("month").and("week"))
+                        .count().as("postCount"), // 주차별 포스트 개수
+                group("year", "month")
+                        .push(new Document("week", "$_id.week").append("postCount", "$postCount")).as("weeks"), // 주차별 데이터 배열
+                group("year")
+                        .push(new Document("month", "$_id.month").append("weeks", "$weeks")).as("months"), // 월별 데이터 배열
+                project()
+                        .and("_id").as("year") // 연도를 id에서 year로 변경
+                        .and("months").as("months"), // 월 데이터를 포함
+                sort(Sort.by(Sort.Direction.DESC, "year")) // 연도 내림차순 정렬
+        );
+
+        // Aggregation 실행 및 결과 반환
+        AggregationResults<YearlyPostDto> result = mongoTemplate.aggregate(aggregation, "posts", YearlyPostDto.class);
+
+        return result.getMappedResults();
+    }
+
     // 이전/이후 포스트를 조회하는 메서드
     @Override
     public List<PostDocument> findAdjacentPosts(Long userId, LocalDateTime createDate, int limit) {
@@ -148,51 +183,16 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
                 previousPosts.stream().limit(4).toList();
     }
 
-    // 연간 포스트 데이터를 조회하는 메서드
-    @Override
-    public List<YearlyPostDto> findYearlyPostCounts(Long blogId) {
+    // Criteria와 Projection을 사용해 포스트를 조회하는 메서드
+    private List<PostDocument> fetchPostsWithProjection(Criteria criteria, Sort.Direction direction, int limit, List<String> fields) {
 
-        LocalDateTime oneYearAgo = LocalDateTime.now().minusYears(1); // 1년 전 날짜 설정
+        Query query = new Query(criteria)
+                .with(Sort.by(direction, "create_date")) // 작성일 기준으로 정렬
+                .limit(limit); // 조회할 포스트 수 제한
 
-        // Aggregation 파이프라인 설정
-        Aggregation aggregation = newAggregation(
-                match(new Criteria("create_date").gte(oneYearAgo)
-                        .and("is_public").is(true)
-                        .and("blog_id").is(blogId)), // 1년 이내, 공개된 포스트 조회
-                project()
-                        .andExpression("year(create_date)").as("year") // 연도 추출
-                        .andExpression("month(create_date)").as("month") // 월 추출
-                        .andExpression("1 + floor((dayOfMonth(create_date) - 1) / 7)").as("week"), // 주차 계산
-                group(fields().and("year").and("month").and("week"))
-                        .count().as("postCount"), // 주차별 포스트 개수
-                group("year", "month")
-                        .push(new Document("week", "$_id.week").append("postCount", "$postCount")).as("weeks"), // 주차별 데이터 배열
-                group("year")
-                        .push(new Document("month", "$_id.month").append("weeks", "$weeks")).as("months"), // 월별 데이터 배열
-                project()
-                        .and("_id").as("year") // 연도를 id에서 year로 변경
-                        .and("months").as("months"), // 월 데이터를 포함
-                sort(Sort.by(Sort.Direction.DESC, "year")) // 연도 내림차순 정렬
-        );
+        fields.forEach(field -> query.fields().include(field)); // 필요한 필드만 포함
 
-        // Aggregation 실행 및 결과 반환
-        AggregationResults<YearlyPostDto> result = mongoTemplate.aggregate(aggregation, "posts", YearlyPostDto.class);
-
-        return result.getMappedResults();
-    }
-
-    // ProjectionOperation 생성 메서드, 특정 필드만 포함할지 여부에 따라 반환값 설정
-    private ProjectionOperation createProjectionOperation(boolean includeBlogId) {
-
-        ProjectionOperation projectionOperation = project("_id", "category_id", "title", "like_count", "create_date", "thumbnail_image_path")
-                .and(aggregationOperationContext -> new Document("$substrCP", List.of("$content", 0, 300))) // 본문 내용 중 처음 300자만 포함
-                .as("content"); // content 필드로 이름을 지정
-
-        if (includeBlogId) {
-            projectionOperation = projectionOperation.and("blog_id").as("blog_id"); // blog_id 필드 포함 여부에 따른 처리
-        }
-
-        return projectionOperation;
+        return mongoTemplate.find(query, PostDocument.class); // MongoDB에서 조회 실행
     }
 
     // 필터링 및 페이지네이션된 포스트 목록 조회
@@ -219,15 +219,17 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
         return new PageImpl<>(postDocuments, pageable, total); // 페이지네이션된 결과 반환
     }
 
-    // Criteria와 Projection을 사용해 포스트를 조회하는 메서드
-    private List<PostDocument> fetchPostsWithProjection(Criteria criteria, Sort.Direction direction, int limit, List<String> fields) {
+    // ProjectionOperation 생성 메서드, 특정 필드만 포함할지 여부에 따라 반환값 설정
+    private ProjectionOperation createProjectionOperation(boolean includeBlogId) {
 
-        Query query = new Query(criteria)
-                .with(Sort.by(direction, "create_date")) // 작성일 기준으로 정렬
-                .limit(limit); // 조회할 포스트 수 제한
+        ProjectionOperation projectionOperation = project("_id", "category_id", "title", "like_count", "create_date", "thumbnail_image_path")
+                .and(aggregationOperationContext -> new Document("$substrCP", List.of("$content", 0, 300))) // 본문 내용 중 처음 300자만 포함
+                .as("content"); // content 필드로 이름을 지정
 
-        fields.forEach(field -> query.fields().include(field)); // 필요한 필드만 포함
+        if (includeBlogId) {
+            projectionOperation = projectionOperation.and("blog_id").as("blog_id"); // blog_id 필드 포함 여부에 따른 처리
+        }
 
-        return mongoTemplate.find(query, PostDocument.class); // MongoDB에서 조회 실행
+        return projectionOperation;
     }
 }
