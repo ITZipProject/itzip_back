@@ -1,9 +1,9 @@
 package darkoverload.itzip.feature.techinfo.domain;
 
 import darkoverload.itzip.feature.techinfo.controller.request.PostCreateRequest;
+import darkoverload.itzip.feature.techinfo.controller.response.PostBasicResponse;
 import darkoverload.itzip.feature.techinfo.controller.response.PostBlogPreviewResponse;
 import darkoverload.itzip.feature.techinfo.controller.response.PostDetailInfoResponse;
-import darkoverload.itzip.feature.techinfo.controller.response.PostListResponse;
 import darkoverload.itzip.feature.techinfo.controller.response.PostPreviewResponse;
 import darkoverload.itzip.feature.techinfo.model.document.PostDocument;
 import darkoverload.itzip.feature.user.domain.User;
@@ -25,19 +25,25 @@ import java.util.List;
 public class Post {
 
     /**
-     * 포스트의 고유 식별자.
-     */
-    private String id;
-
-    /**
      * 블로그 ID.
      */
     private Long blogId;
 
     /**
+     * 포스트의 고유 식별자.
+     */
+    private String id;
+
+    /**
      * 카테고리 ID.
      */
     private String categoryId;
+
+
+    /**
+     * 포스트 작성일.
+     */
+    private LocalDateTime createDate;
 
     /**
      * 포스트 제목.
@@ -50,26 +56,6 @@ public class Post {
     private String content;
 
     /**
-     * 포스트 조회수.
-     */
-    private Integer viewCount;
-
-    /**
-     * 좋아요 개수.
-     */
-    private Integer likeCount;
-
-    /**
-     * 포스트 공개 여부.
-     */
-    private Boolean isPublic;
-
-    /**
-     * 포스트 작성일.
-     */
-    private LocalDateTime createDate;
-
-    /**
      * 썸네일 이미지 경로.
      */
     private String thumbnailImagePath;
@@ -80,6 +66,21 @@ public class Post {
     private List<String> contentImagePaths;
 
     /**
+     * 좋아요 개수.
+     */
+    private Integer likeCount;
+
+    /**
+     * 포스트 조회수.
+     */
+    private Integer viewCount;
+
+    /**
+     * 포스트 공개 여부.
+     */
+    private Boolean isPublic;
+
+    /**
      * 포스트 생성 메서드.
      *
      * @param postCreateDto 포스트 생성 요청 객체
@@ -88,8 +89,8 @@ public class Post {
      */
     public static Post createPost(PostCreateRequest postCreateDto, Long blogId) {
         return Post.builder()
-                .categoryId(postCreateDto.getCategoryId())
                 .blogId(blogId)
+                .categoryId(postCreateDto.getCategoryId())
                 .title(postCreateDto.getTitle())
                 .content(postCreateDto.getContent())
                 .viewCount(0)
@@ -128,10 +129,10 @@ public class Post {
         return PostBlogPreviewResponse.builder()
                 .postId(this.id)
                 .categoryId(this.categoryId)
+                .createDate(this.createDate.toString())
                 .title(this.title)
                 .content(this.content)
                 .likeCount(this.likeCount)
-                .createDate(this.createDate.toString())
                 .thumbnailImagePath(this.thumbnailImagePath)
                 .build();
     }
@@ -148,11 +149,11 @@ public class Post {
                 .categoryId(this.categoryId)
                 .title(this.title)
                 .content(this.content)
-                .likeCount(this.likeCount)
-                .author(user.getNickname())
-                // .profileImagePath() // 추가적으로 프로필 이미지 경로를 설정할 수 있음
-                .createDate(this.createDate.toString())
                 .thumbnailImagePath(this.thumbnailImagePath)
+                .likeCount(this.likeCount)
+                .profileImagePath(user.getImageUrl())
+                .author(user.getNickname())
+                .createDate(this.createDate.toString())
                 .build();
     }
 
@@ -165,29 +166,30 @@ public class Post {
      */
     public PostDetailInfoResponse convertToPostDetailInfoResponse(User user, Boolean isLiked) {
         return PostDetailInfoResponse.builder()
-                .postId(this.id)
                 .blogId(this.blogId)
+                .email(user.getEmail())
+                .postId(this.id)
                 .categoryId(this.categoryId)
+                .profileImagePath(user.getImageUrl())
+                .author(user.getNickname())
+                .createDate(this.createDate.toString())
                 .title(this.title)
                 .content(this.content)
-                .viewCount(this.viewCount)
-                .likeCount(this.likeCount)
-                .createDate(this.createDate.toString())
-                .author(user.getNickname())
-                // .profileImagePath() // 추가적으로 프로필 이미지 경로를 설정할 수 있음
                 .thumbnailImagePath(this.thumbnailImagePath)
                 .contentImagePaths(this.contentImagePaths)
                 .isLiked(isLiked)
+                .likeCount(this.likeCount)
+                .viewCount(this.viewCount)
                 .build();
     }
 
     /**
-     * Post -> PostListResponse 변환 메서드.
+     * Post -> PostBasicResponse 변환 메서드.
      *
-     * @return 변환된 PostListResponse 객체
+     * @return 변환된 PostBasicResponse 객체
      */
-    public PostListResponse convertToPostListResponse() {
-        return PostListResponse.builder()
+    public PostBasicResponse convertToPostBasicResponse() {
+        return PostBasicResponse.builder()
                 .postId(this.id)
                 .title(this.title)
                 .createDate(this.createDate.toString())

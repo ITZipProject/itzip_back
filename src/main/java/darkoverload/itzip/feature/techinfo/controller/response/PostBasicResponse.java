@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostListResponse {
+public class PostBasicResponse {
 
     @Schema(description = "포스트의 고유 ID", example = "66e9a2ed666b0728ada7edbf")
     private String postId;

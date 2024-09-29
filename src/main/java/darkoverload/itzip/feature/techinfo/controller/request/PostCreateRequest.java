@@ -18,10 +18,6 @@ import java.util.List;
 @AllArgsConstructor
 public class PostCreateRequest {
 
-    @Schema(description = "포스트 작성자의 닉네임", example = "hyoseung")
-    @NotBlank(message = "닉네임은 필수 입력 항목입니다.")
-    private String nickname;
-
     @Schema(description = "포스트가 속한 카테고리 ID", example = "66ce18d84cb7d0b29ce602f5")
     @NotBlank(message = "카테고리 ID는 필수 입력 항목입니다.")
     private String categoryId;

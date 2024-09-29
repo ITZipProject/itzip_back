@@ -31,21 +31,21 @@ public class PostPreviewResponse {
     )
     private String content;
 
+    @Schema(
+            description = "포스트의 썸네일 이미지 경로",
+            example = "https://dy1vg9emkijkn.cloudfront.net/techinfo/19cc111f-c8f4-4d64-bd7a-129415e3ffa2.jpg"
+    )
+    private String thumbnailImagePath;
+
     @Schema(description = "포스트의 좋아요 수", example = "0")
     private Integer likeCount;
+
+    @Schema(description = "작성자 프로필 이미지 경로", example = "")
+    private String profileImagePath;
 
     @Schema(description = "포스트 작성자의 닉네임", example = "hyoseung")
     private String author;
 
     @Schema(description = "포스트의 생성 날짜", example = "2024-09-16T03:18:13.734")
     private String createDate;
-
-    // 작성자 프로필 이미지 경로
-//    String profileImagePath;
-
-    @Schema(
-            description = "포스트의 썸네일 이미지 경로",
-            example = "https://dy1vg9emkijkn.cloudfront.net/techinfo/19cc111f-c8f4-4d64-bd7a-129415e3ffa2.jpg"
-    )
-    private String thumbnailImagePath;
 }

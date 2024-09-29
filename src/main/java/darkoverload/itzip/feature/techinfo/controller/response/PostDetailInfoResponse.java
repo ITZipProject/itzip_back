@@ -16,14 +16,26 @@ import java.util.List;
 @AllArgsConstructor
 public class PostDetailInfoResponse {
 
-    @Schema(description = "포스트 고유 ID", example = "66e9a2ed666b0728ada7edbf")
-    private String postId;
-
     @Schema(description = "블로그 고유 ID", example = "1")
     private Long blogId;
 
+    @Schema(description = "작성자 고유 Email", example = "dev.hyoseung@gmail.com")
+    private String email;
+
+    @Schema(description = "포스트 고유 ID", example = "66e9a2ed666b0728ada7edbf")
+    private String postId;
+
     @Schema(description = "포스트가 속한 카테고리 ID", example = "66ce18d84cb7d0b29ce602f5")
     private String categoryId;
+
+     @Schema(description = "작성자 프로필 이미지 경로", example = "")
+     private String profileImagePath;
+
+    @Schema(description = "포스트 작성자의 닉네임", example = "hyoseung")
+    private String author;
+
+    @Schema(description = "포스트 생성일", example = "2024-09-16T03:18:13.734")
+    private String createDate;
 
     @Schema(description = "포스트 제목", example = "밤하늘 아래, 감정의 여정")
     private String title;
@@ -38,21 +50,6 @@ public class PostDetailInfoResponse {
                 """
     )
     private String content;
-
-    @Schema(description = "포스트 조회수", example = "4")
-    private Integer viewCount;
-
-    @Schema(description = "포스트 좋아요 수", example = "0")
-    private Integer likeCount;
-
-    @Schema(description = "포스트 생성일", example = "2024-09-16T03:18:13.734")
-    private String createDate;
-
-    @Schema(description = "포스트 작성자의 닉네임", example = "hyoseung")
-    private String author;
-
-    // @Schema(description = "작성자 프로필 이미지 경로", example = "")
-    // private String profileImagePath;
 
     @Schema(
             description = "포스트의 썸네일 이미지 경로",
@@ -73,4 +70,10 @@ public class PostDetailInfoResponse {
 
     @Schema(description = "좋아요 상태 여부", example = "false")
     private Boolean isLiked;
+
+    @Schema(description = "포스트 좋아요 수", example = "0")
+    private Integer likeCount;
+
+    @Schema(description = "포스트 조회수", example = "4")
+    private Integer viewCount;
 }
