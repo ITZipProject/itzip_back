@@ -1,10 +1,14 @@
 package darkoverload.itzip.feature.techinfo.domain;
 
+import darkoverload.itzip.feature.techinfo.controller.response.BlogBasicInfoResponse;
+import darkoverload.itzip.feature.techinfo.controller.response.BlogDetailInfoResponse;
+import darkoverload.itzip.feature.techinfo.dto.year.YearlyPostDto;
 import darkoverload.itzip.feature.techinfo.model.entity.BlogEntity;
-
-import jakarta.persistence.Column;
+import darkoverload.itzip.feature.user.domain.User;
 
 import lombok.*;
+
+import java.util.List;
 
 /**
  * Blog 클래스는 블로그 정보를 나타내는 도메인 객체.
@@ -22,30 +26,31 @@ public class Blog {
     private Long id;
 
     /**
+     * 블로그 소유자의 정보.
+     * {@link User} 객체와 연결되어 블로그의 소유자 정보를 나타냄.
+     */
+    private User user;
+
+    /**
      * 블로그 소개글.
      */
     @Setter
     private String intro;
 
     /**
-     * 회원 ID.
-     */
-    private Long userId;
-
-    /**
      * 블로그 공개 여부.
      */
     @Setter
-    @Column(name = "is_public")
     private Boolean isPublic;
 
     /**
      * 회원 가입 시 기본 블로그 생성.
      *
-     * @param userId 블로그 소유자의 회원 ID
+     * @param user 블로그 소유자의 회원 객체
      */
-    public Blog(Long userId) {
-        this.userId = userId;
+    public Blog(User user) {
+        this.id = user.getId();
+        this.user = user;
         this.intro = "";
         this.isPublic = true;
     }
@@ -57,10 +62,30 @@ public class Blog {
      */
     public BlogEntity convertToEntity() {
         return BlogEntity.builder()
-                .id(this.id)
+                .userId(this.id)
+                .userEntity(this.user.convertToEntity())
                 .intro(this.intro)
-                .userId(this.userId)
                 .isPublic(this.isPublic)
+                .build();
+    }
+
+    public BlogBasicInfoResponse convertToBlogBasicInfoResponse() {
+        return BlogBasicInfoResponse.builder()
+                .profileImagePath(this.user.getImageUrl())
+                .nickname(this.user.getNickname())
+                .email(this.user.getEmail())
+                .intro(this.intro)
+                .build();
+    }
+
+    public BlogDetailInfoResponse convertToBlogDetailInfoResponse(List<YearlyPostDto> yearlyPostsCount) {
+        return BlogDetailInfoResponse.builder()
+                .blogId(this.getId())
+                .profileImagePath(this.user.getImageUrl())
+                .nickname(this.user.getNickname())
+                .email(this.user.getEmail())
+                .intro(this.intro)
+                .postCountByYear(yearlyPostsCount)
                 .build();
     }
 }
