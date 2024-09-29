@@ -13,15 +13,6 @@ import org.springframework.data.domain.Pageable;
 public interface CustomCommentRepository {
 
     /**
-     * 주어진 포스트 ID에 해당하는 댓글 목록을 페이지네이션하여 조회.
-     *
-     * @param postId 포스트 ID
-     * @param pageable 페이지네이션 정보
-     * @return 페이지네이션된 댓글 목록
-     */
-    Page<CommentDocument> findCommentsByPostId(ObjectId postId, Pageable pageable);
-
-    /**
      * 주어진 댓글 ID에 해당하는 댓글 내용을 업데이트.
      *
      * @param commentId 댓글 ID
@@ -38,4 +29,13 @@ public interface CustomCommentRepository {
      * @return 업데이트 성공 여부
      */
     boolean updateCommentVisibility(ObjectId commentId, boolean isPublic);
+
+    /**
+     * 주어진 포스트 ID에 해당하는 댓글 목록을 페이지네이션하여 조회.
+     *
+     * @param postId 포스트 ID
+     * @param pageable 페이지네이션 정보
+     * @return 페이지네이션된 댓글 목록
+     */
+    Page<CommentDocument> findCommentsByPostId(ObjectId postId, Pageable pageable);
 }
