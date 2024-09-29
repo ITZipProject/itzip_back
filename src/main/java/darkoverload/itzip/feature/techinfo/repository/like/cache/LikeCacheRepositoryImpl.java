@@ -17,9 +17,11 @@ import java.util.concurrent.TimeUnit;
 public class LikeCacheRepositoryImpl implements LikeCacheRepository {
     private final RedisTemplate<String, Object> redisTemplate; // Redis와 상호작용하는 템플릿
 
-    // Redis 키를 생성하는 메서드
-    private String buildRedisKey(Long userId, String postId) {
-        return "post:" + postId + ":user:" + userId + ":like"; // "post:포스트ID:user:유저ID:like" 형식의 키 생성
+    // 캐시에 특정 유저의 포스트에 대한 좋아요 상태를 저장
+    @Override
+    public void setLikeStatus(Long userId, String postId, boolean isLiked, long ttl) {
+        String redisKey = buildRedisKey(userId, postId); // Redis 키 생성
+        redisTemplate.opsForValue().set(redisKey, String.valueOf(isLiked), ttl, TimeUnit.MINUTES); // 좋아요 상태와 TTL 설정
     }
 
     // 캐시에서 특정 유저의 포스트에 대한 좋아요 상태를 조회
@@ -30,13 +32,6 @@ public class LikeCacheRepositoryImpl implements LikeCacheRepository {
 
         // 문자열을 Boolean으로 변환, null 처리 포함
         return isLikedString != null ? Boolean.valueOf(isLikedString) : null;
-    }
-
-    // 캐시에 특정 유저의 포스트에 대한 좋아요 상태를 저장
-    @Override
-    public void setLikeStatus(Long userId, String postId, boolean isLiked, long ttl) {
-        String redisKey = buildRedisKey(userId, postId); // Redis 키 생성
-        redisTemplate.opsForValue().set(redisKey, String.valueOf(isLiked), ttl, TimeUnit.MINUTES); // 좋아요 상태와 TTL 설정
     }
 
     // 캐시에서 모든 좋아요 상태를 조회
@@ -67,5 +62,10 @@ public class LikeCacheRepositoryImpl implements LikeCacheRepository {
         }
 
         return likeStatuses; // 좋아요 상태 리스트 반환
+    }
+
+    // Redis 키를 생성하는 메서드
+    private String buildRedisKey(Long userId, String postId) {
+        return "post:" + postId + ":user:" + userId + ":like"; // "post:포스트ID:user:유저ID:like" 형식의 키 생성
     }
 }
