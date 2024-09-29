@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.techinfo.service.sync;
+package darkoverload.itzip.feature.techinfo.service.sync.impl;
 
 import darkoverload.itzip.feature.techinfo.domain.Like;
 import darkoverload.itzip.feature.techinfo.dto.like.LikeStatusDto;
@@ -6,6 +6,7 @@ import darkoverload.itzip.feature.techinfo.repository.like.LikeRepository;
 import darkoverload.itzip.feature.techinfo.repository.like.cache.LikeCacheRepository;
 import darkoverload.itzip.feature.techinfo.repository.post.PostRepository;
 
+import darkoverload.itzip.feature.techinfo.service.sync.SyncService;
 import lombok.RequiredArgsConstructor;
 
 import org.bson.types.ObjectId;
@@ -20,13 +21,14 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class SyncService {
+public class SyncServiceImpl implements SyncService {
 
     private final PostRepository postRepository;
     private final LikeRepository likeRepository;
     private final LikeCacheRepository likeCacheRepository;
 
-    @Scheduled(fixedRate = 60000) // 60초마다 캐시된 좋아요 상태를 MongoDB로 동기화
+    @Scheduled(cron = "${TECHINFO_LIKE_SCHEDULER_CRON}") // 60초마다 캐시된 좋아요 상태를 MongoDB로 동기화
+    @Override
     public void persistLikesToMongo() {
         List<LikeStatusDto> cachedLikes = likeCacheRepository.getAllLikeStatuses(); // 캐시에서 모든 좋아요 상태 조회
 
