@@ -9,8 +9,8 @@ import darkoverload.itzip.feature.user.domain.User;
 import java.util.Optional;
 
 /**
- * BlogService 인터페이스는 블로그 관련 비즈니스 로직을 정의합니다.
- * 블로그 생성, 업데이트, 숨김 처리, 블로그 정보 조회와 같은 주요 기능들을 제공합니다.
+ * 블로그 관련 비즈니스 로직을 처리하는 서비스 인터페이스.
+ * 블로그 생성, 업데이트, 숨김 처리, 블로그 정보 조회와 같은 주요 기능들을 제공함.
  */
 public interface BlogService {
 
