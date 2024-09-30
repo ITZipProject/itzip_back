@@ -1,9 +1,11 @@
 package darkoverload.itzip.feature.techinfo.service.like.impl;
 
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.techinfo.repository.like.LikeRepository;
 import darkoverload.itzip.feature.techinfo.repository.like.cache.LikeCacheRepository;
 import darkoverload.itzip.feature.techinfo.service.like.LikeService;
 
+import darkoverload.itzip.feature.techinfo.service.shared.SharedService;
 import lombok.RequiredArgsConstructor;
 
 import org.bson.types.ObjectId;
@@ -16,19 +18,17 @@ public class LikeServiceImpl implements LikeService {
 
     private final LikeRepository likeRepository;
     private final LikeCacheRepository likeCacheRepository;
+    private final SharedService sharedService;
 
     @Override
     @Transactional
-    public boolean toggleLike(Long userId, String postId) {
+    public boolean toggleLike(CustomUserDetails userDetails, String postId) {
+        Long userId = sharedService.getUserByEmail(userDetails.getEmail()).getId();
+
         boolean isLiked = isLiked(userId, postId); // 현재 상태 확인
+        likeCacheRepository.setLikeStatus(userId, postId, !isLiked, 90); // 상태를 반전하여 설정
 
-        if (isLiked) {
-            likeCacheRepository.setLikeStatus(userId, postId, false, 90); // 좋아요 취소
-            return false;
-        }
-
-        likeCacheRepository.setLikeStatus(userId, postId, true, 90); // 좋아요 추가
-        return true;
+        return !isLiked;
     }
 
     @Override
