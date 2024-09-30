@@ -3,20 +3,20 @@ package darkoverload.itzip.feature.techinfo.repository.post.custom;
 import darkoverload.itzip.feature.techinfo.dto.year.YearlyPostDto;
 import darkoverload.itzip.feature.techinfo.model.document.PostDocument;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 
-import org.bson.Document;
-import org.bson.types.ObjectId;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.*;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.mongodb.core.query.Query;
+import org.bson.types.ObjectId;
+import org.bson.Document;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -112,8 +112,6 @@ public class CustomPostRepositoryImpl implements CustomPostRepository {
 
         return executeQueryWithCriteria(criteria, pageable, false); // 실행
     }
-
-
 
     // 연간 포스트 데이터를 조회하는 메서드
     @Override

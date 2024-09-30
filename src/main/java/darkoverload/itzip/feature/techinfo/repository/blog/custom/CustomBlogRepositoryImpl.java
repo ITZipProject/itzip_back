@@ -1,12 +1,12 @@
 package darkoverload.itzip.feature.techinfo.repository.blog.custom;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import darkoverload.itzip.feature.techinfo.model.entity.BlogEntity;
+
+import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.stereotype.Repository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.util.Optional;
 
@@ -18,7 +18,6 @@ public class CustomBlogRepositoryImpl implements CustomBlogRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    // 블로그 소유자의 ID와 공개 여부를 기준으로 BlogEntity 조회
     @Override
     public Optional<BlogEntity> findByIdAndIsPublic(Long Id) {
         BlogEntity result = queryFactory

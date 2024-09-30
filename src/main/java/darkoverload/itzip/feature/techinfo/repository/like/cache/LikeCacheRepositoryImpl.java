@@ -4,18 +4,19 @@ import darkoverload.itzip.feature.techinfo.dto.like.LikeStatusDto;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.redis.core.RedisTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
+import java.util.List;
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 @Repository
 @RequiredArgsConstructor
 public class LikeCacheRepositoryImpl implements LikeCacheRepository {
-    private final RedisTemplate<String, Object> redisTemplate; // Redis와 상호작용하는 템플릿
+
+    private final RedisTemplate<String, Object> redisTemplate;
 
     // 캐시에 특정 유저의 포스트에 대한 좋아요 상태를 저장
     @Override
