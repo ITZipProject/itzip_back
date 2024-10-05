@@ -22,6 +22,9 @@ public class MypageServiceImpl implements MypageService {
     UserRepository userRepository;
     private final CloudStorageService storageService;
 
+    /**
+     * 닉네임 중복 체크
+     */
     @Override
     public ResponseEntity<String> checkDuplicateNickname(String nickname) {
         // 닉네임을 입력하지 않은 경우
@@ -30,13 +33,16 @@ public class MypageServiceImpl implements MypageService {
         }
 
         // 사용 중인 닉네임일 경우
-        if (userService.findByNickname(nickname).isPresent()) {
+        if (userService.findUserByNickname(nickname).isPresent()) {
             throw new RestApiException(CommonExceptionCode.EXIST_NICKNAME_ERROR);
         }
 
         return ResponseEntity.ok("사용 가능한 닉네임입니다.");
     }
 
+    /**
+     * 닉네임 변경
+     */
     @Override
     public ResponseEntity<String> changeNickname(CustomUserDetails userDetails, ChangeNicknameRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -47,12 +53,12 @@ public class MypageServiceImpl implements MypageService {
         String nickname = request.getNickname();
 
         // 사용 중인 닉네임일 경우
-        if (userService.findByNickname(nickname).isPresent()) {
+        if (userService.findUserByNickname(nickname).isPresent()) {
             throw new RestApiException(CommonExceptionCode.EXIST_NICKNAME_ERROR);
         }
 
         // 유저 데이터를 가져와 닉네임 변경
-        User user = userService.findByEmail(userDetails.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
+        User user = userService.getUserByEmail(userDetails.getEmail());
 
         user.setNickname(nickname);
         userRepository.save(user.convertToEntity());
@@ -60,6 +66,9 @@ public class MypageServiceImpl implements MypageService {
         return ResponseEntity.ok("닉네임이 변경되었습니다.");
     }
 
+    /**
+     * 비밀번호 변경
+     */
     @Override
     public ResponseEntity<String> changePassword(CustomUserDetails userDetails, ChangePasswordRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -72,7 +81,7 @@ public class MypageServiceImpl implements MypageService {
         String encryptPassword = userService.encryptPassword(password);
 
         // 로그인 유저 데이터를 가져와 비밀번호 변경
-        User user = userService.findByEmail(userDetails.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
+        User user = userService.getUserByEmail(userDetails.getEmail());
 
         user.setPassword(encryptPassword);
         userRepository.save(user.convertToEntity());
@@ -80,6 +89,9 @@ public class MypageServiceImpl implements MypageService {
         return ResponseEntity.ok("비밀번호가 변경되었습니다.");
     }
 
+    /**
+     * 프로필 이미지 변경
+     */
     @Override
     public ResponseEntity<String> changeImageUrl(CustomUserDetails userDetails, MultipartFile file) {
         // 파일 빈값 체크
@@ -93,7 +105,7 @@ public class MypageServiceImpl implements MypageService {
         // 이미지 업로드
         Image image = storageService.imageUpload(file, profileDir);
 
-        User user = userService.findByEmail(userDetails.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
+        User user = userService.getUserByEmail(userDetails.getEmail());
 
         // 기존 프로필 이미지 삭제
         if (!user.getImageUrl().isEmpty()) {

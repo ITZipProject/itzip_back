@@ -31,13 +31,15 @@ public interface UserService {
 
     ResponseEntity<String> checkDuplicateNickname(String nickname);
 
+    User getUserById(Long id);
+
+    User getUserByEmail(String email);
+    Optional<User> findUserByEmail(String email);
+
+    User getUserByNickname(String nickname);
+    Optional<User> findUserByNickname(String nickname);
+
     String getUniqueNickname();
-
-    Optional<User> findByEmail(String email);
-
-    User getById(Long id);
-
-    Optional<User> findByNickname(String nickname);
 
     String encryptPassword(String password);
 }

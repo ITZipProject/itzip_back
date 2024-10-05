@@ -4,6 +4,7 @@ import darkoverload.itzip.feature.jwt.domain.Token;
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.jwt.service.TokenService;
 import darkoverload.itzip.feature.jwt.util.JwtTokenizer;
+import darkoverload.itzip.feature.techinfo.service.blog.BlogService;
 import darkoverload.itzip.feature.user.controller.request.*;
 import darkoverload.itzip.feature.user.controller.response.*;
 import darkoverload.itzip.feature.user.domain.User;
@@ -38,13 +39,10 @@ public class UserServiceImpl implements UserService {
     private final VerificationService verificationService;
     private final EmailService emailService;
     private final TokenService tokenService;
+    private final BlogService blogService;
 
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenizer jwtTokenizer;
-
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email).map(UserEntity::convertToDomain);
-    }
 
     /**
      * 로그인 유저 정보 반환
@@ -52,9 +50,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<UserInfoResponse> getUserInfo(CustomUserDetails userDetails) {
         // 로그인한 유저의 이메일과 일치하는 유저 데이터 가져오기
-        User user = findByEmail(userDetails.getEmail()).orElseThrow(
-                () -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)
-        );
+        User user = getUserByEmail(userDetails.getEmail());
 
         // 이메일, 닉네임, 프로필 이미지 url 반환
         UserInfoResponse userInfoResponse = UserInfoResponse.builder()
@@ -77,7 +73,7 @@ public class UserServiceImpl implements UserService {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
         }
 
-        User user = findByEmail(request.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_MATCH_PASSWORD));
+        User user = findUserByEmail(request.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_MATCH_PASSWORD));
 
         // 비밀번호 일치여부 체크
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
@@ -156,7 +152,7 @@ public class UserServiceImpl implements UserService {
 
         // 유저 정보 가져오기
         Long userId = Long.valueOf((Integer) claims.get("userId"));
-        User user = getById(userId);
+        User user = getUserById(userId);
         Authority authority = Authority.valueOf(claims.get("authority", String.class));
 
         // access token 생성
@@ -187,10 +183,11 @@ public class UserServiceImpl implements UserService {
     /**
      * 회원가입
      */
+    @Override
     @Transactional
     public ResponseEntity<String> save(UserJoinRequest userJoinDto, BindingResult bindingResult) {
         // 이메일 중복 체크
-        if (findByEmail(userJoinDto.getEmail()).isPresent()) {
+        if (findUserByEmail(userJoinDto.getEmail()).isPresent()) {
             throw new RestApiException(CommonExceptionCode.EXIST_EMAIL_ERROR);
         }
 
@@ -208,10 +205,15 @@ public class UserServiceImpl implements UserService {
         user.setNickname(getUniqueNickname());
 
         userRepository.save(user.convertToEntity());
+
+        blogService.createBlog(user);
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
 
-
+    /**
+     * 이메일 인증번호 전송
+     */
+    @Override
     @Transactional(readOnly = true)
     public ResponseEntity<String> sendAuthEmail(AuthEmailSendRequest emailSendRequest, BindingResult bindingResult) {
         // 필드 에러 확인
@@ -237,7 +239,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 인증번호 검증
+     * 이메일 인증번호 검증
      */
     @Override
     public ResponseEntity<String> checkAuthEmail(String email, String authCode) {
@@ -275,6 +277,9 @@ public class UserServiceImpl implements UserService {
         return ResponseEntity.ok("사용 가능한 이메일입니다.");
     }
 
+    /**
+     * 중복 닉네임 체크
+     */
     @Override
     public ResponseEntity<String> checkDuplicateNickname(String nickname) {
         // 닉네임을 입력하지 않은 경우
@@ -283,10 +288,56 @@ public class UserServiceImpl implements UserService {
         }
 
         // 사용 중인 닉네임일 경우
-        if (findByNickname(nickname).isPresent()) {
+        if (findUserByNickname(nickname).isPresent()) {
             throw new RestApiException(CommonExceptionCode.EXIST_NICKNAME_ERROR);
         }
         return ResponseEntity.ok("사용 가능한 닉네임입니다.");
+    }
+
+    /**
+     * userId로 user 데이터를 조회, 없을 경우 에러 반환
+     */
+    @Override
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(()
+                -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)
+        ).convertToDomain();
+    }
+
+    /**
+     * 이메일로 user 데이터를 조회, 없을 경우 에러 반환
+     */
+    @Override
+    public User getUserByEmail(String email) {
+        return findUserByEmail(email).orElseThrow(()
+                -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)
+        );
+    }
+    /**
+     * 이메일로 user 데이터를 조회
+     */
+
+    @Override
+    public Optional<User> findUserByEmail(String email) {
+        return userRepository.findByEmail(email).map(UserEntity::convertToDomain);
+    }
+
+    /**
+     * 닉네임으로 user 데이터를 조회, 없을 경우 에러 반환
+     */
+    @Override
+    public User getUserByNickname(String nickname) {
+        return findUserByNickname(nickname).orElseThrow(()
+                -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)
+        );
+    }
+
+    /**
+     * 닉네임으로 user 데이터를 조회
+     */
+    @Override
+    public Optional<User> findUserByNickname(String nickname) {
+        return userRepository.findByNickname(nickname).map(UserEntity::convertToDomain);
     }
 
     /**
@@ -294,36 +345,14 @@ public class UserServiceImpl implements UserService {
      *
      * @return unique random nickname
      */
+    @Override
     public String getUniqueNickname() {
         String nickname;
         do {
             nickname = randomNickname.generate();
-        } while (findByNickname(nickname).isPresent());
+        } while (findUserByNickname(nickname).isPresent());
 
         return nickname;
-    }
-
-    /**
-     * userId로 user 데이터를 가져오는 메소드
-     *
-     * @param id user id
-     * @return User 도메인
-     */
-    public User getById(Long id) {
-        return userRepository.findById(id).orElseThrow(()
-                -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)
-        ).convertToDomain();
-    }
-
-    /**
-     * 닉네임으로 user 데이터를 가져오는 메소드
-     *
-     * @param nickname user nickname
-     * @return Optional User 도메인
-     */
-    @Transactional(readOnly = true)
-    public Optional<User> findByNickname(String nickname) {
-        return userRepository.findByNickname(nickname).map(UserEntity::convertToDomain);
     }
 
     /**
@@ -332,6 +361,7 @@ public class UserServiceImpl implements UserService {
      * @param password 비밀번호
      * @return 암호화된 비밀번호
      */
+    @Override
     public String encryptPassword(String password) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(password);
