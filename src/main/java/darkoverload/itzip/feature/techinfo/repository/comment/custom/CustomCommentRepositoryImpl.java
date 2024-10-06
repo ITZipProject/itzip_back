@@ -22,8 +22,8 @@ public class CustomCommentRepositoryImpl implements CustomCommentRepository {
 
     // 댓글 내용을 업데이트
     @Override
-    public boolean updateComment(ObjectId commentId, String content) {
-        Query query = new Query(Criteria.where("_id").is(commentId)); // 댓글 ID로 필터링
+    public boolean updateComment(ObjectId commentId, Long userId, String content) {
+        Query query = new Query(Criteria.where("_id").is(commentId).and("user_id").is(userId)); // 댓글 ID와 사용자 ID로 필터
 
         Update update = new Update().set("content", content); // 댓글 내용 업데이트
 
@@ -34,8 +34,8 @@ public class CustomCommentRepositoryImpl implements CustomCommentRepository {
 
     // 댓글 공개 여부를 업데이트
     @Override
-    public boolean updateCommentVisibility(ObjectId commentId, boolean isPublic) {
-        Query query = new Query(Criteria.where("_id").is(commentId)); // 댓글 ID로 필터링
+    public boolean updateCommentVisibility(ObjectId commentId, Long userId, boolean isPublic) {
+        Query query = new Query(Criteria.where("_id").is(commentId).and("user_id").is(userId)); // 댓글 ID와 사용자 ID로 필터
 
         Update update = new Update().set("is_public", isPublic); // 공개 여부 업데이트
 

@@ -19,16 +19,17 @@ public interface CustomCommentRepository {
      * @param content 새로운 댓글 내용
      * @return 업데이트 성공 여부
      */
-    boolean updateComment(ObjectId commentId, String content);
+    boolean updateComment(ObjectId commentId, Long userId, String content);
 
     /**
-     * 주어진 댓글 ID에 해당하는 댓글의 공개 여부를 변경.
+     * 주어진 댓글 ID와 사용자 ID에 해당하는 댓글의 공개 여부를 변경합니다.
      *
      * @param commentId 댓글 ID
+     * @param userId 사용자 ID
      * @param isPublic 공개 여부 (true: 공개, false: 비공개)
      * @return 업데이트 성공 여부
      */
-    boolean updateCommentVisibility(ObjectId commentId, boolean isPublic);
+    boolean updateCommentVisibility(ObjectId commentId, Long userId, boolean isPublic);
 
     /**
      * 주어진 포스트 ID에 해당하는 댓글 목록을 페이지네이션하여 조회.
