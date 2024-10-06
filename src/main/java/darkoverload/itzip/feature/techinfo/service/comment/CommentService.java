@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.techinfo.service.comment;
 
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.techinfo.controller.request.CommentCreateRequest;
 import darkoverload.itzip.feature.techinfo.controller.request.CommentUpdateRequest;
 import darkoverload.itzip.feature.techinfo.controller.response.CommentResponse;
@@ -23,16 +24,17 @@ public interface CommentService {
     /**
      * 기존 댓글을 수정하는 메서드.
      *
-     * @param request 댓글 수정 요청을 담은 객체
+     * @param userDetails 요청을 보낸 사용자의 인증 정보
+     * @param request 수정할 댓글 내용을 담은 요청 객체
      */
-    void modifyComment(CommentUpdateRequest request);
+    void modifyComment(CustomUserDetails userDetails, CommentUpdateRequest request);
 
     /**
      * 특정 댓글을 숨김 처리하는 메서드. 댓글은 삭제되지 않고 비공개 상태로 전환됨.
      *
      * @param commentId 숨길 댓글의 고유 ID
      */
-    void hideComment(String commentId);
+    void hideComment(CustomUserDetails userDetails, String commentId);
 
     /**
      * 특정 게시글에 속한 댓글 목록을 조회하는 메서드. 페이지네이션을 지원함.
