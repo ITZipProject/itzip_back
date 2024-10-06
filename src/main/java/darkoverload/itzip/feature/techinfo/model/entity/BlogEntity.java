@@ -47,7 +47,7 @@ public class BlogEntity extends AuditingFields {
      * 블로그의 공개 여부.
      * 블로그가 공개 상태인지 비공개 상태인지를 나타냄. (true: 공개, false: 비공개)
      */
-    @Column(name = "is_public")
+    @Column(name = "is_public", nullable = false)
     private Boolean isPublic;
 
     /**
