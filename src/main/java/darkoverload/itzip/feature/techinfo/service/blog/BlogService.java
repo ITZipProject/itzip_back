@@ -30,11 +30,11 @@ public interface BlogService {
     void updateBlog(CustomUserDetails userDetails, BlogUpdateRequest blogUpdateDto);
 
     /**
-     * 현재 사용자의 블로그를 숨김 처리(비공개 상태로 전환)한다.
+     * 주어진 블로그 ID를 사용하여 블로그를 숨김 처리(비공개 상태로 전환)한다.
      *
-     * @param customUserDetails 숨김 처리를 요청한 사용자의 인증 정보
+     * @param blogId 숨김 처리를 요청한 블로그의 ID
      */
-    void setBlogHiddenStatus(CustomUserDetails customUserDetails);
+    void setBlogHiddenStatus(Long blogId);
 
     /**
      * 블로그의 기본 정보를 조회한다.
