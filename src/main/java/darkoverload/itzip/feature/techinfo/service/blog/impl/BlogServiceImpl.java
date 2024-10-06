@@ -47,9 +47,8 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     @Transactional
-    public void setBlogHiddenStatus(CustomUserDetails userDetails) {
-        Long userId = sharedService.getUserByEmail(userDetails.getEmail()).getId();
-        Blog blog = sharedService.getBlogById(userId);
+    public void setBlogHiddenStatus(Long blogId) {
+        Blog blog = sharedService.getBlogById(blogId);
 
         blog.setIsPublic(false); // 블로그 비공개 설정
         blogRepository.save(blog.convertToEntity());
