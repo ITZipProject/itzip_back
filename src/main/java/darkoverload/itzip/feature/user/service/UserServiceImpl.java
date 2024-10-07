@@ -290,6 +290,20 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 임시 회원 탈퇴
+     */
+    @Override
+    public ResponseEntity<String> tempUserOut(CustomUserDetails userDetails, HttpServletRequest request, HttpServletResponse response) {
+        logout(request, response);
+
+        User user = findByEmail(userDetails.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
+
+        userRepository.delete(user.convertToEntity());
+
+        return  ResponseEntity.ok("정상적으로 탈퇴 되었습니다.");
+    }
+
+    /**
      * 중복되지 않은 랜덤 닉네임 생성
      *
      * @return unique random nickname

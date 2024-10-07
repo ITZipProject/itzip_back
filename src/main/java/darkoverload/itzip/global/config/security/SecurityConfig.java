@@ -46,6 +46,8 @@ public class SecurityConfig {
             //quiz 임시 허용
             "/cs-quizzes/**",
             "/cs-quiz/**",
+            //알고리즘 임시허용
+            "/algorithm/**",
 
             // 기술 정보 임시 허용
             "/tech-info/**",

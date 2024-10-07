@@ -18,6 +18,9 @@ public class SolvedacUser {
     private Integer rating;
     private Integer rank;
     private LocalDateTime updateTime;
+    private String profileImageUrl;
+    private Integer solvedClass;
+    private Integer tier;
 
     public SolvedacUserEntity convertToEntity() {
         return SolvedacUserEntity.builder()
@@ -26,6 +29,9 @@ public class SolvedacUser {
                 .rating(this.rating)
                 .rank(this.rank)
                 .updateTime(this.updateTime)
+                .profileImageUrl(this.profileImageUrl)
+                .solvedClass(this.solvedClass)
+                .tier(this.tier)
                 .build();
     }
 }
