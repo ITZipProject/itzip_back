@@ -67,7 +67,7 @@ public class UserController {
     )
     @DeleteMapping("/logout")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
-    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
         return userService.logout(request, response);
     }
 
@@ -95,7 +95,7 @@ public class UserController {
     )
     @ResponseCodeAnnotation(CommonResponseCode.CREATED)
     @ExceptionCodeAnnotations(CommonExceptionCode.FILED_ERROR)
-    public ResponseEntity<String> join(@RequestBody @Valid UserJoinRequest request, BindingResult bindingResult) {
+    public String join(@RequestBody @Valid UserJoinRequest request, BindingResult bindingResult) {
         return userService.save(request, bindingResult);
     }
 
@@ -109,7 +109,7 @@ public class UserController {
     @PostMapping("/authEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.FILED_ERROR)
-    public ResponseEntity<String> sendAuthEmail(@RequestBody @Valid AuthEmailSendRequest request, BindingResult bindingResult) {
+    public String sendAuthEmail(@RequestBody @Valid AuthEmailSendRequest request, BindingResult bindingResult) {
         return userService.sendAuthEmail(request, bindingResult);
     }
 
@@ -123,7 +123,7 @@ public class UserController {
     @GetMapping("/authEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_MATCH_AUTH_CODE})
-    public ResponseEntity<String> checkAuthEmail(
+    public String checkAuthEmail(
             @Parameter(description = "이메일") @RequestParam(required = false) String email,
             @Parameter(description = "이메일 인증 코드") @RequestParam(required = false) String authCode
     ) {
@@ -140,7 +140,7 @@ public class UserController {
     @GetMapping("/checkDuplicateEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR})
-    public ResponseEntity<String> checkDuplicateEmail(
+    public String checkDuplicateEmail(
             @Parameter(description = "이메일") @RequestParam(required = false) String email
     ) {
         return userService.checkDuplicateEmail(email);
@@ -156,7 +156,7 @@ public class UserController {
     @DeleteMapping("/out")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_FOUND_USER})
-    public ResponseEntity<String> tempUserOut(
+    public String tempUserOut(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             HttpServletRequest request,
             HttpServletResponse response
