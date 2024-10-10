@@ -4,9 +4,8 @@ import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.techinfo.controller.request.BlogUpdateRequest;
 import darkoverload.itzip.feature.techinfo.controller.response.BlogBasicInfoResponse;
 import darkoverload.itzip.feature.techinfo.controller.response.BlogDetailInfoResponse;
+import darkoverload.itzip.feature.techinfo.domain.Blog;
 import darkoverload.itzip.feature.user.domain.User;
-
-import java.util.Optional;
 
 /**
  * 블로그 관련 비즈니스 로직을 처리하는 서비스 인터페이스.
@@ -37,6 +36,14 @@ public interface BlogService {
     void setBlogHiddenStatus(Long blogId);
 
     /**
+     * 블로그 ID를 이용해 해당 블로그의 도메인 객체를 조회
+     *
+     * @param id 조회할 블로그의 고유 ID
+     * @return 조회된 블로그 도메인 객체
+     */
+    Blog getBlogById(Long id);
+
+    /**
      * 블로그의 기본 정보를 조회한다.
      *
      * @param blogId 조회할 블로그의 ID
@@ -49,8 +56,8 @@ public interface BlogService {
      * 닉네임이 제공되지 않은 경우 기본 정보를 반환할 수 있다.
      *
      * @param customUserDetails 세부 정보를 요청한 사용자의 인증 정보
-     * @param nickname 조회할 블로그의 닉네임 (Optional)
+     * @param nickname 조회할 블로그의 닉네임
      * @return 블로그 세부 정보를 담은 BlogDetailInfoResponse 객체
      */
-    BlogDetailInfoResponse getDetailBlogInfo(CustomUserDetails customUserDetails, Optional<String> nickname);
+    BlogDetailInfoResponse getDetailBlogInfo(CustomUserDetails customUserDetails, String nickname);
 }
