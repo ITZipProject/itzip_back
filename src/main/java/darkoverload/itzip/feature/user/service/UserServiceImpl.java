@@ -189,6 +189,11 @@ public class UserServiceImpl implements UserService {
      */
     @Transactional
     public ResponseEntity<String> save(UserJoinRequest userJoinDto, BindingResult bindingResult) {
+        // 필드 에러 확인
+        if (bindingResult.hasErrors()) {
+            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
+        }
+
         // 이메일 중복 체크
         if (findByEmail(userJoinDto.getEmail()).isPresent()) {
             throw new RestApiException(CommonExceptionCode.EXIST_EMAIL_ERROR);
@@ -198,6 +203,9 @@ public class UserServiceImpl implements UserService {
         if (!verificationService.verifyCode(userJoinDto.getEmail(), userJoinDto.getAuthCode())) {
             throw new RestApiException(CommonExceptionCode.NOT_MATCH_AUTH_CODE);
         }
+
+        // 저장된 인증번호 삭제
+        verificationService.deleteCode(userJoinDto.getEmail());
 
         User user = userJoinDto.toDomain();
 
