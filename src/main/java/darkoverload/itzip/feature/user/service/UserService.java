@@ -16,19 +16,19 @@ public interface UserService {
 
     ResponseEntity<UserLoginResponse> login(UserLoginRequest userLoginRequest, HttpServletResponse httpServletResponse);
 
-    ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response);
+    String logout(HttpServletRequest request, HttpServletResponse response);
 
     ResponseEntity<UserLoginResponse> refreshToken(HttpServletRequest request, HttpServletResponse response);
 
-    ResponseEntity<String> save(UserJoinRequest userJoinRequest);
+    String save(UserJoinRequest userJoinRequest);
 
-    ResponseEntity<String> sendAuthEmail(AuthEmailSendRequest emailSendRequest);
+    String sendAuthEmail(AuthEmailSendRequest emailSendRequest);
 
-    ResponseEntity<String> checkAuthEmail(String email, String authCode);
+    String checkAuthEmail(String email, String authCode);
 
-    ResponseEntity<String> checkDuplicateEmail(String email);
+    String checkDuplicateEmail(String email);
 
-    ResponseEntity<String> checkDuplicateNickname(String nickname);
+    String checkDuplicateNickname(String nickname);
 
     String getUniqueNickname();
 
@@ -40,5 +40,5 @@ public interface UserService {
 
     String encryptPassword(String password);
 
-    ResponseEntity<String> tempUserOut(CustomUserDetails userDetails, HttpServletRequest request, HttpServletResponse response);
+    String tempUserOut(CustomUserDetails userDetails, HttpServletRequest request, HttpServletResponse response);
 }

@@ -25,20 +25,20 @@ public class MypageServiceImpl implements MypageService {
      * 닉네임 중복 체크
      */
     @Override
-    public ResponseEntity<String> checkDuplicateNickname(String nickname) {
+    public String checkDuplicateNickname(String nickname) {
         // 사용 중인 닉네임일 경우
         if (userService.findByNickname(nickname).isPresent()) {
             throw new RestApiException(CommonExceptionCode.EXIST_NICKNAME_ERROR);
         }
 
-        return ResponseEntity.ok("사용 가능한 닉네임입니다.");
+        return "사용 가능한 닉네임입니다.";
     }
 
     /**
      * 닉네임 변경
      */
     @Override
-    public ResponseEntity<String> changeNickname(CustomUserDetails userDetails, ChangeNicknameRequest changeNicknameRequest) {
+    public String changeNickname(CustomUserDetails userDetails, ChangeNicknameRequest changeNicknameRequest) {
         // 요청 닉네임
         String nickname = changeNicknameRequest.getNickname();
 
@@ -53,14 +53,14 @@ public class MypageServiceImpl implements MypageService {
         user.setNickname(nickname);
         userRepository.save(user.convertToEntity());
 
-        return ResponseEntity.ok("닉네임이 변경되었습니다.");
+        return "닉네임이 변경되었습니다.";
     }
 
     /**
      * 비밀번호 변경
      */
     @Override
-    public ResponseEntity<String> changePassword(CustomUserDetails userDetails, ChangePasswordRequest changePasswordRequest) {
+    public String changePassword(CustomUserDetails userDetails, ChangePasswordRequest changePasswordRequest) {
         // 요청 비밀번호
         String password = changePasswordRequest.getPassword();
         // 암호화한 비밀번호
@@ -72,14 +72,14 @@ public class MypageServiceImpl implements MypageService {
         user.setPassword(encryptPassword);
         userRepository.save(user.convertToEntity());
 
-        return ResponseEntity.ok("비밀번호가 변경되었습니다.");
+        return "비밀번호가 변경되었습니다.";
     }
 
     /**
      * 프로필 이미지 변경
      */
     @Override
-    public ResponseEntity<String> changeImageUrl(CustomUserDetails userDetails, MultipartFile file) {
+    public String changeImageUrl(CustomUserDetails userDetails, MultipartFile file) {
         // 파일 빈값 체크
         if (file.isEmpty()) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
@@ -101,6 +101,6 @@ public class MypageServiceImpl implements MypageService {
         user.setImageUrl(image.getImagePath());
         userRepository.save(user.convertToEntity());
 
-        return ResponseEntity.ok("프로필 이미지가 변경되었습니다.");
+        return "프로필 이미지가 변경되었습니다.";
     }
 }
