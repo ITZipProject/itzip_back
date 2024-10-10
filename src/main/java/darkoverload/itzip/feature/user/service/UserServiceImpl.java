@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
      * 로그아웃
      */
     @Override
-    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
         // access token 가져오기
         String accessToken = CookieUtils.findCookieValue(request, "accessToken").orElse(null);
 
@@ -137,7 +137,7 @@ public class UserServiceImpl implements UserService {
 
         // tokens 데이터 삭제
         tokenService.deleteByAccessToken(accessToken);
-        return ResponseEntity.ok("로그아웃 되었습니다.");
+        return "로그아웃 되었습니다.";
     }
 
     /**
@@ -188,7 +188,7 @@ public class UserServiceImpl implements UserService {
      * 회원가입
      */
     @Transactional
-    public ResponseEntity<String> save(UserJoinRequest userJoinDto, BindingResult bindingResult) {
+    public String save(UserJoinRequest userJoinDto, BindingResult bindingResult) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
@@ -216,12 +216,12 @@ public class UserServiceImpl implements UserService {
         user.setNickname(getUniqueNickname());
 
         userRepository.save(user.convertToEntity());
-        return ResponseEntity.ok("회원가입이 완료되었습니다.");
+        return "회원가입이 완료되었습니다.";
     }
 
 
     @Transactional(readOnly = true)
-    public ResponseEntity<String> sendAuthEmail(AuthEmailSendRequest emailSendRequest, BindingResult bindingResult) {
+    public String sendAuthEmail(AuthEmailSendRequest emailSendRequest, BindingResult bindingResult) {
         // 필드 에러 확인
         if (bindingResult.hasErrors()) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
@@ -241,14 +241,14 @@ public class UserServiceImpl implements UserService {
 
         // 메일 발송
         emailService.sendFormMail(emailSendRequest.getEmail(), subject, body);
-        return ResponseEntity.ok("인증 메일이 발송되었습니다.");
+        return "인증 메일이 발송되었습니다.";
     }
 
     /**
      * 인증번호 검증
      */
     @Override
-    public ResponseEntity<String> checkAuthEmail(String email, String authCode) {
+    public String checkAuthEmail(String email, String authCode) {
         String emailPattern = "^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}$";
 
         // 입력값이 비정상적일 경우
@@ -261,14 +261,14 @@ public class UserServiceImpl implements UserService {
             throw new RestApiException(CommonExceptionCode.NOT_MATCH_AUTH_CODE);
         }
 
-        return ResponseEntity.ok("인증이 완료되었습니다.");
+        return "인증이 완료되었습니다.";
     }
 
     /**
      * 사용 중인 이메일인지 체크
      */
     @Override
-    public ResponseEntity<String> checkDuplicateEmail(String email) {
+    public String checkDuplicateEmail(String email) {
         String emailPattern = "^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}$";
 
         // 이메일 패턴이 아닐 경우
@@ -280,11 +280,11 @@ public class UserServiceImpl implements UserService {
         userRepository.findByEmail(email).ifPresent(user -> {
             throw new RestApiException(CommonExceptionCode.EXIST_EMAIL_ERROR);
         });
-        return ResponseEntity.ok("사용 가능한 이메일입니다.");
+        return "사용 가능한 이메일입니다.";
     }
 
     @Override
-    public ResponseEntity<String> checkDuplicateNickname(String nickname) {
+    public String checkDuplicateNickname(String nickname) {
         // 닉네임을 입력하지 않은 경우
         if (nickname == null) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
@@ -294,21 +294,21 @@ public class UserServiceImpl implements UserService {
         if (findByNickname(nickname).isPresent()) {
             throw new RestApiException(CommonExceptionCode.EXIST_NICKNAME_ERROR);
         }
-        return ResponseEntity.ok("사용 가능한 닉네임입니다.");
+        return "사용 가능한 닉네임입니다.";
     }
 
     /**
      * 임시 회원 탈퇴
      */
     @Override
-    public ResponseEntity<String> tempUserOut(CustomUserDetails userDetails, HttpServletRequest request, HttpServletResponse response) {
+    public String tempUserOut(CustomUserDetails userDetails, HttpServletRequest request, HttpServletResponse response) {
         logout(request, response);
 
         User user = findByEmail(userDetails.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
 
         userRepository.delete(user.convertToEntity());
 
-        return  ResponseEntity.ok("정상적으로 탈퇴 되었습니다.");
+        return "정상적으로 탈퇴 되었습니다.";
     }
 
     /**

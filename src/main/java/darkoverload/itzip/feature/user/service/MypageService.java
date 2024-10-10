@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface MypageService {
-    ResponseEntity<String> checkDuplicateNickname(String nickname);
+    String checkDuplicateNickname(String nickname);
 
-    ResponseEntity<String> changeNickname(CustomUserDetails userDetails, ChangeNicknameRequest request, BindingResult bindingResult);
+    String changeNickname(CustomUserDetails userDetails, ChangeNicknameRequest request, BindingResult bindingResult);
 
-    ResponseEntity<String> changePassword(CustomUserDetails userDetails, ChangePasswordRequest request, BindingResult bindingResult);
+    String changePassword(CustomUserDetails userDetails, ChangePasswordRequest request, BindingResult bindingResult);
 
-    ResponseEntity<String> changeImageUrl(CustomUserDetails userDetails, @RequestParam("file") MultipartFile file);
+    String changeImageUrl(CustomUserDetails userDetails, @RequestParam("file") MultipartFile file);
 }

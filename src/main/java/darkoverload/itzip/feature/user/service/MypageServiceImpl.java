@@ -23,7 +23,7 @@ public class MypageServiceImpl implements MypageService {
     private final CloudStorageService storageService;
 
     @Override
-    public ResponseEntity<String> checkDuplicateNickname(String nickname) {
+    public String checkDuplicateNickname(String nickname) {
         // 닉네임을 입력하지 않은 경우
         if (nickname == null) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
@@ -34,11 +34,11 @@ public class MypageServiceImpl implements MypageService {
             throw new RestApiException(CommonExceptionCode.EXIST_NICKNAME_ERROR);
         }
 
-        return ResponseEntity.ok("사용 가능한 닉네임입니다.");
+        return "사용 가능한 닉네임입니다.";
     }
 
     @Override
-    public ResponseEntity<String> changeNickname(CustomUserDetails userDetails, ChangeNicknameRequest request, BindingResult bindingResult) {
+    public String changeNickname(CustomUserDetails userDetails, ChangeNicknameRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
         }
@@ -57,11 +57,11 @@ public class MypageServiceImpl implements MypageService {
         user.setNickname(nickname);
         userRepository.save(user.convertToEntity());
 
-        return ResponseEntity.ok("닉네임이 변경되었습니다.");
+        return "닉네임이 변경되었습니다.";
     }
 
     @Override
-    public ResponseEntity<String> changePassword(CustomUserDetails userDetails, ChangePasswordRequest request, BindingResult bindingResult) {
+    public String changePassword(CustomUserDetails userDetails, ChangePasswordRequest request, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
         }
@@ -77,11 +77,11 @@ public class MypageServiceImpl implements MypageService {
         user.setPassword(encryptPassword);
         userRepository.save(user.convertToEntity());
 
-        return ResponseEntity.ok("비밀번호가 변경되었습니다.");
+        return "비밀번호가 변경되었습니다.";
     }
 
     @Override
-    public ResponseEntity<String> changeImageUrl(CustomUserDetails userDetails, MultipartFile file) {
+    public String changeImageUrl(CustomUserDetails userDetails, MultipartFile file) {
         // 파일 빈값 체크
         if (file.isEmpty()) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
@@ -103,6 +103,6 @@ public class MypageServiceImpl implements MypageService {
         user.setImageUrl(image.getImagePath());
         userRepository.save(user.convertToEntity());
 
-        return ResponseEntity.ok("프로필 이미지가 변경되었습니다.");
+        return "프로필 이미지가 변경되었습니다.";
     }
 }
