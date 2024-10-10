@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.techinfo.service.post;
 
-import darkoverload.itzip.feature.techinfo.controller.response.PostPreviewResponse;
+import darkoverload.itzip.feature.techinfo.controller.post.response.PostPreviewResponse;
 import darkoverload.itzip.feature.techinfo.type.SortType;
 
 import org.springframework.hateoas.EntityModel;
@@ -24,5 +24,9 @@ public interface PostPreviewService {
      * @return 페이지네이션된 포스트 프리뷰 응답을 담은 PagedModel
      */
     PagedModel<EntityModel<PostPreviewResponse>> getAllOrFilteredPosts(
-            Optional<String> categoryId, SortType sortType, int page, int size);
+            Optional<String> categoryId,
+            SortType sortType,
+            int page,
+            int size
+    );
 }

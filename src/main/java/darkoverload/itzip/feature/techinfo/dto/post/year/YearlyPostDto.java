@@ -1,6 +1,6 @@
-package darkoverload.itzip.feature.techinfo.dto.year;
+package darkoverload.itzip.feature.techinfo.dto.post.year;
 
-import darkoverload.itzip.feature.techinfo.dto.month.MonthlyPostDto;
+import darkoverload.itzip.feature.techinfo.dto.post.month.MonthlyPostDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

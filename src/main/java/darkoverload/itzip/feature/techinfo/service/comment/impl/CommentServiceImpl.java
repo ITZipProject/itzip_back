@@ -1,9 +1,9 @@
 package darkoverload.itzip.feature.techinfo.service.comment.impl;
 
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
-import darkoverload.itzip.feature.techinfo.controller.request.CommentCreateRequest;
-import darkoverload.itzip.feature.techinfo.controller.request.CommentUpdateRequest;
-import darkoverload.itzip.feature.techinfo.controller.response.CommentResponse;
+import darkoverload.itzip.feature.techinfo.controller.comment.request.CommentCreateRequest;
+import darkoverload.itzip.feature.techinfo.controller.comment.request.CommentUpdateRequest;
+import darkoverload.itzip.feature.techinfo.controller.comment.response.CommentResponse;
 import darkoverload.itzip.feature.techinfo.domain.Comment;
 import darkoverload.itzip.feature.techinfo.model.document.CommentDocument;
 import darkoverload.itzip.feature.techinfo.repository.comment.CommentRepository;
@@ -64,7 +64,10 @@ public class CommentServiceImpl implements CommentService {
         Long userId = getUserIdByEmail(userDetails.getEmail()); // 유저 ID 조회
 
         boolean isUpdated = commentRepository.updateCommentVisibility(
-                new ObjectId(commentId), userId, false); // 댓글 숨김 처리
+                new ObjectId(commentId),
+                userId,
+                false
+        ); // 댓글 숨김 처리
 
         if (!isUpdated) {
             throw new RestApiException(CommonExceptionCode.NOT_FOUND_COMMENT); // 숨김 처리 실패 시 예외 발생

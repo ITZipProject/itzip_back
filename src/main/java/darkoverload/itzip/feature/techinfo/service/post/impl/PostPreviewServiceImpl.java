@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.techinfo.service.post.impl;
 
-import darkoverload.itzip.feature.techinfo.controller.response.PostPreviewResponse;
+import darkoverload.itzip.feature.techinfo.controller.post.response.PostPreviewResponse;
 import darkoverload.itzip.feature.techinfo.domain.Blog;
 import darkoverload.itzip.feature.techinfo.domain.Post;
 import darkoverload.itzip.feature.techinfo.model.document.PostDocument;

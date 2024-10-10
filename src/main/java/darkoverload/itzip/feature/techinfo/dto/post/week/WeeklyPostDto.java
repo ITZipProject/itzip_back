@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.techinfo.dto.week;
+package darkoverload.itzip.feature.techinfo.dto.post.week;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

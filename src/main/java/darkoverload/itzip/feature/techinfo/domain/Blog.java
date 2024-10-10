@@ -1,8 +1,8 @@
 package darkoverload.itzip.feature.techinfo.domain;
 
-import darkoverload.itzip.feature.techinfo.controller.response.BlogBasicInfoResponse;
-import darkoverload.itzip.feature.techinfo.controller.response.BlogDetailInfoResponse;
-import darkoverload.itzip.feature.techinfo.dto.year.YearlyPostDto;
+import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogBasicInfoResponse;
+import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogDetailInfoResponse;
+import darkoverload.itzip.feature.techinfo.dto.post.year.YearlyPostDto;
 import darkoverload.itzip.feature.techinfo.model.entity.BlogEntity;
 import darkoverload.itzip.feature.user.domain.User;
 

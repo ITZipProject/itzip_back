@@ -1,13 +1,12 @@
 package darkoverload.itzip.feature.techinfo.service.post.impl;
 
-import darkoverload.itzip.feature.techinfo.controller.request.PostCreateRequest;
-import darkoverload.itzip.feature.techinfo.controller.request.PostUpdateRequest;
-import darkoverload.itzip.feature.techinfo.controller.response.BlogAdjacentPostsResponse;
-import darkoverload.itzip.feature.techinfo.controller.response.PostDetailInfoResponse;
-import darkoverload.itzip.feature.techinfo.controller.response.PostBasicResponse;
+import darkoverload.itzip.feature.techinfo.controller.post.request.PostCreateRequest;
+import darkoverload.itzip.feature.techinfo.controller.post.request.PostUpdateRequest;
+import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogAdjacentPostsResponse;
+import darkoverload.itzip.feature.techinfo.controller.post.response.PostDetailInfoResponse;
+import darkoverload.itzip.feature.techinfo.controller.post.response.PostBasicResponse;
 import darkoverload.itzip.feature.techinfo.domain.Blog;
 import darkoverload.itzip.feature.techinfo.domain.Post;
-import darkoverload.itzip.feature.techinfo.dto.year.YearlyPostDto;
 import darkoverload.itzip.feature.techinfo.model.document.PostDocument;
 import darkoverload.itzip.feature.techinfo.repository.post.PostRepository;
 import darkoverload.itzip.feature.techinfo.service.blog.BlogService;
@@ -19,14 +18,14 @@ import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 
-import lombok.RequiredArgsConstructor;
-
-import org.bson.types.ObjectId;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
 import java.util.*;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -62,14 +61,20 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void hidePost(String postId) {
-        boolean isUpdated = postRepository.updatePostVisibility(new ObjectId(postId), false); // 포스트 비공개 처리
+        boolean isUpdated = postRepository.updatePostVisibility(
+                new ObjectId(postId),
+                false // 포스트 비공개 처리
+        );
         validateUpdate(isUpdated, CommonExceptionCode.NOT_FOUND_POST); // 실패 시 예외 처리
     }
 
     @Override
     public BlogAdjacentPostsResponse getAdjacentPosts(Long blogId, LocalDateTime createDate) {
         int limit = 4; // 한 번에 조회할 포스트 수 제한
-        String nickname = blogService.getBlogById(blogId).getUser().getNickname(); // 유저 닉네임 조회
+
+        String nickname = blogService.getBlogById(blogId)
+                .getUser()
+                .getNickname(); // 유저 닉네임 조회
 
         List<PostBasicResponse> postResponses = getAdjacentPostsByBlog(blogId, createDate, limit).stream() // 인접한 포스트들을 조회하고 변환
                 .map(Post::convertToPostBasicResponse)
@@ -96,11 +101,6 @@ public class PostServiceImpl implements PostService {
         Blog blog = blogService.getBlogById(post.getBlogId()); // 블로그 정보 조회
 
         return post.convertToPostDetailInfoResponse(blog.getUser(), isLiked); // 포스트 세부 정보 반환
-    }
-
-    @Override
-    public List<YearlyPostDto> getYearlyPostCounts(Long blogId) {
-        return postRepository.findYearlyPostCounts(blogId); // 연도별 포스트 통계 조회
     }
 
     private void validateUpdate(boolean isUpdated, CommonExceptionCode exceptionCode) {

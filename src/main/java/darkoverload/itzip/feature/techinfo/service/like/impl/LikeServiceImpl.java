@@ -44,7 +44,6 @@ public class LikeServiceImpl implements LikeService {
         }
 
         return isLiked;
-
     }
 
     private Long getUserIdByEmail(String email) {

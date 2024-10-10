@@ -1,10 +1,10 @@
 package darkoverload.itzip.feature.techinfo.domain;
 
-import darkoverload.itzip.feature.techinfo.controller.request.PostCreateRequest;
-import darkoverload.itzip.feature.techinfo.controller.response.PostBasicResponse;
-import darkoverload.itzip.feature.techinfo.controller.response.PostBlogPreviewResponse;
-import darkoverload.itzip.feature.techinfo.controller.response.PostDetailInfoResponse;
-import darkoverload.itzip.feature.techinfo.controller.response.PostPreviewResponse;
+import darkoverload.itzip.feature.techinfo.controller.post.request.PostCreateRequest;
+import darkoverload.itzip.feature.techinfo.controller.post.response.PostBasicResponse;
+import darkoverload.itzip.feature.techinfo.controller.post.response.PostBlogPreviewResponse;
+import darkoverload.itzip.feature.techinfo.controller.post.response.PostDetailInfoResponse;
+import darkoverload.itzip.feature.techinfo.controller.post.response.PostPreviewResponse;
 import darkoverload.itzip.feature.techinfo.model.document.PostDocument;
 import darkoverload.itzip.feature.user.domain.User;
 

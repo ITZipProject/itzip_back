@@ -1,15 +1,15 @@
 package darkoverload.itzip.feature.techinfo.service.blog.impl;
 
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
-import darkoverload.itzip.feature.techinfo.controller.request.BlogUpdateRequest;
-import darkoverload.itzip.feature.techinfo.controller.response.BlogBasicInfoResponse;
-import darkoverload.itzip.feature.techinfo.controller.response.BlogDetailInfoResponse;
+import darkoverload.itzip.feature.techinfo.controller.blog.request.BlogUpdateRequest;
+import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogBasicInfoResponse;
+import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogDetailInfoResponse;
 import darkoverload.itzip.feature.techinfo.domain.Blog;
-import darkoverload.itzip.feature.techinfo.dto.year.YearlyPostDto;
+import darkoverload.itzip.feature.techinfo.dto.post.year.YearlyPostDto;
 import darkoverload.itzip.feature.techinfo.model.entity.BlogEntity;
 import darkoverload.itzip.feature.techinfo.repository.blog.BlogRepository;
+import darkoverload.itzip.feature.techinfo.repository.post.PostRepository;
 import darkoverload.itzip.feature.techinfo.service.blog.BlogService;
-import darkoverload.itzip.feature.techinfo.service.post.PostService;
 import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.UserEntity;
 import darkoverload.itzip.feature.user.repository.UserRepository;
@@ -26,9 +26,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BlogServiceImpl implements BlogService {
 
-    private final BlogRepository blogRepository;
     private final UserRepository userRepository;
-    private final PostService postService;
+    private final BlogRepository blogRepository;
+    private final PostRepository postRepository;
 
     @Override
     @Transactional
@@ -92,8 +92,12 @@ public class BlogServiceImpl implements BlogService {
 
         // 블로그 조회 및 연간 포스트 수 조회
         Blog blog = getBlogById(user.getId());
-        List<YearlyPostDto> yearlyPostCounts = postService.getYearlyPostCounts(blog.getId());
+        List<YearlyPostDto> yearlyPostCounts = getYearlyPostCounts(blog.getId());
 
         return blog.convertToBlogDetailInfoResponse(yearlyPostCounts); // 블로그 상세 정보 반환
+    }
+
+    private List<YearlyPostDto> getYearlyPostCounts(Long blogId) {
+        return postRepository.findYearlyPostCounts(blogId); // 연도별 포스트 통계 조회
     }
 }

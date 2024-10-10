@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.techinfo.repository.post.custom;
 
-import darkoverload.itzip.feature.techinfo.dto.year.YearlyPostDto;
+import darkoverload.itzip.feature.techinfo.dto.post.year.YearlyPostDto;
 import darkoverload.itzip.feature.techinfo.model.document.PostDocument;
 
 import lombok.extern.slf4j.Slf4j;

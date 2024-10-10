@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.techinfo.controller.request;
+package darkoverload.itzip.feature.techinfo.controller.post.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

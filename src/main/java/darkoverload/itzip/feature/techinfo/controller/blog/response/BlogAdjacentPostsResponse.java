@@ -1,5 +1,6 @@
-package darkoverload.itzip.feature.techinfo.controller.response;
+package darkoverload.itzip.feature.techinfo.controller.blog.response;
 
+import darkoverload.itzip.feature.techinfo.controller.post.response.PostBasicResponse;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import lombok.AllArgsConstructor;

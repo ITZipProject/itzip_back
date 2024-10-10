@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.techinfo.service.post.impl;
 
-import darkoverload.itzip.feature.techinfo.controller.response.PostBlogPreviewResponse;
+import darkoverload.itzip.feature.techinfo.controller.post.response.PostBlogPreviewResponse;
 import darkoverload.itzip.feature.techinfo.domain.Post;
 import darkoverload.itzip.feature.techinfo.model.document.PostDocument;
 import darkoverload.itzip.feature.techinfo.repository.post.PostRepository;
@@ -9,8 +9,6 @@ import darkoverload.itzip.feature.techinfo.service.post.PostBlogPreviewService;
 import darkoverload.itzip.feature.techinfo.type.SortType;
 import darkoverload.itzip.feature.techinfo.util.PagedModelUtil;
 import darkoverload.itzip.feature.techinfo.util.SortUtil;
-import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
-import darkoverload.itzip.global.config.response.exception.RestApiException;
 
 import lombok.RequiredArgsConstructor;
 
@@ -44,10 +42,6 @@ public class PostBlogPreviewServiceImpl implements PostBlogPreviewService {
                 .map(PostDocument::convertToDomainWithoutBlodIdAndViewCount)
                 .map(Post::convertToBlogPreviewResponse)
                 .toList();
-
-        if (previewResponses.isEmpty()) {
-            throw new RestApiException(CommonExceptionCode.NOT_FOUND_POSTS_FOR_BLOG); // 포스트가 없을 경우 예외 발생
-        }
 
         Page<PostBlogPreviewResponse> postBlogPreviewPage = new PageImpl<>(previewResponses, pageable, previewResponses.size()); // 페이지 생성
 

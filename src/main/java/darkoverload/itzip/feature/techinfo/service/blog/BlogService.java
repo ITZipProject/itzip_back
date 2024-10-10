@@ -1,9 +1,9 @@
 package darkoverload.itzip.feature.techinfo.service.blog;
 
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
-import darkoverload.itzip.feature.techinfo.controller.request.BlogUpdateRequest;
-import darkoverload.itzip.feature.techinfo.controller.response.BlogBasicInfoResponse;
-import darkoverload.itzip.feature.techinfo.controller.response.BlogDetailInfoResponse;
+import darkoverload.itzip.feature.techinfo.controller.blog.request.BlogUpdateRequest;
+import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogBasicInfoResponse;
+import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogDetailInfoResponse;
 import darkoverload.itzip.feature.techinfo.domain.Blog;
 import darkoverload.itzip.feature.user.domain.User;
 

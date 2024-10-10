@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.techinfo.service.post;
 
-import darkoverload.itzip.feature.techinfo.controller.response.PostBlogPreviewResponse;
+import darkoverload.itzip.feature.techinfo.controller.post.response.PostBlogPreviewResponse;
 import darkoverload.itzip.feature.techinfo.type.SortType;
 
 import org.springframework.hateoas.EntityModel;
@@ -21,5 +21,10 @@ public interface PostBlogPreviewService {
      * @param size  페이지당 포스트 개수
      * @return  페이지네이션된 포스트 목록을 담은 PagedModel
      */
-    PagedModel<EntityModel<PostBlogPreviewResponse>> getPostsByBlogId(Long blogId, SortType sortType, int page, int size);
+    PagedModel<EntityModel<PostBlogPreviewResponse>> getPostsByBlogId(
+            Long blogId,
+            SortType sortType,
+            int page,
+            int size
+    );
 }

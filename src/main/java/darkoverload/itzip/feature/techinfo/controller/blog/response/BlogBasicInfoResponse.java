@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.techinfo.controller.response;
+package darkoverload.itzip.feature.techinfo.controller.blog.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

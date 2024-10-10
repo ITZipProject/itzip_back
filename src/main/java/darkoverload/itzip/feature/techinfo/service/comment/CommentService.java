@@ -1,9 +1,9 @@
 package darkoverload.itzip.feature.techinfo.service.comment;
 
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
-import darkoverload.itzip.feature.techinfo.controller.request.CommentCreateRequest;
-import darkoverload.itzip.feature.techinfo.controller.request.CommentUpdateRequest;
-import darkoverload.itzip.feature.techinfo.controller.response.CommentResponse;
+import darkoverload.itzip.feature.techinfo.controller.comment.request.CommentCreateRequest;
+import darkoverload.itzip.feature.techinfo.controller.comment.request.CommentUpdateRequest;
+import darkoverload.itzip.feature.techinfo.controller.comment.response.CommentResponse;
 
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
