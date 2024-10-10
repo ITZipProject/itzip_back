@@ -39,7 +39,7 @@ public class MypageController {
     @GetMapping("/checkDuplicateNickname")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR})
-    public ResponseEntity<String> checkDuplicateNickname(
+    public String checkDuplicateNickname(
             @Parameter(description = "사용할 닉네임") @RequestParam(required = false) String nickname
     ) {
         return mypageService.checkDuplicateNickname(nickname);
@@ -55,7 +55,7 @@ public class MypageController {
     @PatchMapping("/nickname")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.EXIST_NICKNAME_ERROR, CommonExceptionCode.NOT_FOUND_USER})
-    public ResponseEntity<String> changeNickname(
+    public String changeNickname(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody @Valid ChangeNicknameRequest request,
             BindingResult bindingResult
@@ -73,7 +73,7 @@ public class MypageController {
     @PatchMapping("/password")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_FOUND_USER})
-    public ResponseEntity<String> changePassword(
+    public String changePassword(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody @Valid ChangePasswordRequest request,
             BindingResult bindingResult
@@ -91,7 +91,7 @@ public class MypageController {
     @PatchMapping(value = "/profileImage", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_FOUND_USER})
-    public ResponseEntity<String> changeImageUrl(
+    public String changeImageUrl(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestParam("file") MultipartFile file) {
         return mypageService.changeImageUrl(userDetails, file);
