@@ -15,18 +15,19 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "User", description = "회원 기능 API")
-@RestController
 @RequestMapping("/user")
-@Slf4j
 @RequiredArgsConstructor
+@RestController
+@Validated
 public class UserController {
     private final UserService userService;
 
@@ -54,8 +55,8 @@ public class UserController {
     @PostMapping("/login")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_MATCH_PASSWORD})
-    public ResponseEntity<UserLoginResponse> login(@RequestBody @Valid UserLoginRequest request, BindingResult bindingResult, HttpServletResponse httpServletResponse) {
-        return userService.login(request, bindingResult, httpServletResponse);
+    public ResponseEntity<UserLoginResponse> login(@RequestBody @Valid UserLoginRequest userLoginRequest, HttpServletResponse httpServletResponse) {
+        return userService.login(userLoginRequest, httpServletResponse);
     }
 
     /**
@@ -95,8 +96,8 @@ public class UserController {
     )
     @ResponseCodeAnnotation(CommonResponseCode.CREATED)
     @ExceptionCodeAnnotations(CommonExceptionCode.FILED_ERROR)
-    public ResponseEntity<String> join(@RequestBody @Valid UserJoinRequest request, BindingResult bindingResult) {
-        return userService.save(request, bindingResult);
+    public ResponseEntity<String> join(@RequestBody @Valid UserJoinRequest userJoinRequest) {
+        return userService.save(userJoinRequest);
     }
 
     /**
@@ -109,8 +110,8 @@ public class UserController {
     @PostMapping("/authEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.FILED_ERROR)
-    public ResponseEntity<String> sendAuthEmail(@RequestBody @Valid AuthEmailSendRequest request, BindingResult bindingResult) {
-        return userService.sendAuthEmail(request, bindingResult);
+    public ResponseEntity<String> sendAuthEmail(@RequestBody @Valid AuthEmailSendRequest request) {
+        return userService.sendAuthEmail(request);
     }
 
     /**
@@ -124,8 +125,8 @@ public class UserController {
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_MATCH_AUTH_CODE})
     public ResponseEntity<String> checkAuthEmail(
-            @Parameter(description = "이메일") @RequestParam(required = false) String email,
-            @Parameter(description = "이메일 인증 코드") @RequestParam(required = false) String authCode
+            @Parameter(description = "이메일") @RequestParam @NotBlank @Email String email,
+            @Parameter(description = "이메일 인증 코드") @RequestParam @NotBlank String authCode
     ) {
         return userService.checkAuthEmail(email, authCode);
     }
@@ -141,7 +142,7 @@ public class UserController {
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR})
     public ResponseEntity<String> checkDuplicateEmail(
-            @Parameter(description = "이메일") @RequestParam(required = false) String email
+            @Parameter(description = "이메일") @RequestParam @NotBlank @Email String email
     ) {
         return userService.checkDuplicateEmail(email);
     }
