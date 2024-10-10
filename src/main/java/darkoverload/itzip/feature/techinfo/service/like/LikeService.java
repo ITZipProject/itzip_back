@@ -21,7 +21,7 @@ public interface LikeService {
     /**
      * 사용자가 특정 게시물에 좋아요를 눌렀는지 확인하는 메서드.
      *
-     * @param userId 사용자 ID
+     * @param userId 사용자 정보
      * @param postId 게시물 ID
      * @return 좋아요를 눌렀으면 true, 아니면 false
      */
