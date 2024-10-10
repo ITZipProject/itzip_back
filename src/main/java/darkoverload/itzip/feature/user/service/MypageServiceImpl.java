@@ -12,7 +12,6 @@ import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -22,13 +21,11 @@ public class MypageServiceImpl implements MypageService {
     UserRepository userRepository;
     private final CloudStorageService storageService;
 
+    /**
+     * 닉네임 중복 체크
+     */
     @Override
     public ResponseEntity<String> checkDuplicateNickname(String nickname) {
-        // 닉네임을 입력하지 않은 경우
-        if (nickname == null) {
-            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
-        }
-
         // 사용 중인 닉네임일 경우
         if (userService.findByNickname(nickname).isPresent()) {
             throw new RestApiException(CommonExceptionCode.EXIST_NICKNAME_ERROR);
@@ -37,14 +34,13 @@ public class MypageServiceImpl implements MypageService {
         return ResponseEntity.ok("사용 가능한 닉네임입니다.");
     }
 
+    /**
+     * 닉네임 변경
+     */
     @Override
-    public ResponseEntity<String> changeNickname(CustomUserDetails userDetails, ChangeNicknameRequest request, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
-        }
-
+    public ResponseEntity<String> changeNickname(CustomUserDetails userDetails, ChangeNicknameRequest changeNicknameRequest) {
         // 요청 닉네임
-        String nickname = request.getNickname();
+        String nickname = changeNicknameRequest.getNickname();
 
         // 사용 중인 닉네임일 경우
         if (userService.findByNickname(nickname).isPresent()) {
@@ -60,14 +56,13 @@ public class MypageServiceImpl implements MypageService {
         return ResponseEntity.ok("닉네임이 변경되었습니다.");
     }
 
+    /**
+     * 비밀번호 변경
+     */
     @Override
-    public ResponseEntity<String> changePassword(CustomUserDetails userDetails, ChangePasswordRequest request, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
-        }
-
+    public ResponseEntity<String> changePassword(CustomUserDetails userDetails, ChangePasswordRequest changePasswordRequest) {
         // 요청 비밀번호
-        String password = request.getPassword();
+        String password = changePasswordRequest.getPassword();
         // 암호화한 비밀번호
         String encryptPassword = userService.encryptPassword(password);
 
@@ -80,6 +75,9 @@ public class MypageServiceImpl implements MypageService {
         return ResponseEntity.ok("비밀번호가 변경되었습니다.");
     }
 
+    /**
+     * 프로필 이미지 변경
+     */
     @Override
     public ResponseEntity<String> changeImageUrl(CustomUserDetails userDetails, MultipartFile file) {
         // 파일 빈값 체크
