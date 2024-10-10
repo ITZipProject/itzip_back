@@ -25,4 +25,12 @@ public interface PostRepository extends MongoRepository<PostDocument, ObjectId>,
      */
     @Query(value = "{ '_id': ?0, 'is_public': true }", fields = "{ 'is_public': 0 }")
     Optional<PostDocument> findByIdExcludingIsPublic(ObjectId postId);
+
+    /**
+     * 주어진 포스트 ID에 해당하는 공개된 포스트가 존재하는지 여부를 확인함.
+     *
+     * @param postId 확인할 포스트의 MongoDB ObjectId
+     * @return 공개된 포스트가 존재하면 true, 존재하지 않으면 false
+     */
+    boolean existsByIdAndIsPublic(ObjectId postId);
 }

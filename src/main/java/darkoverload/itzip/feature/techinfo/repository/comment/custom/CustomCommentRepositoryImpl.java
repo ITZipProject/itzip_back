@@ -20,6 +20,30 @@ public class CustomCommentRepositoryImpl implements CustomCommentRepository {
 
     private final MongoTemplate mongoTemplate;
 
+    // 댓글 내용을 업데이트
+    @Override
+    public boolean updateComment(ObjectId commentId, Long userId, String content) {
+        Query query = new Query(Criteria.where("_id").is(commentId).and("user_id").is(userId)); // 댓글 ID와 사용자 ID로 필터
+
+        Update update = new Update().set("content", content); // 댓글 내용 업데이트
+
+        CommentDocument savedComment = mongoTemplate.findAndModify(query, update, CommentDocument.class); // 업데이트 실행
+
+        return savedComment != null; // 업데이트 성공 여부 반환
+    }
+
+    // 댓글 공개 여부를 업데이트
+    @Override
+    public boolean updateCommentVisibility(ObjectId commentId, Long userId, boolean isPublic) {
+        Query query = new Query(Criteria.where("_id").is(commentId).and("user_id").is(userId)); // 댓글 ID와 사용자 ID로 필터
+
+        Update update = new Update().set("is_public", isPublic); // 공개 여부 업데이트
+
+        CommentDocument savedComment = mongoTemplate.findAndModify(query, update, CommentDocument.class); // 업데이트 실행
+
+        return savedComment != null; // 업데이트 성공 여부 반환
+    }
+
     // 포스트 ID로 댓글을 페이지네이션하여 조회
     @Override
     public Page<CommentDocument> findCommentsByPostId(ObjectId postId, Pageable pageable) {
@@ -33,29 +57,5 @@ public class CustomCommentRepositoryImpl implements CustomCommentRepository {
         long total = mongoTemplate.count(Query.query(Criteria.where("post_id").is(postId).and("is_public").is(true)), CommentDocument.class); // 총 댓글 수 조회
 
         return new PageImpl<>(commentDocuments, pageable, total); // 페이지네이션된 결과 반환
-    }
-
-    // 댓글 내용을 업데이트
-    @Override
-    public boolean updateComment(ObjectId commentId, String content) {
-        Query query = new Query(Criteria.where("_id").is(commentId)); // 댓글 ID로 필터링
-
-        Update update = new Update().set("content", content); // 댓글 내용 업데이트
-
-        CommentDocument savedComment = mongoTemplate.findAndModify(query, update, CommentDocument.class); // 업데이트 실행
-
-        return savedComment != null; // 업데이트 성공 여부 반환
-    }
-
-    // 댓글 공개 여부를 업데이트
-    @Override
-    public boolean updateCommentVisibility(ObjectId commentId, boolean isPublic) {
-        Query query = new Query(Criteria.where("_id").is(commentId)); // 댓글 ID로 필터링
-
-        Update update = new Update().set("is_public", isPublic); // 공개 여부 업데이트
-
-        CommentDocument savedComment = mongoTemplate.findAndModify(query, update, CommentDocument.class); // 업데이트 실행
-
-        return savedComment != null; // 업데이트 성공 여부 반환
     }
 }

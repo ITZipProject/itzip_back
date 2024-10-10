@@ -14,6 +14,14 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 public interface LikeRepository extends MongoRepository<LikeDocument, ObjectId> {
 
     /**
+     * 특정 유저와 특정 포스트에 대한 좋아요를 삭제.
+     *
+     * @param userId 유저 ID
+     * @param postId 포스트 ID
+     */
+    void deleteByUserIdAndPostId(Long userId, ObjectId postId);
+
+    /**
      * 특정 유저가 특정 포스트에 대해 좋아요를 눌렀는지 여부를 확인.
      *
      * @param userId 유저 ID
@@ -21,12 +29,4 @@ public interface LikeRepository extends MongoRepository<LikeDocument, ObjectId> 
      * @return 해당 유저가 해당 포스트에 대해 좋아요를 눌렀으면 true, 아니면 false
      */
     boolean existsByUserIdAndPostId(Long userId, ObjectId postId);
-
-    /**
-     * 특정 유저와 특정 포스트에 대한 좋아요를 삭제.
-     *
-     * @param userId 유저 ID
-     * @param postId 포스트 ID
-     */
-    void deleteByUserIdAndPostId(Long userId, ObjectId postId);
 }

@@ -1,7 +1,7 @@
 package darkoverload.itzip.feature.techinfo.domain;
 
-import darkoverload.itzip.feature.techinfo.controller.request.CommentCreateRequest;
-import darkoverload.itzip.feature.techinfo.controller.response.CommentResponse;
+import darkoverload.itzip.feature.techinfo.controller.comment.request.CommentCreateRequest;
+import darkoverload.itzip.feature.techinfo.controller.comment.response.CommentResponse;
 import darkoverload.itzip.feature.techinfo.model.document.CommentDocument;
 import darkoverload.itzip.feature.user.domain.User;
 
@@ -92,10 +92,10 @@ public class Comment {
     public CommentResponse convertToCommentResponse(User user) {
         return CommentResponse.builder()
                 .commentId(this.id)
-                .content(this.content)
+                .profileImagePath(user.getImageUrl())
                 .nickname(user.getNickname())
+                .content(this.content)
                 .createDate(this.createDate.toString())
-                // .profileImagePath() // 추가적으로 프로필 이미지 경로를 설정할 수 있음
                 .build();
     }
 }
