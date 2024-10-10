@@ -3,6 +3,7 @@ package darkoverload.itzip.global.config.response.handler;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.handler.Util.ExceptionHandlerUtil;
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.ClientAbortException;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,8 @@ public class GlobalExceptionHandler {
             MethodArgumentNotValidException.class,
             MissingServletRequestParameterException.class,
             MissingServletRequestPartException.class,
-            HandlerMethodValidationException.class
+            HandlerMethodValidationException.class,
+            ConstraintViolationException.class
     })
     public ResponseEntity<Object> handleValidationExceptions(Exception e) {
         log.error("{}: {}", e.getClass().getSimpleName(), e.getMessage(), e);
