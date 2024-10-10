@@ -4,8 +4,8 @@ import darkoverload.itzip.feature.techinfo.controller.response.PostBlogPreviewRe
 import darkoverload.itzip.feature.techinfo.domain.Post;
 import darkoverload.itzip.feature.techinfo.model.document.PostDocument;
 import darkoverload.itzip.feature.techinfo.repository.post.PostRepository;
+import darkoverload.itzip.feature.techinfo.service.blog.BlogService;
 import darkoverload.itzip.feature.techinfo.service.post.PostBlogPreviewService;
-import darkoverload.itzip.feature.techinfo.service.shared.SharedService;
 import darkoverload.itzip.feature.techinfo.type.SortType;
 import darkoverload.itzip.feature.techinfo.util.PagedModelUtil;
 import darkoverload.itzip.feature.techinfo.util.SortUtil;
@@ -29,13 +29,13 @@ import java.util.List;
 public class PostBlogPreviewServiceImpl implements PostBlogPreviewService {
 
     private final PostRepository postRepository;
-    private final SharedService sharedService;
+    private final BlogService blogService;
 
     @Override
     public PagedModel<EntityModel<PostBlogPreviewResponse>> getPostsByBlogId(
             Long blogId, SortType sortType, int page, int size) {
 
-        Long validBlogId = sharedService.getBlogById(blogId).getId(); // 유효한 블로그 ID 조회
+        Long validBlogId = blogService.getBlogById(blogId).getId(); // 유효한 블로그 ID 조회
 
         Pageable pageable = PageRequest.of(page, size, SortUtil.getSort(sortType)); // 페이지 및 정렬 설정
 
