@@ -7,6 +7,7 @@ import darkoverload.itzip.feature.techinfo.controller.comment.response.CommentRe
 import darkoverload.itzip.feature.techinfo.domain.Comment;
 import darkoverload.itzip.feature.techinfo.model.document.CommentDocument;
 import darkoverload.itzip.feature.techinfo.repository.comment.CommentRepository;
+import darkoverload.itzip.feature.techinfo.repository.post.PostRepository;
 import darkoverload.itzip.feature.techinfo.service.comment.CommentService;
 import darkoverload.itzip.feature.techinfo.util.PagedModelUtil;
 import darkoverload.itzip.feature.user.domain.User;
@@ -32,11 +33,18 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
     @Override
     @Transactional(readOnly = true) // PostgreSQL과 관련된 작업에 트랜잭션 적용
     public void addNewComment(CustomUserDetails userDetails, CommentCreateRequest request) {
         Long userId = getUserIdByEmail(userDetails.getEmail()); // 유저 ID 조회
+
+        boolean isPosted = postRepository.existsByIdAndIsPublic(new ObjectId(request.getPostId()));
+
+        if (!isPosted) {
+            throw new RestApiException(CommonExceptionCode.NOT_FOUND_POST); // 포스트가 없으면 예외 발생
+        }
 
         Comment comment = Comment.createComment(request, userId); // 댓글 생성
         commentRepository.save(comment.convertToDocumentWithoutCommentId()); // 댓글 저장

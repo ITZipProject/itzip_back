@@ -71,6 +71,9 @@ public class PostDetailInfoResponse {
     @Schema(description = "좋아요 상태 여부", example = "false")
     private Boolean isLiked;
 
+    @Schema(description = "스크랩 상태 여부", example = "false")
+    private Boolean isScrapped;
+
     @Schema(description = "포스트 좋아요 수", example = "0")
     private Integer likeCount;
 

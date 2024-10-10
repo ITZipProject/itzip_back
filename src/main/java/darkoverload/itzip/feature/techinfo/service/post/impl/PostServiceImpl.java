@@ -13,6 +13,7 @@ import darkoverload.itzip.feature.techinfo.service.blog.BlogService;
 import darkoverload.itzip.feature.techinfo.service.like.LikeService;
 import darkoverload.itzip.feature.techinfo.service.post.PostService;
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
+import darkoverload.itzip.feature.techinfo.service.scrap.ScrapService;
 import darkoverload.itzip.feature.user.entity.UserEntity;
 import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
@@ -35,6 +36,7 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final BlogService blogService;
     private final LikeService likeService;
+    private final ScrapService scrapService;
 
     @Override
     @Transactional(readOnly = true) // PostgreSQL과 관련된 작업에 트랜잭션 적용
@@ -91,6 +93,7 @@ public class PostServiceImpl implements PostService {
     public PostDetailInfoResponse getPostDetailById(CustomUserDetails userDetails, String postId) {
         Long loggedInUserId = getUserIdByEmail(userDetails.getEmail()); // 현재 로그인한 사용자 정보 조회
         boolean isLiked = likeService.isLiked(loggedInUserId, postId); // 좋아요 상태 확인
+        boolean isScrapped = scrapService.isScrapped(loggedInUserId, postId); // 스크랩 상태 확인
 
         Post post = getByPostIdExcludingIsPublic(postId) // 포스트 ID로 포스트 세부 정보 조회
                 .orElseThrow(
@@ -100,7 +103,7 @@ public class PostServiceImpl implements PostService {
         postRepository.updateViewCount(new ObjectId(postId)); // 조회수 증가
         Blog blog = blogService.getBlogById(post.getBlogId()); // 블로그 정보 조회
 
-        return post.convertToPostDetailInfoResponse(blog.getUser(), isLiked); // 포스트 세부 정보 반환
+        return post.convertToPostDetailInfoResponse(blog.getUser(), isLiked, isScrapped); // 포스트 세부 정보 반환
     }
 
     private void validateUpdate(boolean isUpdated, CommonExceptionCode exceptionCode) {

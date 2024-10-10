@@ -164,7 +164,7 @@ public class Post {
      * @param isLiked 좋아요 여부
      * @return 변환된 PostDetailInfoResponse 객체
      */
-    public PostDetailInfoResponse convertToPostDetailInfoResponse(User user, Boolean isLiked) {
+    public PostDetailInfoResponse convertToPostDetailInfoResponse(User user, Boolean isLiked, Boolean isScrapped) {
         return PostDetailInfoResponse.builder()
                 .blogId(this.blogId)
                 .email(user.getEmail())
@@ -178,6 +178,7 @@ public class Post {
                 .thumbnailImagePath(this.thumbnailImagePath)
                 .contentImagePaths(this.contentImagePaths)
                 .isLiked(isLiked)
+                .isScrapped(isScrapped)
                 .likeCount(this.likeCount)
                 .viewCount(this.viewCount)
                 .build();
