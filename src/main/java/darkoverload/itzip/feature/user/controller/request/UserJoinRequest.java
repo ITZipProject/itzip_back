@@ -29,12 +29,12 @@ public class UserJoinRequest {
     @NotBlank(message = "비밀번호를 입력해주세요.")
     @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,16}$",
             message = "영어, 숫자, 특수문자를 포함한 8~16자 비밀번호를 입력해주세요.")
-    @Schema(description = "비밀번호", example = "ExamPassword123!!")
+    @Schema(description = "비밀번호", example = "ExamPass123!!")
     private String password;
 
     @JsonProperty("password_check")
     @NotEmpty(message = "비밀번호 확인을 입력해주세요.")
-    @Schema(description = "비밀번호 확인", example = "ExamPassword123!!")
+    @Schema(description = "비밀번호 확인", example = "ExamPass123!!")
     private String passwordCheck;
 
     @JsonProperty("auth_code")

@@ -17,6 +17,6 @@ public class ChangePasswordRequest {
     @NotEmpty(message = "비밀번호를 입력해주세요.")
     @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*?_]).{8,16}$",
             message = "올바르지 않은 비밀번호 형식입니다.")
-    @Schema(description = "비밀번호", example = "ExamPassword123!!")
+    @Schema(description = "비밀번호", example = "ExamPass123!!")
     private String password;
 }
