@@ -86,7 +86,7 @@ public class BlogServiceImpl implements BlogService {
                         () -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)
                 );
 
-        if (user.getEmail().equals(userDetails.getEmail())) {
+        if (!user.getEmail().equals(userDetails.getEmail())) {
             throw new RestApiException(CommonExceptionCode.FORBIDDEN);
         }
 
