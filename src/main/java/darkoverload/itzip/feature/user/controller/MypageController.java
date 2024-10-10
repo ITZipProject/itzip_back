@@ -12,12 +12,12 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,7 +40,7 @@ public class MypageController {
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR})
     public String checkDuplicateNickname(
-            @Parameter(description = "사용할 닉네임") @RequestParam(required = false) String nickname
+            @Parameter(description = "사용할 닉네임") @RequestParam @NotBlank String nickname
     ) {
         return mypageService.checkDuplicateNickname(nickname);
     }
@@ -57,10 +57,9 @@ public class MypageController {
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.EXIST_NICKNAME_ERROR, CommonExceptionCode.NOT_FOUND_USER})
     public String changeNickname(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestBody @Valid ChangeNicknameRequest request,
-            BindingResult bindingResult
+            @RequestBody @Valid ChangeNicknameRequest changeNicknameRequest
     ) {
-        return mypageService.changeNickname(userDetails, request, bindingResult);
+        return mypageService.changeNickname(userDetails, changeNicknameRequest);
     }
 
     /**
@@ -75,10 +74,9 @@ public class MypageController {
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_FOUND_USER})
     public String changePassword(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestBody @Valid ChangePasswordRequest request,
-            BindingResult bindingResult
+            @RequestBody @Valid ChangePasswordRequest changePasswordRequest
     ) {
-        return mypageService.changePassword(userDetails, request, bindingResult);
+        return mypageService.changePassword(userDetails, changePasswordRequest);
     }
 
     /**

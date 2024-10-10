@@ -8,22 +8,21 @@ import darkoverload.itzip.feature.user.domain.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 
 import java.util.Optional;
 
 public interface UserService {
     ResponseEntity<UserInfoResponse> getUserInfo(CustomUserDetails userDetails);
 
-    ResponseEntity<UserLoginResponse> login(UserLoginRequest request, BindingResult bindingResult, HttpServletResponse httpServletResponse);
+    ResponseEntity<UserLoginResponse> login(UserLoginRequest userLoginRequest, HttpServletResponse httpServletResponse);
 
     String logout(HttpServletRequest request, HttpServletResponse response);
 
     ResponseEntity<UserLoginResponse> refreshToken(HttpServletRequest request, HttpServletResponse response);
 
-    String save(UserJoinRequest userJoinDto, BindingResult bindingResult);
+    String save(UserJoinRequest userJoinRequest);
 
-    String sendAuthEmail(AuthEmailSendRequest emailSendRequest, BindingResult bindingResult);
+    String sendAuthEmail(AuthEmailSendRequest emailSendRequest);
 
     String checkAuthEmail(String email, String authCode);
 
