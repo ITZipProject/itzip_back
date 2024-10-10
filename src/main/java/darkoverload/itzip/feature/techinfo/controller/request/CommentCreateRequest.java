@@ -20,10 +20,6 @@ public class CommentCreateRequest {
     @NotBlank(message = "포스트 ID는 필수 입력 항목입니다.")
     private String postId;
 
-    @Schema(description = "댓글 작성자의 닉네임", example = "hyoseung", required = true)
-    @NotBlank(message = "닉네임은 필수 입력 항목입니다.")
-    private String nickname;
-
     @Schema(description = "댓글 내용", example = "이 포스트 정말 유익하네요!", required = true)
     @NotBlank(message = "댓글 내용은 필수 입력 항목입니다.")
     private String content;

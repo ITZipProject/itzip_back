@@ -19,7 +19,7 @@ public interface CommentService {
      *
      * @param request 댓글 생성 요청을 담은 객체
      */
-    void addNewComment(CommentCreateRequest request);
+    void addNewComment(CustomUserDetails userDetails, CommentCreateRequest request);
 
     /**
      * 기존 댓글을 수정하는 메서드.
