@@ -26,7 +26,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
 
 import java.util.Optional;
 
@@ -71,16 +70,11 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional
-    public ResponseEntity<UserLoginResponse> login(UserLoginRequest request, BindingResult bindingResult, HttpServletResponse httpServletResponse) {
-        // 필드 에러 확인
-        if (bindingResult.hasErrors()) {
-            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
-        }
-
-        User user = findByEmail(request.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_MATCH_PASSWORD));
+    public ResponseEntity<UserLoginResponse> login(UserLoginRequest userLoginRequest, HttpServletResponse httpServletResponse) {
+        User user = findByEmail(userLoginRequest.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_MATCH_PASSWORD));
 
         // 비밀번호 일치여부 체크
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword())) {
             throw new RestApiException(CommonExceptionCode.NOT_MATCH_PASSWORD);
         }
 
@@ -188,29 +182,24 @@ public class UserServiceImpl implements UserService {
      * 회원가입
      */
     @Transactional
-    public String save(UserJoinRequest userJoinDto, BindingResult bindingResult) {
-        // 필드 에러 확인
-        if (bindingResult.hasErrors()) {
-            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
-        }
-
+    public String save(UserJoinRequest userJoinRequest) {
         // 이메일 중복 체크
-        if (findByEmail(userJoinDto.getEmail()).isPresent()) {
+        if (findByEmail(userJoinRequest.getEmail()).isPresent()) {
             throw new RestApiException(CommonExceptionCode.EXIST_EMAIL_ERROR);
         }
 
         // 이메일 인증번호 체크
-        if (!verificationService.verifyCode(userJoinDto.getEmail(), userJoinDto.getAuthCode())) {
+        if (!verificationService.verifyCode(userJoinRequest.getEmail(), userJoinRequest.getAuthCode())) {
             throw new RestApiException(CommonExceptionCode.NOT_MATCH_AUTH_CODE);
         }
 
         // 저장된 인증번호 삭제
-        verificationService.deleteCode(userJoinDto.getEmail());
+        verificationService.deleteCode(userJoinRequest.getEmail());
 
-        User user = userJoinDto.toDomain();
+        User user = userJoinRequest.toDomain();
 
         // 비밀번호 암호화
-        String encryptedPassword = encryptPassword(userJoinDto.getPassword());
+        String encryptedPassword = encryptPassword(userJoinRequest.getPassword());
 
         user.setPassword(encryptedPassword);
         user.setNickname(getUniqueNickname());
@@ -221,12 +210,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Transactional(readOnly = true)
-    public String sendAuthEmail(AuthEmailSendRequest emailSendRequest, BindingResult bindingResult) {
-        // 필드 에러 확인
-        if (bindingResult.hasErrors()) {
-            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
-        }
-
+    public String sendAuthEmail(AuthEmailSendRequest emailSendRequest) {
         // 랜덤 인증 코드 생성
         String authCode = RandomAuthCode.generate();
 
@@ -249,13 +233,6 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public String checkAuthEmail(String email, String authCode) {
-        String emailPattern = "^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}$";
-
-        // 입력값이 비정상적일 경우
-        if (email == null || authCode == null || !email.matches(emailPattern)) {
-            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
-        }
-
         // redis에 저장된 인증번호와 비교하여 확인
         if (!verificationService.verifyCode(email, authCode)) {
             throw new RestApiException(CommonExceptionCode.NOT_MATCH_AUTH_CODE);
@@ -269,13 +246,6 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public String checkDuplicateEmail(String email) {
-        String emailPattern = "^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}$";
-
-        // 이메일 패턴이 아닐 경우
-        if (email == null || !email.matches(emailPattern)) {
-            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
-        }
-
         // 중복 이메일 체크
         userRepository.findByEmail(email).ifPresent(user -> {
             throw new RestApiException(CommonExceptionCode.EXIST_EMAIL_ERROR);
