@@ -19,11 +19,11 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import lombok.RequiredArgsConstructor;
-
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.Valid;
+
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
 
@@ -34,7 +34,7 @@ import java.time.LocalDateTime;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/tech-info")
+@RequestMapping("/tech-info/posts")
 public class TechInfoPostController {
 
     private final PostService postService;
@@ -45,7 +45,7 @@ public class TechInfoPostController {
     )
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.NOT_FOUND_BLOG)
-    @GetMapping("/posts/adjacent")
+    @GetMapping("/adjacent")
     public BlogAdjacentPostsResponse fetchAdjacentPosts(
             @Parameter(description = "블로그 ID", example = "1") @RequestParam(value = "blogId") @NotNull Long blogId,
             @Parameter(description = "생성 날짜", example = "2024-09-16T03:18:13.734") @RequestParam("createDate") @NotNull LocalDateTime createDate)
@@ -53,12 +53,6 @@ public class TechInfoPostController {
         return postService.getAdjacentPosts(blogId, createDate);
     }
 
-    /**
-     * 특정 포스트 ID로 조회, isPublic 필드를 제외하고 가져옴
-     *
-     * @param postId 포스트의 ObjectId
-     * @return {@link PostDetailInfoResponse} isPublic 필드를 제외한 포스트 정보
-     */
     @Operation(
             summary = "포스트 상세 조회",
             description = "특정 포스트 ID로 포스트의 상세 정보를 조회한다."
@@ -69,7 +63,7 @@ public class TechInfoPostController {
             CommonExceptionCode.NOT_FOUND_POST,
             CommonExceptionCode.NOT_FOUND_BLOG
     })
-    @GetMapping("/post/{postId}")
+    @GetMapping("/{postId}")
     public PostDetailInfoResponse retrievePostDetail(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @Parameter(description = "포스트 ID", example = "66e724e50000000000db4e53") @PathVariable @NotBlank String postId)
@@ -86,7 +80,7 @@ public class TechInfoPostController {
             CommonExceptionCode.NOT_FOUND_USER,
             CommonExceptionCode.NOT_FOUND_BLOG
     })
-    @PostMapping("/post")
+    @PostMapping
     public String createPost(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody @Valid PostCreateRequest request)
@@ -101,7 +95,7 @@ public class TechInfoPostController {
     )
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.NOT_FOUND_POST)
-    @PatchMapping("/post")
+    @PatchMapping
     public String editPostDetails(
             @RequestBody @Valid PostUpdateRequest request)
     {
@@ -111,11 +105,11 @@ public class TechInfoPostController {
 
     @Operation(
             summary = "포스트 삭제",
-            description = "특정 포스트을 비활성화하여 삭제한다."
+            description = "지정된 포스트 ID를 사용해 해당 포스트의 공개 상태를 비활성화하고, 사용자에게 보이지 않도록 처리한다."
     )
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.NOT_FOUND_POST)
-    @PatchMapping("/post/hide/{postId}")
+    @PatchMapping("/hide/{postId}")
     public String deletePost(
             @Parameter(description = "포스트 ID", example = "66e724e50000000000db4e53") @PathVariable @NotBlank String postId)
     {
