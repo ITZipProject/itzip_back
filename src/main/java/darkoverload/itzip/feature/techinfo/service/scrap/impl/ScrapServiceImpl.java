@@ -29,7 +29,7 @@ public class ScrapServiceImpl implements ScrapService {
         Long userId = getUserIdByEmail(userDetails.getEmail());
 
         boolean isScrapped = isScrapped(userId, postId); // 현재 상태 확인
-        scrapCacheRepository.setScrapStatus(userId, postId, !isScrapped, 90); // 상태를 반전하여 서렂ㅇ
+        scrapCacheRepository.setScrapStatus(userId, postId, !isScrapped, 90); // 상태를 반전하여 설정
 
         return !isScrapped;
     }
