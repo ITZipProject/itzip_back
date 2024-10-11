@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.techinfo.controller.like;
+package darkoverload.itzip.feature.techinfo.controller.post;
 
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.techinfo.service.like.LikeService;
