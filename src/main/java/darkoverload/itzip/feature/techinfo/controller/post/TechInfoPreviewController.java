@@ -30,7 +30,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/tech-info/posts")
-public class TechInfoPostPreviewController {
+public class TechInfoPreviewController {
 
     private final PostPreviewService postPreviewService;
     private final PostBlogPreviewService postBlogPreviewService;
