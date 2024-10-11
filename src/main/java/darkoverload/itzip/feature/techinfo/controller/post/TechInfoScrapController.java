@@ -23,7 +23,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 
 @Tag(
-        name = "Tech Info Scrap",
+        name = "Tech Info Post Scrap",
         description = "포스트에 대한 스크랩 기능을 제공하는 API"
 )
 @Validated

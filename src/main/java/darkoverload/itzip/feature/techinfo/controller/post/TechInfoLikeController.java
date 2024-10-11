@@ -23,7 +23,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 
 @Tag(
-        name = "Tech Info Like",
+        name = "Tech Info Post Like",
         description = "포스트에 대한 좋아요 기능을 제공하는 API"
 )
 @Validated
