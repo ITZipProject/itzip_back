@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.techinfo.controller.scrap;
+package darkoverload.itzip.feature.techinfo.controller.post;
 
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.techinfo.service.scrap.ScrapService;
@@ -29,7 +29,7 @@ import lombok.RequiredArgsConstructor;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/tech-info")
+@RequestMapping("/tech-info/scrap")
 public class TechInfoScrapController {
 
     private final ScrapService scrapService;
@@ -40,7 +40,7 @@ public class TechInfoScrapController {
     )
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.NOT_FOUND_USER)
-    @PostMapping("scrap/toggle")
+    @PostMapping("/toggle")
     public String toggleScrapStatus(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @Parameter(description = "포스트 ID", example = "66e724e50000000000db4e53") @RequestParam @NotBlank String postId)
