@@ -1,12 +1,12 @@
 package darkoverload.itzip.feature.techinfo.repository.blog.custom;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
-
 import darkoverload.itzip.feature.techinfo.model.entity.BlogEntity;
+
+import org.springframework.stereotype.Repository;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.stereotype.Repository;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import java.util.Optional;
 
@@ -18,24 +18,12 @@ public class CustomBlogRepositoryImpl implements CustomBlogRepository {
 
     private final JPAQueryFactory queryFactory;
 
-    // 블로그 ID와 공개 여부를 기준으로 BlogEntity 조회
-    public Optional<BlogEntity> findByIdAndIsPublic(Long id) {
-        BlogEntity result = queryFactory
-                .selectFrom(blogEntity)
-                .where(blogEntity.id.eq(id)
-                        .and(blogEntity.isPublic.isTrue())) // 공개된 블로그만 조회
-                .fetchOne();
-
-        return Optional.ofNullable(result); // 결과를 Optional로 반환
-    }
-
-    // 사용자 ID와 공개 여부를 기준으로 BlogEntity 조회
     @Override
-    public Optional<BlogEntity> findByUserIdAndIsPublic(Long userId) {
+    public Optional<BlogEntity> findByIdAndIsPublic(Long Id) {
         BlogEntity result = queryFactory
                 .selectFrom(blogEntity)
-                .where(blogEntity.userId.eq(userId)
-                        .and(blogEntity.isPublic.isTrue())) // 공개된 블로그만 조회
+                .where(blogEntity.userId.eq(Id)
+                        .and(blogEntity.isPublic.isTrue()))  // 공개된 블로그만 조회
                 .fetchOne();
 
         return Optional.ofNullable(result);

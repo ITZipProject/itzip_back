@@ -3,15 +3,14 @@ package darkoverload.itzip.feature.techinfo.model.document;
 import darkoverload.itzip.feature.techinfo.domain.Comment;
 import darkoverload.itzip.global.entity.MongoAuditingFields;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-
 import org.bson.types.ObjectId;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 /**
  * MongoDB에 저장되는 댓글 정보를 나타내는 문서 클래스.
