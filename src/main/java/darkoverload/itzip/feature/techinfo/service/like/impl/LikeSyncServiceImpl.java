@@ -31,20 +31,18 @@ public class LikeSyncServiceImpl implements LikeSyncService {
         for (LikeStatusDto likeStatus : cachedLikes) {
             ObjectId postId = new ObjectId(likeStatus.getPostId());
             Long userId = likeStatus.getUserId();
+            boolean isLiked = likeStatus.getIsLiked();
+            boolean exists = likeRepository.existsByUserIdAndPostId(userId, postId);
 
-            if (likeStatus.getIsLiked()) {
+            if (isLiked && !exists) {
                 // 좋아요 추가
-                if (!likeRepository.existsByUserIdAndPostId(userId, postId)) {  // 좋아요가 이미 있는지 확인
-                    Like like = likeStatus.convertToDomain(); // DTO를 도메인 객체로 변환
-                    likeRepository.save(like.convertToDocumentWithoutLikeId()); // 좋아요 추가
-                    postRepository.updateLikeCount(postId, 1); // 포스트 좋아요 수 증가
-                }
-            } else {
+                Like like = likeStatus.convertToDomain(); // DTO를 도메인 객체로 변환
+                likeRepository.save(like.convertToDocumentWithoutLikeId()); // 좋아요 추가
+                postRepository.updateLikeCount(postId, 1); // 포스트 좋아요 수 증가
+            } else if (!isLiked && exists) {
                 // 좋아요 취소
-                if (likeRepository.existsByUserIdAndPostId(userId, postId)) { // 좋아요가 이미 존재하는지 확인
-                    likeRepository.deleteByUserIdAndPostId(userId, postId); // 좋아요 취소
-                    postRepository.updateLikeCount(postId, -1); // 포스트 좋아요 수 감소
-                }
+                likeRepository.deleteByUserIdAndPostId(userId, postId); // 좋아요 취소
+                postRepository.updateLikeCount(postId, -1); // 포스트 좋아요 수 감소
             }
         }
     }
