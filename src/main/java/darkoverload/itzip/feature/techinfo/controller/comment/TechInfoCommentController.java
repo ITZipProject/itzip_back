@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 )
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/tech-info")
+@RequestMapping("/tech-info/comments")
 public class TechInfoCommentController {
 
     private final CommentService commentService;
@@ -38,7 +38,7 @@ public class TechInfoCommentController {
     )
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.NOT_FOUND_USER)
-    @GetMapping("/comments")
+    @GetMapping("")
     public PagedModel<EntityModel<CommentResponse>> fetchFilteredComments(
             @Parameter(description = "포스트 ID", example = "66e724e50000000000db4e53") @RequestParam(name = "postId") String postId,
             @RequestParam(name = "page", defaultValue = "0") int page,
@@ -56,7 +56,7 @@ public class TechInfoCommentController {
             CommonExceptionCode.NOT_FOUND_USER,
             CommonExceptionCode.NOT_FOUND_POST
     })
-    @PostMapping("/comment")
+    @PostMapping("")
     public String createComment(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody CommentCreateRequest request)
@@ -74,7 +74,7 @@ public class TechInfoCommentController {
             CommonExceptionCode.NOT_FOUND_USER,
             CommonExceptionCode.NOT_FOUND_COMMENT
     })
-    @PatchMapping("/comment")
+    @PatchMapping("")
     public String editComment(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @RequestBody CommentUpdateRequest request)
@@ -92,7 +92,7 @@ public class TechInfoCommentController {
             CommonExceptionCode.NOT_FOUND_USER,
             CommonExceptionCode.NOT_FOUND_COMMENT,
     })
-    @PatchMapping("/comment/{commentId}/hide")
+    @PatchMapping("/{commentId}/hide")
     public String deleteComment(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @Parameter(description = "댓글 ID", example = "66eaeacb48e1841cc9893a60") @PathVariable String commentId)
