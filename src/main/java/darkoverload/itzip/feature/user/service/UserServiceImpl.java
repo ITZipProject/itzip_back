@@ -92,19 +92,6 @@ public class UserServiceImpl implements UserService {
 
         tokenService.saveOrUpdate(token);
 
-        // 토큰 쿠키 저장
-        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.accessTokenExpire / 1000));
-        httpServletResponse.addCookie(accessTokenCookie);
-
-        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.refreshTokenExpire / 1000));
-        httpServletResponse.addCookie(refreshTokenCookie);
-
         // 응답 값
         UserLoginResponse userLoginResponse = UserLoginResponse.builder()
                 .accessToken(accessToken)
@@ -123,11 +110,6 @@ public class UserServiceImpl implements UserService {
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         // access token 가져오기
         String accessToken = CookieUtils.findCookieValue(request, "accessToken").orElse(null);
-
-        // access token 삭제
-        CookieUtils.deleteCookie(response, "accessToken");
-        // refresh token 삭제
-        CookieUtils.deleteCookie(response, "refreshToken");
 
         // tokens 데이터 삭제
         tokenService.deleteByAccessToken(accessToken);
