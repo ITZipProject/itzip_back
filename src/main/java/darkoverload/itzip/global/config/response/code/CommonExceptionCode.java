@@ -129,6 +129,8 @@ public enum CommonExceptionCode implements ResponseCode {
     UPDATE_COOLDOWN(HttpStatus.CONFLICT, "마지막 업데이트로부터 시간이 지나지 않았습니다."),
     //solved.ac 서버로부터 api를 받아올수 없습니다.
     SOLVEDAC_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "solved.ac로부터 오류를 보냈습니다."),
+    //solved.ac 로부터 받아온 url에 에러가 생겼습니다.
+    SOLVEDAC_PROFILEIMAGE_URL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "solved.ac로부터 받은 image url에 에러가 있습니다."),
 
     /**
      * Resume Error
