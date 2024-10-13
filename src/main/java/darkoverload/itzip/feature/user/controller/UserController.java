@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -55,8 +54,8 @@ public class UserController {
     @PostMapping("/login")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_MATCH_PASSWORD})
-    public ResponseEntity<UserLoginResponse> login(@RequestBody @Valid UserLoginRequest userLoginRequest, HttpServletResponse httpServletResponse) {
-        return userService.login(userLoginRequest, httpServletResponse);
+    public ResponseEntity<UserLoginResponse> login(@RequestBody @Valid UserLoginRequest userLoginRequest) {
+        return userService.login(userLoginRequest);
     }
 
     /**
@@ -68,8 +67,8 @@ public class UserController {
     )
     @DeleteMapping("/logout")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
-        return userService.logout(request, response);
+    public String logout(HttpServletRequest request) {
+        return userService.logout(request);
     }
 
     /**
@@ -82,8 +81,8 @@ public class UserController {
     @PatchMapping("/refreshToken")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.JWT_UNKNOWN_ERROR, CommonExceptionCode.NOT_FOUND_USER})
-    public ResponseEntity<UserLoginResponse> refreshToken(HttpServletRequest request, HttpServletResponse response) {
-        return userService.refreshToken(request, response);
+    public ResponseEntity<UserLoginResponse> refreshToken(HttpServletRequest request) {
+        return userService.refreshToken(request);
     }
 
     /**
@@ -110,8 +109,8 @@ public class UserController {
     @PostMapping("/authEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.FILED_ERROR)
-    public String sendAuthEmail(@RequestBody @Valid AuthEmailSendRequest request) {
-        return userService.sendAuthEmail(request);
+    public String sendAuthEmail(@RequestBody @Valid AuthEmailSendRequest authEmailSendRequest) {
+        return userService.sendAuthEmail(authEmailSendRequest);
     }
 
     /**
@@ -159,9 +158,8 @@ public class UserController {
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_FOUND_USER})
     public String tempUserOut(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            HttpServletRequest request,
-            HttpServletResponse response
+            HttpServletRequest request
     ) {
-        return userService.tempUserOut(userDetails, request, response);
+        return userService.tempUserOut(userDetails, request);
     }
 }

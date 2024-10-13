@@ -14,15 +14,15 @@ import java.util.Optional;
 public interface UserService {
     ResponseEntity<UserInfoResponse> getUserInfo(CustomUserDetails userDetails);
 
-    ResponseEntity<UserLoginResponse> login(UserLoginRequest userLoginRequest, HttpServletResponse httpServletResponse);
+    ResponseEntity<UserLoginResponse> login(UserLoginRequest userLoginRequest);
 
-    String logout(HttpServletRequest request, HttpServletResponse response);
+    String logout(HttpServletRequest request);
 
-    ResponseEntity<UserLoginResponse> refreshToken(HttpServletRequest request, HttpServletResponse response);
+    ResponseEntity<UserLoginResponse> refreshToken(HttpServletRequest request);
 
     String save(UserJoinRequest userJoinRequest);
 
-    String sendAuthEmail(AuthEmailSendRequest emailSendRequest);
+    String sendAuthEmail(AuthEmailSendRequest authEmailSendRequest);
 
     String checkAuthEmail(String email, String authCode);
 
@@ -40,5 +40,5 @@ public interface UserService {
 
     String encryptPassword(String password);
 
-    String tempUserOut(CustomUserDetails userDetails, HttpServletRequest request, HttpServletResponse response);
+    String tempUserOut(CustomUserDetails userDetails, HttpServletRequest request);
 }

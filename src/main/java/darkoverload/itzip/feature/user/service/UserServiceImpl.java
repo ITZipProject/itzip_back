@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional
-    public ResponseEntity<UserLoginResponse> login(UserLoginRequest userLoginRequest, HttpServletResponse httpServletResponse) {
+    public ResponseEntity<UserLoginResponse> login(UserLoginRequest userLoginRequest) {
         User user = findByEmail(userLoginRequest.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_MATCH_PASSWORD));
 
         // 비밀번호 일치여부 체크
@@ -106,7 +106,7 @@ public class UserServiceImpl implements UserService {
      * 로그아웃
      */
     @Override
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
+    public String logout(HttpServletRequest request) {
         // access token 가져오기
         String accessToken = jwtTokenizer.resolveAccessToken(request);
 
@@ -120,7 +120,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<UserLoginResponse> refreshToken(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<UserLoginResponse> refreshToken(HttpServletRequest request) {
         // cookie에서 refresh token  가져오기
         String refreshToken = CookieUtils.findCookieValue(request, "refreshToken").orElseThrow(
                 () -> new RestApiException(CommonExceptionCode.JWT_UNKNOWN_ERROR)
@@ -183,12 +183,12 @@ public class UserServiceImpl implements UserService {
 
 
     @Transactional(readOnly = true)
-    public String sendAuthEmail(AuthEmailSendRequest emailSendRequest) {
+    public String sendAuthEmail(AuthEmailSendRequest authEmailSendRequest) {
         // 랜덤 인증 코드 생성
         String authCode = RandomAuthCode.generate();
 
         // redis에 인증 코드 저장
-        verificationService.saveCode(emailSendRequest.getEmail(), authCode);
+        verificationService.saveCode(authEmailSendRequest.getEmail(), authCode);
 
         // 메일 제목
         String subject = "[ITZIP] 이메일 인증번호 : " + authCode;
@@ -197,7 +197,7 @@ public class UserServiceImpl implements UserService {
         String body = emailService.setAuthForm(authCode);
 
         // 메일 발송
-        emailService.sendFormMail(emailSendRequest.getEmail(), subject, body);
+        emailService.sendFormMail(authEmailSendRequest.getEmail(), subject, body);
         return "인증 메일이 발송되었습니다.";
     }
 
@@ -244,8 +244,8 @@ public class UserServiceImpl implements UserService {
      * 임시 회원 탈퇴
      */
     @Override
-    public String tempUserOut(CustomUserDetails userDetails, HttpServletRequest request, HttpServletResponse response) {
-        logout(request, response);
+    public String tempUserOut(CustomUserDetails userDetails, HttpServletRequest request) {
+        logout(request);
 
         User user = findByEmail(userDetails.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
 
