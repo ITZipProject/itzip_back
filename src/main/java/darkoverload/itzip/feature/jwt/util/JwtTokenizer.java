@@ -7,8 +7,10 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -23,6 +25,8 @@ public class JwtTokenizer {
     private final byte[] refreshSecret;
     public static Long accessTokenExpire;
     public static Long refreshTokenExpire;
+
+    public static final String AUTHORIZATION_HEADER = "Authorization";
 
     public JwtTokenizer(@Value("${jwt.accessSecret}") String accessSecret, @Value("${jwt.refreshSecret}") String refreshSecret, @Value("${jwt.accessTokenExpire}") Long accessTokenExpire, @Value("${jwt.refreshTokenExpire}") Long refreshTokenExpire) {
         this.accessSecret = accessSecret.getBytes(StandardCharsets.UTF_8);
@@ -140,5 +144,16 @@ public class JwtTokenizer {
      */
     public static Key getSigningKey(byte[] secretKey) {
         return Keys.hmacShaKeyFor(secretKey);
+    }
+
+    /**
+     * Request Header에서 토큰 정보를 꺼내오기 위한 resolveToken 메서드
+     */
+    public String resolveAccessToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 }

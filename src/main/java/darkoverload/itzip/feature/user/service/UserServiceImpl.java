@@ -16,7 +16,6 @@ import darkoverload.itzip.feature.user.util.RandomNickname;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -109,7 +108,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         // access token 가져오기
-        String accessToken = CookieUtils.findCookieValue(request, "accessToken").orElse(null);
+        String accessToken = jwtTokenizer.resolveAccessToken(request);
 
         // tokens 데이터 삭제
         tokenService.deleteByAccessToken(accessToken);
@@ -140,14 +139,6 @@ public class UserServiceImpl implements UserService {
 
         // Token 데이터 access token 값 업데이트
         tokenService.updateByRefreshToken(refreshToken, accessToken);
-
-        // accessToken 쿠키 생성
-        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.accessTokenExpire / 1000));
-
-        response.addCookie(accessTokenCookie);
 
         // 응답 값
         UserLoginResponse userLoginResponse = UserLoginResponse.builder()

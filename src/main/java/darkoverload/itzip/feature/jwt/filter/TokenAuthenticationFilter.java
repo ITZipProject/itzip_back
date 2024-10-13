@@ -35,8 +35,6 @@ import java.util.List;
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenizer jwtTokenizer;
 
-    public static final String AUTHORIZATION_HEADER = "Authorization";
-
     /**
      * 필터 메서드
      * 각 요청마다 JWT 토큰을 검증하고 인증을 설정
@@ -50,7 +48,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 쿠키에 저장된 accessToken 값을 가져옴
-        String accessToken = resolveToken(request);
+        String accessToken = jwtTokenizer.resolveAccessToken(request);
 
         if (StringUtils.hasText(accessToken)) {
             try {
@@ -86,16 +84,5 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
         CustomUserDetails userDetails = new CustomUserDetails(email, "", nickname, (List<GrantedAuthority>) authorities);
         Authentication authentication = new JwtAuthenticationToken(authorities, userDetails, null); // 인증 객체 생성
         SecurityContextHolder.getContext().setAuthentication(authentication); // SecurityContextHolder에 인증 객체 설정
-    }
-
-    /**
-     * Request Header에서 토큰 정보를 꺼내오기 위한 resolveToken 메서드
-     */
-    private String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-            return bearerToken.substring(7);
-        }
-        return null;
     }
 }
