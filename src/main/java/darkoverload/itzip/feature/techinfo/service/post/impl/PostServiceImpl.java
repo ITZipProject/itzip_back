@@ -9,7 +9,7 @@ import darkoverload.itzip.feature.techinfo.domain.Blog;
 import darkoverload.itzip.feature.techinfo.domain.Post;
 import darkoverload.itzip.feature.techinfo.model.document.PostDocument;
 import darkoverload.itzip.feature.techinfo.repository.post.PostRepository;
-import darkoverload.itzip.feature.techinfo.service.blog.BlogService;
+import darkoverload.itzip.feature.techinfo.service.blog.core.BlogService;
 import darkoverload.itzip.feature.techinfo.service.like.LikeService;
 import darkoverload.itzip.feature.techinfo.service.post.PostService;
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
@@ -42,7 +42,7 @@ public class PostServiceImpl implements PostService {
     @Transactional(readOnly = true) // PostgreSQL과 관련된 작업에 트랜잭션 적용
     public void addNewPost(CustomUserDetails userDetails, PostCreateRequest request) {
         Long userId = getUserIdByEmail(userDetails.getEmail()); // 로그인 회원 이메일을 통해 유저 ID 조회
-        Long blogId = blogService.getBlogById(userId).getId(); // 블로그 ID 조회
+        Long blogId = blogService.findBlogById(userId).getId(); // 블로그 ID 조회
 
         Post post = Post.createPost(request, blogId); // 새로운 포스트 생성
         postRepository.save(post.convertToDocumentWithoutPostId()); // 포스트 저장
@@ -74,7 +74,7 @@ public class PostServiceImpl implements PostService {
     public BlogAdjacentPostsResponse getAdjacentPosts(Long blogId, LocalDateTime createDate) {
         int limit = 4; // 한 번에 조회할 포스트 수 제한
 
-        String nickname = blogService.getBlogById(blogId)
+        String nickname = blogService.findBlogById(blogId)
                 .getUser()
                 .getNickname(); // 유저 닉네임 조회
 
@@ -101,7 +101,7 @@ public class PostServiceImpl implements PostService {
                 ); // 포스트가 없으면 예외 발생
 
         postRepository.updateViewCount(new ObjectId(postId)); // 조회수 증가
-        Blog blog = blogService.getBlogById(post.getBlogId()); // 블로그 정보 조회
+        Blog blog = blogService.findBlogById(post.getBlogId()); // 블로그 정보 조회
 
         return post.convertToPostDetailInfoResponse(blog.getUser(), isLiked, isScrapped); // 포스트 세부 정보 반환
     }
