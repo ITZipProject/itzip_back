@@ -80,9 +80,9 @@ public class UserController {
     )
     @PatchMapping("/refreshToken")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
-    @ExceptionCodeAnnotations({CommonExceptionCode.JWT_UNKNOWN_ERROR, CommonExceptionCode.NOT_FOUND_USER})
-    public ResponseEntity<UserLoginResponse> refreshToken(HttpServletRequest request) {
-        return userService.refreshToken(request);
+    @ExceptionCodeAnnotations(CommonExceptionCode.FILED_ERROR)
+    public ResponseEntity<UserLoginResponse> refreshAccessToken(@RequestBody @Valid RefreshAccessTokenRequest refreshAccessTokenRequest) {
+        return userService.refreshAccessToken(refreshAccessTokenRequest);
     }
 
     /**

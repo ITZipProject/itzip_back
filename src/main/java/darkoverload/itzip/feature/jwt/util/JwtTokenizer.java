@@ -5,6 +5,7 @@ import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -101,6 +102,7 @@ public class JwtTokenizer {
 
     /**
      * access token 파싱
+     *
      * @param accessToken access token
      * @return 파싱된 토큰
      */
@@ -110,6 +112,7 @@ public class JwtTokenizer {
 
     /**
      * refresh token 파싱
+     *
      * @param refreshToken refresh token
      * @return 파싱된 토큰
      */
@@ -119,7 +122,8 @@ public class JwtTokenizer {
 
     /**
      * token 파싱
-     * @param token access/refresh token
+     *
+     * @param token     access/refresh token
      * @param secretKey access/refresh 비밀키
      * @return 파싱된 토큰
      */
@@ -131,7 +135,7 @@ public class JwtTokenizer {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-        } catch (SignatureException e) { // 토큰 유효성 체크 실패 시
+        } catch (SignatureException | MalformedJwtException e) {  // 토큰 유효성 체크 실패 시
             throw new RestApiException(CommonExceptionCode.JWT_INVALID_ERROR);
         }
 

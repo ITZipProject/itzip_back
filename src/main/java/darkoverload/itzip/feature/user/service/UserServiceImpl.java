@@ -120,11 +120,9 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<UserLoginResponse> refreshToken(HttpServletRequest request) {
+    public ResponseEntity<UserLoginResponse> refreshAccessToken(RefreshAccessTokenRequest refreshAccessTokenRequest) {
         // cookie에서 refresh token  가져오기
-        String refreshToken = CookieUtils.findCookieValue(request, "refreshToken").orElseThrow(
-                () -> new RestApiException(CommonExceptionCode.JWT_UNKNOWN_ERROR)
-        );
+        String refreshToken = refreshAccessTokenRequest.getRefreshToken();
 
         // refresh token 파싱
         Claims claims = jwtTokenizer.parseRefreshToken(refreshToken);

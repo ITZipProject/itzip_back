@@ -18,7 +18,7 @@ public interface UserService {
 
     String logout(HttpServletRequest request);
 
-    ResponseEntity<UserLoginResponse> refreshToken(HttpServletRequest request);
+    ResponseEntity<UserLoginResponse> refreshAccessToken(RefreshAccessTokenRequest refreshAccessTokenRequest);
 
     String save(UserJoinRequest userJoinRequest);
 

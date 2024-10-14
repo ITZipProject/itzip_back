@@ -7,6 +7,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Optional;
 
+/**
+ * 쿠키를 관리하기 위한 유틸리티
+ *
+ * @deprecated jwt 인증 방식 변경(쿠키 -> 헤더)으로 인한 미사용처리
+ */
 public class CookieUtils {
 
     /**
