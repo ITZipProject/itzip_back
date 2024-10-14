@@ -50,7 +50,7 @@
         let inputField = authModal.querySelector('input[type="text"]'); // 토큰 입력 필드 선택
         let token = inputField.value.replace('Bearer ', ''); //토큰의 Bearer 문자열 제거
         document.cookie = `accessToken=${token};path=/;SameSite=Lax;`; // 쿠키에 토큰 저장
-        alert(`JWT 토큰이 쿠키에 설정되었습니다. accessToken=${token}`); // 사용자에게 알림
+        alert(`요청 헤더에 JWT 인증을 설정했습니다. Authorization: Bearer ${token}`); // 사용자에게 알림
       }
     }
   </script>
