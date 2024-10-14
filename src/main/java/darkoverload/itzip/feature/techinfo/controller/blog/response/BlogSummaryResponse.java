@@ -12,7 +12,7 @@ import lombok.Getter;
 @Getter
 @Builder
 @AllArgsConstructor
-public class BlogBasicInfoResponse {
+public class BlogSummaryResponse {
 
     /**
      * 현재는 사용되지 않으며, 차후에 블로그 관련 기능 개선 시 활용할 예정입니다.

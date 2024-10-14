@@ -16,7 +16,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-public class BlogDetailInfoResponse {
+public class BlogDetailsResponse {
 
     @Schema(description = "블로그의 고유 ID", example = "1")
     private Long blogId;

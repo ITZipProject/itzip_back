@@ -1,7 +1,7 @@
 package darkoverload.itzip.feature.techinfo.domain;
 
-import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogBasicInfoResponse;
-import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogDetailInfoResponse;
+import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogDetailsResponse;
+import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogSummaryResponse;
 import darkoverload.itzip.feature.techinfo.dto.post.year.YearlyPostDto;
 import darkoverload.itzip.feature.techinfo.model.entity.BlogEntity;
 import darkoverload.itzip.feature.user.domain.User;
@@ -16,7 +16,6 @@ import java.util.List;
  */
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class Blog {
 
@@ -69,8 +68,8 @@ public class Blog {
                 .build();
     }
 
-    public BlogBasicInfoResponse convertToBlogBasicInfoResponse() {
-        return BlogBasicInfoResponse.builder()
+    public BlogSummaryResponse convertToBlogBasicInfoResponse() {
+        return BlogSummaryResponse.builder()
                 .profileImagePath(this.user.getImageUrl())
                 .nickname(this.user.getNickname())
                 .email(this.user.getEmail())
@@ -78,8 +77,8 @@ public class Blog {
                 .build();
     }
 
-    public BlogDetailInfoResponse convertToBlogDetailInfoResponse(List<YearlyPostDto> yearlyPostsCount) {
-        return BlogDetailInfoResponse.builder()
+    public BlogDetailsResponse convertToBlogDetailInfoResponse(List<YearlyPostDto> yearlyPostsCount) {
+        return BlogDetailsResponse.builder()
                 .blogId(this.getId())
                 .profileImagePath(this.user.getImageUrl())
                 .nickname(this.user.getNickname())
