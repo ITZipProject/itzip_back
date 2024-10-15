@@ -6,6 +6,7 @@ import darkoverload.itzip.feature.algorithm.entity.SolvedacUserEntity;
 import darkoverload.itzip.feature.algorithm.repository.user.SolvedacUserRepository;
 import darkoverload.itzip.feature.algorithm.util.SaveSolvedUser;
 import darkoverload.itzip.feature.algorithm.util.SaveUserSolvedProblem;
+import darkoverload.itzip.feature.image.service.CloudStorageService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,9 @@ class UpdateUserSolvedProfileAndProblemServiceImplTest {
 
     @Mock
     private SolvedacUserRepository solvedacUserRepository;
+
+    @Mock
+    private CloudStorageService cloudStorageService;
 
     @InjectMocks
     private UpdateUserSolvedProfileAndProblemServiceImpl updateUserSolvedProfileAndProblemService;
