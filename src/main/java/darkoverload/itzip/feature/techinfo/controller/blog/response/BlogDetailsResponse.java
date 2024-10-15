@@ -21,7 +21,7 @@ public class BlogDetailsResponse {
     @Schema(description = "블로그의 고유 ID", example = "1")
     private Long blogId;
 
-    @Schema(description = "블로그 소유자의 프로필 이미지 경로", example = "")
+    @Schema(description = "블로그 소유자의 프로필 이미지 경로", example = "https://dy1vg9emkijkn.cloudfront.net/profile/19cc111f-c8f4-4d64-bd7a-129415e3ffa2.jpg")
     private String profileImagePath;
 
     @Schema(description = "블로그 소유자의 닉네임", example = "hyoseung")
