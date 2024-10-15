@@ -3,11 +3,13 @@ package darkoverload.itzip.feature.techinfo.service.blog.core;
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.techinfo.controller.blog.request.UpdateBlogIntroRequest;
 import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogDetailsResponse;
+import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogRecentPostsResponse;
 import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogSummaryResponse;
 import darkoverload.itzip.feature.techinfo.domain.Blog;
 import darkoverload.itzip.feature.techinfo.service.blog.create.CreateBlogService;
 import darkoverload.itzip.feature.techinfo.service.blog.find.FindBlogDetailsService;
-import darkoverload.itzip.feature.techinfo.service.blog.find.FindBlogService;
+import darkoverload.itzip.feature.techinfo.service.blog.find.FindBlogRecentPostsService;
+import darkoverload.itzip.feature.techinfo.service.blog.find.FindBlogSearchService;
 import darkoverload.itzip.feature.techinfo.service.blog.find.FindBlogSummaryService;
 import darkoverload.itzip.feature.techinfo.service.blog.update.UpdateBlogDisableService;
 import darkoverload.itzip.feature.techinfo.service.blog.update.UpdateBlogIntroService;
@@ -18,9 +20,11 @@ import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
-public class BlogServiceImpl implements BlogService {
+public class BlogSearchServiceImpl implements BlogSearchService {
 
     @Qualifier("createBlogServiceImpl")
     private final CreateBlogService createBlogService;
@@ -31,14 +35,17 @@ public class BlogServiceImpl implements BlogService {
     @Qualifier("updateBlogDisableServiceImpl")
     private final UpdateBlogDisableService updateBlogDisableService;
 
-    @Qualifier("findBlogServiceImpl")
-    private final FindBlogService findBlogService;
+    @Qualifier("findBlogSearchServiceImpl")
+    private final FindBlogSearchService findBlogSearchService;
 
     @Qualifier("findBlogSummaryServiceImpl")
     private final FindBlogSummaryService findBlogSummaryService;
 
     @Qualifier("findBlogDetailsServiceImpl")
     private final FindBlogDetailsService findBlogDetailsService;
+
+    @Qualifier("findBlogRecentPostsServiceImpl")
+    private final FindBlogRecentPostsService findBlogRecentPostsService;
 
     @Override
     public void createBlog(User user) {
@@ -56,8 +63,8 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Blog findBlogById(Long id) {
-        return findBlogService.findBlogById(id);
+    public Blog findBlogSearchById(Long id) {
+        return findBlogSearchService.findBlogSearchById(id);
     }
 
     @Override
@@ -68,5 +75,10 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public BlogDetailsResponse findBlogDetailsByNickname(CustomUserDetails userDetails, String nickname) {
         return findBlogDetailsService.findBlogDetailsByNickname(userDetails, nickname);
+    }
+
+    @Override
+    public BlogRecentPostsResponse findBlogRecentPostsByBlogIdAndCreateDate(Long blogId, LocalDateTime createDate) {
+        return findBlogRecentPostsService.findBlogRecentPostsByBlogIdAndCreateDate(blogId, createDate);
     }
 }

@@ -2,14 +2,12 @@ package darkoverload.itzip.feature.techinfo.service.post.impl;
 
 import darkoverload.itzip.feature.techinfo.controller.post.request.PostCreateRequest;
 import darkoverload.itzip.feature.techinfo.controller.post.request.PostUpdateRequest;
-import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogAdjacentPostsResponse;
 import darkoverload.itzip.feature.techinfo.controller.post.response.PostDetailInfoResponse;
-import darkoverload.itzip.feature.techinfo.controller.post.response.PostBasicResponse;
 import darkoverload.itzip.feature.techinfo.domain.Blog;
 import darkoverload.itzip.feature.techinfo.domain.Post;
 import darkoverload.itzip.feature.techinfo.model.document.PostDocument;
 import darkoverload.itzip.feature.techinfo.repository.post.PostRepository;
-import darkoverload.itzip.feature.techinfo.service.blog.core.BlogService;
+import darkoverload.itzip.feature.techinfo.service.blog.core.BlogSearchService;
 import darkoverload.itzip.feature.techinfo.service.like.LikeService;
 import darkoverload.itzip.feature.techinfo.service.post.PostService;
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
@@ -23,7 +21,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.bson.types.ObjectId;
 
-import java.time.LocalDateTime;
 import java.util.*;
 
 import lombok.RequiredArgsConstructor;
@@ -34,7 +31,7 @@ public class PostServiceImpl implements PostService {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
-    private final BlogService blogService;
+    private final BlogSearchService blogService;
     private final LikeService likeService;
     private final ScrapService scrapService;
 
@@ -42,7 +39,7 @@ public class PostServiceImpl implements PostService {
     @Transactional(readOnly = true) // PostgreSQL과 관련된 작업에 트랜잭션 적용
     public void addNewPost(CustomUserDetails userDetails, PostCreateRequest request) {
         Long userId = getUserIdByEmail(userDetails.getEmail()); // 로그인 회원 이메일을 통해 유저 ID 조회
-        Long blogId = blogService.findBlogById(userId).getId(); // 블로그 ID 조회
+        Long blogId = blogService.findBlogSearchById(userId).getId(); // 블로그 ID 조회
 
         Post post = Post.createPost(request, blogId); // 새로운 포스트 생성
         postRepository.save(post.convertToDocumentWithoutPostId()); // 포스트 저장
@@ -71,24 +68,6 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public BlogAdjacentPostsResponse getAdjacentPosts(Long blogId, LocalDateTime createDate) {
-        int limit = 4; // 한 번에 조회할 포스트 수 제한
-
-        String nickname = blogService.findBlogById(blogId)
-                .getUser()
-                .getNickname(); // 유저 닉네임 조회
-
-        List<PostBasicResponse> postResponses = getAdjacentPostsByBlog(blogId, createDate, limit).stream() // 인접한 포스트들을 조회하고 변환
-                .map(Post::convertToPostBasicResponse)
-                .toList();
-
-        return BlogAdjacentPostsResponse.builder() // 닉네임과 조회된 포스트를 포함한 응답 반환
-                .nickname(nickname)
-                .posts(postResponses)
-                .build();
-    }
-
-    @Override
     @Transactional(readOnly = true) // PostgreSQL과 관련된 작업에 트랜잭션 적용
     public PostDetailInfoResponse getPostDetailById(CustomUserDetails userDetails, String postId) {
         Long loggedInUserId = getUserIdByEmail(userDetails.getEmail()); // 현재 로그인한 사용자 정보 조회
@@ -101,7 +80,7 @@ public class PostServiceImpl implements PostService {
                 ); // 포스트가 없으면 예외 발생
 
         postRepository.updateViewCount(new ObjectId(postId)); // 조회수 증가
-        Blog blog = blogService.findBlogById(post.getBlogId()); // 블로그 정보 조회
+        Blog blog = blogService.findBlogSearchById(post.getBlogId()); // 블로그 정보 조회
 
         return post.convertToPostDetailInfoResponse(blog.getUser(), isLiked, isScrapped); // 포스트 세부 정보 반환
     }
@@ -110,12 +89,6 @@ public class PostServiceImpl implements PostService {
         if (!isUpdated) {
             throw new RestApiException(exceptionCode); // 업데이트 실패 시 예외 발생
         }
-    }
-
-    private List<Post> getAdjacentPostsByBlog(Long blogId, LocalDateTime createDate, int limit) {
-        return postRepository.findAdjacentPosts(blogId, createDate, limit).stream() // 인접 포스트 조회
-                .map(PostDocument::convertToDomainWithBasicFields)
-                .toList();
     }
 
     private Optional<Post> getByPostIdExcludingIsPublic(String postId) {
