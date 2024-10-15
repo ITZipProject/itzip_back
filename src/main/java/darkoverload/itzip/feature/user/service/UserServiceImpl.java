@@ -121,7 +121,6 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public ResponseEntity<UserLoginResponse> refreshAccessToken(RefreshAccessTokenRequest refreshAccessTokenRequest) {
-        // cookie에서 refresh token  가져오기
         String refreshToken = refreshAccessTokenRequest.getRefreshToken();
 
         // refresh token 파싱
