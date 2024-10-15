@@ -17,7 +17,6 @@ public class CreateBlogServiceImpl implements CreateBlogService {
 
     @Override
     public void createBlog(User user) {
-
         // 사용자 정보를 기반으로 블로그 객체 생성
         Blog blog = new Blog(user);
 

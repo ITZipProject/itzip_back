@@ -17,5 +17,8 @@ public interface FindBlogDetailsService {
      * @param nickname    조회할 블로그 소유자의 닉네임.
      * @return 조회된 블로그의 세부 정보.
      */
-    BlogDetailsResponse findBlogDetailsByNickname(CustomUserDetails userDetails, String nickname);
+    BlogDetailsResponse findBlogDetailsByNickname(
+            CustomUserDetails userDetails,
+            String nickname
+    );
 }

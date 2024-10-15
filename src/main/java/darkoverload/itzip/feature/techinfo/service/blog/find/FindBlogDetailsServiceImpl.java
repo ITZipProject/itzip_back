@@ -27,16 +27,16 @@ public class FindBlogDetailsServiceImpl implements FindBlogDetailsService {
     private final PostRepository postRepository;
 
     // 블로그 정보를 조회하는 서비스
-    private final FindBlogService findBlogService;
+    private final FindBlogSearchService findBlogSearchService;
 
     public FindBlogDetailsServiceImpl(
             UserRepository userRepository,
             PostRepository postRepository,
-            @Qualifier("findBlogServiceImpl") FindBlogService findBlogService
+            @Qualifier("findBlogSearchServiceImpl") FindBlogSearchService findBlogSearchService
     ) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
-        this.findBlogService = findBlogService;
+        this.findBlogSearchService = findBlogSearchService;
     }
 
     /**
@@ -50,7 +50,6 @@ public class FindBlogDetailsServiceImpl implements FindBlogDetailsService {
      */
     @Transactional(readOnly = true)
     public BlogDetailsResponse findBlogDetailsByNickname(CustomUserDetails userDetails, String nickname) {
-
         // 닉네임을 기반으로 유저 조회, 없을 경우 예외 처리
         User user = userRepository.findByNickname(nickname)
                 .map(UserEntity::convertToDomain)
@@ -64,7 +63,7 @@ public class FindBlogDetailsServiceImpl implements FindBlogDetailsService {
         }
 
         // 유저 ID로 블로그 조회
-        Blog blog = findBlogService.findBlogById(user.getId());
+        Blog blog = findBlogSearchService.findBlogSearchById(user.getId());
 
         // 연도별 게시글 수 조회
         List<YearlyPostDto> yearlyPostCounts = findYearlyPostCountsByBlogId(blog.getId());

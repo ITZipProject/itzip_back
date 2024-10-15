@@ -10,19 +10,18 @@ import org.springframework.stereotype.Service;
 public class FindBlogSummaryServiceImpl implements FindBlogSummaryService {
 
     // 블로그 정보를 조회하는 서비스
-    private final FindBlogService findBlogService;
+    private final FindBlogSearchService findBlogSearchService;
 
     public FindBlogSummaryServiceImpl(
-            @Qualifier("findBlogServiceImpl") FindBlogService findBlogService
+            @Qualifier("findBlogSearchServiceImpl") FindBlogSearchService findBlogSearchService
     ) {
-        this.findBlogService = findBlogService;
+        this.findBlogSearchService = findBlogSearchService;
     }
 
     @Override
     public BlogSummaryResponse findBlogSummaryById(Long blogId) {
-
         // 블로그 ID를 기반으로 블로그를 조회
-        Blog blog = findBlogService.findBlogById(blogId);
+        Blog blog = findBlogSearchService.findBlogSearchById(blogId);
 
         // 블로그 객체를 요약 정보로 변환하여 반환
         return blog.convertToBlogBasicInfoResponse();

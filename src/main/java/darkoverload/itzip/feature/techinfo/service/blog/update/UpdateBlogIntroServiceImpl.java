@@ -4,7 +4,7 @@ import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.techinfo.controller.blog.request.UpdateBlogIntroRequest;
 import darkoverload.itzip.feature.techinfo.domain.Blog;
 import darkoverload.itzip.feature.techinfo.repository.blog.BlogRepository;
-import darkoverload.itzip.feature.techinfo.service.blog.find.FindBlogService;
+import darkoverload.itzip.feature.techinfo.service.blog.find.FindBlogSearchService;
 import darkoverload.itzip.feature.user.entity.UserEntity;
 import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
@@ -24,21 +24,20 @@ public class UpdateBlogIntroServiceImpl implements UpdateBlogIntroService {
     private final BlogRepository blogRepository;
 
     // 블로그 정보를 조회하는 서비스
-    private final FindBlogService findBlogService;
+    private final FindBlogSearchService findBlogSearchService;
 
     public UpdateBlogIntroServiceImpl(
             UserRepository userRepository,
             BlogRepository blogRepository,
-            @Qualifier("findBlogServiceImpl") FindBlogService findBlogService
+            @Qualifier("findBlogSearchServiceImpl") FindBlogSearchService findBlogSearchService
     ) {
        this.userRepository = userRepository;
        this.blogRepository = blogRepository;
-       this.findBlogService = findBlogService;
+       this.findBlogSearchService = findBlogSearchService;
     }
 
     @Transactional
     public void updateBlogIntro(CustomUserDetails userDetails, UpdateBlogIntroRequest request) {
-
         // 유저의 이메일을 기반으로 유저 정보를 조회한 후, 없을 경우 예외 처리
         Long userId = userRepository.findByEmail(userDetails.getEmail())
                 .map(UserEntity::convertToDomain) // 엔티티를 도메인 객체로 변환
@@ -48,7 +47,7 @@ public class UpdateBlogIntroServiceImpl implements UpdateBlogIntroService {
                 .getId();
 
         // 공통 BlogFinderService를 사용하여 유저 ID로 블로그를 조회
-        Blog blog = findBlogService.findBlogById(userId);
+        Blog blog = findBlogSearchService.findBlogSearchById(userId);
 
         // 블로그 소개글을 업데이트
         blog.setIntro(request.getIntro());
