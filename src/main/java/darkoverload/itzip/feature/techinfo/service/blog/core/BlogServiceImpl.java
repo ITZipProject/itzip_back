@@ -56,6 +56,11 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
+    public Blog findBlogById(Long id) {
+        return findBlogService.findBlogById(id);
+    }
+
+    @Override
     public BlogSummaryResponse findBlogSummaryById(Long blogId) {
         return findBlogSummaryService.findBlogSummaryById(blogId);
     }
@@ -63,10 +68,5 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public BlogDetailsResponse findBlogDetailsByNickname(CustomUserDetails userDetails, String nickname) {
         return findBlogDetailsService.findBlogDetailsByNickname(userDetails, nickname);
-    }
-
-    @Override
-    public Blog findBlogById(Long id) {
-        return findBlogService.findBlogById(id);
     }
 }
