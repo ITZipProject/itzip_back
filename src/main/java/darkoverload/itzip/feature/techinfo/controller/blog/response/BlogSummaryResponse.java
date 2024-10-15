@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Schema(
-        description = "블로그의 기본 정보를 반환하는 응답 객체로, 블로그 ID, 소유자 정보, 소개글을 포함합니다."
+        description = "블로그 ID, 소유자 정보, 소개글을 포함한 기본 정보 응답 객체"
 )
 @Getter
 @Builder

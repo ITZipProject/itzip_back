@@ -11,7 +11,7 @@ import lombok.Getter;
 import java.util.List;
 
 @Schema(
-        description = "블로그의 상세 정보를 반환하는 응답 객체로, 블로그 ID, 소유자 정보, 소개글 및 연도별 포스트 수를 포함합니다."
+        description = "블로그 ID, 소유자 정보, 소개글, 연도별 포스트 수를 포함한 상세 정보 응답 객체"
 )
 @Getter
 @Builder

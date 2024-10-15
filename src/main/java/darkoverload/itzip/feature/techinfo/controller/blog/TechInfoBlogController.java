@@ -1,10 +1,10 @@
 package darkoverload.itzip.feature.techinfo.controller.blog;
 
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
-import darkoverload.itzip.feature.techinfo.controller.blog.request.BlogUpdateRequest;
-import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogBasicInfoResponse;
-import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogDetailInfoResponse;
-import darkoverload.itzip.feature.techinfo.service.blog.BlogService;
+import darkoverload.itzip.feature.techinfo.controller.blog.request.UpdateBlogIntroRequest;
+import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogDetailsResponse;
+import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogSummaryResponse;
+import darkoverload.itzip.feature.techinfo.service.blog.core.BlogService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.swagger.ExceptionCodeAnnotations;
@@ -43,10 +43,10 @@ public class TechInfoBlogController {
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.NOT_FOUND_BLOG)
     @GetMapping("{blogId}/basic/")
-    public BlogBasicInfoResponse retrieveBlogSummary(
+    public BlogSummaryResponse retrieveBlogSummary(
             @Parameter(description = "블로그 ID", example = "1") @PathVariable @NotNull Long blogId)
     {
-        return blogService.getBasicBlogInfo(blogId);
+        return blogService.findBlogSummaryById(blogId);
     }
 
     @Operation(
@@ -60,11 +60,11 @@ public class TechInfoBlogController {
             CommonExceptionCode.FORBIDDEN,
             CommonExceptionCode.NOT_FOUND_BLOG
     })
-    public BlogDetailInfoResponse fetchBlogDetails(
+    public BlogDetailsResponse fetchBlogDetails(
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @Parameter(description = "사용자 닉네임", example = "hyoseung") @PathVariable @NotBlank String nickname)
     {
-        return blogService.getDetailBlogInfo(userDetails, nickname);
+        return blogService.findBlogDetailsByNickname(userDetails, nickname);
     }
 
     @Operation(
@@ -77,11 +77,11 @@ public class TechInfoBlogController {
             CommonExceptionCode.NOT_FOUND_BLOG
     })
     @PatchMapping("")
-    public String editBlogDetails(
+    public String editBlogIntro(
             @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestBody @Valid BlogUpdateRequest request)
+            @RequestBody @Valid UpdateBlogIntroRequest request)
     {
-        blogService.updateBlog(userDetails, request);
+        blogService.updateBlogIntro(userDetails, request);
         return "블로그 정보가 수정되었습니다.";
     }
 
@@ -95,7 +95,7 @@ public class TechInfoBlogController {
     public String disableBlog(
             @Parameter(description = "블로그 ID", example = "1") @PathVariable @NotNull Long blogId)
     {
-        blogService.setBlogHiddenStatus(blogId);
+        blogService.updateBlogDisable(blogId);
         return "블로그가 비활성화되었습니다.";
     }
 }
