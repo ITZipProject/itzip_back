@@ -5,7 +5,7 @@ import darkoverload.itzip.feature.techinfo.controller.blog.request.UpdateBlogInt
 import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogDetailsResponse;
 import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogRecentPostsResponse;
 import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogSummaryResponse;
-import darkoverload.itzip.feature.techinfo.service.blog.core.BlogSearchService;
+import darkoverload.itzip.feature.techinfo.service.blog.BlogFacade;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.swagger.ExceptionCodeAnnotations;
@@ -37,7 +37,7 @@ import java.time.LocalDateTime;
 @RequestMapping("/tech-info/blog")
 public class TechInfoBlogController {
 
-    private final BlogSearchService blogService;
+    private final BlogFacade blogService;
 
     @Operation(
             summary = "블로그 기본 정보 조회",

@@ -3,7 +3,7 @@ package darkoverload.itzip.feature.techinfo.service.blog.update;
 import darkoverload.itzip.feature.techinfo.domain.Blog;
 import darkoverload.itzip.feature.techinfo.repository.blog.BlogRepository;
 
-import darkoverload.itzip.feature.techinfo.service.blog.find.FindBlogSearchService;
+import darkoverload.itzip.feature.techinfo.service.blog.find.FindBlogService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,21 +15,21 @@ public class UpdateBlogDisableServiceImpl implements UpdateBlogDisableService {
     private final BlogRepository blogRepository;
 
     // 블로그 정보를 조회하는 서비스
-    private final FindBlogSearchService findBlogSearchService;
+    private final FindBlogService findBlogService;
 
     public UpdateBlogDisableServiceImpl(
             BlogRepository blogRepository,
-            @Qualifier("findBlogSearchServiceImpl") FindBlogSearchService findBlogSearchService
+            @Qualifier("findBlogServiceImpl") FindBlogService findBlogService
     ) {
         this.blogRepository = blogRepository;
-        this.findBlogSearchService = findBlogSearchService;
+        this.findBlogService = findBlogService;
     }
 
     @Transactional
     @Override
     public void updateBlogDisable(Long blogId) {
         // 공통 BlogFinderService를 사용하여 블로그를 조회
-        Blog blog = findBlogSearchService.findBlogSearchById(blogId);
+        Blog blog = findBlogService.findBlogById(blogId);
 
         // 블로그를 비공개 상태로 설정
         blog.setIsPublic(false);

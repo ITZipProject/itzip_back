@@ -5,7 +5,7 @@ import darkoverload.itzip.feature.techinfo.domain.Blog;
 import darkoverload.itzip.feature.techinfo.domain.Post;
 import darkoverload.itzip.feature.techinfo.model.document.PostDocument;
 import darkoverload.itzip.feature.techinfo.repository.post.PostRepository;
-import darkoverload.itzip.feature.techinfo.service.blog.core.BlogSearchService;
+import darkoverload.itzip.feature.techinfo.service.blog.BlogFacade;
 import darkoverload.itzip.feature.techinfo.service.post.PostPreviewService;
 import darkoverload.itzip.feature.techinfo.type.SortType;
 import darkoverload.itzip.feature.techinfo.util.PagedModelUtil;
@@ -32,7 +32,7 @@ import lombok.RequiredArgsConstructor;
 public class PostPreviewServiceImpl implements PostPreviewService {
 
     private final PostRepository postRepository;
-    private final BlogSearchService blogService;
+    private final BlogFacade blogService;
 
     @Override
     public PagedModel<EntityModel<PostPreviewResponse>> getAllOrFilteredPosts(
@@ -76,7 +76,7 @@ public class PostPreviewServiceImpl implements PostPreviewService {
     }
 
     private PostPreviewResponse convertToPostPreviewResponse(Post post) {
-        Blog blog = blogService.findBlogSearchById(post.getBlogId()); // 블로그 정보 조회
+        Blog blog = blogService.findBlogById(post.getBlogId()); // 블로그 정보 조회
         return post.convertToPostPreviewResponse(blog.getUser());
     }
 }

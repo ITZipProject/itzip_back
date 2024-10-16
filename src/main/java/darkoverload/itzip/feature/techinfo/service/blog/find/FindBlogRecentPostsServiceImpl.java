@@ -19,23 +19,23 @@ public class FindBlogRecentPostsServiceImpl implements FindBlogRecentPostsServic
     private static final int LIMIT = 4;
 
     // 블로그 정보 조회 서비스
-    private final FindBlogSearchService findBlogSearchService;
+    private final FindBlogService findBlogService;
 
     // 게시글 리포지토리
     private final PostRepository postRepository;
 
     public FindBlogRecentPostsServiceImpl(
-            @Qualifier("findBlogSearchServiceImpl") FindBlogSearchService findBlogSearchService,
+            @Qualifier("findBlogServiceImpl") FindBlogService findBlogService,
             PostRepository postRepository
     ) {
-        this.findBlogSearchService = findBlogSearchService; // 블로그 서비스 초기화
+        this.findBlogService = findBlogService; // 블로그 서비스 초기화
         this.postRepository = postRepository; // 게시글 리포지토리 초기화
     }
 
     @Override
     public BlogRecentPostsResponse findBlogRecentPostsByBlogIdAndCreateDate(Long blogId, LocalDateTime createDate) {
         // 블로그 ID를 사용하여 유저의 닉네임을 조회
-        String nickname = findBlogSearchService.findBlogSearchById(blogId)
+        String nickname = findBlogService.findBlogById(blogId)
                 .getUser()
                 .getNickname();
 

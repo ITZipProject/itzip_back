@@ -4,7 +4,7 @@ import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.techinfo.controller.blog.request.UpdateBlogIntroRequest;
 import darkoverload.itzip.feature.techinfo.domain.Blog;
 import darkoverload.itzip.feature.techinfo.repository.blog.BlogRepository;
-import darkoverload.itzip.feature.techinfo.service.blog.find.FindBlogSearchService;
+import darkoverload.itzip.feature.techinfo.service.blog.find.FindBlogService;
 import darkoverload.itzip.feature.user.entity.UserEntity;
 import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
@@ -24,16 +24,16 @@ public class UpdateBlogIntroServiceImpl implements UpdateBlogIntroService {
     private final BlogRepository blogRepository;
 
     // 블로그 정보를 조회하는 서비스
-    private final FindBlogSearchService findBlogSearchService;
+    private final FindBlogService findBlogService;
 
     public UpdateBlogIntroServiceImpl(
             UserRepository userRepository,
             BlogRepository blogRepository,
-            @Qualifier("findBlogSearchServiceImpl") FindBlogSearchService findBlogSearchService
+            @Qualifier("findBlogServiceImpl") FindBlogService findBlogService
     ) {
        this.userRepository = userRepository;
        this.blogRepository = blogRepository;
-       this.findBlogSearchService = findBlogSearchService;
+       this.findBlogService = findBlogService;
     }
 
     @Transactional
@@ -47,7 +47,7 @@ public class UpdateBlogIntroServiceImpl implements UpdateBlogIntroService {
                 .getId();
 
         // 공통 BlogFinderService를 사용하여 유저 ID로 블로그를 조회
-        Blog blog = findBlogSearchService.findBlogSearchById(userId);
+        Blog blog = findBlogService.findBlogById(userId);
 
         // 블로그 소개글을 업데이트
         blog.setIntro(request.getIntro());

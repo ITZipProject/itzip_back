@@ -7,7 +7,7 @@ import darkoverload.itzip.feature.techinfo.domain.Blog;
 import darkoverload.itzip.feature.techinfo.domain.Post;
 import darkoverload.itzip.feature.techinfo.model.document.PostDocument;
 import darkoverload.itzip.feature.techinfo.repository.post.PostRepository;
-import darkoverload.itzip.feature.techinfo.service.blog.core.BlogSearchService;
+import darkoverload.itzip.feature.techinfo.service.blog.BlogFacade;
 import darkoverload.itzip.feature.techinfo.service.like.LikeService;
 import darkoverload.itzip.feature.techinfo.service.post.PostService;
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
@@ -31,7 +31,7 @@ public class PostServiceImpl implements PostService {
 
     private final UserRepository userRepository;
     private final PostRepository postRepository;
-    private final BlogSearchService blogService;
+    private final BlogFacade blogService;
     private final LikeService likeService;
     private final ScrapService scrapService;
 
@@ -39,7 +39,7 @@ public class PostServiceImpl implements PostService {
     @Transactional(readOnly = true) // PostgreSQL과 관련된 작업에 트랜잭션 적용
     public void addNewPost(CustomUserDetails userDetails, PostCreateRequest request) {
         Long userId = getUserIdByEmail(userDetails.getEmail()); // 로그인 회원 이메일을 통해 유저 ID 조회
-        Long blogId = blogService.findBlogSearchById(userId).getId(); // 블로그 ID 조회
+        Long blogId = blogService.findBlogById(userId).getId(); // 블로그 ID 조회
 
         Post post = Post.createPost(request, blogId); // 새로운 포스트 생성
         postRepository.save(post.convertToDocumentWithoutPostId()); // 포스트 저장
@@ -80,7 +80,7 @@ public class PostServiceImpl implements PostService {
                 ); // 포스트가 없으면 예외 발생
 
         postRepository.updateViewCount(new ObjectId(postId)); // 조회수 증가
-        Blog blog = blogService.findBlogSearchById(post.getBlogId()); // 블로그 정보 조회
+        Blog blog = blogService.findBlogById(post.getBlogId()); // 블로그 정보 조회
 
         return post.convertToPostDetailInfoResponse(blog.getUser(), isLiked, isScrapped); // 포스트 세부 정보 반환
     }

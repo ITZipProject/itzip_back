@@ -27,16 +27,16 @@ public class FindBlogDetailsServiceImpl implements FindBlogDetailsService {
     private final PostRepository postRepository;
 
     // 블로그 정보를 조회하는 서비스
-    private final FindBlogSearchService findBlogSearchService;
+    private final FindBlogService findBlogService;
 
     public FindBlogDetailsServiceImpl(
             UserRepository userRepository,
             PostRepository postRepository,
-            @Qualifier("findBlogSearchServiceImpl") FindBlogSearchService findBlogSearchService
+            @Qualifier("findBlogServiceImpl") FindBlogService findBlogService
     ) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
-        this.findBlogSearchService = findBlogSearchService;
+        this.findBlogService = findBlogService;
     }
 
     /**
@@ -63,7 +63,7 @@ public class FindBlogDetailsServiceImpl implements FindBlogDetailsService {
         }
 
         // 유저 ID로 블로그 조회
-        Blog blog = findBlogSearchService.findBlogSearchById(user.getId());
+        Blog blog = findBlogService.findBlogById(user.getId());
 
         // 연도별 게시글 수 조회
         List<YearlyPostDto> yearlyPostCounts = findYearlyPostCountsByBlogId(blog.getId());
