@@ -18,13 +18,15 @@ public class CustomErrorController implements ErrorController {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 
         return switch (status.toString()) {
+            case "403" -> // 로그인 유저의 비로그인 유저 허용 페이지 접근 예외처리
+                    ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.FORBIDDEN);
             case "404" -> // NoHandlerFoundException 예외처리
                     ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.NOT_FOUND);
             case "405" -> // HttpRequestMethodNotSupportedException 예외처리
                     ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.METHOD_NOT_ALLOWED);
             case "415" -> // HttpMediaTypeNotSupportedException 예외처리
                     ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.FILED_ERROR);
-            default -> // 404, 405에도 안잡히면 예상치 못한 예외처리
+            default -> // 예상치 못한 예외처리
                     ExceptionHandlerUtil.handleExceptionInternal(CommonExceptionCode.INTERNAL_SERVER_ERROR);
         };
     }

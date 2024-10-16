@@ -4,7 +4,6 @@ import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.jwt.infrastructure.JwtAuthenticationToken;
 import darkoverload.itzip.feature.jwt.util.JwtTokenizer;
 import darkoverload.itzip.feature.user.entity.Authority;
-import darkoverload.itzip.feature.user.util.CookieUtils;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import io.jsonwebtoken.Claims;
@@ -29,7 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * JWT 토큰 인증 필터 클래스
+ * JWT 인증 필터 클래스
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -49,7 +48,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         // 쿠키에 저장된 accessToken 값을 가져옴
-        String accessToken = CookieUtils.findCookieValue(request, "accessToken").orElse(null);
+        String accessToken = jwtTokenizer.resolveAccessToken(request);
 
         if (StringUtils.hasText(accessToken)) {
             try {
@@ -77,7 +76,6 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private void getAuthentication(String token) {
         Claims claims = jwtTokenizer.parseAccessToken(token); // 토큰에서 클레임을 파싱
         String email = claims.getSubject(); // 이메일을 가져옴
-        Long userId = claims.get("userId", Long.class); // 사용자 ID를 가져옴
         String nickname = claims.get("nickname", String.class); // 이름을 가져옴
         Authority authority = Authority.valueOf(claims.get("authority", String.class)); // 사용자 권한을 가져옴
 

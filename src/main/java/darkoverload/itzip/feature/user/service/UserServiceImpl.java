@@ -16,7 +16,6 @@ import darkoverload.itzip.feature.user.util.RandomNickname;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import io.jsonwebtoken.Claims;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
@@ -70,7 +69,7 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional
-    public ResponseEntity<UserLoginResponse> login(UserLoginRequest userLoginRequest, HttpServletResponse httpServletResponse) {
+    public ResponseEntity<UserLoginResponse> login(UserLoginRequest userLoginRequest) {
         User user = findByEmail(userLoginRequest.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_MATCH_PASSWORD));
 
         // 비밀번호 일치여부 체크
@@ -92,19 +91,6 @@ public class UserServiceImpl implements UserService {
 
         tokenService.saveOrUpdate(token);
 
-        // 토큰 쿠키 저장
-        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.accessTokenExpire / 1000));
-        httpServletResponse.addCookie(accessTokenCookie);
-
-        Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
-        refreshTokenCookie.setHttpOnly(true);
-        refreshTokenCookie.setPath("/");
-        refreshTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.refreshTokenExpire / 1000));
-        httpServletResponse.addCookie(refreshTokenCookie);
-
         // 응답 값
         UserLoginResponse userLoginResponse = UserLoginResponse.builder()
                 .accessToken(accessToken)
@@ -120,14 +106,9 @@ public class UserServiceImpl implements UserService {
      * 로그아웃
      */
     @Override
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
+    public String logout(HttpServletRequest request) {
         // access token 가져오기
-        String accessToken = CookieUtils.findCookieValue(request, "accessToken").orElse(null);
-
-        // access token 삭제
-        CookieUtils.deleteCookie(response, "accessToken");
-        // refresh token 삭제
-        CookieUtils.deleteCookie(response, "refreshToken");
+        String accessToken = jwtTokenizer.resolveAccessToken(request);
 
         // tokens 데이터 삭제
         tokenService.deleteByAccessToken(accessToken);
@@ -139,11 +120,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     @Transactional(readOnly = true)
-    public ResponseEntity<UserLoginResponse> refreshToken(HttpServletRequest request, HttpServletResponse response) {
-        // cookie에서 refresh token  가져오기
-        String refreshToken = CookieUtils.findCookieValue(request, "refreshToken").orElseThrow(
-                () -> new RestApiException(CommonExceptionCode.JWT_UNKNOWN_ERROR)
-        );
+    public ResponseEntity<UserLoginResponse> refreshAccessToken(RefreshAccessTokenRequest refreshAccessTokenRequest) {
+        String refreshToken = refreshAccessTokenRequest.getRefreshToken();
 
         // refresh token 파싱
         Claims claims = jwtTokenizer.parseRefreshToken(refreshToken);
@@ -158,14 +136,6 @@ public class UserServiceImpl implements UserService {
 
         // Token 데이터 access token 값 업데이트
         tokenService.updateByRefreshToken(refreshToken, accessToken);
-
-        // accessToken 쿠키 생성
-        Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
-        accessTokenCookie.setHttpOnly(true);
-        accessTokenCookie.setPath("/");
-        accessTokenCookie.setMaxAge(Math.toIntExact(JwtTokenizer.accessTokenExpire / 1000));
-
-        response.addCookie(accessTokenCookie);
 
         // 응답 값
         UserLoginResponse userLoginResponse = UserLoginResponse.builder()
@@ -210,12 +180,12 @@ public class UserServiceImpl implements UserService {
 
 
     @Transactional(readOnly = true)
-    public String sendAuthEmail(AuthEmailSendRequest emailSendRequest) {
+    public String sendAuthEmail(AuthEmailSendRequest authEmailSendRequest) {
         // 랜덤 인증 코드 생성
         String authCode = RandomAuthCode.generate();
 
         // redis에 인증 코드 저장
-        verificationService.saveCode(emailSendRequest.getEmail(), authCode);
+        verificationService.saveCode(authEmailSendRequest.getEmail(), authCode);
 
         // 메일 제목
         String subject = "[ITZIP] 이메일 인증번호 : " + authCode;
@@ -224,7 +194,7 @@ public class UserServiceImpl implements UserService {
         String body = emailService.setAuthForm(authCode);
 
         // 메일 발송
-        emailService.sendFormMail(emailSendRequest.getEmail(), subject, body);
+        emailService.sendFormMail(authEmailSendRequest.getEmail(), subject, body);
         return "인증 메일이 발송되었습니다.";
     }
 
@@ -271,8 +241,8 @@ public class UserServiceImpl implements UserService {
      * 임시 회원 탈퇴
      */
     @Override
-    public String tempUserOut(CustomUserDetails userDetails, HttpServletRequest request, HttpServletResponse response) {
-        logout(request, response);
+    public String tempUserOut(CustomUserDetails userDetails, HttpServletRequest request) {
+        logout(request);
 
         User user = findByEmail(userDetails.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
 
