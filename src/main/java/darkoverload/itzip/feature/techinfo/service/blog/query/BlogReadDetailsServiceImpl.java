@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.techinfo.service.blog.find;
+package darkoverload.itzip.feature.techinfo.service.blog.query;
 
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogDetailsResponse;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class FindBlogDetailsServiceImpl implements FindBlogDetailsService {
+public class BlogReadDetailsServiceImpl implements BlogReadDetailsService {
 
     // 유저 정보를 다루는 리포지토리
     private final UserRepository userRepository;
@@ -27,16 +27,16 @@ public class FindBlogDetailsServiceImpl implements FindBlogDetailsService {
     private final PostRepository postRepository;
 
     // 블로그 정보를 조회하는 서비스
-    private final FindBlogService findBlogService;
+    private final BlogReadService blogReadService;
 
-    public FindBlogDetailsServiceImpl(
+    public BlogReadDetailsServiceImpl(
             UserRepository userRepository,
             PostRepository postRepository,
-            @Qualifier("findBlogServiceImpl") FindBlogService findBlogService
+            @Qualifier("blogReadServiceImpl") BlogReadService blogReadService
     ) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
-        this.findBlogService = findBlogService;
+        this.blogReadService = blogReadService;
     }
 
     /**
@@ -49,7 +49,7 @@ public class FindBlogDetailsServiceImpl implements FindBlogDetailsService {
      * @return 조회된 블로그의 세부 정보.
      */
     @Transactional(readOnly = true)
-    public BlogDetailsResponse findBlogDetailsByNickname(CustomUserDetails userDetails, String nickname) {
+    public BlogDetailsResponse getBlogDetailsByNickname(CustomUserDetails userDetails, String nickname) {
         // 닉네임을 기반으로 유저 조회, 없을 경우 예외 처리
         User user = userRepository.findByNickname(nickname)
                 .map(UserEntity::convertToDomain)
@@ -63,7 +63,7 @@ public class FindBlogDetailsServiceImpl implements FindBlogDetailsService {
         }
 
         // 유저 ID로 블로그 조회
-        Blog blog = findBlogService.findBlogById(user.getId());
+        Blog blog = blogReadService.getBlogById(user.getId());
 
         // 연도별 게시글 수 조회
         List<YearlyPostDto> yearlyPostCounts = findYearlyPostCountsByBlogId(blog.getId());

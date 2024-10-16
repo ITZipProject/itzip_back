@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.techinfo.service.blog.find;
+package darkoverload.itzip.feature.techinfo.service.blog.query;
 
 import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogRecentPostsResponse;
 
@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  * 블로그의 최근 포스트를 조회하는 서비스를 정의하는 인터페이스.
  * 이 인터페이스는 주어진 블로그 ID와 생성일을 기반으로 최근 포스트 목록을 조회하는 메서드를 제공한다.
  */
-public interface FindBlogRecentPostsService {
+public interface BlogReadRecentPostsService {
 
     /**
      * 블로그 ID와 생성일을 사용하여 해당 블로그의 최근 포스트 목록을 조회한다.
@@ -18,7 +18,7 @@ public interface FindBlogRecentPostsService {
      * @param createDate 기준이 되는 포스트의 생성일.
      * @return 조회된 블로그의 최근 포스트 목록 응답.
      */
-    BlogRecentPostsResponse findBlogRecentPostsByBlogIdAndCreateDate(
+    BlogRecentPostsResponse getBlogRecentPostsByBlogIdAndCreateDate(
             Long blogId,
             LocalDateTime createDate
     );

@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.techinfo.service.blog.create;
+package darkoverload.itzip.feature.techinfo.service.blog.command;
 
 import darkoverload.itzip.feature.techinfo.domain.Blog;
 import darkoverload.itzip.feature.techinfo.repository.blog.BlogRepository;
@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class CreateBlogServiceImpl implements CreateBlogService {
+public class BlogCreateServiceImpl implements BlogCreateService {
 
     // 블로그 정보를 저장하고 관리하는 리포지토리
     private final BlogRepository blogRepository;

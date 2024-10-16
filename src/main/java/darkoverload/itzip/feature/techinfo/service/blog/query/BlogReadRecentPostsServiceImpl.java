@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.techinfo.service.blog.find;
+package darkoverload.itzip.feature.techinfo.service.blog.query;
 
 import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogRecentPostsResponse;
 import darkoverload.itzip.feature.techinfo.controller.post.response.PostBasicResponse;
@@ -13,29 +13,29 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-public class FindBlogRecentPostsServiceImpl implements FindBlogRecentPostsService {
+public class BlogReadRecentPostsServiceImpl implements BlogReadRecentPostsService {
 
     // 한 번에 조회할 포스트 수 제한
     private static final int LIMIT = 4;
 
     // 블로그 정보 조회 서비스
-    private final FindBlogService findBlogService;
+    private final BlogReadService blogReadService;
 
     // 게시글 리포지토리
     private final PostRepository postRepository;
 
-    public FindBlogRecentPostsServiceImpl(
-            @Qualifier("findBlogServiceImpl") FindBlogService findBlogService,
+    public BlogReadRecentPostsServiceImpl(
+            @Qualifier("blogReadServiceImpl") BlogReadService blogReadService,
             PostRepository postRepository
     ) {
-        this.findBlogService = findBlogService; // 블로그 서비스 초기화
+        this.blogReadService = blogReadService; // 블로그 서비스 초기화
         this.postRepository = postRepository; // 게시글 리포지토리 초기화
     }
 
     @Override
-    public BlogRecentPostsResponse findBlogRecentPostsByBlogIdAndCreateDate(Long blogId, LocalDateTime createDate) {
+    public BlogRecentPostsResponse getBlogRecentPostsByBlogIdAndCreateDate(Long blogId, LocalDateTime createDate) {
         // 블로그 ID를 사용하여 유저의 닉네임을 조회
-        String nickname = findBlogService.findBlogById(blogId)
+        String nickname = blogReadService.getBlogById(blogId)
                 .getUser()
                 .getNickname();
 

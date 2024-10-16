@@ -5,7 +5,7 @@ import darkoverload.itzip.feature.techinfo.controller.blog.request.UpdateBlogInt
 import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogDetailsResponse;
 import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogRecentPostsResponse;
 import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogSummaryResponse;
-import darkoverload.itzip.feature.techinfo.service.blog.BlogFacade;
+import darkoverload.itzip.feature.techinfo.service.blog.facade.BlogFacade;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.swagger.ExceptionCodeAnnotations;
@@ -49,7 +49,7 @@ public class TechInfoBlogController {
     public BlogSummaryResponse getBlogSummary(
             @Parameter(description = "블로그 ID", example = "1") @PathVariable @NotNull Long blogId)
     {
-        return blogService.findBlogSummaryById(blogId);
+        return blogService.getBlogSummaryById(blogId);
     }
 
     @Operation(
@@ -67,7 +67,7 @@ public class TechInfoBlogController {
             @AuthenticationPrincipal CustomUserDetails userDetails,
             @Parameter(description = "사용자 닉네임", example = "hyoseung") @PathVariable @NotBlank String nickname)
     {
-        return blogService.findBlogDetailsByNickname(userDetails, nickname);
+        return blogService.getBlogDetailsByNickname(userDetails, nickname);
     }
 
     @Operation(
@@ -81,7 +81,7 @@ public class TechInfoBlogController {
             @Parameter(description = "블로그 ID", example = "1") @RequestParam(value = "blogId") @NotNull Long blogId,
             @Parameter(description = "생성 날짜", example = "2024-09-16T03:18:13.734") @RequestParam("createDate") @NotNull LocalDateTime createDate)
     {
-        return blogService.findBlogRecentPostsByBlogIdAndCreateDate(blogId, createDate);
+        return blogService.getBlogRecentPostsByBlogIdAndCreateDate(blogId, createDate);
     }
 
     @Operation(
@@ -112,7 +112,7 @@ public class TechInfoBlogController {
     public String disableBlog(
             @Parameter(description = "블로그 ID", example = "1") @PathVariable @NotNull Long blogId)
     {
-        blogService.updateBlogDisable(blogId);
+        blogService.disableBlog(blogId);
         return "블로그가 비활성화되었습니다.";
     }
 }
