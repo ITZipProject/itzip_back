@@ -36,6 +36,4 @@ class JobInfoScrapRepositoryTest {
         assertEquals(jobInfo.getId(), 100L);
     }
 
-
-
 }
