@@ -25,9 +25,20 @@ public class VerificationServiceImpl implements VerificationService {
      * @param email 이메일 주소
      * @param code  인증 코드
      */
+    @Override
     public void saveCode(String email, String code) {
         // 이메일을 키로 사용하고, 인증 코드를 값으로 사용하여 Redis에 저장
         redisTemplate.opsForValue().set(email, code, VERIFICATION_CODE_EXPIRATION, TimeUnit.MINUTES);
+    }
+
+    /**
+     * Redis에 저장된 이메일 인증코드 삭제
+     *
+     * @param email 이메일 주소
+     */
+    @Override
+    public void deleteCode(String email) {
+        redisTemplate.delete(email);
     }
 
     /**
@@ -37,6 +48,7 @@ public class VerificationServiceImpl implements VerificationService {
      * @param code  인증 코드
      * @return 인증 코드가 일치하면 true, 그렇지 않으면 false
      */
+    @Override
     public boolean verifyCode(String email, String code) {
         // Redis에서 이메일에 해당하는 저장된 인증 코드를 가져옴
         String storedCode = redisTemplate.opsForValue().get(email);

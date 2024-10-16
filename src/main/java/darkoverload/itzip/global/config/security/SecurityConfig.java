@@ -46,8 +46,10 @@ public class SecurityConfig {
             //quiz 임시 허용
             "/cs-quizzes/**",
             "/cs-quiz/**",
+            //알고리즘 임시허용
+            "/algorithm/**",
 
-            // 기술 정보 허용
+            // 기술 정보 임시 허용
             "/tech-info/**",
 
             // 학교 정보 검색 허용
@@ -59,9 +61,6 @@ public class SecurityConfig {
             // 직업 정보 임시 허용
             "/job-info",
             "/job-info/scrap",
-
-            // 기술 정보 임시 허용
-            "/tech"
     };
 
     // 비로그인 유저 허용 페이지

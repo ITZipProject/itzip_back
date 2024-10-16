@@ -11,6 +11,7 @@ import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.responses.ApiResponse;
 import io.swagger.v3.oas.models.responses.ApiResponses;
 import io.swagger.v3.oas.models.media.Schema;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springdoc.core.customizers.OperationCustomizer;
@@ -26,7 +27,7 @@ import java.util.Optional;
 @Configuration
 @SecurityScheme(
         //보안 스키마 이름
-        name = "Cookie Token",
+        name = "Bearer Authentication",
         //인증 방식
         scheme = "bearer",
         //보안 유형
@@ -77,6 +78,9 @@ public class SwaggerConfig {
                     break; // 필요한 어노테이션을 찾았으면 반복을 종료
                 }
             }
+
+            // Authorize 버튼을 통해 Bearer Authentication(jwt 헤더) 설정
+            operation.addSecurityItem(new SecurityRequirement().addList("Bearer Authentication"));
 
             return operation;
         };

@@ -88,10 +88,11 @@ public enum CommonExceptionCode implements ResponseCode {
     NOT_FOUND_POSTS_FOR_BLOG(HttpStatus.NOT_FOUND, "해당 블로그에 대한 게시물을 찾을 수 없습니다."),
     // 해당 카테고리에 게시물이 없는 경우
     NOT_FOUND_POSTS_FOR_CATEGORY(HttpStatus.NOT_FOUND, "해당 카테고리에 대한 게시물을 찾을 수 없습니다."),
-    // 잘못된 형식의 카테고리 ID가 입력된 경우
-    INVALID_CATEGORY_ID(HttpStatus.BAD_REQUEST, "잘못된 카테고리 ID 형식입니다."),
     // 잘못된 형식의 포스트 ID가 입력된 경우
     INVALID_POST_ID(HttpStatus.BAD_REQUEST, "잘못된 POST ID 형식입니다."),
+    // 잘못된 형식의 카테고리 ID가 입력된 경우
+    INVALID_CATEGORY_ID(HttpStatus.BAD_REQUEST, "잘못된 카테고리 ID 형식입니다."),
+
 
     /**
      * Quiz Error
@@ -108,6 +109,28 @@ public enum CommonExceptionCode implements ResponseCode {
     ALREADY_CORRECT(HttpStatus.BAD_REQUEST, "이미 정답을 맞췄습니다."),
     //카테고리가 없음
     NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "카테고리가 없습니다."),
+
+    /**
+     * Algorithm Error
+     */
+    //sovledac TAG를 받는중 에러가 생김
+    SOLVED_TAG_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "solved Tag를 업데이트하는중 문제가 생겼습니다."),
+    //sovledac problem을 받는중 에러가 생김
+    SOLVED_PROBLEM_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "solved problem를 업데이트하는중 문제가 생겼습니다."),
+    //solvedac 사용자가 푼 문제를 받는중 에러가 생김
+    SOLVED_USER_SOLVED_PROBLEM_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "solvedac 사용자가 푼 문제를 받는중 에러가 생겼습니댜."),
+    //solvedac 사용자가 정보를 등록하는 중 에러가 생김
+    SOLVED_USER_SOLVED_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "solvedac 사용자 정보를 저장하는 중 에러가 생겼습니댜."),
+    //sovledac Id를 등록해야 합니다.
+    NOT_FOUND_SOLVEDAC_USER(HttpStatus.BAD_REQUEST, "solvedac user를 등록해주세요"),
+    //solvedac에서 username을 찾을 수 없음
+    NOT_FOUND_SOLVEDAC_USERNAME(HttpStatus.BAD_REQUEST, "solvedac에서 user이름을 찾을 수 없습니다."),
+    //업데이트 하려면 기다려야 합니다.
+    UPDATE_COOLDOWN(HttpStatus.CONFLICT, "마지막 업데이트로부터 시간이 지나지 않았습니다."),
+    //solved.ac 서버로부터 api를 받아올수 없습니다.
+    SOLVEDAC_API_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "solved.ac로부터 오류를 보냈습니다."),
+    //solved.ac 로부터 받아온 url에 에러가 생겼습니다.
+    SOLVEDAC_PROFILEIMAGE_URL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "solved.ac로부터 받은 image url에 에러가 있습니다."),
 
     /**
      * Resume Error
