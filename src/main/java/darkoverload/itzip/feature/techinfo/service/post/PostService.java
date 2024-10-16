@@ -3,10 +3,7 @@ package darkoverload.itzip.feature.techinfo.service.post;
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.techinfo.controller.post.request.PostCreateRequest;
 import darkoverload.itzip.feature.techinfo.controller.post.request.PostUpdateRequest;
-import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogAdjacentPostsResponse;
 import darkoverload.itzip.feature.techinfo.controller.post.response.PostDetailInfoResponse;
-
-import java.time.LocalDateTime;
 
 /**
  * 포스트 관련 비즈니스 로직을 처리하는 서비스 인터페이스.
@@ -34,15 +31,6 @@ public interface PostService {
      * @param postId 숨길 포스트의 고유 ID
      */
     void hidePost(String postId);
-
-    /**
-     * 특정 포스트의 생성일을 기준으로 인접한 포스트들을 조회하는 메서드.
-     *
-     * @param blogId     조회할 블로그의 고유 ID
-     * @param createDate 기준이 되는 포스트의 생성일
-     * @return 인접한 포스트 목록이 담긴 응답 객체
-     */
-    BlogAdjacentPostsResponse getAdjacentPosts(Long blogId, LocalDateTime createDate);
 
     /**
      * 포스트의 세부 정보를 ID를 통해 조회하는 메서드.

@@ -3,7 +3,6 @@ package darkoverload.itzip.feature.techinfo.controller.post;
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.techinfo.controller.post.request.PostCreateRequest;
 import darkoverload.itzip.feature.techinfo.controller.post.request.PostUpdateRequest;
-import darkoverload.itzip.feature.techinfo.controller.blog.response.BlogAdjacentPostsResponse;
 import darkoverload.itzip.feature.techinfo.controller.post.response.PostDetailInfoResponse;
 import darkoverload.itzip.feature.techinfo.service.post.PostService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
@@ -19,13 +18,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Tag(
         name = "Tech Info Post",
@@ -38,20 +34,6 @@ import java.time.LocalDateTime;
 public class TechInfoPostController {
 
     private final PostService postService;
-
-    @Operation(
-            summary = "인접한 포스트 조회",
-            description = "주어진 블로그 ID와 생성 날짜를 사용해 인접한 포스트을 조회한다."
-    )
-    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
-    @ExceptionCodeAnnotations(CommonExceptionCode.NOT_FOUND_BLOG)
-    @GetMapping("/adjacent")
-    public BlogAdjacentPostsResponse fetchAdjacentPosts(
-            @Parameter(description = "블로그 ID", example = "1") @RequestParam(value = "blogId") @NotNull Long blogId,
-            @Parameter(description = "생성 날짜", example = "2024-09-16T03:18:13.734") @RequestParam("createDate") @NotNull LocalDateTime createDate)
-    {
-        return postService.getAdjacentPosts(blogId, createDate);
-    }
 
     @Operation(
             summary = "포스트 상세 조회",
