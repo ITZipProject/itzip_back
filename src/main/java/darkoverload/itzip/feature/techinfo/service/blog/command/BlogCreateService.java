@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.techinfo.service.blog.create;
+package darkoverload.itzip.feature.techinfo.service.blog.command;
 
 import darkoverload.itzip.feature.user.domain.User;
 
@@ -6,7 +6,7 @@ import darkoverload.itzip.feature.user.domain.User;
  * 블로그를 생성하는 서비스 인터페이스.
  * 이 인터페이스는 사용자가 블로그를 생성하는 메서드를 정의한다.
  */
-public interface CreateBlogService {
+public interface BlogCreateService {
 
     /**
      * 주어진 사용자를 기반으로 블로그를 생성한다.
