@@ -1,31 +1,34 @@
 package darkoverload.itzip.feature.user.service;
 
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.user.controller.request.*;
+import darkoverload.itzip.feature.user.controller.response.UserInfoResponse;
 import darkoverload.itzip.feature.user.controller.response.UserLoginResponse;
 import darkoverload.itzip.feature.user.domain.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 
 import java.util.Optional;
 
 public interface UserService {
-    ResponseEntity<UserLoginResponse> login(UserLoginRequest request, BindingResult bindingResult, HttpServletResponse httpServletResponse);
+    ResponseEntity<UserInfoResponse> getUserInfo(CustomUserDetails userDetails);
 
-    ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response);
+    ResponseEntity<UserLoginResponse> login(UserLoginRequest userLoginRequest, HttpServletResponse httpServletResponse);
+
+    String logout(HttpServletRequest request, HttpServletResponse response);
 
     ResponseEntity<UserLoginResponse> refreshToken(HttpServletRequest request, HttpServletResponse response);
 
-    ResponseEntity<String> save(UserJoinRequest userJoinDto, BindingResult bindingResult);
+    String save(UserJoinRequest userJoinRequest);
 
-    ResponseEntity<String> sendAuthEmail(AuthEmailSendRequest emailSendRequest, BindingResult bindingResult);
+    String sendAuthEmail(AuthEmailSendRequest emailSendRequest);
 
-    ResponseEntity<String> checkAuthEmail(String email, String authCode);
+    String checkAuthEmail(String email, String authCode);
 
-    ResponseEntity<String> checkDuplicateEmail(String email);
+    String checkDuplicateEmail(String email);
 
-    ResponseEntity<String> checkDuplicateNickname(String nickname);
+    String checkDuplicateNickname(String nickname);
 
     String getUniqueNickname();
 
@@ -34,4 +37,8 @@ public interface UserService {
     User getById(Long id);
 
     Optional<User> findByNickname(String nickname);
+
+    String encryptPassword(String password);
+
+    String tempUserOut(CustomUserDetails userDetails, HttpServletRequest request, HttpServletResponse response);
 }

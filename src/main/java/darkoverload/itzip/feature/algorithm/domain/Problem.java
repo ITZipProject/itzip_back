@@ -15,7 +15,7 @@ public class Problem {
     private Long problemId;
     private String title;
     private Integer level;
-    private Integer acceptedUserCount;
+    private Long acceptedUserCount;
     private Integer averageTries;
 
     public ProblemEntity convertToEntity() {

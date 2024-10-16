@@ -1,6 +1,8 @@
 package darkoverload.itzip.feature.user.controller;
 
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.user.controller.request.*;
+import darkoverload.itzip.feature.user.controller.response.UserInfoResponse;
 import darkoverload.itzip.feature.user.controller.response.UserLoginResponse;
 import darkoverload.itzip.feature.user.service.UserService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
@@ -13,19 +15,35 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "User", description = "회원 기능 API")
-@RestController
 @RequestMapping("/user")
-@Slf4j
 @RequiredArgsConstructor
+@RestController
+@Validated
 public class UserController {
     private final UserService userService;
+
+    /**
+     * 로그인 중인 유저 정보 반환
+     */
+    @Operation(
+            summary = "로그인 유저 정보",
+            description = "현재 로그인 되어있는 유저의 정보를 반환합니다."
+    )
+    @GetMapping
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations(CommonExceptionCode.NOT_FOUND_USER)
+    public ResponseEntity<UserInfoResponse> getUserInfo(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return userService.getUserInfo(userDetails);
+    }
 
     /**
      * 로그인
@@ -37,8 +55,8 @@ public class UserController {
     @PostMapping("/login")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_MATCH_PASSWORD})
-    public ResponseEntity<UserLoginResponse> login(@RequestBody @Valid UserLoginRequest request, BindingResult bindingResult, HttpServletResponse httpServletResponse) {
-        return userService.login(request, bindingResult, httpServletResponse);
+    public ResponseEntity<UserLoginResponse> login(@RequestBody @Valid UserLoginRequest userLoginRequest, HttpServletResponse httpServletResponse) {
+        return userService.login(userLoginRequest, httpServletResponse);
     }
 
     /**
@@ -50,7 +68,7 @@ public class UserController {
     )
     @DeleteMapping("/logout")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
-    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
         return userService.logout(request, response);
     }
 
@@ -78,8 +96,8 @@ public class UserController {
     )
     @ResponseCodeAnnotation(CommonResponseCode.CREATED)
     @ExceptionCodeAnnotations(CommonExceptionCode.FILED_ERROR)
-    public ResponseEntity<String> join(@RequestBody @Valid UserJoinRequest request, BindingResult bindingResult) {
-        return userService.save(request, bindingResult);
+    public String join(@RequestBody @Valid UserJoinRequest userJoinRequest) {
+        return userService.save(userJoinRequest);
     }
 
     /**
@@ -92,8 +110,8 @@ public class UserController {
     @PostMapping("/authEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.FILED_ERROR)
-    public ResponseEntity<String> sendAuthEmail(@RequestBody @Valid AuthEmailSendRequest request, BindingResult bindingResult) {
-        return userService.sendAuthEmail(request, bindingResult);
+    public String sendAuthEmail(@RequestBody @Valid AuthEmailSendRequest request) {
+        return userService.sendAuthEmail(request);
     }
 
     /**
@@ -106,10 +124,9 @@ public class UserController {
     @GetMapping("/authEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_MATCH_AUTH_CODE})
-    public ResponseEntity<String> checkAuthEmail(
-            @Parameter(description = "이메일") @RequestParam(required = false) String email,
-            @Parameter(description = "이메일 인증 코드") @RequestParam(required = false) String authCode
-
+    public String checkAuthEmail(
+            @Parameter(description = "이메일") @RequestParam @NotBlank @Email String email,
+            @Parameter(description = "이메일 인증 코드") @RequestParam @NotBlank String authCode
     ) {
         return userService.checkAuthEmail(email, authCode);
     }
@@ -124,9 +141,27 @@ public class UserController {
     @GetMapping("/checkDuplicateEmail")
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR})
-    public ResponseEntity<String> checkDuplicateEmail(
-            @Parameter(description = "이메일") @RequestParam(required = false) String email
+    public String checkDuplicateEmail(
+            @Parameter(description = "이메일") @RequestParam @NotBlank @Email String email
     ) {
         return userService.checkDuplicateEmail(email);
+    }
+
+    /**
+     * 임시 유저 탈퇴 메소드
+     */
+    @Operation(
+            summary = "임시 유저 탈퇴",
+            description = "현재 로그인 되어 있는 유저 데이터를 삭제합니다."
+    )
+    @DeleteMapping("/out")
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR, CommonExceptionCode.NOT_FOUND_USER})
+    public String tempUserOut(
+            @AuthenticationPrincipal CustomUserDetails userDetails,
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) {
+        return userService.tempUserOut(userDetails, request, response);
     }
 }

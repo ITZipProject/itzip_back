@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 public class ProblemTagEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "boj_tag_id")
     private Long bojTagId; // 태그 ID
 
     @Column(name = "display_name")
@@ -26,11 +26,15 @@ public class ProblemTagEntity {
     @Column(name = "display_name_sort")
     private String displayNameSort; // 문제 유형 별명
 
+    @Column(name = "problem_count")
+    private Integer problemCount; //tag에 있는 문제수
+
     public ProblemTag convertToDomain() {
         return ProblemTag.builder()
                 .bojTagId(this.bojTagId)
                 .displayName(this.displayName)
                 .displayNameSort(this.displayNameSort)
+                .problemCount(this.problemCount)
                 .build();
     }
 }

@@ -14,12 +14,14 @@ public class ProblemTag {
     private Long bojTagId;
     private String displayName;
     private String displayNameSort;
+    private Integer problemCount;
 
     public ProblemTagEntity convertToEntity() {
         return ProblemTagEntity.builder()
                 .bojTagId(this.bojTagId)
                 .displayName(this.displayName)
                 .displayNameSort(this.displayNameSort)
+                .problemCount(this.problemCount)
                 .build();
     }
 }

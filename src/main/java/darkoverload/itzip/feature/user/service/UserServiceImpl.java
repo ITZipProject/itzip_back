@@ -1,14 +1,16 @@
 package darkoverload.itzip.feature.user.service;
 
 import darkoverload.itzip.feature.jwt.domain.Token;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.jwt.service.TokenService;
 import darkoverload.itzip.feature.jwt.util.JwtTokenizer;
 import darkoverload.itzip.feature.user.controller.request.*;
-import darkoverload.itzip.feature.user.controller.response.UserLoginResponse;
+import darkoverload.itzip.feature.user.controller.response.*;
 import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.Authority;
 import darkoverload.itzip.feature.user.entity.UserEntity;
 import darkoverload.itzip.feature.user.repository.UserRepository;
+import darkoverload.itzip.feature.user.util.CookieUtils;
 import darkoverload.itzip.feature.user.util.RandomAuthCode;
 import darkoverload.itzip.feature.user.util.RandomNickname;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
@@ -24,7 +26,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.BindingResult;
 
 import java.util.Optional;
 
@@ -45,20 +46,35 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 로그인 유저 정보 반환
+     */
+    @Override
+    public ResponseEntity<UserInfoResponse> getUserInfo(CustomUserDetails userDetails) {
+        // 로그인한 유저의 이메일과 일치하는 유저 데이터 가져오기
+        User user = findByEmail(userDetails.getEmail()).orElseThrow(
+                () -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)
+        );
+
+        // 이메일, 닉네임, 프로필 이미지 url 반환
+        UserInfoResponse userInfoResponse = UserInfoResponse.builder()
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .imageUrl(user.getImageUrl())
+                .build();
+
+        return new ResponseEntity<>(userInfoResponse, HttpStatus.OK);
+    }
+
+    /**
      * 로그인
      */
     @Override
     @Transactional
-    public ResponseEntity<UserLoginResponse> login(UserLoginRequest request, BindingResult bindingResult, HttpServletResponse httpServletResponse) {
-        // 필드 에러 확인
-        if (bindingResult.hasErrors()) {
-            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
-        }
-
-        User user = findByEmail(request.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_MATCH_PASSWORD));
+    public ResponseEntity<UserLoginResponse> login(UserLoginRequest userLoginRequest, HttpServletResponse httpServletResponse) {
+        User user = findByEmail(userLoginRequest.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_MATCH_PASSWORD));
 
         // 비밀번호 일치여부 체크
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(userLoginRequest.getPassword(), user.getPassword())) {
             throw new RestApiException(CommonExceptionCode.NOT_MATCH_PASSWORD);
         }
 
@@ -104,29 +120,18 @@ public class UserServiceImpl implements UserService {
      * 로그아웃
      */
     @Override
-    public ResponseEntity<String> logout(HttpServletRequest request, HttpServletResponse response) {
-        String accessToken = null;
+    public String logout(HttpServletRequest request, HttpServletResponse response) {
+        // access token 가져오기
+        String accessToken = CookieUtils.findCookieValue(request, "accessToken").orElse(null);
 
-        // access / refresh token cookie 삭제
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                switch (cookie.getName()) {
-                    case "accessToken":
-                        accessToken = cookie.getValue();
-                    case "refreshToken":
-                        cookie.setValue("");
-                        cookie.setPath("/");
-                        cookie.setMaxAge(0);
-                        response.addCookie(cookie);
-                        break;
-                }
-            }
-        }
+        // access token 삭제
+        CookieUtils.deleteCookie(response, "accessToken");
+        // refresh token 삭제
+        CookieUtils.deleteCookie(response, "refreshToken");
 
         // tokens 데이터 삭제
         tokenService.deleteByAccessToken(accessToken);
-        return ResponseEntity.ok("로그아웃 되었습니다.");
+        return "로그아웃 되었습니다.";
     }
 
     /**
@@ -136,21 +141,9 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     public ResponseEntity<UserLoginResponse> refreshToken(HttpServletRequest request, HttpServletResponse response) {
         // cookie에서 refresh token  가져오기
-        String refreshToken = null;
-        Cookie[] cookies = request.getCookies();
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if ("refreshToken".equals(cookie.getName())) {
-                    refreshToken = cookie.getValue();
-                    break;
-                }
-            }
-        }
-
-        // refresh token이 없을 경우
-        if (refreshToken == null) {
-            throw new RestApiException(CommonExceptionCode.JWT_UNKNOWN_ERROR);
-        }
+        String refreshToken = CookieUtils.findCookieValue(request, "refreshToken").orElseThrow(
+                () -> new RestApiException(CommonExceptionCode.JWT_UNKNOWN_ERROR)
+        );
 
         // refresh token 파싱
         Claims claims = jwtTokenizer.parseRefreshToken(refreshToken);
@@ -189,37 +182,35 @@ public class UserServiceImpl implements UserService {
      * 회원가입
      */
     @Transactional
-    public ResponseEntity<String> save(UserJoinRequest userJoinDto, BindingResult bindingResult) {
+    public String save(UserJoinRequest userJoinRequest) {
         // 이메일 중복 체크
-        if (findByEmail(userJoinDto.getEmail()).isPresent()) {
+        if (findByEmail(userJoinRequest.getEmail()).isPresent()) {
             throw new RestApiException(CommonExceptionCode.EXIST_EMAIL_ERROR);
         }
 
         // 이메일 인증번호 체크
-        if (!verificationService.verifyCode(userJoinDto.getEmail(), userJoinDto.getAuthCode())) {
+        if (!verificationService.verifyCode(userJoinRequest.getEmail(), userJoinRequest.getAuthCode())) {
             throw new RestApiException(CommonExceptionCode.NOT_MATCH_AUTH_CODE);
         }
 
-        User user = userJoinDto.toDomain();
+        // 저장된 인증번호 삭제
+        verificationService.deleteCode(userJoinRequest.getEmail());
+
+        User user = userJoinRequest.toDomain();
 
         // 비밀번호 암호화
-        String encryptedPassword = encryptPassword(userJoinDto.getPassword());
+        String encryptedPassword = encryptPassword(userJoinRequest.getPassword());
 
         user.setPassword(encryptedPassword);
         user.setNickname(getUniqueNickname());
 
         userRepository.save(user.convertToEntity());
-        return ResponseEntity.ok("회원가입이 완료되었습니다.");
+        return "회원가입이 완료되었습니다.";
     }
 
-    
-    @Transactional(readOnly = true)
-    public ResponseEntity<String> sendAuthEmail(AuthEmailSendRequest emailSendRequest, BindingResult bindingResult) {
-        // 필드 에러 확인
-        if (bindingResult.hasErrors()) {
-            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
-        }
 
+    @Transactional(readOnly = true)
+    public String sendAuthEmail(AuthEmailSendRequest emailSendRequest) {
         // 랜덤 인증 코드 생성
         String authCode = RandomAuthCode.generate();
 
@@ -234,60 +225,60 @@ public class UserServiceImpl implements UserService {
 
         // 메일 발송
         emailService.sendFormMail(emailSendRequest.getEmail(), subject, body);
-        return ResponseEntity.ok("인증 메일이 발송되었습니다.");
+        return "인증 메일이 발송되었습니다.";
     }
 
     /**
      * 인증번호 검증
      */
     @Override
-    public ResponseEntity<String> checkAuthEmail(String email, String authCode) {
-        String emailPattern = "^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}$";
-
-        // 입력값이 비정상적일 경우
-        if (email == null || authCode == null || !email.matches(emailPattern)) {
-            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
-        }
-
+    public String checkAuthEmail(String email, String authCode) {
         // redis에 저장된 인증번호와 비교하여 확인
         if (!verificationService.verifyCode(email, authCode)) {
             throw new RestApiException(CommonExceptionCode.NOT_MATCH_AUTH_CODE);
         }
 
-        return ResponseEntity.ok("인증이 완료되었습니다.");
+        return "인증이 완료되었습니다.";
     }
 
     /**
      * 사용 중인 이메일인지 체크
      */
     @Override
-    public ResponseEntity<String> checkDuplicateEmail(String email) {
-        String emailPattern = "^[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_\\.]?[0-9a-zA-Z])*\\.[a-zA-Z]{2,3}$";
-
-        // 이메일 패턴이 아닐 경우
-        if (email == null || !email.matches(emailPattern)) {
-            throw new RestApiException(CommonExceptionCode.FILED_ERROR);
-        }
-
+    public String checkDuplicateEmail(String email) {
         // 중복 이메일 체크
         userRepository.findByEmail(email).ifPresent(user -> {
             throw new RestApiException(CommonExceptionCode.EXIST_EMAIL_ERROR);
         });
-        return ResponseEntity.ok("사용 가능한 이메일입니다.");
+        return "사용 가능한 이메일입니다.";
     }
 
     @Override
-    public ResponseEntity<String> checkDuplicateNickname(String nickname) {
+    public String checkDuplicateNickname(String nickname) {
         // 닉네임을 입력하지 않은 경우
-        if (nickname == null){
+        if (nickname == null) {
             throw new RestApiException(CommonExceptionCode.FILED_ERROR);
         }
 
         // 사용 중인 닉네임일 경우
-        if (findByNickname(nickname).isPresent()){
+        if (findByNickname(nickname).isPresent()) {
             throw new RestApiException(CommonExceptionCode.EXIST_NICKNAME_ERROR);
         }
-        return ResponseEntity.ok("사용 가능한 닉네임입니다.");
+        return "사용 가능한 닉네임입니다.";
+    }
+
+    /**
+     * 임시 회원 탈퇴
+     */
+    @Override
+    public String tempUserOut(CustomUserDetails userDetails, HttpServletRequest request, HttpServletResponse response) {
+        logout(request, response);
+
+        User user = findByEmail(userDetails.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
+
+        userRepository.delete(user.convertToEntity());
+
+        return "정상적으로 탈퇴 되었습니다.";
     }
 
     /**
@@ -333,7 +324,7 @@ public class UserServiceImpl implements UserService {
      * @param password 비밀번호
      * @return 암호화된 비밀번호
      */
-    private String encryptPassword(String password) {
+    public String encryptPassword(String password) {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         return encoder.encode(password);
     }

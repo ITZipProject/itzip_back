@@ -18,6 +18,9 @@ spring:
   mongodb:
     embedded:
       version: 4.0.21
+  webflux:
+    problemdetails:
+      enabled: true
 
 school:
   api-url: ${SCHOOL_API_URL}

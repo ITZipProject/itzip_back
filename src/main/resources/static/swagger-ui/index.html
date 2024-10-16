@@ -17,6 +17,9 @@
           SwaggerUIStandalonePreset
         ],
         layout: "StandaloneLayout", // Swagger 레이아웃
+        apisSorter: "alpha", // API 문자순 정렬
+        operationsSorter: "alpha", // 각 메서드 문자순 정렬
+        tagsSorter: "alpha", // 태그 문자순 정렬
         onComplete: addAuthModalEventListener //Swagger UI 로딩후 실행될 함수
       });
     }
