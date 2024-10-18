@@ -33,6 +33,13 @@ public class QualificationDto {
     // 아이디
     private Long qualificationId;
 
+    public QualificationDto(String organization, LocalDateTime qualificationDate, String name, int score, String level) {
+        this.organization = organization;
+        this.qualificationDate = qualificationDate;
+        this.name = name;
+        this.score = score;
+        this.level = level;
+    }
 
     public Qualification create() {
         return Qualification.builder()
