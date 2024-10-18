@@ -10,6 +10,8 @@ public interface EducationRepository {
 
     List<Education> update(List<Education> educations, Resume resume);
 
+    Education save(Education education);
+
     void deleteAllById(List<Long> ids);
 
     List<Education> saveAll(List<Education> educations);

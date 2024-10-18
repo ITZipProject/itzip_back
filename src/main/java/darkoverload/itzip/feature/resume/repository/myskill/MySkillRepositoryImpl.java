@@ -35,6 +35,11 @@ public class MySkillRepositoryImpl implements MySkillRepository {
     }
 
     @Override
+    public MySkill save(MySkill mySkill) {
+        return repository.save(mySkill.toEntity()).convertToDomain();
+    }
+
+    @Override
     public void deleteAllById(List<Long> ids) {
         repository.deleteAllById(ids);
     }

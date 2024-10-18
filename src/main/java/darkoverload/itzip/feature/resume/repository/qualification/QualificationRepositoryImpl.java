@@ -32,14 +32,18 @@ public class QualificationRepositoryImpl implements QualificationRepository {
     }
 
     @Override
+    public Qualification save(Qualification qualification) {
+        return qualificationRepository.save(qualification.toEntity()).convertToDomain();
+    }
+
+    @Override
     public void deleteAllById(List<Long> ids) {
         qualificationRepository.deleteAllById(ids);
     }
 
     @Override
     public List<Qualification> saveAll(List<Qualification> qualifications) {
-        List<QualificationEntity> qualificationEntities = qualifications.stream().map(Qualification::toEntity).collect(Collectors.toList());
-
+        List<QualificationEntity> qualificationEntities = qualifications.stream().map(Qualification::toEntity).toList();
         return qualificationRepository.saveAll(qualificationEntities).stream().map(QualificationEntity::convertToDomain).toList();
     }
 

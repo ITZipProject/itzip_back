@@ -23,6 +23,12 @@ public class ActivityRepositoryImpl implements ActivityRepository {
     }
 
     @Override
+    public Activity save(Activity activity) {
+
+        return repository.save(activity.toEntity()).convertToDomain();
+    }
+
+    @Override
     public List<Activity> update(List<Activity> activities, Resume resume) {
         List<Long> deleteActivities = getDeleteActivityIds(activities, resume);
 

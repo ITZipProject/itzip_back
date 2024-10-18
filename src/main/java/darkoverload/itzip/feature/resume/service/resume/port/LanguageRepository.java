@@ -11,6 +11,8 @@ public interface LanguageRepository {
 
     List<Language> update(List<Language> languages, Resume resume);
 
+    Language save(Language language);
+
     List<Language> saveAll(List<Language> languages);
 
     void deleteAllById(List<Long> ids);

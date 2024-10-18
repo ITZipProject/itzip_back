@@ -10,6 +10,8 @@ public interface QualificationRepository {
 
     List<Qualification> update(List<Qualification> qualifications, Resume resume);
 
+    Qualification save(Qualification qualification);
+
     List<Qualification> saveAll(List<Qualification> qualifications);
 
     void deleteAllById(List<Long> ids);

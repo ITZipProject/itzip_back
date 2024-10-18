@@ -3,24 +3,34 @@ package darkoverload.itzip.feature.resume.service.resume;
 import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
 import darkoverload.itzip.feature.resume.domain.achievement.Achievement;
+import darkoverload.itzip.feature.resume.domain.achievement.Achievements;
+import darkoverload.itzip.feature.resume.domain.activity.Activities;
 import darkoverload.itzip.feature.resume.domain.activity.Activity;
 import darkoverload.itzip.feature.resume.domain.career.Career;
+import darkoverload.itzip.feature.resume.domain.career.Careers;
 import darkoverload.itzip.feature.resume.domain.education.Education;
+import darkoverload.itzip.feature.resume.domain.education.Educations;
 import darkoverload.itzip.feature.resume.domain.language.Language;
+import darkoverload.itzip.feature.resume.domain.language.Languages;
 import darkoverload.itzip.feature.resume.domain.myskill.MySkill;
+import darkoverload.itzip.feature.resume.domain.myskill.MySkills;
 import darkoverload.itzip.feature.resume.domain.qualification.Qualification;
+import darkoverload.itzip.feature.resume.domain.qualification.Qualifications;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.service.resume.port.*;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 
 @Slf4j
 @Service
+@Builder
 @RequiredArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
 
@@ -127,81 +137,34 @@ public class ResumeServiceImpl implements ResumeService {
     private void create(CreateResumeRequest request, Resume resume) {
 
         // 요청에 경력 정보가 포함된 경우 경력 섹션을 생성하고 저장
-        if (!request.getCareers().isEmpty()) {
-            List<Career> careers = request.getCareers().stream().map(createCareerDto -> {
-                Career career = createCareerDto.create();
-                career.setResume(resume);
-                return career;
-            }).toList();
-
-            careerRepository.saveAll(careers);
-        }
+        Optional<Careers> careers = Careers.of(request.getCareers(), resume);
+        careers.ifPresent(value -> careerRepository.saveAll(value.getCareers()));
 
         // 요청에 성과 정보가 포함된 경우 성과 섹션을 생성하고 저장
-        if (!request.getAchievements().isEmpty()) {
-            List<Achievement> achievements = request.getAchievements().stream().map(createAchievementDto -> {
-                Achievement achievement = createAchievementDto.create();
-                achievement.setResume(resume);
-                return achievement;
-            }).toList();
-
-            achievementRepository.saveAll(achievements);
-        }
+        Optional<Achievements> achievements = Achievements.of(request.getAchievements(), resume);
+        achievements.ifPresent(value -> achievementRepository.saveAll(value.getAchievements()));
 
         // 요청에 활동 정보가 포함된 경우 활동 섹션을 생성하고 저장
-        if (!request.getActivities().isEmpty()) {
-            List<Activity> activities = request.getActivities().stream().map(createActivityDto -> {
-                Activity activity = createActivityDto.create();
-                activity.setResume(resume);
-                return activity;
-            }).toList();
-
-            activityRepository.saveAll(activities);
-        }
+        Optional<Activities> activities = Activities.of(request.getActivities(), resume);
+        activities.ifPresent(value -> activityRepository.saveAll(value.getActivities()));
 
         // 요청에 언어 정보가 포함된 경우 언어 섹션을 생성하고 저장
-        if (!request.getLanguages().isEmpty()) {
-            List<Language> languages = request.getLanguages().stream().map(createLanguageDto -> {
-                Language language = createLanguageDto.create();
-                language.setResume(resume);
-                return language;
-            }).toList();
+        Optional<Languages> languages = Languages.of(request.getLanguages(), resume);
+        languages.ifPresent(value-> languageRepository.saveAll(value.getLanguages()));
 
-            languageRepository.saveAll(languages);
-        }
 
         // 요청에 학력 정보가 포함된 경우 학력 섹션을 생성하고 저장
-        if (!request.getEducations().isEmpty()) {
-            List<Education> educations = request.getEducations().stream().map(createEducationDto -> {
-                Education education = createEducationDto.create();
-                education.setResume(resume);
-                return education;
-            }).toList();
-
-            educationRepository.saveAll(educations);
-        }
+        Optional<Educations> educations = Educations.of(request.getEducations(), resume);
+        educations.ifPresent(value -> educationRepository.saveAll(value.getEducations()));
 
         // 요청에 기술 정보가 포함된 경우 기술 섹션을 생성하고 저장
-        if (!request.getMySkills().isEmpty()) {
-            List<MySkill> mySkills = request.getMySkills().stream().map(createMySkillsDto -> {
-                MySkill mySkill = createMySkillsDto.create();
-                mySkill.setResume(resume);
-                return mySkill;
-            }).toList();
+        Optional<MySkills> mySkills = MySkills.of(request.getMySkills(), resume);
+        mySkills.ifPresent(value -> mySkillRepository.saveAll(value.getMySkills()));
 
-            mySkillRepository.saveAll(mySkills);
-        }
 
         // 요청에 자격증 정보가 포함된 경우 자격증 섹션을 생성하고 저장
-        if (!request.getQualifications().isEmpty()) {
-            List<Qualification> qualifications = request.getQualifications().stream().map(createQualificationDto -> {
-                Qualification qualification = createQualificationDto.create();
-                qualification.setResume(resume);
-                return qualification;
-            }).toList();
-
-            qualificationRepository.saveAll(qualifications);
-        }
+        Optional<Qualifications> qualifications = Qualifications.of(request.getQualifications(), resume);
+        qualifications.ifPresent(value -> qualificationRepository.saveAll(value.getQualifications()));
 
     }
 

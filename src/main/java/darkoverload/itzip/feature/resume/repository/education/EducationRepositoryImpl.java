@@ -33,6 +33,11 @@ public class EducationRepositoryImpl implements EducationRepository {
     }
 
     @Override
+    public Education save(Education education) {
+        return repository.save(education.toEntity()).convertToDomain();
+    }
+
+    @Override
     public void deleteAllById(List<Long> ids) {
         repository.deleteAllById(ids);
     }

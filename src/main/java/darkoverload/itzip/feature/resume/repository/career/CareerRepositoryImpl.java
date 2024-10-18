@@ -26,6 +26,11 @@ public class CareerRepositoryImpl implements CareerRepository {
     }
 
     @Override
+    public Career save(Career career) {
+        return repository.save(career.toEntity()).convertToDomain();
+    }
+
+    @Override
     public List<Career> update(List<Career> careers, Resume resume) {
         List<Long> deleteCareers = getDeleteCareerIds(careers, resume);
 

@@ -10,6 +10,8 @@ public interface MySkillRepository {
 
     List<MySkill> update(List<MySkill> mySkills, Resume resume);
 
+    MySkill save(MySkill mySkill);
+
     List<MySkill> saveAll(List<MySkill> mySkill);
 
     void deleteAllById(List<Long> ids);

@@ -1,6 +1,5 @@
 package darkoverload.itzip.feature.resume.controller.request;
 
-import darkoverload.itzip.feature.resume.dto.achievement.AchievementDto;
 import darkoverload.itzip.feature.resume.dto.activity.ActivityDto;
 import darkoverload.itzip.feature.resume.dto.career.CareerDto;
 import darkoverload.itzip.feature.resume.dto.education.EducationDto;
@@ -19,27 +18,39 @@ import java.util.List;
 public class CreateResumeRequest {
 
     @ResumeConditional
-    private List<AchievementDto> achievements = new ArrayList<>();
+    private List<darkoverload.itzip.feature.resume.dto.achievement.AchievementDto> achievements = new ArrayList<>();
 
     @ResumeConditional
-    private final List<QualificationDto> qualifications = new ArrayList<>();
+    private List<QualificationDto> qualifications = new ArrayList<>();
 
     @ResumeConditional
-    private final List<MySkillsDto> mySkills= new ArrayList<>();
+    private List<MySkillsDto> mySkills= new ArrayList<>();
 
     @ResumeConditional
-    private final List<ActivityDto> activities = new ArrayList<>(); // activity ==> save
+    private List<ActivityDto> activities = new ArrayList<>(); // activity ==> save
 
     @ResumeConditional
-    private final List<CareerDto> careers = new ArrayList<>(); // ==> save
+    private List<CareerDto> careers = new ArrayList<>(); // ==> save
 
     @ResumeConditional
-    private final List<EducationDto> educations = new ArrayList<>(); //
+    private List<EducationDto> educations = new ArrayList<>(); //
 
     @ResumeConditional
-    private final List<LanguageDto> languages = new ArrayList<>();
+    private List<LanguageDto> languages = new ArrayList<>();
 
     private ResumeDto resume;
 
     private Long userId;
+
+    @Builder
+    public CreateResumeRequest(List<darkoverload.itzip.feature.resume.dto.achievement.AchievementDto> achievements, List<QualificationDto> qualifications, List<MySkillsDto> mySkills, List<ActivityDto> activities, List<CareerDto> careers, List<EducationDto> educations, List<LanguageDto> languages){
+        this.achievements = achievements;
+        this.qualifications = qualifications;
+        this.mySkills = mySkills;
+        this.activities = activities;
+        this.careers = careers;
+        this.educations = educations;
+        this.languages = languages;
+    }
+
 }

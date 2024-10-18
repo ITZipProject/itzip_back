@@ -1,9 +1,7 @@
 package darkoverload.itzip.feature.resume.controller;
 
-import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
-import darkoverload.itzip.feature.resume.controller.response.UpdateResumeResponse;
 import darkoverload.itzip.feature.resume.service.resume.ResumeService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;

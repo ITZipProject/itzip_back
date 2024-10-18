@@ -9,6 +9,8 @@ public interface CareerRepository {
 
     List<Career> findAllByResumeId(Long resumeId);
 
+    Career save(Career career);
+
     List<Career> update(List<Career> careers, Resume resume);
 
     List<Career> saveAll(List<Career> careers);

@@ -33,6 +33,11 @@ public class LanguageRepositoryImpl implements LanguageRepository {
     }
 
     @Override
+    public Language save(Language language) {
+        return repository.save(language.toEntity()).convertToDomain();
+    }
+
+    @Override
     public void deleteAllById(List<Long> ids) {
         repository.deleteAllById(ids);
     }
