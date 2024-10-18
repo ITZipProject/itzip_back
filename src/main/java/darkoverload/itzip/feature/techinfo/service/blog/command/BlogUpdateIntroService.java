@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.techinfo.service.blog.update;
+package darkoverload.itzip.feature.techinfo.service.blog.command;
 
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.techinfo.controller.blog.request.UpdateBlogIntroRequest;
@@ -7,7 +7,7 @@ import darkoverload.itzip.feature.techinfo.controller.blog.request.UpdateBlogInt
  * 블로그 소개글 업데이트 서비스를 정의하는 인터페이스.
  * 이 인터페이스는 인증된 유저의 블로그 소개글을 업데이트하는 메서드를 제공한다.
  */
-public interface UpdateBlogIntroService {
+public interface BlogUpdateIntroService {
 
     /**
      * 인증된 유저의 블로그 소개글을 업데이트한다.
