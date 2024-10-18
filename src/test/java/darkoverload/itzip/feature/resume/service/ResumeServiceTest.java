@@ -23,7 +23,7 @@ public class ResumeServiceTest {
 
         //given
 //        resumeService.search(request);
-2
+
 
         // when
 
