@@ -113,7 +113,7 @@ public class QuizMapper {
      * @param categoryName 사용자가 생성한 문제 카테고리 이름
      * @return QuizEntity를 반환한다.
      */
-    public QuizDocument requestToDocument(QuizCreatedRequest request, String categoryName) {
+    public QuizDocument requestToDocument(QuizCreatedRequest request, String categoryName, Long userId) {
         if (request == null) {
             return null;
         }
@@ -127,7 +127,7 @@ public class QuizMapper {
                 .acceptedUserCount(0)
                 .triedUserCount(0)
                 .points(0)
-                .createUserId(request.getUserId())
+                .createUserId(userId)
                 .choices(request.getChoices())
                 .build();
     }

@@ -5,7 +5,10 @@ import darkoverload.itzip.feature.csQuiz.entity.QuizCategory;
 import darkoverload.itzip.feature.csQuiz.repository.quiz.QuizRepository;
 import darkoverload.itzip.feature.csQuiz.repository.quizcategory.QuizCategoryRepository;
 import darkoverload.itzip.feature.csQuiz.util.QuizMapper;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
+import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.repository.UserRepository;
+import darkoverload.itzip.feature.user.service.UserService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +28,7 @@ public class CreateQuizImpl implements CreateQuiz {
     private final QuizMapper quizMapper;
 
     //User객체를 받아올 userRepository
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     /**
      * 퀴즈를 생성할 때 사용하는 메서드
@@ -33,11 +36,10 @@ public class CreateQuizImpl implements CreateQuiz {
      */
     @Override
     @Transactional
-    public void createQuiz(QuizCreatedRequest quizCreatedRequest) {
+    public void createQuiz(QuizCreatedRequest quizCreatedRequest, CustomUserDetails customUserDetails) {
         //사용자가 존재하는지 확인
-        userRepository.findById(quizCreatedRequest.getUserId()).ifPresentOrElse(
-                user -> {},
-                () -> { throw new RestApiException(CommonExceptionCode.NOT_FOUND_USER); }
+        User user = userService.findByEmail(customUserDetails.getEmail()).orElseThrow(
+                () -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)
         );
 
         //카테고리가 존재하는지 확인
@@ -47,7 +49,7 @@ public class CreateQuizImpl implements CreateQuiz {
 
         //퀴즈 저장
         try{
-            quizRepository.save(quizMapper.requestToDocument(quizCreatedRequest, quizCategory.getCategoryName()));
+            quizRepository.save(quizMapper.requestToDocument(quizCreatedRequest, quizCategory.getCategoryName(), user.getId()));
         } catch (MongoTransactionException e){
             throw new RestApiException(CommonExceptionCode.MONGO_DB_EXCEPTION);
         }

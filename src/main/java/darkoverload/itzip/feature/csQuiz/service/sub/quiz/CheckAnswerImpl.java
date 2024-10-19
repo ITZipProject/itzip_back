@@ -6,8 +6,11 @@ import darkoverload.itzip.feature.csQuiz.entity.QuizUserSolvedMapping;
 import darkoverload.itzip.feature.csQuiz.entity.UserQuizStatus;
 import darkoverload.itzip.feature.csQuiz.repository.quiz.QuizRepository;
 import darkoverload.itzip.feature.csQuiz.repository.quizusersolvedmapping.QuizUserSolvedMappingRepository;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
+import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.UserEntity;
 import darkoverload.itzip.feature.user.repository.UserRepository;
+import darkoverload.itzip.feature.user.service.UserService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +28,15 @@ public class CheckAnswerImpl implements CheckAnswer {
     private final QuizUserSolvedMappingRepository quizUserSolvedMappingRepository;
 
     //User객체를 받아올 userRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     @Transactional
-    public UserQuizStatus checkAnswer(QuizAnswerRequest quizAnswerRequest) {
+    public UserQuizStatus checkAnswer(QuizAnswerRequest quizAnswerRequest, CustomUserDetails customUserDetails) {
         // 사용자가 존재하는지 확인
-        UserEntity userEntity = userRepository.findById(quizAnswerRequest.getUserId()).orElseThrow(
-                () -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)
-        );
+        UserEntity userEntity = userService.findByEmail(customUserDetails.getEmail())
+                .map(User::convertToEntity)
+                .orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
 
         // 제출된 퀴즈가 존재하는지 확인
         ObjectId objectQuizId = new ObjectId(quizAnswerRequest.getQuizId());

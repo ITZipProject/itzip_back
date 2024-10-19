@@ -7,6 +7,7 @@ import darkoverload.itzip.feature.csQuiz.controller.response.QuizCategoryDetailR
 import darkoverload.itzip.feature.csQuiz.entity.QuizCategory;
 import darkoverload.itzip.feature.csQuiz.entity.UserQuizStatus;
 import darkoverload.itzip.feature.csQuiz.service.QuizService;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.swagger.ExceptionCodeAnnotations;
@@ -17,6 +18,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -71,8 +73,8 @@ public class CsQuizController {
     @PostMapping("/point")
     public Integer sumPointToQuiz(
             @SwaggerRequestBody(description = "점수를 부여할 문제의 정보와 점수", content = @Content(schema = @Schema(implementation = QuizPointRequest.class)))
-            @RequestBody QuizPointRequest quizPointRequest) {
-        return quizService.givenPointToQuiz(quizPointRequest);
+            @RequestBody QuizPointRequest quizPointRequest, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        return quizService.givenPointToQuiz(quizPointRequest, customUserDetails);
     }
 
     /**
@@ -88,8 +90,8 @@ public class CsQuizController {
     public UserQuizStatus submitAnswer(
             @SwaggerRequestBody(description = "제출할 문제의 정답 정보", required = true, content = @Content(
                     schema = @Schema(implementation = QuizAnswerRequest.class)
-            )) @RequestBody QuizAnswerRequest quizAnswerRequest) {
-        return quizService.checkAnswer(quizAnswerRequest);
+            )) @RequestBody QuizAnswerRequest quizAnswerRequest, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        return quizService.checkAnswer(quizAnswerRequest, customUserDetails);
     }
 
     /**
@@ -105,8 +107,8 @@ public class CsQuizController {
     public String createQuiz(
             @SwaggerRequestBody(description = "생성할 문제에 대한 정보", required = true, content = @Content(
                     schema = @Schema(implementation = QuizCreatedRequest.class)
-            )) @RequestBody QuizCreatedRequest quizCreatedRequest) {
-        quizService.createQuiz(quizCreatedRequest);
+            )) @RequestBody QuizCreatedRequest quizCreatedRequest, @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        quizService.createQuiz(quizCreatedRequest, customUserDetails);
         return "문제를 생성했습니다.";
     }
 }

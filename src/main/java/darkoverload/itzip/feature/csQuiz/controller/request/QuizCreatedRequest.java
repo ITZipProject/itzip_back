@@ -30,10 +30,6 @@ public class QuizCreatedRequest {
     @Schema(description = "문제번호 0부터 시작하면 된다.", example = "0")
     private Integer answer;
 
-    @NotNull(message = "문제를 만든 사용자 ID는 필수 입력 항목입니다.")
-    @Schema(description = "문제를 만든 사용자 ID", example = "5")
-    private Long userId;
-
     @NotEmpty(message = "정답지 모음은 필수 입력 항목입니다.")
     @Schema(description = "정답지 모음")
     private List<QuizChoice> choices;
