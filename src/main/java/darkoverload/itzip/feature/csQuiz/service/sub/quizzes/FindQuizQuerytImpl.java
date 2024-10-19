@@ -118,13 +118,13 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
         switch (sortBy) {
             case OLDEST:
                 // OLDEST 기준으로 정렬: 시간순 오름차순
-                return Sort.by(Sort.Direction.ASC, "timeStamp");
+                return Sort.by(Sort.Direction.ASC, "create_date");
                 // 추천순으로 정렬
             case RECOMMENDED:
                 return Sort.by(Sort.Direction.DESC, "points");
             default:
                 // NEWEST 기준으로 정렬: 시간순 내림차순 (새로운순을 기본값으로 하기위함)
-                return Sort.by(Sort.Direction.DESC, "timeStamp");
+                return Sort.by(Sort.Direction.DESC, "create_date");
         }
     }
 }
