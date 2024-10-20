@@ -3,6 +3,7 @@ package darkoverload.itzip.feature.algorithm.service.user;
 import darkoverload.itzip.feature.algorithm.controller.response.SolvedUserResponse;
 import darkoverload.itzip.feature.algorithm.entity.SolvedacUserEntity;
 import darkoverload.itzip.feature.algorithm.repository.user.SolvedacUserRepository;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import org.junit.jupiter.api.Test;
@@ -27,22 +28,28 @@ class FindUserSolvedProfileServiceImplTest {
 
     @Test
     void 사용자_프로필_정상_반환() {
-        Long userId = 1L;
-        SolvedacUserEntity solvedacUserEntity = mock(SolvedacUserEntity.class);
-        when(solvedacUserRepository.findById(userId)).thenReturn(Optional.of(solvedacUserEntity));
+        String email = "test@example.com";
+        CustomUserDetails customUserDetails = mock(CustomUserDetails.class);
+        when(customUserDetails.getEmail()).thenReturn(email);
 
-        SolvedUserResponse response = findUserSolvedProfileService.findUserSolvedProfile(userId);
+        SolvedacUserEntity solvedacUserEntity = mock(SolvedacUserEntity.class);
+        when(solvedacUserRepository.findByUserEntityEmail(email)).thenReturn(Optional.of(solvedacUserEntity));
+
+        SolvedUserResponse response = findUserSolvedProfileService.findUserSolvedProfile(customUserDetails);
 
         assertEquals(solvedacUserEntity.convertToDomain(), response.getSolvedacUser());
     }
 
     @Test
     void 사용자_프로필_없을_경우_예외() {
-        Long userId = 2L;
-        when(solvedacUserRepository.findById(userId)).thenReturn(Optional.empty());
+        String email = "test@example.com";
+        CustomUserDetails customUserDetails = mock(CustomUserDetails.class);
+        when(customUserDetails.getEmail()).thenReturn(email);
+
+        when(solvedacUserRepository.findByUserEntityEmail(email)).thenReturn(Optional.empty());
 
         RestApiException exception = assertThrows(RestApiException.class, () ->
-                findUserSolvedProfileService.findUserSolvedProfile(userId)
+                findUserSolvedProfileService.findUserSolvedProfile(customUserDetails)
         );
         assertEquals(CommonExceptionCode.NOT_FOUND_SOLVEDAC_USER, exception.getExceptionCode());
     }

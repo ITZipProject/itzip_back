@@ -2,6 +2,11 @@ package darkoverload.itzip.feature.algorithm.service.user;
 
 import darkoverload.itzip.feature.algorithm.util.SaveSolvedUser;
 import darkoverload.itzip.feature.algorithm.util.SaveUserSolvedProblem;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
+import darkoverload.itzip.feature.user.domain.User;
+import darkoverload.itzip.feature.user.service.UserService;
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,16 +18,22 @@ public class SaveUserSolvedProfileServiceImpl implements SaveUserSolvedProfileSe
     private final SaveSolvedUser saveSolvedUser;
     private final SaveUserSolvedProblem saveUserSolvedProblem;
 
+    private final UserService userService;
+
     /**
      * 사용자 id와 이름을 받아와서 solvedAc를 등록하는 메서드
-     * @param userId
-     * @param username
+     * @param customUserDetails 사용자 인증 정보
+     * @param username 사용자 sovledac 이름
      */
     @Override
     @Transactional
-    public void saveUserSolvedProfile(Long userId, String username) {
-        saveSolvedUser.saveSolvedUser(userId, username);
+    public void saveUserSolvedProfile(CustomUserDetails customUserDetails, String username) {
+        User user = userService.findByEmail(customUserDetails.getEmail()).orElseThrow(
+                () -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)
+        );
+
+        saveSolvedUser.saveSolvedUser(user.getId(), username);
         //사용자가 푼 문제들 저장
-        saveUserSolvedProblem.saveUserSolvedProblem(userId);
+        saveUserSolvedProblem.saveUserSolvedProblem(user.getId());
     }
 }

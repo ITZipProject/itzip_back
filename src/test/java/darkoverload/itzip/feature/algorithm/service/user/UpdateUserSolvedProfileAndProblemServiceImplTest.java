@@ -7,6 +7,7 @@ import darkoverload.itzip.feature.algorithm.repository.user.SolvedacUserReposito
 import darkoverload.itzip.feature.algorithm.util.SaveSolvedUser;
 import darkoverload.itzip.feature.algorithm.util.SaveUserSolvedProblem;
 import darkoverload.itzip.feature.image.service.CloudStorageService;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import org.junit.jupiter.api.Test;
@@ -39,35 +40,50 @@ class UpdateUserSolvedProfileAndProblemServiceImplTest {
 
     @Test
     void 사용자가_업데이트_쿨다운을_지켰을_경우_프로필_업데이트() {
-        Long userId = 1L;
+        String email = "test@example.com";
         SolvedacUserEntity solvedacUserEntity = mock(SolvedacUserEntity.class);
-        when(solvedacUserRepository.findById(userId)).thenReturn(Optional.of(solvedacUserEntity));
+
+        // CustomUserDetails 설정
+        CustomUserDetails customUserDetails = mock(CustomUserDetails.class);
+        when(customUserDetails.getEmail()).thenReturn(email);
+
+        // SolvedacUserEntity 설정
+        when(solvedacUserRepository.findByUserEntityEmail(email)).thenReturn(Optional.of(solvedacUserEntity));
 
         SolvedacUser solvedacUser = mock(SolvedacUser.class);
         when(solvedacUserEntity.convertToDomain()).thenReturn(solvedacUser);
         when(solvedacUser.getUpdateTime()).thenReturn(LocalDateTime.now().minusHours(2));
 
-        when(saveSolvedUser.saveSolvedUser(userId, solvedacUser.getUsername())).thenReturn(solvedacUser);
+        when(saveSolvedUser.saveSolvedUser(solvedacUserEntity.getUserId(), solvedacUser.getUsername())).thenReturn(solvedacUser);
 
-        SolvedUserResponse response = updateUserSolvedProfileAndProblemService.updateUserSolvedProfileAndProblem(userId);
+        // 서비스 호출
+        SolvedUserResponse response = updateUserSolvedProfileAndProblemService.updateUserSolvedProfileAndProblem(customUserDetails);
 
+        // 검증
         assertNotNull(response);
         assertEquals(solvedacUser, response.getSolvedacUser());
-        verify(saveUserSolvedProblem).saveUserSolvedProblem(userId);
+        verify(saveUserSolvedProblem).saveUserSolvedProblem(solvedacUserEntity.getUserId());
     }
 
     @Test
     void 사용자가_업데이트_쿨다운_미준수시_예외_발생() {
-        Long userId = 1L;
+        String email = "test@example.com";
         SolvedacUserEntity solvedacUserEntity = mock(SolvedacUserEntity.class);
-        when(solvedacUserRepository.findById(userId)).thenReturn(Optional.of(solvedacUserEntity));
+
+        // CustomUserDetails 설정
+        CustomUserDetails customUserDetails = mock(CustomUserDetails.class);
+        when(customUserDetails.getEmail()).thenReturn(email);
+
+        // SolvedacUserEntity 설정
+        when(solvedacUserRepository.findByUserEntityEmail(email)).thenReturn(Optional.of(solvedacUserEntity));
 
         SolvedacUser solvedacUser = mock(SolvedacUser.class);
         when(solvedacUserEntity.convertToDomain()).thenReturn(solvedacUser);
         when(solvedacUser.getUpdateTime()).thenReturn(LocalDateTime.now());
 
+        // 예외 검증
         RestApiException exception = assertThrows(RestApiException.class, () ->
-                updateUserSolvedProfileAndProblemService.updateUserSolvedProfileAndProblem(userId)
+                updateUserSolvedProfileAndProblemService.updateUserSolvedProfileAndProblem(customUserDetails)
         );
         assertEquals(CommonExceptionCode.UPDATE_COOLDOWN, exception.getExceptionCode());
     }
