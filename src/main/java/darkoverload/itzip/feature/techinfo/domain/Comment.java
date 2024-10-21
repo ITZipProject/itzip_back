@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.techinfo.domain;
 
+import darkoverload.itzip.feature.techinfo.controller.comment.request.CommentCreateRequest;
 import darkoverload.itzip.feature.techinfo.controller.comment.response.CommentResponse;
 import darkoverload.itzip.feature.techinfo.model.document.CommentDocument;
 import darkoverload.itzip.feature.user.domain.User;

@@ -1,10 +1,10 @@
-package darkoverload.itzip.feature.techinfo.service.blog.update;
+package darkoverload.itzip.feature.techinfo.service.blog.command;
 
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.techinfo.controller.blog.request.UpdateBlogIntroRequest;
 import darkoverload.itzip.feature.techinfo.domain.Blog;
 import darkoverload.itzip.feature.techinfo.repository.blog.BlogRepository;
-import darkoverload.itzip.feature.techinfo.service.blog.find.FindBlogService;
+import darkoverload.itzip.feature.techinfo.service.blog.query.BlogReadService;
 import darkoverload.itzip.feature.user.entity.UserEntity;
 import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UpdateBlogIntroServiceImpl implements UpdateBlogIntroService {
+public class BlogUpdateIntroServiceImpl implements BlogUpdateIntroService {
 
     // 유저 정보를 다루는 리포지토리
     private final UserRepository userRepository;
@@ -24,16 +24,16 @@ public class UpdateBlogIntroServiceImpl implements UpdateBlogIntroService {
     private final BlogRepository blogRepository;
 
     // 블로그 정보를 조회하는 서비스
-    private final FindBlogService findBlogService;
+    private final BlogReadService blogReadService;
 
-    public UpdateBlogIntroServiceImpl(
+    public BlogUpdateIntroServiceImpl(
             UserRepository userRepository,
             BlogRepository blogRepository,
-            @Qualifier("findBlogServiceImpl") FindBlogService findBlogService
+            @Qualifier("blogReadServiceImpl") BlogReadService blogReadService
     ) {
        this.userRepository = userRepository;
        this.blogRepository = blogRepository;
-       this.findBlogService = findBlogService;
+       this.blogReadService = blogReadService;
     }
 
     @Transactional
@@ -47,7 +47,7 @@ public class UpdateBlogIntroServiceImpl implements UpdateBlogIntroService {
                 .getId();
 
         // 공통 BlogFinderService를 사용하여 유저 ID로 블로그를 조회
-        Blog blog = findBlogService.findBlogById(userId);
+        Blog blog = blogReadService.getBlogById(userId);
 
         // 블로그 소개글을 업데이트
         blog.setIntro(request.getIntro());
