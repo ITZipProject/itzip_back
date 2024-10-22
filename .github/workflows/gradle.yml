@@ -39,7 +39,7 @@ jobs:
       run: |
         mkdir ./src/test/resources/properties
         touch ./src/test/resources/properties/test-env.properties
-        echo "${{secrets.TEST_ENV_FILE}}" > ./src/main/resources/properties/env.properties
+        echo "${{secrets.TEST_ENV_FILE}}" > ./src/main/resources/properties/test-env.properties
 
     # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
     # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
