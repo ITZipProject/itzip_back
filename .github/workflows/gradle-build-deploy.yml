@@ -64,6 +64,7 @@ jobs:
             docker-compose -f /home/ubuntu/itzip/docker-compose.yml down
             docker-compose -f /home/ubuntu/itzip/docker-compose.yml pull
             docker-compose -f /home/ubuntu/itzip/docker-compose.yml up -d
+            docker system prune -a -f
 
       - name: Send Success Discord Notification
         if: success()
