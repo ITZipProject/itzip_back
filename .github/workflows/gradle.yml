@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build_and_deploy :
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -49,4 +49,18 @@ jobs:
         file: Dockerfile
         push: true
         tags: |
+          ${{ secrets.DOCKER_USERNAME }}/jdk-21-spring-boot-3.3.1:${{ github.sha }}
           ${{ secrets.DOCKER_USERNAME }}/jdk-21-spring-boot-3.3.1:latest
+
+    - name: SSH to Remote Server and Deploy
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.REMOTE_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          docker-compose -f /home/ubuntu/itzip/docker-compose.yml down
+          docker-compose -f /home/ubuntu/itzip/docker-compose.yml pull
+          docker-compose -f /home/ubuntu/itzip/docker-compose.yml up -d
+          
