@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 //사용자에게 문제에 대한 정보를 줄때 사용하는 DTO
@@ -38,6 +39,10 @@ public class QuizDetailResponse extends RepresentationModel<QuizDetailResponse> 
     private Integer points;
     @Schema(description = "검색을 시도한 사용자가 풀었는지 나타내는 값", example = "UnSolved")
     private UserQuizStatus userQuizStatus;
+    @Schema(description = "문제 생성 시간")
+    private LocalDateTime createDate;
+    @Schema(description = "문제 수정 시간")
+    private LocalDateTime modifyDate;
     @Schema(description = "정답지 모음")
     private List<QuizChoice> choices;
 }

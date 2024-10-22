@@ -36,6 +36,8 @@ public class QuizMapper {
                 .correctRate(correctRate)
                 .points(quizDocument.getPoints())
                 .choices(quizDocument.getChoices())
+                .createDate(quizDocument.getCreateDate())
+                .modifyDate(quizDocument.getModifyDate())
                 .build();
     }
 
@@ -71,6 +73,8 @@ public class QuizMapper {
                 .points(quizDocument.getPoints())
                 .userQuizStatus(userQuizStatus)
                 .choices(quizDocument.getChoices())
+                .createDate(quizDocument.getCreateDate())
+                .modifyDate(quizDocument.getModifyDate())
                 .build();
     }
 
@@ -98,6 +102,8 @@ public class QuizMapper {
                 .points(quizDocument.getPoints())
                 .userQuizStatus(UserQuizStatus.UNSOLVED) //사용자가 풀지 않은 문제만 반환함으로 false로 모두 반환
                 .choices(quizDocument.getChoices())
+                .createDate(quizDocument.getCreateDate())
+                .modifyDate(quizDocument.getModifyDate())
                 .build();
     }
 
