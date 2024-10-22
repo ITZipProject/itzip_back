@@ -4,6 +4,7 @@ import darkoverload.itzip.feature.csQuiz.controller.request.QuizQueryRequest;
 import darkoverload.itzip.feature.csQuiz.entity.SortBy;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizDetailResponse;
 import darkoverload.itzip.feature.csQuiz.service.QuizService;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.swagger.ExceptionCodeAnnotations;
@@ -14,6 +15,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -53,7 +55,8 @@ public class CsQuizzesController {
             @Parameter(description = "사용자가 푼 문제를 포함 하는지 true면 포함 false면 미포함") @RequestParam(required = false, defaultValue = "false") boolean inUserSolved,
             @Parameter(description = "문제 페이지 0부터 시작") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "가져올 문제 수") @RequestParam(defaultValue = "10") int size,
-            @Parameter(description = "검색할 단어") @RequestParam(required = false) String keyword ) {
+            @Parameter(description = "검색할 단어") @RequestParam(required = false) String keyword,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
         QuizQueryRequest quizQueryRequest = QuizQueryRequest.builder()
                 .difficulty(difficulty)
                 .categoryId(categoryId)
@@ -64,6 +67,6 @@ public class CsQuizzesController {
                 .size(size)
                 .keyword(keyword)
                 .build();
-        return quizService.findQuizzesByQuery(quizQueryRequest);
+        return quizService.findQuizzesByQuery(quizQueryRequest, customUserDetails);
     }
 }

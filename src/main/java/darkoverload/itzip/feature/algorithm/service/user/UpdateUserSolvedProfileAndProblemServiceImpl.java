@@ -6,6 +6,7 @@ import darkoverload.itzip.feature.algorithm.repository.user.SolvedacUserReposito
 import darkoverload.itzip.feature.algorithm.util.SaveSolvedUser;
 import darkoverload.itzip.feature.algorithm.util.SaveUserSolvedProblem;
 import darkoverload.itzip.feature.image.service.CloudStorageService;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -35,11 +36,11 @@ public class UpdateUserSolvedProfileAndProblemServiceImpl implements UpdateUserS
      */
     @Override
     @Transactional
-    public SolvedUserResponse updateUserSolvedProfileAndProblem(Long userId) {
+    public SolvedUserResponse updateUserSolvedProfileAndProblem(CustomUserDetails customUserDetails) {
         //solvedac 프로필 사진이 저장되는 디렉토리
         final String solvedAcProfileDir = "solvedacProfile";
 
-        SolvedacUser solvedacUser = solvedacUserRepository.findById(userId)
+        SolvedacUser solvedacUser = solvedacUserRepository.findByUserEntityEmail(customUserDetails.getEmail())
                 .orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_SOLVEDAC_USER))
                 .convertToDomain();
 
@@ -48,14 +49,14 @@ public class UpdateUserSolvedProfileAndProblemServiceImpl implements UpdateUserS
         Duration duration = Duration.between(solvedacUser.getUpdateTime(), currentTime);
         if (duration.toSeconds() > updateCooldownSeconds){
             //사용자가 푼 문제들 저장
-            saveUserSolvedProblem.saveUserSolvedProblem(userId);
+            saveUserSolvedProblem.saveUserSolvedProblem(solvedacUser.getUserId());
 
             //사용자 기존 사진 삭제
             cloudStorageService.imageDelete(solvedacUser.getProfileImageUrl(), solvedAcProfileDir);
 
             //업데이트된 사용자 정보를 저장하고 return
             return SolvedUserResponse.builder()
-                    .solvedacUser(saveSolvedUser.saveSolvedUser(userId, solvedacUser.getUsername()))
+                    .solvedacUser(saveSolvedUser.saveSolvedUser(solvedacUser.getUserId(), solvedacUser.getUsername()))
                     .build();
         } else {
             throw new RestApiException(CommonExceptionCode.UPDATE_COOLDOWN);

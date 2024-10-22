@@ -11,6 +11,7 @@ import darkoverload.itzip.feature.algorithm.service.tag.SaveTagsService;
 import darkoverload.itzip.feature.algorithm.service.user.FindUserSolvedProfileService;
 import darkoverload.itzip.feature.algorithm.service.user.SaveUserSolvedProfileService;
 import darkoverload.itzip.feature.algorithm.service.user.UpdateUserSolvedProfileAndProblemService;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -56,28 +57,28 @@ public class AlgorithmServiceImpl implements AlgorithmService {
     }
 
     @Override
-    public void saveUserSolvedProfile(Long userId, String username) {
-        saveUserSolvedProfileService.saveUserSolvedProfile(userId, username);
+    public void saveUserSolvedProfile(CustomUserDetails customUserDetails, String username) {
+        saveUserSolvedProfileService.saveUserSolvedProfile(customUserDetails, username);
     }
 
     @Override
-    public SolvedUserResponse updateUserSolvedProfileAndProblem(Long userId) {
-        return updateUserSolvedProfileAndProblemService.updateUserSolvedProfileAndProblem(userId);
+    public SolvedUserResponse updateUserSolvedProfileAndProblem(CustomUserDetails customUserDetails) {
+        return updateUserSolvedProfileAndProblemService.updateUserSolvedProfileAndProblem(customUserDetails);
     }
 
     @Override
-    public ProblemListResponse findProblemsByUser(Long userId) {
-        return findProblemsByUserService.findProblemsByUser(userId);
+    public ProblemListResponse findProblemsByUser(CustomUserDetails customUserDetails) {
+        return findProblemsByUserService.findProblemsByUser(customUserDetails);
     }
 
     @Override
-    public ProblemListResponse findProblemsByTagAndUser(Long userId, Long tagId) {
-        return findProblemsByTagAndUserService.findProblemsByTagAndUser(userId, tagId);
+    public ProblemListResponse findProblemsByTagAndUser(CustomUserDetails customUserDetails, Long tagId) {
+        return findProblemsByTagAndUserService.findProblemsByTagAndUser(customUserDetails, tagId);
     }
 
     @Override
-    public SolvedUserResponse findUserSolvedProfile(Long userId) {
-        return findUserSolvedProfileService.findUserSolvedProfile(userId);
+    public SolvedUserResponse findUserSolvedProfile(CustomUserDetails customUserDetails) {
+        return findUserSolvedProfileService.findUserSolvedProfile(customUserDetails);
     }
 
     @Override

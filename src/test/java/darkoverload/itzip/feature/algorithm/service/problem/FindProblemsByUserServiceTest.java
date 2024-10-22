@@ -6,6 +6,7 @@ import darkoverload.itzip.feature.algorithm.entity.ProblemEntity;
 import darkoverload.itzip.feature.algorithm.entity.SolvedacUserEntity;
 import darkoverload.itzip.feature.algorithm.repository.problem.ProblemRepository;
 import darkoverload.itzip.feature.algorithm.repository.user.SolvedacUserRepository;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,20 +36,29 @@ class FindProblemsByUserServiceImplTest {
 
     @Test
     void 사용자의_tier_기준으로_문제를_추천() {
-        Long userId = 1L;
+        String email = "test@example.com";
+
+        // CustomUserDetails 설정
+        CustomUserDetails customUserDetails = mock(CustomUserDetails.class);
+        when(customUserDetails.getEmail()).thenReturn(email);
+
+        // SolvedacUserEntity 설정
         SolvedacUserEntity solvedacUserEntity = mock(SolvedacUserEntity.class);
-        when(solvedacUserRepository.findById(userId)).thenReturn(Optional.of(solvedacUserEntity));
+        when(solvedacUserRepository.findByUserEntityEmail(email)).thenReturn(Optional.of(solvedacUserEntity));
 
         SolvedacUser solvedacUser = mock(SolvedacUser.class);
         when(solvedacUserEntity.convertToDomain()).thenReturn(solvedacUser);
         when(solvedacUser.getTier()).thenReturn(5);
 
+        // 문제 리스트 설정
         List<ProblemEntity> problemEntities = List.of(mock(ProblemEntity.class));
-        when(problemRepository.findProblemsByUser(userId, 5, PageRequest.of(0, 10)))
+        when(problemRepository.findProblemsByUser(solvedacUserEntity.getUserId(), 5, PageRequest.of(0, 10)))
                 .thenReturn(problemEntities);
 
-        ProblemListResponse response = findProblemsByUserService.findProblemsByUser(userId);
+        // 서비스 호출
+        ProblemListResponse response = findProblemsByUserService.findProblemsByUser(customUserDetails);
 
+        // Assertions
         assertNotNull(response);
         assertEquals(problemEntities.size(), response.getProblems().size());
     }

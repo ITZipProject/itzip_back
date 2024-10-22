@@ -8,8 +8,11 @@ import darkoverload.itzip.feature.csQuiz.entity.QuizDocument;
 import darkoverload.itzip.feature.csQuiz.repository.quiz.QuizRepository;
 import darkoverload.itzip.feature.csQuiz.repository.quizusersolvedmapping.QuizUserSolvedMappingRepository;
 import darkoverload.itzip.feature.csQuiz.util.QuizMapper;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
+import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.UserEntity;
 import darkoverload.itzip.feature.user.repository.UserRepository;
+import darkoverload.itzip.feature.user.service.UserService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -35,10 +38,7 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
     private final QuizUserSolvedMappingRepository quizUserSolvedMappingRepository;
 
     //User객체를 받아올 userRepository;
-    private final UserRepository userRepository;
-
-    // PageModel을 만들기위한 주입
-    private final PagedResourcesAssembler<QuizDetailResponse> pagedResourcesAssembler;
+    private final UserService userService;
 
     /**
      * 주어진 필터와 정렬 기준, 사용자 정보를 기반으로 퀴즈 목록을 조회하는 메서드
@@ -48,7 +48,7 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
      */
     @Override
     @Transactional
-    public PagedModel<EntityModel<QuizDetailResponse>> findQuizzesByQuery(QuizQueryRequest quizQueryRequest) {
+    public PagedModel<EntityModel<QuizDetailResponse>> findQuizzesByQuery(QuizQueryRequest quizQueryRequest, CustomUserDetails customUserDetails) {
         // 페이지 정보와 정렬 기준을 기반으로 Pageable 객체 생성
         Pageable pageable = PageRequest.of(quizQueryRequest.getPage(), quizQueryRequest.getSize(), getSort(quizQueryRequest.getSortBy()));
 
@@ -60,10 +60,10 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
         // 사용자가 있으면 사용자가 푼 문제를 가져옴
         if (quizQueryRequest.getUserId() != null) {
             //사용자를 찾고 사용자가 없을시 사용자가 없음 예외 출력
-            UserEntity userEntity = userRepository.findById(quizQueryRequest.getUserId()).orElse(null);
-            if (userEntity == null) {
-                throw new RestApiException(CommonExceptionCode.NOT_FOUND_USER);
-            }
+            UserEntity userEntity = userService.findByEmail(customUserDetails.getEmail())
+                    .map(User::convertToEntity)
+                    .orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
+
             //사용자가 푼문제매핑 테이블 list로 받아옴
             solvedProblemsEntity = quizUserSolvedMappingRepository.findAllByUser(userEntity);
             // 사용자가 푼 문제의 problemId를 리스트로 추출
