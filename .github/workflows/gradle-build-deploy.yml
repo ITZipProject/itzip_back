@@ -20,15 +20,15 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      #      - name: Secret Prod Env File Download
-      #        run: |
-      #          mkdir -p ./src/main/resources/properties
-      #          echo "${{ secrets.PROD_ENV_FILE }}" > ./src/main/resources/properties/env.properties
-      #
-      #      - name: Secret Test Env File Download
-      #        run: |
-      #          mkdir -p ./src/test/resources/properties
-      #          echo "${{ secrets.TEST_ENV_FILE }}" > ./src/test/resources/properties/test-env.properties
+      - name: Secret Prod Env File Download
+        run: |
+          mkdir -p ./src/main/resources/properties
+          echo "${{ secrets.PROD_ENV_FILE }}" > ./src/main/resources/properties/env.properties
+      
+      - name: Secret Test Env File Download
+        run: |
+          mkdir -p ./src/test/resources/properties
+          echo "${{ secrets.TEST_ENV_FILE }}" > ./src/test/resources/properties/test-env.properties
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
@@ -90,5 +90,5 @@ jobs:
           fi
 
           curl -H "Content-Type: application/json" \
-            -d '{"content": "**배포 실패!** :x: \n빌드 및 배포 과정에서 오류가 발생했습니다. 오류 내용: '"${outcome_message}"'"}' \
+            -d '{"content": "**배포 실패!** :x: \n빌드 및 배포 과정에서 오류가 발생했습니다. \n오류 내용: '"${outcome_message}"'"}' \
             ${{ secrets.DISCORD_WEBHOOK_URL }}
