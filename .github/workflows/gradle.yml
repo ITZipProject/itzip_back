@@ -63,4 +63,10 @@ jobs:
           docker-compose -f /home/ubuntu/itzip/docker-compose.yml down
           docker-compose -f /home/ubuntu/itzip/docker-compose.yml pull
           docker-compose -f /home/ubuntu/itzip/docker-compose.yml up -d
-          
+
+    - name: Send Discord Notification
+      if: success()
+      run: |
+        curl -H "Content-Type: application/json" \
+          -d '{"content": "**Deployment Successful!** :rocket: \nThe build and deployment process has been completed successfully."}' \
+          ${{ secrets.DISCORD_WEBHOOK_URL }}
