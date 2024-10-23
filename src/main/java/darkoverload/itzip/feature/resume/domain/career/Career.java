@@ -6,13 +6,12 @@ import darkoverload.itzip.feature.resume.entity.CareerEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-@ToString
 @Setter
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Career {
 
     // 이력서
@@ -35,6 +34,17 @@ public class Career {
 
     // 커리어 아이디
     private Long careerId;
+
+    @Builder
+    public Career(Resume resume, String companyName, String careerPosition, String department, LocalDateTime startDate, LocalDateTime endDate, Long careerId) {
+        this.resume = resume;
+        this.companyName = companyName;
+        this.careerPosition = careerPosition;
+        this.department = department;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.careerId = careerId;
+    }
 
     public static Career update(CareerDto career, Resume resume) {
         return Career.builder()
@@ -59,4 +69,5 @@ public class Career {
                 .id(this.careerId)
                 .build();
     }
+
 }

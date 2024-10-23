@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.resume.controller.request;
 
+import darkoverload.itzip.feature.resume.dto.achievement.AchievementDto;
 import darkoverload.itzip.feature.resume.dto.activity.ActivityDto;
 import darkoverload.itzip.feature.resume.dto.career.CareerDto;
 import darkoverload.itzip.feature.resume.dto.education.EducationDto;
@@ -18,7 +19,7 @@ import java.util.List;
 public class CreateResumeRequest {
 
     @ResumeConditional
-    private List<darkoverload.itzip.feature.resume.dto.achievement.AchievementDto> achievements = new ArrayList<>();
+    private List<AchievementDto> achievements = new ArrayList<>();
 
     @ResumeConditional
     private List<QualificationDto> qualifications = new ArrayList<>();
@@ -43,7 +44,7 @@ public class CreateResumeRequest {
     private Long userId;
 
     @Builder
-    public CreateResumeRequest(List<darkoverload.itzip.feature.resume.dto.achievement.AchievementDto> achievements, List<QualificationDto> qualifications, List<MySkillsDto> mySkills, List<ActivityDto> activities, List<CareerDto> careers, List<EducationDto> educations, List<LanguageDto> languages){
+    public CreateResumeRequest(List<darkoverload.itzip.feature.resume.dto.achievement.AchievementDto> achievements, List<QualificationDto> qualifications, List<MySkillsDto> mySkills, List<ActivityDto> activities, List<CareerDto> careers, List<EducationDto> educations, List<LanguageDto> languages, ResumeDto resume, Long userId){
         this.achievements = achievements;
         this.qualifications = qualifications;
         this.mySkills = mySkills;
@@ -51,6 +52,8 @@ public class CreateResumeRequest {
         this.careers = careers;
         this.educations = educations;
         this.languages = languages;
+        this.resume = resume;
+        this.userId = userId;
     }
 
 }

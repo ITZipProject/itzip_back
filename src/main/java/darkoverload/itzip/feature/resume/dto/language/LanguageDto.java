@@ -29,6 +29,13 @@ public class LanguageDto {
     // 아이디
     private Long languageId;
 
+    public LanguageDto(String name, String level, int score, LocalDateTime acquisitionDate) {
+        this.name = name;
+        this.level = level;
+        this.score = score;
+        this.acquisitionDate = acquisitionDate;
+    }
+
     public Language create(){
         return Language.builder()
                 .name(this.name)

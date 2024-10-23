@@ -6,11 +6,13 @@ import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.entity.EducationEntity;
 import darkoverload.itzip.feature.resume.service.resume.port.EducationRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Objects;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class EducationRepositoryImpl implements EducationRepository {
