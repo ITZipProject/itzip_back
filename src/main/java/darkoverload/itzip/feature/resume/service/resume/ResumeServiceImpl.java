@@ -2,6 +2,7 @@ package darkoverload.itzip.feature.resume.service.resume;
 
 import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
+import darkoverload.itzip.feature.resume.controller.response.CreateResumeResponse;
 import darkoverload.itzip.feature.resume.domain.achievement.Achievement;
 import darkoverload.itzip.feature.resume.domain.achievement.Achievements;
 import darkoverload.itzip.feature.resume.domain.activity.Activities;
@@ -17,6 +18,7 @@ import darkoverload.itzip.feature.resume.domain.myskill.MySkills;
 import darkoverload.itzip.feature.resume.domain.qualification.Qualification;
 import darkoverload.itzip.feature.resume.domain.qualification.Qualifications;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
+import darkoverload.itzip.feature.resume.domain.resume.ResumeDetails;
 import darkoverload.itzip.feature.resume.service.resume.port.*;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -52,15 +54,14 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Transactional
     @Override
-    public void create(CreateResumeRequest request) {
+    public CreateResumeResponse create(CreateResumeRequest request) {
 
         //"career", "skill", "language", "qualification", "education", "activity", "achievement"
         Resume resume = Resume.create(request.getResume(), request.getUserId());
 
         // 이력서 저장
         // 이력서와 관련된 내용들 저장
-        create(request, resumeRepository.save(resume));
-
+        return CreateResumeResponse.from(create(request, resumeRepository.save(resume)));
     }
 
     @Transactional
@@ -134,37 +135,59 @@ public class ResumeServiceImpl implements ResumeService {
      * @param request 새로운 이력서 데이터를 포함한 CreateResumeRequest 객체입니다.
      * @param resume  새로운 정보가 저장될 Resume 객체입니다.
      */
-    private void create(CreateResumeRequest request, Resume resume) {
+    private ResumeDetails create(CreateResumeRequest request, Resume resume) {
 
         // 요청에 경력 정보가 포함된 경우 경력 섹션을 생성하고 저장
         Optional<Careers> careers = Careers.of(request.getCareers(), resume);
-        careers.ifPresent(value -> careerRepository.saveAll(value.getCareers()));
+        Optional<Careers> dataCareers = Optional.empty();
+        if (careers.isPresent()) {
+            dataCareers = Careers.of(careerRepository.saveAll(careers.get().getCareers()));
+        }
 
         // 요청에 성과 정보가 포함된 경우 성과 섹션을 생성하고 저장
         Optional<Achievements> achievements = Achievements.of(request.getAchievements(), resume);
-        achievements.ifPresent(value -> achievementRepository.saveAll(value.getAchievements()));
+        Optional<Achievements> dataAchievements = Optional.empty();
+        if (achievements.isPresent()) {
+            dataAchievements = Achievements.of(achievementRepository.saveAll(achievements.get().getAchievements()));
+        }
+
 
         // 요청에 활동 정보가 포함된 경우 활동 섹션을 생성하고 저장
         Optional<Activities> activities = Activities.of(request.getActivities(), resume);
-        activities.ifPresent(value -> activityRepository.saveAll(value.getActivities()));
+        Optional<Activities> dataActivities = Optional.empty();
+        if (activities.isPresent()) {
+            dataActivities = Activities.of(activityRepository.saveAll(activities.get().getActivities()));
+        }
 
         // 요청에 언어 정보가 포함된 경우 언어 섹션을 생성하고 저장
         Optional<Languages> languages = Languages.of(request.getLanguages(), resume);
-        languages.ifPresent(value-> languageRepository.saveAll(value.getLanguages()));
-
+        Optional<Languages> dataLanguages = Optional.empty();
+        if (languages.isPresent()) {
+            dataLanguages = Languages.of(languageRepository.saveAll(languages.get().getLanguages()));
+        }
 
         // 요청에 학력 정보가 포함된 경우 학력 섹션을 생성하고 저장
         Optional<Educations> educations = Educations.of(request.getEducations(), resume);
-        educations.ifPresent(value -> educationRepository.saveAll(value.getEducations()));
+        Optional<Educations> dataEducations = Optional.empty();
+        if (educations.isPresent()) {
+            dataEducations = Educations.of(educationRepository.saveAll(educations.get().getEducations()));
+        }
 
         // 요청에 기술 정보가 포함된 경우 기술 섹션을 생성하고 저장
         Optional<MySkills> mySkills = MySkills.of(request.getMySkills(), resume);
-        mySkills.ifPresent(value -> mySkillRepository.saveAll(value.getMySkills()));
-
+        Optional<MySkills> dataMySkills = Optional.empty();
+        if (mySkills.isPresent()) {
+            dataMySkills = MySkills.of(mySkillRepository.saveAll(mySkills.get().getMySkills()));
+        }
 
         // 요청에 자격증 정보가 포함된 경우 자격증 섹션을 생성하고 저장
         Optional<Qualifications> qualifications = Qualifications.of(request.getQualifications(), resume);
-        qualifications.ifPresent(value -> qualificationRepository.saveAll(value.getQualifications()));
+        Optional<Qualifications> dataQualifications = Optional.empty();
+        if (qualifications.isPresent()) {
+            dataQualifications = Qualifications.of(qualificationRepository.saveAll(qualifications.get().getQualifications()));
+        }
+
+        return ResumeDetails.of(dataAchievements.orElse(null), dataActivities.orElse(null), dataCareers.orElse(null), dataEducations.orElse(null), dataLanguages.orElse(null), dataMySkills.orElse(null), dataQualifications.orElse(null), resume);
 
     }
 

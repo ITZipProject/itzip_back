@@ -39,7 +39,7 @@ public class ResumeEntity extends AuditingFields {
     private String introduction;
 
     @Convert(converter = StringListConverter.class)
-    private List<String> links = new ArrayList<>();
+    private List<String> links;
 
     @Enumerated(EnumType.STRING)
     @Column(name="public_on_off", nullable = false)

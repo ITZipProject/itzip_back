@@ -39,6 +39,10 @@ public class EducationEntity extends AuditingFields {
         return Education.builder()
                 .educationId(this.id)
                 .resume(this.resume.convertToDomain())
+                .schoolName(this.schoolName)
+                .major(this.major)
+                .startDate(this.startDate)
+                .endDate(this.endDate)
                 .build();
     }
 
