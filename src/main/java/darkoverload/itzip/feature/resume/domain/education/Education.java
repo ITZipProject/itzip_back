@@ -7,12 +7,12 @@ import darkoverload.itzip.feature.resume.entity.EducationEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Education {
 
     // 이력서
@@ -32,6 +32,16 @@ public class Education {
 
     // 아이디
     private Long educationId;
+
+    @Builder
+    public Education(Resume resume, String schoolName, String major, LocalDateTime startDate, LocalDateTime endDate, Long educationId) {
+        this.resume = resume;
+        this.schoolName = schoolName;
+        this.major = major;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.educationId = educationId;
+    }
 
     public static Education update(EducationDto education, Resume resume){
         return Education.builder()
@@ -54,4 +64,5 @@ public class Education {
                 .id(this.educationId)
                 .build();
     }
+
 }

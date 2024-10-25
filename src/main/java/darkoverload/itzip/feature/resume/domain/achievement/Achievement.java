@@ -8,31 +8,41 @@ import darkoverload.itzip.feature.resume.entity.ResumeEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Setter
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Achievement {
 
     // 이력서
     private Resume resume;
 
     // 수상명
-    private String name;
+    private final String name;
 
     // 수상기관
-    private String organization;
+    private final String organization;
 
     // 수상일
-    private LocalDateTime achievementDate;
+    private final LocalDateTime achievementDate;
 
     // 설명
-    private String content;
+    private final String content;
 
     // 아이디값
-    private Long achievementId;
+    private final Long achievementId;
+
+    @Builder
+    public Achievement(Resume resume, String name, String organization, LocalDateTime achievementDate, String content, Long achievementId) {
+        this.resume = resume;
+        this.name = name;
+        this.organization = organization;
+        this.achievementDate = achievementDate;
+        this.content = content;
+        this.achievementId = achievementId;
+    }
 
     public static Achievement update(AchievementDto achievementDto, Resume resume) {
         return Achievement.builder()
@@ -55,4 +65,5 @@ public class Achievement {
                 .id(this.achievementId)
                 .build();
     }
+
 }

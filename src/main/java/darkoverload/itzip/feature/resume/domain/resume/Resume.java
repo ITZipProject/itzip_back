@@ -8,12 +8,10 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@ToString
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Resume {
     // 이메일
     private String email;
@@ -31,7 +29,6 @@ public class Resume {
     private PublicOnOff publicOnOff;
 
     // 링크
-    @Builder.Default
     private List<String> links = new ArrayList<>();
 
     // 이미지
@@ -42,6 +39,22 @@ public class Resume {
 
     // 이력서 아이디
     private Long resumeId;
+
+    public Resume() {
+    }
+
+    @Builder
+    public Resume(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff, List<String> links, String imageUrl, Long userId, Long resumeId) {
+        this.email = email;
+        this.phone = phone;
+        this.subject = subject;
+        this.introduction = introduction;
+        this.publicOnOff = publicOnOff;
+        this.links = links;
+        this.imageUrl = imageUrl;
+        this.userId = userId;
+        this.resumeId = resumeId;
+    }
 
     public static Resume create(ResumeDto resume, Long userId){
         return Resume.builder()

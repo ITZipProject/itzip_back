@@ -2,25 +2,38 @@ package darkoverload.itzip.feature.resume.domain.activity;
 
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.dto.activity.ActivityDto;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Getter
+@ToString
+@EqualsAndHashCode
 public class Activities {
     private final List<Activity> activities;
+
+    public Activities() {
+        this(new ArrayList<>());
+    }
 
     public Activities(List<Activity> activities) {
         this.activities = activities;
     }
 
     public static Optional<Activities> of(List<ActivityDto> activities, Resume resume) {
-        if (isValidate(activities)) {
+        if (activities != null && isValidate(activities)) {
             return Optional.of(new Activities(parse(activities, resume)));
         }
 
         return Optional.empty();
+    }
+
+    public static Optional<Activities> of(List<Activity> activities) {
+        return Optional.of(new Activities(activities));
     }
 
     public static List<Activity> parse(List<ActivityDto> activities, Resume resume) {
@@ -35,4 +48,5 @@ public class Activities {
     public static boolean isValidate(List<ActivityDto> activities) {
         return !activities.isEmpty();
     }
+
 }

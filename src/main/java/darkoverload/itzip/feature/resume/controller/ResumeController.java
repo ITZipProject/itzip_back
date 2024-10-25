@@ -2,6 +2,7 @@ package darkoverload.itzip.feature.resume.controller;
 
 import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
+import darkoverload.itzip.feature.resume.controller.response.CreateResumeResponse;
 import darkoverload.itzip.feature.resume.service.resume.ResumeService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
@@ -33,11 +34,9 @@ public class ResumeController {
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.BAD_REQUEST)
     @PostMapping("")
-    public String createResume(@Valid @RequestBody CreateResumeRequest request){
+    public CreateResumeResponse createResume(@Valid @RequestBody CreateResumeRequest request){
 
-        service.create(request);
-
-        return "이력서 저장을 성공하였습니다.";
+        return service.create(request);
     }
 
     @Operation(

@@ -29,6 +29,13 @@ public class ActivityDto {
     // 아이디
     private Long activityId;
 
+    public ActivityDto(String name, String content, LocalDateTime startDate, LocalDateTime endDate) {
+        this.name = name;
+        this.content = content;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     public Activity create(){
         return Activity.builder()
                 .name(this.name)

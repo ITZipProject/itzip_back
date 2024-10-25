@@ -30,6 +30,14 @@ public class CareerDto {
     // 아이디
     private Long careerId;
 
+    public CareerDto(String companyName, String careerPosition, String department, LocalDateTime startDate, LocalDateTime endDate) {
+        this.companyName = companyName;
+        this.careerPosition = careerPosition;
+        this.department = department;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     public Career create(){
         return Career.builder()
                 .companyName(this.companyName)

@@ -5,12 +5,11 @@ import darkoverload.itzip.feature.resume.dto.activity.ActivityDto;
 import darkoverload.itzip.feature.resume.entity.ActivityEntity;
 import lombok.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Setter
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@EqualsAndHashCode
 public class Activity {
 
     // 이력서
@@ -30,6 +29,16 @@ public class Activity {
 
     // 아이디
     private Long activityId;
+
+    @Builder
+    public Activity(Resume resume, String name, String content, LocalDateTime startDate, LocalDateTime endDate, Long activityId) {
+        this.resume = resume;
+        this.name = name;
+        this.content = content;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.activityId = activityId;
+    }
 
     public static Activity update(ActivityDto activity, Resume resume){
         return Activity.builder()
@@ -51,5 +60,17 @@ public class Activity {
                 .endDate(this.endDate)
                 .id(this.activityId)
                 .build();
+    }
+
+    @Override
+    public String toString() {
+        return "Activity{" +
+                "resume=" + resume +
+                ", name='" + name + '\'' +
+                ", content='" + content + '\'' +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", activityId=" + activityId +
+                '}';
     }
 }
