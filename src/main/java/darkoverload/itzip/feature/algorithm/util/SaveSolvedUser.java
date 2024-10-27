@@ -45,10 +45,14 @@ public class SaveSolvedUser {
             if (response.statusCode() == 400) {
                 throw new RestApiException(CommonExceptionCode.NOT_FOUND_SOLVEDAC_USERNAME);
             }
+            Image image = new Image();
 
-            MultipartFile multipartFile = downloadImageAsMultipartFile(jsonObject.get("profileImageUrl").getAsString(), username);
+            //사용자 사진이 있을경우에만 저장
+            if (jsonObject.get("profileImageUrl") != null && !jsonObject.get("profileImageUrl").isJsonNull()){
+                MultipartFile multipartFile = downloadImageAsMultipartFile(jsonObject.get("profileImageUrl").getAsString(), username);
 
-            Image image = cloudStorageService.imageUpload(multipartFile, solvedAcProfileDir);
+                image = cloudStorageService.imageUpload(multipartFile, solvedAcProfileDir);
+            }
 
             SolvedacUserEntity solvedacUserEntity = SolvedacUserEntity.builder()
                     .userId(userId)

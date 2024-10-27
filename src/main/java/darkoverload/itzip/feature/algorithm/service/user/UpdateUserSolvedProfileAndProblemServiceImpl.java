@@ -51,8 +51,10 @@ public class UpdateUserSolvedProfileAndProblemServiceImpl implements UpdateUserS
             //사용자가 푼 문제들 저장
             saveUserSolvedProblem.saveUserSolvedProblem(solvedacUser.getUserId());
 
-            //사용자 기존 사진 삭제
-            cloudStorageService.imageDelete(solvedacUser.getProfileImageUrl(), solvedAcProfileDir);
+            //사용자 기존 사진 삭제(사진이 있는 경우)
+            if (solvedacUser.getProfileImageUrl() != null) {
+                cloudStorageService.imageDelete(solvedacUser.getProfileImageUrl(), solvedAcProfileDir);
+            }
 
             //업데이트된 사용자 정보를 저장하고 return
             return SolvedUserResponse.builder()
