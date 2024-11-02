@@ -57,7 +57,7 @@ public class QuizMapper {
         // 사용자가 이 문제를 풀었는지, 그리고 맞췄는지 여부를 확인하여 UserQuizStatus를 설정한다.
         UserQuizStatus userQuizStatus = solvedProblemsSet.stream()
                 .filter(solvedProblem -> solvedProblem.getProblemId().equals(quizDocument.getId().toString()))
-                .map(QuizUserSolvedMapping::getIsCorrect)
+                .map(QuizUserSolvedMapping::getUserQuizStatus)
                 .findFirst()
                 .orElse(UserQuizStatus.UNSOLVED);
 

@@ -57,20 +57,17 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
         // 사용자가 푼 문제의 Id값들만 저장할 리스트 초기화
         List<String> solvedProblemIds = new ArrayList<>();
 
-        // 사용자가 있으면 사용자가 푼 문제를 가져옴
-        if (quizQueryRequest.getUserId() != null) {
-            //사용자를 찾고 사용자가 없을시 사용자가 없음 예외 출력
-            UserEntity userEntity = userService.findByEmail(customUserDetails.getEmail())
-                    .map(User::convertToEntity)
-                    .orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
+        //사용자를 찾고 사용자가 없을시 사용자가 없음 예외 출력
+        UserEntity userEntity = userService.findByEmail(customUserDetails.getEmail())
+                .map(User::convertToEntity)
+                .orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
 
-            //사용자가 푼문제매핑 테이블 list로 받아옴
-            solvedProblemsEntity = quizUserSolvedMappingRepository.findAllByUser(userEntity);
-            // 사용자가 푼 문제의 problemId를 리스트로 추출
-            solvedProblemIds = solvedProblemsEntity.stream()
-                    .map(QuizUserSolvedMapping::getProblemId)
-                    .toList();
-        }
+        //사용자가 푼문제매핑 테이블 list로 받아옴
+        solvedProblemsEntity = quizUserSolvedMappingRepository.findAllByUser(userEntity);
+        // 사용자가 푼 문제의 problemId를 리스트로 추출
+        solvedProblemIds = solvedProblemsEntity.stream()
+                .map(QuizUserSolvedMapping::getProblemId)
+                .toList();
         //사용자가 푼문제들을 HashSet으로 만들어서 빠른 검색을 할수 있게함 key는 problemid값
         Set<QuizUserSolvedMapping> solvedProblemsSet = new HashSet<>(solvedProblemsEntity);
 

@@ -42,7 +42,7 @@ public class QuizUserSolvedMapping{
     //사용자의 정답 여부
     @Column(name = "user_quiz_status", length = 10)
     @Enumerated(EnumType.STRING)
-    private UserQuizStatus isCorrect;
+    private UserQuizStatus userQuizStatus;
 
     /**
      * 문제 아이디(`problemId`)를 기준으로 `QuizUserSolvedMapping` 객체의 동등성을 정의
@@ -85,6 +85,6 @@ public class QuizUserSolvedMapping{
      * @return 준점수가 업데이트된 새로운 객체를 생성한다.
      */
     public QuizUserSolvedMapping updateGivenPoints(Integer givenPoints) {
-        return new QuizUserSolvedMapping(this.id, this.user, this.problemId, this.timeStamp, givenPoints, this.isCorrect);
+        return new QuizUserSolvedMapping(this.id, this.user, this.problemId, this.timeStamp, givenPoints, this.userQuizStatus);
     }
 }
