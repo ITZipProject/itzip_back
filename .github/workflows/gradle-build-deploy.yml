@@ -3,13 +3,9 @@ name: Java CI with Gradle Build & Deploy
 on:
   push:
     branches: [ "main" ]
-  pull_request:
-    types: [closed]
-    branches: [ "main" ]
 
 jobs:
   build_and_deploy:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -53,7 +49,7 @@ jobs:
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/jdk-21-spring-boot-3.3.1:${{ github.sha }}
             ${{ secrets.DOCKER_USERNAME }}/jdk-21-spring-boot-3.3.1:latest
-            
+
       - name: SSH to Remote Server and Deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -66,14 +62,14 @@ jobs:
             docker-compose -f /home/ubuntu/itzip/docker-compose.yml pull
             docker-compose -f /home/ubuntu/itzip/docker-compose.yml up -d
             docker system prune -a -f
-            
+
       - name: Send Success Discord Notification
         if: success()
         run: |
           curl -H "Content-Type: application/json" \
             -d '{"content": "**배포 성공!** :rocket: \n빌드 및 배포 과정이 성공적으로 완료되었습니다."}' \
             ${{ secrets.DISCORD_WEBHOOK_URL }}
-            
+
       - name: Send Failure Discord Notification
         if: failure()
         run: |
