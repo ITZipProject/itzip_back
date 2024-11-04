@@ -4,10 +4,12 @@ on:
   push:
     branches: [ "main" ]
   pull_request:
+    types: [closed]
     branches: [ "main" ]
 
 jobs:
   build_and_deploy:
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -51,45 +53,4 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/jdk-21-spring-boot-3.3.1:${{ github.sha }}
-            ${{ secrets.DOCKER_USERNAME }}/jdk-21-spring-boot-3.3.1:latest
-
-      - name: SSH to Remote Server and Deploy
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: ${{ secrets.SSH_PORT }}
-          script: |
-            docker-compose -f /home/ubuntu/itzip/docker-compose.yml down
-            docker-compose -f /home/ubuntu/itzip/docker-compose.yml pull
-            docker-compose -f /home/ubuntu/itzip/docker-compose.yml up -d
-            docker system prune -a -f
-
-      - name: Send Success Discord Notification
-        if: success()
-        run: |
-          curl -H "Content-Type: application/json" \
-            -d '{"content": "**배포 성공!** :rocket: \n빌드 및 배포 과정이 성공적으로 완료되었습니다."}' \
-            ${{ secrets.DISCORD_WEBHOOK_URL }}
-
-      - name: Send Failure Discord Notification
-        if: failure()
-        run: |
-          outcome_message=""
-          
-          if [ "${{ steps.build.outcome }}" == "failure" ]; then
-            outcome_message+="빌드 단계에서 오류 발생. "
-          fi
-          
-          if [ "${{ steps.docker_build.outcome }}" == "failure" ]; then
-            outcome_message+="Docker 빌드 단계에서 오류 발생. "
-          fi
-
-          if [ "${{ steps.deploy.outcome }}" == "failure" ]; then
-            outcome_message+="배포 단계에서 오류 발생. "
-          fi
-
-          curl -H "Content-Type: application/json" \
-            -d '{"content": "**배포 실패!** :x: \n빌드 및 배포 과정에서 오류가 발생했습니다. \n오류 내용: '"${outcome_message}"'"}' \
-            ${{ secrets.DISCORD_WEBHOOK_URL }}
+            ${{ secrets.DOCKER_USERNAME }}/
