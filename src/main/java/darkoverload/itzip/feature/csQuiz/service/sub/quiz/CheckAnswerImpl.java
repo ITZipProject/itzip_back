@@ -9,7 +9,6 @@ import darkoverload.itzip.feature.csQuiz.repository.quizusersolvedmapping.QuizUs
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.UserEntity;
-import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.feature.user.service.UserService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
@@ -55,11 +54,11 @@ public class CheckAnswerImpl implements CheckAnswer {
                         .problemId(quizAnswerRequest.getQuizId())
                         .timeStamp(LocalDateTime.now())
                         .givenPoints(0) // 기본 점수 설정
-                        .isCorrect(UserQuizStatus.UNSOLVED) // 기본 상태 설정
+                        .userQuizStatus(UserQuizStatus.UNSOLVED) // 기본 상태 설정
                         .build());
 
         //이미 문제를 맞췄을 경우 또 못 풀게 함
-        if (quizUserSolvedMapping.getIsCorrect().equals(UserQuizStatus.CORRECT)) {
+        if (quizUserSolvedMapping.getUserQuizStatus().equals(UserQuizStatus.CORRECT)) {
             throw new RestApiException(CommonExceptionCode.ALREADY_CORRECT);
         }
 

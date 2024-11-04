@@ -9,7 +9,6 @@ import darkoverload.itzip.feature.csQuiz.repository.quizusersolvedmapping.QuizUs
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.UserEntity;
-import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.feature.user.service.UserService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
@@ -53,7 +52,7 @@ public class GivenPointToQuizImpl implements GivenPointToQuiz {
         );
 
         //문제 정답을 맞췄는지 확인
-        if (!quizUserSolvedMapping.getIsCorrect().equals(UserQuizStatus.CORRECT)) {
+        if (!quizUserSolvedMapping.getUserQuizStatus().equals(UserQuizStatus.CORRECT)) {
             throw new RestApiException(CommonExceptionCode.ANSWER_NOT_CORRECT);
         }
 
