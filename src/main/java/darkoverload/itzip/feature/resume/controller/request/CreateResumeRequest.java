@@ -43,8 +43,9 @@ public class CreateResumeRequest {
 
     private Long userId;
 
+
     @Builder
-    public CreateResumeRequest(List<darkoverload.itzip.feature.resume.dto.achievement.AchievementDto> achievements, List<QualificationDto> qualifications, List<MySkillsDto> mySkills, List<ActivityDto> activities, List<CareerDto> careers, List<EducationDto> educations, List<LanguageDto> languages, ResumeDto resume, Long userId){
+    public CreateResumeRequest(List<AchievementDto> achievements, List<QualificationDto> qualifications, List<MySkillsDto> mySkills, List<ActivityDto> activities, List<CareerDto> careers, List<EducationDto> educations, List<LanguageDto> languages, ResumeDto resume, Long userId){
         this.achievements = achievements;
         this.qualifications = qualifications;
         this.mySkills = mySkills;

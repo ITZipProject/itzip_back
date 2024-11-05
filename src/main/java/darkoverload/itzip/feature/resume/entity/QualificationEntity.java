@@ -35,9 +35,6 @@ public class QualificationEntity extends AuditingFields {
     @Column(name="qualification_date", nullable = false)
     private LocalDateTime qualificationDate;
 
-    @Column(length=5)
-    private String level;
-
     public Qualification convertToDomain(){
         return Qualification.builder()
                 .qualificationId(this.id)
@@ -46,7 +43,6 @@ public class QualificationEntity extends AuditingFields {
                 .score(this.score)
                 .organization(this.organization)
                 .qualificationDate(this.qualificationDate)
-                .level(this.level)
                 .build();
     }
 

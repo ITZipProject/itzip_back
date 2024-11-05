@@ -26,10 +26,7 @@ public class LanguageEntity extends AuditingFields {
     @Column(length = 50, nullable = false)
     private String name;
 
-    @Column(length=50)
-    private String level;
-
-    private int score;
+    private String score;
 
     @Column(name="acquisition_date", nullable = false)
     private LocalDateTime acquisitionDate;
@@ -40,7 +37,6 @@ public class LanguageEntity extends AuditingFields {
                 .languageId(this.id)
                 .resume(this.resume.convertToDomain())
                 .name(this.name)
-                .level(this.level)
                 .score(this.score)
                 .acquisitionDate(this.acquisitionDate)
                 .build();

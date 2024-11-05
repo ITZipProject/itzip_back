@@ -37,7 +37,6 @@ public class FakeQualificationRepository implements QualificationRepository {
                     .resume(qualification.getResume())
                     .qualificationDate(qualification.getQualificationDate())
                     .name(qualification.getName())
-                    .level(qualification.getLevel())
                     .score(qualification.getScore())
                     .organization(qualification.getOrganization())
                     .build();

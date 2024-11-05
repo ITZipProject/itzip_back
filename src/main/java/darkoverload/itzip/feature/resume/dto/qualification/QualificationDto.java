@@ -27,18 +27,14 @@ public class QualificationDto {
     // 점수
     private int score;
 
-    // 급
-    private String level;
-
     // 아이디
     private Long qualificationId;
 
-    public QualificationDto(String organization, LocalDateTime qualificationDate, String name, int score, String level) {
+    public QualificationDto(String organization, LocalDateTime qualificationDate, String name, int score) {
         this.organization = organization;
         this.qualificationDate = qualificationDate;
         this.name = name;
         this.score = score;
-        this.level = level;
     }
 
     public Qualification create() {
@@ -47,7 +43,6 @@ public class QualificationDto {
                 .qualificationDate(this.qualificationDate)
                 .name(this.name)
                 .score(this.score)
-                .level(this.level)
                 .build();
     }
 }

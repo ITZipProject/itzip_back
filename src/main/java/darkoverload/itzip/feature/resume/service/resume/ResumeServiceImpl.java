@@ -150,8 +150,7 @@ public class ResumeServiceImpl implements ResumeService {
         if (achievements.isPresent()) {
             dataAchievements = Achievements.of(achievementRepository.saveAll(achievements.get().getAchievements()));
         }
-
-
+        
         // 요청에 활동 정보가 포함된 경우 활동 섹션을 생성하고 저장
         Optional<Activities> activities = Activities.of(request.getActivities(), resume);
         Optional<Activities> dataActivities = Optional.empty();
@@ -188,8 +187,6 @@ public class ResumeServiceImpl implements ResumeService {
         }
 
         return ResumeDetails.of(dataAchievements.orElse(null), dataActivities.orElse(null), dataCareers.orElse(null), dataEducations.orElse(null), dataLanguages.orElse(null), dataMySkills.orElse(null), dataQualifications.orElse(null), resume);
-
     }
-
 
 }
