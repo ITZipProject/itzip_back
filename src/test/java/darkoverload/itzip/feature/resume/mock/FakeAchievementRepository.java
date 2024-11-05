@@ -37,7 +37,7 @@ public class FakeAchievementRepository implements AchievementRepository {
             return newAchievement;
         }
         data.removeIf(item -> Objects.equals(item.getAchievementId(), achievement.getAchievementId()));
-        data.add(achievement);
+        data.add(Math.toIntExact(achievement.getAchievementId()), achievement);
 
         return achievement;
     }
