@@ -49,8 +49,6 @@ public class ResumeController {
             schema = @Schema(implementation = UpdateResumeRequest.class)
     )) @Valid @RequestBody UpdateResumeRequest request) {
 
-
-
         return service.update(request);
     }
 

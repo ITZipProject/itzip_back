@@ -80,4 +80,5 @@ public class FakeLanguageRepository implements LanguageRepository {
     private List<Long> getLanguageIds(Long resumeId) {
         return findAllByResumeId(resumeId).stream().map(Language::getLanguageId).toList();
     }
+
 }

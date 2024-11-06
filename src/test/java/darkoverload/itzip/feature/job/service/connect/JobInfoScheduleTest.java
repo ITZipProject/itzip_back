@@ -1,37 +1,30 @@
-package darkoverload.itzip.feature.job.scheduler;
+package darkoverload.itzip.feature.job.service.connect;
 
 import darkoverload.itzip.feature.job.domain.JobInfo;
 import darkoverload.itzip.feature.job.entity.JobInfoEntity;
 import darkoverload.itzip.feature.job.repository.JobInfoRepository;
-import darkoverload.itzip.feature.job.service.connect.JobInfoConnectService;
-import lombok.RequiredArgsConstructor;
+import darkoverload.itzip.feature.job.service.JobInfoService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+
 import java.util.List;
 
 @Slf4j
-@Component
-@RequiredArgsConstructor
-public class JobInfoScheduler {
-    private static final String JOB_INFO_SCHEDULER_CON = "1 30 0 * * *";
+@SpringBootTest
+@ActiveProfiles(profiles = "test")
+public class JobInfoScheduleTest {
 
-    private final JobInfoRepository jobInfoRepository;
-    private final JobInfoConnectService service;
-    /**
-     * Saramin API에서 최신 JobInfo 데이터를 가져와 데이터베이스와 비교하여
-     * 삭제, 업데이트, 삽입 작업을 수행하는 메서드입니다. 이 메서드는 매일 00:30에 실행됩니다.
-     *
-     * @Transactional 트랜잭션이 보장되는 환경에서 실행되며, 작업이 완료될 때까지
-     * 트랜잭션이 유지됩니다. 오류가 발생하면 모든 작업이 롤백됩니다.
-     *
-     * @Scheduled(cron = "1 30 0 * * *") 크론 표현식을 사용하여 매일 01:30에 실행됩니다.
-     */
+    @Autowired
+    private JobInfoRepository jobInfoRepository;
 
-    @Transactional
-    @Scheduled(cron = JOB_INFO_SCHEDULER_CON)
-    public void jobInfoConnectApi() {
+    @Autowired
+    private JobInfoConnectService service;
+
+    @Test
+    void 사람인_테스트() {
         // 데이터베이스에서 모든 JobInfo 데이터를 조회하고, 도메인 객체 리스트로 변환
         List<JobInfo> dbList = jobInfoRepository.findAll().stream().map(JobInfoEntity::convertToDomain).toList();
 

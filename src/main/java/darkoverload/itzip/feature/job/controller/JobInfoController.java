@@ -21,7 +21,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 
-
 @Slf4j
 @RestController
 @RequestMapping("/job-info")
@@ -53,6 +52,5 @@ public class JobInfoController {
 
         return jobInfoService.jobInfoScrap(request);
     }
-
 
 }

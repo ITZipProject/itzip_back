@@ -34,7 +34,6 @@ public class AchievementEntity extends AuditingFields {
 
     private String content;
 
-
     public Achievement convertToDomain(){
         return Achievement.builder()
                 .achievementId(this.id)
@@ -44,4 +43,5 @@ public class AchievementEntity extends AuditingFields {
                 .content(this.content)
                 .build();
     }
+
 }
