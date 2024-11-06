@@ -37,8 +37,9 @@ public class AchievementDto {
         this.content = content;
     }
 
-    public Achievement create() {
+    public Achievement toModel() {
         return Achievement.builder()
+                .achievementId(this.achievementId)
                 .name(this.name)
                 .organization(this.organization)
                 .achievementDate(this.achievementDate)

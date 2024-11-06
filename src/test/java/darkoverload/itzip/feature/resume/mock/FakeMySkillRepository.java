@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.resume.mock;
 
+import darkoverload.itzip.feature.resume.domain.language.Language;
 import darkoverload.itzip.feature.resume.domain.myskill.MySkill;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.service.resume.port.MySkillRepository;
@@ -21,10 +22,7 @@ public class FakeMySkillRepository implements MySkillRepository {
     }
 
     @Override
-    public List<MySkill> update(List<MySkill> mySkills, Resume resume) {
-        List<Long> mySkillDeleteIds = getMySkillDeleteIds(mySkills, resume);
-        deleteAllById(mySkillDeleteIds);
-
+    public List<MySkill> update(List<MySkill> mySkills) {
         return saveAll(mySkills);
     }
 
@@ -56,6 +54,12 @@ public class FakeMySkillRepository implements MySkillRepository {
         for(Long id: ids) {
             data.removeIf(item -> Objects.equals(item.getMySkillId(), id));
         }
+    }
+
+    @Override
+    public void deleteAllMySkills(List<MySkill> deleteMySkills) {
+        deleteMySkills.stream().map(MySkill::getMySkillId)
+                .forEach(id -> data.removeIf(mySkill -> mySkill.getMySkillId().equals(id)));
     }
 
     private List<Long> getMySkillDeleteIds(List<MySkill> mySkills, Resume resume) {

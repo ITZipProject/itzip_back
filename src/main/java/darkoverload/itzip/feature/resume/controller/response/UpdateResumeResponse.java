@@ -1,24 +1,38 @@
 package darkoverload.itzip.feature.resume.controller.response;
 
-import darkoverload.itzip.feature.resume.code.PublicOnOff;
+import darkoverload.itzip.feature.resume.domain.achievement.Achievements;
+import darkoverload.itzip.feature.resume.domain.activity.Activities;
+import darkoverload.itzip.feature.resume.domain.career.Careers;
+import darkoverload.itzip.feature.resume.domain.education.Educations;
+import darkoverload.itzip.feature.resume.domain.language.Languages;
+import darkoverload.itzip.feature.resume.domain.myskill.MySkills;
+import darkoverload.itzip.feature.resume.domain.qualification.Qualifications;
+import darkoverload.itzip.feature.resume.domain.resume.Resume;
+import darkoverload.itzip.feature.resume.domain.resume.ResumeDetails;
+import lombok.Builder;
 
-import java.util.List;
 
+public record UpdateResumeResponse(Achievements achievements, Activities activities, Careers careers,
+                                   Educations educations, Languages languages, MySkills mySkills,
+                                   Qualifications qualifications, Resume resume) {
+    @Builder
+    public UpdateResumeResponse {
 
+    }
 
-public class UpdateResumeResponse {
+    public static UpdateResumeResponse from(ResumeDetails details) {
+        return UpdateResumeResponse.builder()
+                .achievements(details.achievements())
+                .activities(details.activities())
+                .careers(details.careers())
+                .educations(details.educations())
+                .languages(details.languages())
+                .mySkills(details.mySkills())
+                .qualifications(details.qualifications())
+                .resume(details.resume())
+                .build();
+    }
 
-    private String email;
-
-    private String phone;
-
-    private String subject;
-
-    private String introduction;
-
-    private PublicOnOff publicOnOff;
-
-    private List<String> links;
-
-    private Long resumeId;
 }
+
+

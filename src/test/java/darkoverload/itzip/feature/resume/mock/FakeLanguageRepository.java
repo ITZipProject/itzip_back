@@ -24,10 +24,7 @@ public class FakeLanguageRepository implements LanguageRepository {
     }
 
     @Override
-    public List<Language> update(List<Language> languages, Resume resume) {
-        List<Long> languageDeleteIds = getLanguageDeleteIds(languages, resume);
-        deleteAllById(languageDeleteIds);
-
+    public List<Language> update(List<Language> languages) {
         return languages;
     }
 
@@ -61,6 +58,12 @@ public class FakeLanguageRepository implements LanguageRepository {
         for (Long id : ids) {
             data.removeIf(item -> Objects.equals(item.getLanguageId(), id));
         }
+    }
+
+    @Override
+    public void deleteAllLanguages(List<Language> deleteLanguages) {
+        deleteLanguages.stream().map(Language::getLanguageId)
+                .forEach(id -> data.removeIf(language -> language.getLanguageId().equals(id)));
     }
 
     private List<Long> getLanguageDeleteIds(List<Language> languages, Resume resume) {

@@ -38,8 +38,8 @@ public class Activities {
 
     public static List<Activity> parse(List<ActivityDto> activities, Resume resume) {
         return activities.stream()
-                .map(createActivityDto -> {
-                    Activity activity = createActivityDto.create();
+                .map(activityDto -> {
+                    Activity activity = activityDto.toModel();
                     activity.setResume(resume);
                     return activity;
                 }).toList();
@@ -47,6 +47,12 @@ public class Activities {
 
     public static boolean isValidate(List<ActivityDto> activities) {
         return !activities.isEmpty();
+    }
+
+    public List<Activity> deleteActivities(List<Activity> allActivities) {
+        return activities.stream().filter(activity -> {
+            return !allActivities.contains(activity);
+        }).toList();
     }
 
 }

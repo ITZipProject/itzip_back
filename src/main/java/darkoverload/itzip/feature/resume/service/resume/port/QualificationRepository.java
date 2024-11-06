@@ -8,11 +8,13 @@ import java.util.List;
 public interface QualificationRepository {
     List<Qualification> findByAllResumeId(Long resumeId);
 
-    List<Qualification> update(List<Qualification> qualifications, Resume resume);
+    List<Qualification> update(List<Qualification> qualifications);
 
     Qualification save(Qualification qualification);
 
     List<Qualification> saveAll(List<Qualification> qualifications);
 
     void deleteAllById(List<Long> ids);
+
+    void deleteAllQualifications(List<Qualification> deleteQualifications);
 }

@@ -38,8 +38,8 @@ public class Achievements {
 
     public static List<Achievement> parse(List<AchievementDto> achievements, Resume resume) {
         return achievements.stream()
-                .map(createAchievementDto -> {
-                    Achievement achievement = createAchievementDto.create();
+                .map(achievementDto -> {
+                    Achievement achievement = achievementDto.toModel();
                     achievement.setResume(resume);
                     return achievement;
                 }).toList();
@@ -47,6 +47,12 @@ public class Achievements {
 
     public static boolean isValidate(List<AchievementDto> achievements) {
         return !achievements.isEmpty();
+    }
+
+    public List<Achievement> deleteAchievements(List<Achievement> allAchievements) {
+        return achievements.stream().filter(achievement -> {
+            return !achievements.contains(achievement);
+        }).toList();
     }
 
 }

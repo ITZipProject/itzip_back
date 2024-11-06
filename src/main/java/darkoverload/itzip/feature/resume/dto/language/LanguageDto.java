@@ -32,7 +32,7 @@ public class LanguageDto {
         this.acquisitionDate = acquisitionDate;
     }
 
-    public Language create(){
+    public Language toModel(){
         return Language.builder()
                 .name(this.name)
                 .score(this.score)

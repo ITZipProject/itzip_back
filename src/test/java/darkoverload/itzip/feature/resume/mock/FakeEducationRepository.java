@@ -24,9 +24,7 @@ public class FakeEducationRepository implements EducationRepository {
     }
 
     @Override
-    public List<Education> update(List<Education> educations, Resume resume) {
-        List<Long> educationDeleteIds = getEducationDeleteIds(educations, resume);
-        deleteAllById(educationDeleteIds);
+    public List<Education> update(List<Education> educations) {
         return saveAll(educations);
     }
 
@@ -54,6 +52,12 @@ public class FakeEducationRepository implements EducationRepository {
     @Override
     public List<Education> saveAll(List<Education> educations) {
         return educations.stream().map(this::save).toList();
+    }
+
+    @Override
+    public void deleteAllEducations(List<Education> deleteEducations) {
+        deleteEducations.stream().map(Education::getEducationId)
+                .forEach(id -> data.removeIf(data -> data.getEducationId().equals(id)));
     }
 
     @Override

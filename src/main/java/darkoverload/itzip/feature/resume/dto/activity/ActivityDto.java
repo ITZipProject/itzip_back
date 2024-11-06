@@ -36,8 +36,9 @@ public class ActivityDto {
         this.endDate = endDate;
     }
 
-    public Activity create(){
+    public Activity toModel(){
         return Activity.builder()
+                .activityId(this.activityId)
                 .name(this.name)
                 .content(this.content)
                 .startDate(this.startDate)

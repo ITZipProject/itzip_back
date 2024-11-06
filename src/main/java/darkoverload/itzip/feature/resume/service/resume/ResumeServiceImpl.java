@@ -3,6 +3,7 @@ package darkoverload.itzip.feature.resume.service.resume;
 import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.response.CreateResumeResponse;
+import darkoverload.itzip.feature.resume.controller.response.UpdateResumeResponse;
 import darkoverload.itzip.feature.resume.domain.achievement.Achievement;
 import darkoverload.itzip.feature.resume.domain.achievement.Achievements;
 import darkoverload.itzip.feature.resume.domain.activity.Activities;
@@ -64,69 +65,6 @@ public class ResumeServiceImpl implements ResumeService {
         return CreateResumeResponse.from(create(request, resumeRepository.save(resume)));
     }
 
-    @Transactional
-    @Override
-    public void update(UpdateResumeRequest request) {
-        Resume updateResume = Resume.update(request.getResume(), request.getResumeId(), request.getUserId());
-
-        update(request, resumeRepository.update(updateResume));
-    }
-
-    /**
-     * 제공된 요청 객체의 데이터를 사용하여 주어진 이력서를 업데이트합니다.
-     * 이 메서드는 경력, 성과, 활동, 언어, 학력, 기술, 자격증과 같은 이력서의 여러 섹션을 처리하고,
-     * 각 섹션에 해당하는 저장소에 업데이트를 수행합니다.
-     *
-     * @param request 업데이트할 이력서의 각 섹션(경력, 성과, 활동, 언어, 학력, 기술, 자격증 등)에 대한 데이터를 포함한
-     *                UpdateResumeRequest 객체입니다.
-     * @param resume  새로운 정보로 업데이트할 Resume 객체입니다.
-     */
-    private void update(UpdateResumeRequest request, Resume resume) {
-
-        // 요청에 경력 정보가 포함된 경우 경력 섹션을 업데이트
-        if (!request.getCareers().isEmpty()) {
-            List<Career> careers = request.getCareers().stream().map(careerDto -> Career.update(careerDto, resume)).toList();
-            careerRepository.update(careers, resume);
-        }
-
-        // 요청에 성과 정보가 포함된 경우 성과 섹션을 업데이트
-        if (!request.getAchievements().isEmpty()) {
-            List<Achievement> achievements = request.getAchievements().stream().map(achievementDto -> Achievement.update(achievementDto, resume)).toList();
-            achievementRepository.update(achievements, resume);
-        }
-
-        // 요청에 활동 정보가 포함된 경우 활동 섹션을 업데이트
-        if (!request.getActivities().isEmpty()) {
-            List<Activity> activities = request.getActivities().stream().map(activityDto -> Activity.update(activityDto, resume)).toList();
-
-            activityRepository.update(activities, resume);
-        }
-
-        // 요청에 언어 정보가 포함된 경우 언어 섹션을 업데이트
-        if (!request.getLanguages().isEmpty()) {
-            List<Language> languages = request.getLanguages().stream().map(languageDto -> Language.update(languageDto, resume)).toList();
-            languageRepository.update(languages, resume);
-        }
-
-        // 요청에 학력 정보가 포함된 경우 학력 섹션을 업데이트
-        if (!request.getEducations().isEmpty()) {
-            List<Education> educations = request.getEducations().stream().map(educationDto -> Education.update(educationDto, resume)).toList();
-            educationRepository.update(educations, resume);
-        }
-
-        // 요청에 기술 정보가 포함된 경우 기술 섹션을 업데이트
-        if (!request.getMySkills().isEmpty()) {
-            List<MySkill> mySkills = request.getMySkills().stream().map(mySkillsDto -> MySkill.update(mySkillsDto, resume)).toList();
-            mySkillRepository.update(mySkills, resume);
-        }
-
-        // 요청에 자격증 정보가 포함된 경우 자격증 섹션을 업데이트
-        if (!request.getQualifications().isEmpty()) {
-            List<Qualification> qualifications = request.getQualifications().stream().map(qualificationDto -> Qualification.update(qualificationDto, resume)).toList();
-            qualificationRepository.update(qualifications, resume);
-        }
-    }
-
     /**
      * 제공된 요청 데이터를 기반으로 새로운 이력서의 각 섹션(경력, 성과, 활동, 언어, 학력, 기술, 자격증 등)을 생성하고 저장합니다.
      * 각 섹션은 DTO를 도메인 객체로 변환한 후, 해당 이력서와의 관계를 설정하고,
@@ -150,7 +88,7 @@ public class ResumeServiceImpl implements ResumeService {
         if (achievements.isPresent()) {
             dataAchievements = Achievements.of(achievementRepository.saveAll(achievements.get().getAchievements()));
         }
-        
+
         // 요청에 활동 정보가 포함된 경우 활동 섹션을 생성하고 저장
         Optional<Activities> activities = Activities.of(request.getActivities(), resume);
         Optional<Activities> dataActivities = Optional.empty();
@@ -184,6 +122,80 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<Qualifications> dataQualifications = Optional.empty();
         if (qualifications.isPresent()) {
             dataQualifications = Qualifications.of(qualificationRepository.saveAll(qualifications.get().getQualifications()));
+        }
+
+        return ResumeDetails.of(dataAchievements.orElse(null), dataActivities.orElse(null), dataCareers.orElse(null), dataEducations.orElse(null), dataLanguages.orElse(null), dataMySkills.orElse(null), dataQualifications.orElse(null), resume);
+    }
+
+
+    @Override
+    public UpdateResumeResponse update(UpdateResumeRequest request) {
+        Resume updateResume = Resume.update(request.getResume(), request.getResumeId(), request.getUserId());
+
+        return UpdateResumeResponse.from(update(request, resumeRepository.update(updateResume)));
+    }
+
+    /**
+     *
+     * @param request
+     * @param resume
+     * @return
+     */
+    private ResumeDetails update(UpdateResumeRequest request, Resume resume) {
+        Optional<Careers> careers = Careers.of(request.getCareers(), resume);
+        Optional<Careers> dataCareers = Optional.empty();
+        if (careers.isPresent()) {
+            List<Career> allCareers = careerRepository.findAllByResumeId(resume.getResumeId());
+            careerRepository.deleteAllCareers(careers.get().deleteCareers(allCareers));
+            dataCareers = Careers.of(careerRepository.update(careers.get().getCareers()));
+        }
+
+        Optional<Achievements> achievements = Achievements.of(request.getAchievements(), resume);
+        Optional<Achievements> dataAchievements = Optional.empty();
+        if (achievements.isPresent()) {
+            List<Achievement> allAchievements = achievementRepository.findAllByResumeId(resume.getResumeId());
+            achievementRepository.deleteAllAchievements(achievements.get().deleteAchievements(allAchievements));
+            dataAchievements = Achievements.of(achievementRepository.update(achievements.get().getAchievements()));
+        }
+
+        Optional<Activities> activities = Activities.of(request.getActivities(), resume);
+        Optional<Activities> dataActivities = Optional.empty();
+        if (activities.isPresent()) {
+            List<Activity> allActivities = activityRepository.findAllByResumeId(resume.getResumeId());
+            activityRepository.deleteAllActivities(activities.get().deleteActivities(allActivities));
+            dataActivities = Activities.of(activityRepository.update(activities.get().getActivities()));
+        }
+
+        Optional<Languages> languages = Languages.of(request.getLanguages(), resume);
+        Optional<Languages> dataLanguages = Optional.empty();
+        if (languages.isPresent()) {
+            List<Language> allLanguages = languageRepository.findAllByResumeId(resume.getResumeId());
+            languageRepository.deleteAllLanguages(languages.get().deleteLanguages(allLanguages));
+            dataLanguages = Languages.of(languageRepository.update(languages.get().getLanguages()));
+        }
+
+        Optional<Educations> educations = Educations.of(request.getEducations(), resume);
+        Optional<Educations> dataEducations = Optional.empty();
+        if (educations.isPresent()) {
+            List<Education> allEducations = educationRepository.findAllByResumeId(resume.getResumeId());
+            educationRepository.deleteAllEducations(educations.get().deleteEducations(allEducations));
+            dataEducations = Educations.of(educationRepository.update(educations.get().getEducations()));
+        }
+
+        Optional<MySkills> mySkills = MySkills.of(request.getMySkills(), resume);
+        Optional<MySkills> dataMySkills = Optional.empty();
+        if (mySkills.isPresent()) {
+            List<MySkill> allMySkills = mySkillRepository.findByAllResumeId(resume.getResumeId());
+            mySkillRepository.deleteAllMySkills(mySkills.get().deleteMySkills(allMySkills));
+            dataMySkills = MySkills.of(mySkillRepository.update(mySkills.get().getMySkills()));
+        }
+
+        Optional<Qualifications> qualifications = Qualifications.of(request.getQualifications(), resume);
+        Optional<Qualifications> dataQualifications = Optional.empty();
+        if (qualifications.isPresent()) {
+            List<Qualification> allQualifications = qualificationRepository.findByAllResumeId(resume.getResumeId());
+            qualificationRepository.deleteAllQualifications(allQualifications);
+            dataQualifications = Qualifications.of(qualificationRepository.update(qualifications.get().getQualifications()));
         }
 
         return ResumeDetails.of(dataAchievements.orElse(null), dataActivities.orElse(null), dataCareers.orElse(null), dataEducations.orElse(null), dataLanguages.orElse(null), dataMySkills.orElse(null), dataQualifications.orElse(null), resume);

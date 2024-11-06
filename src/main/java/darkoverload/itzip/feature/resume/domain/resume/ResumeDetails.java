@@ -10,7 +10,6 @@ import darkoverload.itzip.feature.resume.domain.qualification.Qualifications;
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter
 public record ResumeDetails(Achievements achievements, Activities activities, Careers careers, Educations educations,
                             Languages languages, MySkills mySkills, Qualifications qualifications, Resume resume) {
 

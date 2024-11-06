@@ -10,9 +10,12 @@ public interface ActivityRepository {
 
     Activity save(Activity activity);
 
-    List<Activity> update(List<Activity> activities, Resume resume);
+    List<Activity> update(List<Activity> activities);
 
     void deleteAllByIds(List<Long> ids);
 
     List<Activity> saveAll(List<Activity> activities);
+
+    void deleteAllActivities(List<Activity> deleteActivities);
+
 }

@@ -1,7 +1,6 @@
 package darkoverload.itzip.feature.resume.dto.qualification;
 
 import darkoverload.itzip.feature.resume.domain.qualification.Qualification;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,8 +36,9 @@ public class QualificationDto {
         this.score = score;
     }
 
-    public Qualification create() {
+    public Qualification toModel() {
         return Qualification.builder()
+                .qualificationId(this.qualificationId)
                 .organization(this.organization)
                 .qualificationDate(this.qualificationDate)
                 .name(this.name)
