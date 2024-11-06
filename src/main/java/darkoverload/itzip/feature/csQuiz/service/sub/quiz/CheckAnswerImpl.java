@@ -6,8 +6,10 @@ import darkoverload.itzip.feature.csQuiz.entity.QuizUserSolvedMapping;
 import darkoverload.itzip.feature.csQuiz.entity.UserQuizStatus;
 import darkoverload.itzip.feature.csQuiz.repository.quiz.QuizRepository;
 import darkoverload.itzip.feature.csQuiz.repository.quizusersolvedmapping.QuizUserSolvedMappingRepository;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
+import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.UserEntity;
-import darkoverload.itzip.feature.user.repository.UserRepository;
+import darkoverload.itzip.feature.user.service.UserService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -25,15 +27,15 @@ public class CheckAnswerImpl implements CheckAnswer {
     private final QuizUserSolvedMappingRepository quizUserSolvedMappingRepository;
 
     //User객체를 받아올 userRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     @Override
     @Transactional
-    public UserQuizStatus checkAnswer(QuizAnswerRequest quizAnswerRequest) {
+    public UserQuizStatus checkAnswer(QuizAnswerRequest quizAnswerRequest, CustomUserDetails customUserDetails) {
         // 사용자가 존재하는지 확인
-        UserEntity userEntity = userRepository.findById(quizAnswerRequest.getUserId()).orElseThrow(
-                () -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)
-        );
+        UserEntity userEntity = userService.findByEmail(customUserDetails.getEmail())
+                .map(User::convertToEntity)
+                .orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
 
         // 제출된 퀴즈가 존재하는지 확인
         ObjectId objectQuizId = new ObjectId(quizAnswerRequest.getQuizId());
@@ -52,11 +54,11 @@ public class CheckAnswerImpl implements CheckAnswer {
                         .problemId(quizAnswerRequest.getQuizId())
                         .timeStamp(LocalDateTime.now())
                         .givenPoints(0) // 기본 점수 설정
-                        .isCorrect(UserQuizStatus.UNSOLVED) // 기본 상태 설정
+                        .userQuizStatus(UserQuizStatus.UNSOLVED) // 기본 상태 설정
                         .build());
 
         //이미 문제를 맞췄을 경우 또 못 풀게 함
-        if (quizUserSolvedMapping.getIsCorrect().equals(UserQuizStatus.CORRECT)) {
+        if (quizUserSolvedMapping.getUserQuizStatus().equals(UserQuizStatus.CORRECT)) {
             throw new RestApiException(CommonExceptionCode.ALREADY_CORRECT);
         }
 

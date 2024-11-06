@@ -30,14 +30,13 @@ job:
   api-url: ${JOB_API_URL}
   api-key: ${JOB_API_KEY}
 
-
 logging:
   level:
     org:
       hibernate:
         SQL: DEBUG
 
-##정적 리소스을 제공할 것인가
+# 정적 리소스 제공 설정
 resources:
   chain:
     strategy:
@@ -46,11 +45,21 @@ resources:
     mime-mappings:
       js: application/javascript
 
-##기본적으로 있는 Swagger를 비활성화해서 custom을 사용하도록함
+# 기본 Swagger 비활성화 (custom Swagger 사용)
 springdoc:
   swagger-ui:
     enabled: false
 
+# API 기본 경로 설정
 server:
-    servlet:
-      context-path: /api
+  servlet:
+    context-path: /api
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus, health, info
+  metrics:
+    tags:
+      application: ${spring.application.name}

@@ -36,6 +36,8 @@ public class QuizMapper {
                 .correctRate(correctRate)
                 .points(quizDocument.getPoints())
                 .choices(quizDocument.getChoices())
+                .createDate(quizDocument.getCreateDate())
+                .modifyDate(quizDocument.getModifyDate())
                 .build();
     }
 
@@ -55,7 +57,7 @@ public class QuizMapper {
         // 사용자가 이 문제를 풀었는지, 그리고 맞췄는지 여부를 확인하여 UserQuizStatus를 설정한다.
         UserQuizStatus userQuizStatus = solvedProblemsSet.stream()
                 .filter(solvedProblem -> solvedProblem.getProblemId().equals(quizDocument.getId().toString()))
-                .map(QuizUserSolvedMapping::getIsCorrect)
+                .map(QuizUserSolvedMapping::getUserQuizStatus)
                 .findFirst()
                 .orElse(UserQuizStatus.UNSOLVED);
 
@@ -71,6 +73,8 @@ public class QuizMapper {
                 .points(quizDocument.getPoints())
                 .userQuizStatus(userQuizStatus)
                 .choices(quizDocument.getChoices())
+                .createDate(quizDocument.getCreateDate())
+                .modifyDate(quizDocument.getModifyDate())
                 .build();
     }
 
@@ -98,6 +102,8 @@ public class QuizMapper {
                 .points(quizDocument.getPoints())
                 .userQuizStatus(UserQuizStatus.UNSOLVED) //사용자가 풀지 않은 문제만 반환함으로 false로 모두 반환
                 .choices(quizDocument.getChoices())
+                .createDate(quizDocument.getCreateDate())
+                .modifyDate(quizDocument.getModifyDate())
                 .build();
     }
 
@@ -107,7 +113,7 @@ public class QuizMapper {
      * @param categoryName 사용자가 생성한 문제 카테고리 이름
      * @return QuizEntity를 반환한다.
      */
-    public QuizDocument requestToDocument(QuizCreatedRequest request, String categoryName) {
+    public QuizDocument requestToDocument(QuizCreatedRequest request, String categoryName, Long userId) {
         if (request == null) {
             return null;
         }
@@ -121,7 +127,7 @@ public class QuizMapper {
                 .acceptedUserCount(0)
                 .triedUserCount(0)
                 .points(0)
-                .createUserId(request.getUserId())
+                .createUserId(userId)
                 .choices(request.getChoices())
                 .build();
     }

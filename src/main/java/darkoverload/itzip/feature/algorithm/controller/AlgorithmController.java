@@ -4,6 +4,7 @@ import darkoverload.itzip.feature.algorithm.controller.response.ProblemListRespo
 import darkoverload.itzip.feature.algorithm.controller.response.SolvedTagResponse;
 import darkoverload.itzip.feature.algorithm.controller.response.SolvedUserResponse;
 import darkoverload.itzip.feature.algorithm.service.AlgorithmService;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.swagger.ExceptionCodeAnnotations;
@@ -11,6 +12,7 @@ import darkoverload.itzip.global.config.swagger.ResponseCodeAnnotation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Tag(name = "Algorithm Problem Recommend", description = "코딩 테스트 문제 추천 서비스")
@@ -28,13 +30,13 @@ public class AlgorithmController {
     @ExceptionCodeAnnotations(CommonExceptionCode.NOT_FOUND_SOLVEDAC_USER)
     @GetMapping("/problems")
     public ProblemListResponse findProblemsByUserOrTag(
-            @RequestParam Long userId,
-            @RequestParam(required = false) Long tagId
-    ){
+            @RequestParam(required = false) Long tagId,
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
+            ){
         if (tagId == null) {
-            return algorithmService.findProblemsByUser(userId);
+            return algorithmService.findProblemsByUser(customUserDetails);
         }
-        return algorithmService.findProblemsByTagAndUser(userId, tagId);
+        return algorithmService.findProblemsByTagAndUser(customUserDetails, tagId);
     }
 
     @Operation(
@@ -44,8 +46,8 @@ public class AlgorithmController {
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.NOT_FOUND_SOLVEDAC_USER)
     @GetMapping("/user")
-    public SolvedUserResponse findSolvedUser(@RequestParam Long userId){
-        return algorithmService.findUserSolvedProfile(userId);
+    public SolvedUserResponse findSolvedUser(@AuthenticationPrincipal CustomUserDetails customUserDetails){
+        return algorithmService.findUserSolvedProfile(customUserDetails);
     }
 
     @Operation(
@@ -57,9 +59,9 @@ public class AlgorithmController {
     @PostMapping("/user")
     public void saveUserSolvedProfile(
             @RequestParam String username,
-            @RequestParam Long userId
+            @AuthenticationPrincipal CustomUserDetails customUserDetails
     ){
-        algorithmService.saveUserSolvedProfile(userId, username);
+        algorithmService.saveUserSolvedProfile(customUserDetails, username);
     }
 
     @Operation(
@@ -73,8 +75,8 @@ public class AlgorithmController {
             CommonExceptionCode.SOLVEDAC_API_ERROR
     })
     @PatchMapping("/user")
-    public SolvedUserResponse updateUserSolvedProfile(@RequestParam Long userId){
-        return algorithmService.updateUserSolvedProfileAndProblem(userId);
+    public SolvedUserResponse updateUserSolvedProfile(@AuthenticationPrincipal CustomUserDetails customUserDetails){
+        return algorithmService.updateUserSolvedProfileAndProblem(customUserDetails);
     }
 
     @Operation(

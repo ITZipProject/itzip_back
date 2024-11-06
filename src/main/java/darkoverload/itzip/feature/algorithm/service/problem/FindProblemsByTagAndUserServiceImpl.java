@@ -6,6 +6,7 @@ import darkoverload.itzip.feature.algorithm.entity.SolvedacUserEntity;
 import darkoverload.itzip.feature.algorithm.repository.problem.ProblemRepository;
 import darkoverload.itzip.feature.algorithm.repository.user.SolvedacUserRepository;
 import darkoverload.itzip.feature.algorithm.util.SolvedTierCalculator;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -22,24 +23,24 @@ public class FindProblemsByTagAndUserServiceImpl implements FindProblemsByTagAnd
 
     /**
      * 사용자 아이디와 테그 아이드를 받아와서 문제를 추천해주는 로직
-     * @param userId 사용자 아이디
+     * @param customUserDetails 사용자 인증 정보
      * @param tagId 테그 아이디
      * @return 문제 응답 객체
      */
     @Override
-    public ProblemListResponse findProblemsByTagAndUser(Long userId, Long tagId) {
+    public ProblemListResponse findProblemsByTagAndUser(CustomUserDetails customUserDetails, Long tagId) {
         //사용자 정보 찾기
-        SolvedacUserEntity solvedacUserEntity = solvedacUserRepository.findById(userId).orElseThrow(() ->
+        SolvedacUserEntity solvedacUserEntity = solvedacUserRepository.findByUserEntityEmail(customUserDetails.getEmail()).orElseThrow(() ->
                 new RestApiException(CommonExceptionCode.NOT_FOUND_SOLVEDAC_USER)
         );
 
         // 사용자 tag 평균 티어 계산
-        int userTagRating = userTagAverageRating(userId, tagId);
+        int userTagRating = userTagAverageRating(solvedacUserEntity.getUserId(), tagId);
         //사용자 tier 불러 오기
         int tier = solvedacUserEntity.convertToDomain().getTier();
         int averageTier = (userTagRating + tier) / 2;
         return ProblemListResponse.builder()
-                .problems(problemRepository.findProblemsByTagExcludingUserSolved(userId, tagId, averageTier, PageRequest.of(0, 10)).stream()
+                .problems(problemRepository.findProblemsByTagExcludingUserSolved(solvedacUserEntity.getUserId(), tagId, averageTier, PageRequest.of(0, 10)).stream()
                         .map(ProblemEntity::convertToDomain)
                         .toList())
                 .build();

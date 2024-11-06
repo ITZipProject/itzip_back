@@ -14,6 +14,4 @@ public class QuizAnswerRequest {
     private String quizId;
     @Schema(description = "사용자가 선택한 정답 배열의 index값을 주면 된다.", required = true, example = "0")
     private Integer answer;
-    @Schema(description = "문제를 푼 사용자의 ID", example = "5")
-    private Long userId;
 }
