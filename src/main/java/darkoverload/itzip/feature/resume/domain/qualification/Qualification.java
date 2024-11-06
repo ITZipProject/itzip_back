@@ -10,9 +10,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @Setter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Qualification {
 
     // 이력서
@@ -35,6 +34,17 @@ public class Qualification {
 
     // 아이디
     private Long qualificationId;
+
+    @Builder
+    public Qualification(Resume resume, String organization, LocalDateTime qualificationDate, String name, int score, String level, Long qualificationId) {
+        this.resume = resume;
+        this.organization = organization;
+        this.qualificationDate = qualificationDate;
+        this.name = name;
+        this.score = score;
+        this.level = level;
+        this.qualificationId = qualificationId;
+    }
 
     public static Qualification update(QualificationDto qualification, Resume resume) {
 

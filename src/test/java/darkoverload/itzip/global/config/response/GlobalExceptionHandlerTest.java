@@ -15,8 +15,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.time.Duration;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -225,6 +224,27 @@ class GlobalExceptionHandlerTest {
                 .andExpect(jsonPath("$.code").value("FILED_ERROR"))
                 .andExpect(jsonPath("$.data").value("요청값이 올바르지 않습니다."));
     }
+
+    @Test
+    @DisplayName("미지원 미디어 타입 에외처리 테스트")
+    void whenUnsupportedMediaType_thenReturnsBadRequest() throws Exception {
+        mockMvc.perform(multipart("/test/validateMediaType"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("FILED_ERROR"))
+                .andExpect(jsonPath("$.data").value("요청값이 올바르지 않습니다."));
+    }
+
+    @Test
+    @DisplayName("파일 파라미터 validation 테스트")
+    void givenInvalidFileUploadParameters_whenValidated_thenReturnsBadRequest() throws Exception {
+        mockMvc.perform(post("/test/validateFile")
+                        .param("file", "")
+                        .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("FILED_ERROR"))
+                .andExpect(jsonPath("$.data").value("요청값이 올바르지 않습니다."));
+    }
+
 
 //    @Test
 //    @DisplayName("NoHandlerFoundException 테스트")

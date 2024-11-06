@@ -7,13 +7,12 @@ import darkoverload.itzip.feature.resume.entity.ResumeEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
-@ToString
 @Setter
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Language {
 
     // 이력서
@@ -33,6 +32,16 @@ public class Language {
 
     // 아이디
     private Long languageId;
+
+    @Builder
+    public Language(Resume resume, String name, String level, int score, LocalDateTime acquisitionDate, Long languageId) {
+        this.resume = resume;
+        this.name = name;
+        this.level = level;
+        this.score = score;
+        this.acquisitionDate = acquisitionDate;
+        this.languageId = languageId;
+    }
 
     public static Language update(LanguageDto language, Resume resume) {
         return Language.builder()
@@ -55,4 +64,6 @@ public class Language {
                 .id(this.languageId)
                 .build();
     }
+
+
 }

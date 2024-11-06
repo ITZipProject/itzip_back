@@ -8,11 +8,9 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import darkoverload.itzip.feature.job.controller.response.JobInfoSearchResponse;
 import darkoverload.itzip.feature.job.entity.QJobInfoEntity;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Objects;
@@ -63,6 +61,7 @@ public class CustomJobInfoRepositoryImpl implements CustomJobInfoRepository{
                         jobInfoEntity.title,
                         jobInfoEntity.industryName,
                         jobInfoEntity.locationName,
+                        jobInfoEntity.locationCode,
                         jobInfoEntity.jobName,
                         jobInfoEntity.expirationDate,
                         jobInfoEntity.experienceName,

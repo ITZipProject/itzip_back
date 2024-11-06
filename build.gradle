@@ -24,40 +24,49 @@ repositories {
 }
 
 dependencies {
-    // Spring Security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    testImplementation 'org.springframework.security:spring-security-test'
-
     // Spring Boot Starter Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    // PostgreSQL
-    implementation group: 'org.postgresql', name:'postgresql', version: '42.2.19'
+    // Spring Security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
 
-    // MongoDB
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+    // Spring Hateoas
+    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 
-    // JPA
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // Spring Actuator
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
     // H2
     runtimeOnly 'com.h2database:h2'
 
-    // redis 설정 주입
+    // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // MongoDB
+    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    // PostgreSQL
+    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.19'
+
+    // Elastic Search
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+
+    // Logback
+    implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
+
+    // Prometheus
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    // JPA
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     // SpringBoot 3.x later for QueryDsl
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
-
-    // Lombok
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
 
     // Swagger UI
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.2.0'
@@ -66,12 +75,22 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
     testImplementation 'io.findify:s3mock_2.12:0.2.4'
 
+    // Apache Tika Core
+    implementation 'org.apache.tika:tika-core:1.28.4'
+
     // File Upload
     implementation 'commons-io:commons-io:2.14.0'
     implementation 'commons-fileupload:commons-fileupload:1.5'
 
-    // Apache Tika Core
-    implementation 'org.apache.tika:tika-core:1.28.4'
+    // Image Resize
+    implementation 'com.github.downgoon:marvin:1.5.5'
+    implementation 'com.github.downgoon:MarvinPlugins:1.5.5'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
     // Lombok for Test Code
     testCompileOnly 'org.projectlombok:lombok'
@@ -93,6 +112,9 @@ dependencies {
     // Json
     implementation 'com.google.code.gson:gson'
 
+    // Json-Simple
+    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
+
     // Validation
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.2'
     testRuntimeOnly 'com.h2database:h2'
@@ -100,26 +122,10 @@ dependencies {
     // Java Mail Sender
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-    // Image Resize
-    implementation 'com.github.downgoon:marvin:1.5.5'
-    implementation 'com.github.downgoon:MarvinPlugins:1.5.5'
-
-    // WebClient 외부 API 호출하기
+    // WebFlux
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
-
-    // json-simple 의존성 추가
-    implementation 'com.googlecode.json-simple:json-simple:1.1.1'
-
-    // elastic search
-    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
-
-    //Spring HATEOAS
-    implementation 'org.springframework.boot:spring-boot-starter-hateoas'
-
-    // logback
-    implementation 'net.logstash.logback:logstash-logback-encoder:7.4'
-
 }
+
 // QueryDsl Test Code 실행 시, QClass 생성
 sourceSets {
     main.java.srcDirs += 'build/generated/source/apt/main'

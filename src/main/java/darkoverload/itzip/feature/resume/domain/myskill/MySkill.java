@@ -7,9 +7,8 @@ import lombok.*;
 
 @Setter
 @Getter
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class MySkill {
     // 이력서
     private Resume resume;
@@ -19,6 +18,13 @@ public class MySkill {
 
     // 아이디
     private Long mySkillId;
+
+    @Builder
+    public MySkill(Resume resume, String name, Long mySkillId) {
+        this.resume = resume;
+        this.name = name;
+        this.mySkillId = mySkillId;
+    }
 
     public static MySkill update(MySkillsDto mySkill, Resume resume){
         return MySkill.builder()

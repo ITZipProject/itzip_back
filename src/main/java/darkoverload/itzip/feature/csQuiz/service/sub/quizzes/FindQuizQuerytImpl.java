@@ -8,8 +8,11 @@ import darkoverload.itzip.feature.csQuiz.entity.QuizDocument;
 import darkoverload.itzip.feature.csQuiz.repository.quiz.QuizRepository;
 import darkoverload.itzip.feature.csQuiz.repository.quizusersolvedmapping.QuizUserSolvedMappingRepository;
 import darkoverload.itzip.feature.csQuiz.util.QuizMapper;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
+import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.UserEntity;
 import darkoverload.itzip.feature.user.repository.UserRepository;
+import darkoverload.itzip.feature.user.service.UserService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -35,10 +38,7 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
     private final QuizUserSolvedMappingRepository quizUserSolvedMappingRepository;
 
     //User객체를 받아올 userRepository;
-    private final UserRepository userRepository;
-
-    // PageModel을 만들기위한 주입
-    private final PagedResourcesAssembler<QuizDetailResponse> pagedResourcesAssembler;
+    private final UserService userService;
 
     /**
      * 주어진 필터와 정렬 기준, 사용자 정보를 기반으로 퀴즈 목록을 조회하는 메서드
@@ -48,7 +48,7 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
      */
     @Override
     @Transactional
-    public PagedModel<EntityModel<QuizDetailResponse>> findQuizzesByQuery(QuizQueryRequest quizQueryRequest) {
+    public PagedModel<EntityModel<QuizDetailResponse>> findQuizzesByQuery(QuizQueryRequest quizQueryRequest, CustomUserDetails customUserDetails) {
         // 페이지 정보와 정렬 기준을 기반으로 Pageable 객체 생성
         Pageable pageable = PageRequest.of(quizQueryRequest.getPage(), quizQueryRequest.getSize(), getSort(quizQueryRequest.getSortBy()));
 
@@ -57,20 +57,17 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
         // 사용자가 푼 문제의 Id값들만 저장할 리스트 초기화
         List<String> solvedProblemIds = new ArrayList<>();
 
-        // 사용자가 있으면 사용자가 푼 문제를 가져옴
-        if (quizQueryRequest.getUserId() != null) {
-            //사용자를 찾고 사용자가 없을시 사용자가 없음 예외 출력
-            UserEntity userEntity = userRepository.findById(quizQueryRequest.getUserId()).orElse(null);
-            if (userEntity == null) {
-                throw new RestApiException(CommonExceptionCode.NOT_FOUND_USER);
-            }
-            //사용자가 푼문제매핑 테이블 list로 받아옴
-            solvedProblemsEntity = quizUserSolvedMappingRepository.findAllByUser(userEntity);
-            // 사용자가 푼 문제의 problemId를 리스트로 추출
-            solvedProblemIds = solvedProblemsEntity.stream()
-                    .map(QuizUserSolvedMapping::getProblemId)
-                    .toList();
-        }
+        //사용자를 찾고 사용자가 없을시 사용자가 없음 예외 출력
+        UserEntity userEntity = userService.findByEmail(customUserDetails.getEmail())
+                .map(User::convertToEntity)
+                .orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
+
+        //사용자가 푼문제매핑 테이블 list로 받아옴
+        solvedProblemsEntity = quizUserSolvedMappingRepository.findAllByUser(userEntity);
+        // 사용자가 푼 문제의 problemId를 리스트로 추출
+        solvedProblemIds = solvedProblemsEntity.stream()
+                .map(QuizUserSolvedMapping::getProblemId)
+                .toList();
         //사용자가 푼문제들을 HashSet으로 만들어서 빠른 검색을 할수 있게함 key는 problemid값
         Set<QuizUserSolvedMapping> solvedProblemsSet = new HashSet<>(solvedProblemsEntity);
 
@@ -118,13 +115,13 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
         switch (sortBy) {
             case OLDEST:
                 // OLDEST 기준으로 정렬: 시간순 오름차순
-                return Sort.by(Sort.Direction.ASC, "timeStamp");
+                return Sort.by(Sort.Direction.ASC, "create_date");
                 // 추천순으로 정렬
             case RECOMMENDED:
                 return Sort.by(Sort.Direction.DESC, "points");
             default:
                 // NEWEST 기준으로 정렬: 시간순 내림차순 (새로운순을 기본값으로 하기위함)
-                return Sort.by(Sort.Direction.DESC, "timeStamp");
+                return Sort.by(Sort.Direction.DESC, "create_date");
         }
     }
 }

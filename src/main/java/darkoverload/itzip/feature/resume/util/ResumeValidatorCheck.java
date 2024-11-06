@@ -46,4 +46,5 @@ public class ResumeValidatorCheck implements ConstraintValidator<ResumeCondition
 
         return true;
     }
+
 }

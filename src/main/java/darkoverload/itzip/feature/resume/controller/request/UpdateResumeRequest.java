@@ -1,6 +1,5 @@
 package darkoverload.itzip.feature.resume.controller.request;
 
-import darkoverload.itzip.feature.resume.dto.achievement.AchievementDto;
 import darkoverload.itzip.feature.resume.dto.activity.ActivityDto;
 import darkoverload.itzip.feature.resume.dto.career.CareerDto;
 import darkoverload.itzip.feature.resume.dto.education.EducationDto;
@@ -21,7 +20,7 @@ import java.util.List;
 public class UpdateResumeRequest {
 
     @ResumeConditional
-    private List<AchievementDto> achievements = new ArrayList<>();
+    private List<darkoverload.itzip.feature.resume.dto.achievement.AchievementDto> achievements = new ArrayList<>();
 
     @ResumeConditional
     private final List<QualificationDto> qualifications = new ArrayList<>();

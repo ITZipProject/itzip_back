@@ -16,8 +16,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 /**
- * Spring Security 설정 클래스
- * 애플리케이션의 보안 구성을 정의
+ * Spring Security 설정 클래스 애플리케이션의 보안 구성을 정의
  */
 @Configuration
 @EnableWebSecurity
@@ -42,10 +41,17 @@ public class SecurityConfig {
             "/swagger/**",// Swagger try it out
             "/resources/image/**", // 이미지 리소스
             "/image/**", // 이미지 url 임시 허용
+            "/actuator/**", // Actuator for Prometheus
 
             //quiz 임시 허용
             "/cs-quizzes/**",
             "/cs-quiz/**",
+
+            //알고리즘 임시허용
+            "/algorithm/**",
+
+            // 기술 정보 임시 허용
+            "/tech-info/**",
 
             // 학교 정보 검색 허용
             "/schoolsearch",
@@ -56,9 +62,6 @@ public class SecurityConfig {
             // 직업 정보 임시 허용
             "/job-info",
             "/job-info/scrap",
-
-            // 기술 정보 임시 허용
-            "/tech"
     };
 
     // 비로그인 유저 허용 페이지
@@ -94,7 +97,8 @@ public class SecurityConfig {
 
         // cors 허용
         http.csrf(csrf -> csrf.disable());
-        http.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()));
+        http.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(
+                corsConfigurationSource()));
         // 로그인 폼 비활성화
         http.formLogin(auth -> auth.disable());
 

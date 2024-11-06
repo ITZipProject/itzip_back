@@ -14,6 +14,7 @@ import darkoverload.itzip.feature.csQuiz.service.sub.quiz.CreateQuiz;
 import darkoverload.itzip.feature.csQuiz.service.sub.quiz.GivenPointToQuiz;
 import darkoverload.itzip.feature.csQuiz.service.sub.quizCategory.FindQuizCategory;
 import darkoverload.itzip.feature.csQuiz.service.sub.quizzes.FindQiuzQuery;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.hateoas.EntityModel;
@@ -50,8 +51,8 @@ public class QuizServiceImpl implements QuizService {
      * @return 필터링되고 정렬된 퀴즈 목록
      */
     @Override
-    public PagedModel<EntityModel<QuizDetailResponse>> findQuizzesByQuery(QuizQueryRequest quizQueryRequest) {
-        return getFilteredAndSortedQuizzes.findQuizzesByQuery(quizQueryRequest);
+    public PagedModel<EntityModel<QuizDetailResponse>> findQuizzesByQuery(QuizQueryRequest quizQueryRequest, CustomUserDetails customUserDetails) {
+        return getFilteredAndSortedQuizzes.findQuizzesByQuery(quizQueryRequest, customUserDetails);
     }
 
     /**
@@ -81,8 +82,8 @@ public class QuizServiceImpl implements QuizService {
      * @return 맞췄는짐 못맞췄는지 알려준다.
      */
     @Override
-    public UserQuizStatus checkAnswer(QuizAnswerRequest quizAnswerRequest){
-        return checkAnswer.checkAnswer(quizAnswerRequest);
+    public UserQuizStatus checkAnswer(QuizAnswerRequest quizAnswerRequest, CustomUserDetails customUserDetails){
+        return checkAnswer.checkAnswer(quizAnswerRequest, customUserDetails);
     }
 
     /**
@@ -91,8 +92,8 @@ public class QuizServiceImpl implements QuizService {
      * @return 문제를 주는 것을 성공했을 경우 변경된 문제의 점수를 알려준다.
      */
     @Override
-    public Integer givenPointToQuiz(QuizPointRequest quizPointRequest){
-        return givenPointToQuiz.givenPointToQuiz(quizPointRequest);
+    public Integer givenPointToQuiz(QuizPointRequest quizPointRequest, CustomUserDetails customUserDetails){
+        return givenPointToQuiz.givenPointToQuiz(quizPointRequest, customUserDetails);
     }
 
     /**
@@ -100,7 +101,7 @@ public class QuizServiceImpl implements QuizService {
      * @param quizCreatedRequest 사용자한테서 받아오는 퀴즈 생성 코드 퀴즈 생성자 아이디도 들어있다.
      */
     @Override
-    public void createQuiz(QuizCreatedRequest quizCreatedRequest){
-        createQuiz.createQuiz(quizCreatedRequest);
+    public void createQuiz(QuizCreatedRequest quizCreatedRequest, CustomUserDetails customUserDetails){
+        createQuiz.createQuiz(quizCreatedRequest, customUserDetails);
     }
 }

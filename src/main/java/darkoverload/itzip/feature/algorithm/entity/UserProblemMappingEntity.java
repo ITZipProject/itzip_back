@@ -1,6 +1,7 @@
 package darkoverload.itzip.feature.algorithm.entity;
 
 import darkoverload.itzip.feature.algorithm.domain.UserProblemMapping;
+import darkoverload.itzip.feature.algorithm.entity.embedded.UserProblemMappingId;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,21 +16,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserProblemMappingEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // 매핑 ID
+    @EmbeddedId
+    private UserProblemMappingId userProblemMappingId;
 
     @ManyToOne
+    @MapsId("userId")  // 복합 키의 userId와 연결
     @JoinColumn(name = "user_id", nullable = false)
-    private SolvedacUserEntity solvedacUserEntity; // 유저 ID (외래 키)
+    private SolvedacUserEntity solvedacUserEntity;
 
     @ManyToOne
+    @MapsId("problemId")  // 복합 키의 problemId와 연결
     @JoinColumn(name = "problem_id", nullable = false)
-    private ProblemEntity problemEntity; // 문제 ID (외래 키)
+    private ProblemEntity problemEntity;
 
     public UserProblemMapping convertToDomain() {
         return UserProblemMapping.builder()
-                .id(this.id)
+                .userProblemMappingId(this.userProblemMappingId)
                 .solvedacUserEntity(this.solvedacUserEntity.convertToDomain())
                 .problemEntity(this.problemEntity.convertToDomain())
                 .build();

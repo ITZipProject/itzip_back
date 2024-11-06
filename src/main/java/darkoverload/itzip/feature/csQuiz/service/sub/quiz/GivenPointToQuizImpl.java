@@ -6,8 +6,10 @@ import darkoverload.itzip.feature.csQuiz.entity.QuizUserSolvedMapping;
 import darkoverload.itzip.feature.csQuiz.entity.UserQuizStatus;
 import darkoverload.itzip.feature.csQuiz.repository.quiz.QuizRepository;
 import darkoverload.itzip.feature.csQuiz.repository.quizusersolvedmapping.QuizUserSolvedMappingRepository;
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
+import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.UserEntity;
-import darkoverload.itzip.feature.user.repository.UserRepository;
+import darkoverload.itzip.feature.user.service.UserService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +25,7 @@ public class GivenPointToQuizImpl implements GivenPointToQuiz {
     private final QuizUserSolvedMappingRepository quizUserSolvedMappingRepository;
 
     //User 객체를 받아올 userRepository;
-    private final UserRepository userRepository;
+    private final UserService userService;
 
     /**
      * 사용자가 문제에게 점수를 줄때 사용하는 메서드
@@ -31,11 +33,11 @@ public class GivenPointToQuizImpl implements GivenPointToQuiz {
      * @return 문제를 주는 것을 성공했을 경우 변경된 문제의 점수를 알려준다.
      */
     @Transactional
-    public Integer givenPointToQuiz(QuizPointRequest quizPointRequest) {
+    public Integer givenPointToQuiz(QuizPointRequest quizPointRequest, CustomUserDetails customUserDetails) {
         // 사용자가 존재하는지 확인
-        UserEntity userEntity = userRepository.findById(quizPointRequest.getUserId()).orElseThrow(
-                () -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)
-        );
+        UserEntity userEntity = userService.findByEmail(customUserDetails.getEmail())
+                .map(User::convertToEntity)
+                .orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
 
         // 퀴즈가 존재하는지 확인
         ObjectId objectQuizId = new ObjectId(quizPointRequest.getQuizId());
@@ -50,7 +52,7 @@ public class GivenPointToQuizImpl implements GivenPointToQuiz {
         );
 
         //문제 정답을 맞췄는지 확인
-        if (!quizUserSolvedMapping.getIsCorrect().equals(UserQuizStatus.CORRECT)) {
+        if (!quizUserSolvedMapping.getUserQuizStatus().equals(UserQuizStatus.CORRECT)) {
             throw new RestApiException(CommonExceptionCode.ANSWER_NOT_CORRECT);
         }
 

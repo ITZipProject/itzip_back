@@ -22,6 +22,8 @@ public class JobInfoSearchResponse {
 
     private List<String> locationName;
 
+    private List<String> locationCode;
+
     private List<String> jobName;
 
     private LocalDateTime expirationDate;
@@ -38,11 +40,12 @@ public class JobInfoSearchResponse {
 
     private String url;
 
-    public JobInfoSearchResponse(Long id, String title, String industryName, String locationName,String jobName, LocalDateTime expirationDate, String experienceName, Long experienceMin, Long experienceMax, Integer scrapCount, String companyName, String url) {
+    public JobInfoSearchResponse(Long id, String title, String industryName, String locationName, String locationCode,String jobName, LocalDateTime expirationDate, String experienceName, Long experienceMin, Long experienceMax, Integer scrapCount, String companyName, String url) {
         this.id = id;
         this.title = title;
         this.industryName = industryName;
         this.locationName = CustomStringUtil.convertList(locationName);
+        this.locationCode = CustomStringUtil.convertList(locationCode);
         this.jobName = CustomStringUtil.convertList(jobName);
         this.expirationDate = expirationDate;
         this.experienceName = experienceName;

@@ -30,6 +30,13 @@ public class AchievementDto {
     // id 값
     private Long achievementId;
 
+    public AchievementDto(String name, String organization, LocalDateTime achievementDate, String content) {
+        this.name = name;
+        this.organization = organization;
+        this.achievementDate = achievementDate;
+        this.content = content;
+    }
+
     public Achievement create() {
         return Achievement.builder()
                 .name(this.name)

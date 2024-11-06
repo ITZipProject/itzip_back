@@ -29,6 +29,13 @@ public class EducationDto {
     // 아이디
     private Long educationId;
 
+    public EducationDto(String schoolName, String major, LocalDateTime startDate, LocalDateTime endDate) {
+        this.schoolName = schoolName;
+        this.major = major;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
+
     public Education create(){
         return Education.builder()
                 .schoolName(this.schoolName)
