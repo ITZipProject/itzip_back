@@ -8,11 +8,14 @@ import java.util.List;
 public interface MySkillRepository {
     List<MySkill> findByAllResumeId(Long resumeId);
 
-    List<MySkill> update(List<MySkill> mySkills, Resume resume);
+    List<MySkill> update(List<MySkill> mySkills);
 
     MySkill save(MySkill mySkill);
 
     List<MySkill> saveAll(List<MySkill> mySkill);
 
     void deleteAllById(List<Long> ids);
+
+    void deleteAllMySkills(List<MySkill> allMySkills);
+
 }

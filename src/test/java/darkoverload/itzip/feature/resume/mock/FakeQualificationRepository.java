@@ -22,10 +22,7 @@ public class FakeQualificationRepository implements QualificationRepository {
     }
 
     @Override
-    public List<Qualification> update(List<Qualification> qualifications, Resume resume) {
-        List<Long> qualificationDeleteIds = getQualificationDeleteIds(qualifications, resume);
-        deleteAllById(qualificationDeleteIds);
-
+    public List<Qualification> update(List<Qualification> qualifications) {
         return saveAll(qualifications);
     }
 
@@ -37,7 +34,6 @@ public class FakeQualificationRepository implements QualificationRepository {
                     .resume(qualification.getResume())
                     .qualificationDate(qualification.getQualificationDate())
                     .name(qualification.getName())
-                    .level(qualification.getLevel())
                     .score(qualification.getScore())
                     .organization(qualification.getOrganization())
                     .build();
@@ -60,6 +56,12 @@ public class FakeQualificationRepository implements QualificationRepository {
         for (Long id : ids) {
             data.removeIf(item -> Objects.equals(item.getQualificationId(), id));
         }
+    }
+
+    @Override
+    public void deleteAllQualifications(List<Qualification> deleteQualifications) {
+        deleteQualifications.stream().map(Qualification::getQualificationId)
+                .forEach(id -> data.removeIf(qualification -> qualification.getQualificationId().equals(id)));
     }
 
     private List<Long> getQualificationDeleteIds(List<Qualification> qualifications, Resume resume) {

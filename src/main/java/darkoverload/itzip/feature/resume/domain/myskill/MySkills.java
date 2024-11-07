@@ -1,7 +1,5 @@
 package darkoverload.itzip.feature.resume.domain.myskill;
 
-import darkoverload.itzip.feature.resume.domain.language.Language;
-import darkoverload.itzip.feature.resume.domain.language.Languages;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.dto.myskill.MySkillsDto;
 import lombok.EqualsAndHashCode;
@@ -11,6 +9,7 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Getter
 @ToString
@@ -40,8 +39,8 @@ public class MySkills {
 
     public static List<MySkill> parse(List<MySkillsDto> mySkills, Resume resume) {
         return mySkills.stream()
-                .map(createMySkillsDto -> {
-                    MySkill mySkill = createMySkillsDto.create();
+                .map(mySkillsDto -> {
+                    MySkill mySkill = mySkillsDto.toModel();
                     mySkill.setResume(resume);
                     return mySkill;
                 }).toList();
@@ -50,4 +49,11 @@ public class MySkills {
     public static boolean isValidate(List<MySkillsDto> mySkills) {
         return !mySkills.isEmpty();
     }
+
+    public List<MySkill> deleteMySkills(List<MySkill> allMySkills) {
+        return mySkills.stream().filter(mySkill -> {
+            return !allMySkills.contains(mySkill);
+        }).collect(Collectors.toList());
+    }
+
 }

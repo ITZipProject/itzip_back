@@ -46,6 +46,7 @@ public class ResumeEntity extends AuditingFields {
     private PublicOnOff publicOnOff;
 
 
+
     public Resume convertToDomain(){
         return Resume.builder()
                 .resumeId(this.id)

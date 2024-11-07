@@ -4,6 +4,7 @@ import darkoverload.itzip.feature.job.domain.ConnectJobInfo;
 import darkoverload.itzip.feature.job.domain.JobInfo;
 import darkoverload.itzip.feature.job.entity.JobInfoEntity;
 import darkoverload.itzip.feature.job.repository.JobInfoRepository;
+import darkoverload.itzip.feature.job.repository.JobInfoScrapRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
 public class JobInfoConnectServiceImpl implements JobInfoConnectService {
 
     private final JobInfoRepository jobInfoRepository;
+    private final JobInfoScrapRepository jobInfoScrapRepository;
 
     @Value("${job.api-url}")
     private String jobUrl;
@@ -63,7 +65,6 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
         // dbList가 비어있을 경우, 즉시 반환하여 추가 작업을 방지
         if(dbList.isEmpty()) return 0L;
 
-
         List<Long> deleteList = makeDeleteList(apiDataList, dbList);
 
 
@@ -71,6 +72,7 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
         // batchSize를 설정하여 500개씩 나누어 삭제 작업을 수행 (대량 삭제 시 성능 최적화)
        for(int i=0; i < deleteList.size(); i+= 500){
            List<Long> batch = deleteList.subList(i, Math.min(i + 500, deleteList.size()));
+           jobInfoScrapRepository.bulkDeleteByPositionIds(batch);
            totalDeletedCount += jobInfoRepository.bulkDeleteByPositionIds(batch);
        }
 
@@ -169,8 +171,6 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
                 || !dbJobInfo.getIndustryName().equals(apiJobInfo.getIndustryName()) // 산업 이름 비교
                 || !dbJobInfo.getLocationCode().equals(apiJobInfo.getLocationCode()) // 위치 코드 비교
                 || !dbJobInfo.getLocationName().equals(apiJobInfo.getLocationName()) // 위치 이름 비교
-                || !dbJobInfo.getJobTypeCode().equals(apiJobInfo.getJobTypeCode()) // 직무 유형 코드 비교
-                || !dbJobInfo.getJobTypeName().equals(apiJobInfo.getJobTypeName()) // 직무 유형 이름 비교
                 || !dbJobInfo.getJobMidCode().equals(apiJobInfo.getJobMidCode()) // 중간 직무 코드 비교
                 || !dbJobInfo.getJobMidName().equals(apiJobInfo.getJobMidName()) // 중간 직무 이름 비교
                 || !dbJobInfo.getJobName().equals(apiJobInfo.getJobName()) // 직무 이름 비교

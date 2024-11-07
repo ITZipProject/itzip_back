@@ -36,8 +36,9 @@ public class EducationDto {
         this.endDate = endDate;
     }
 
-    public Education create(){
+    public Education toModel(){
         return Education.builder()
+                .educationId(this.educationId)
                 .schoolName(this.schoolName)
                 .major(this.major)
                 .startDate(this.startDate)

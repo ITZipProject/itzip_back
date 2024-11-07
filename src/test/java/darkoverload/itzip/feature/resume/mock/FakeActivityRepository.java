@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.resume.mock;
 
+import darkoverload.itzip.feature.resume.domain.achievement.Achievement;
 import darkoverload.itzip.feature.resume.domain.activity.Activity;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.service.resume.port.ActivityRepository;
@@ -42,10 +43,7 @@ public class FakeActivityRepository implements ActivityRepository {
     }
 
     @Override
-    public List<Activity> update(List<Activity> activities, Resume resume) {
-        List<Long> activityDeleteIds = getActivityDeleteIds(activities, resume);
-        deleteAllByIds(activityDeleteIds);
-
+    public List<Activity> update(List<Activity> activities) {
         return saveAll(activities);
     }
 
@@ -59,6 +57,12 @@ public class FakeActivityRepository implements ActivityRepository {
     @Override
     public List<Activity> saveAll(List<Activity> activities) {
         return activities.stream().map(this::save).toList();
+    }
+
+    @Override
+    public void deleteAllActivities(List<Activity> deleteActivities) {
+        deleteActivities.stream().map(Activity::getActivityId)
+                .forEach(id -> data.removeIf(activity -> activity.getActivityId().equals(id)));
     }
 
     private List<Long> getActivityDeleteIds(List<Activity> activities, Resume resume) {

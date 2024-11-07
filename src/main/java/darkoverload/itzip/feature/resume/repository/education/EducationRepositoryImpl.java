@@ -2,6 +2,7 @@ package darkoverload.itzip.feature.resume.repository.education;
 
 
 import darkoverload.itzip.feature.resume.domain.education.Education;
+import darkoverload.itzip.feature.resume.domain.language.Language;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.entity.EducationEntity;
 import darkoverload.itzip.feature.resume.service.resume.port.EducationRepository;
@@ -25,12 +26,7 @@ public class EducationRepositoryImpl implements EducationRepository {
     }
 
     @Override
-    public List<Education> update(List<Education> educations, Resume resume){
-        List<Long> deleteEducations = getDeleteEducationIds(educations, resume);
-        if(!deleteEducations.isEmpty()) {
-            deleteAllById(deleteEducations);
-        }
-
+    public List<Education> update(List<Education> educations){
         return saveAll(educations);
     }
 
@@ -48,6 +44,11 @@ public class EducationRepositoryImpl implements EducationRepository {
     public List<Education> saveAll(List<Education> educations) {
         List<EducationEntity> educationEntities = educations.stream().map(Education::toEntity).toList();
         return repository.saveAll(educationEntities).stream().map(EducationEntity::convertToDomain).toList();
+    }
+
+    @Override
+    public void deleteAllEducations(List<Education> deleteEducations) {
+        repository.deleteAll(deleteEducations.stream().map(Education::toEntity).toList());
     }
 
     private List<Long> getDeleteEducationIds(List<Education> educations, Resume resume) {

@@ -24,13 +24,7 @@ public class MySkillRepositoryImpl implements MySkillRepository {
     }
 
     @Override
-    public List<MySkill> update(List<MySkill> mySkills, Resume resume){
-        List<Long> deleteMySkills = getMySkillDeleteIds(mySkills, resume);
-
-        if(!deleteMySkills.isEmpty()) {
-            deleteAllById(deleteMySkills);
-        }
-
+    public List<MySkill> update(List<MySkill> mySkills){
         return saveAll(mySkills);
     }
 
@@ -42,6 +36,11 @@ public class MySkillRepositoryImpl implements MySkillRepository {
     @Override
     public void deleteAllById(List<Long> ids) {
         repository.deleteAllById(ids);
+    }
+
+    @Override
+    public void deleteAllMySkills(List<MySkill> allMySkills) {
+        repository.deleteAll(allMySkills.stream().map(MySkill::toEntity).toList());
     }
 
     @Override

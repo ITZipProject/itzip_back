@@ -41,4 +41,5 @@ public class MySkill {
                 .id(this.mySkillId)
                 .build();
     }
+
 }

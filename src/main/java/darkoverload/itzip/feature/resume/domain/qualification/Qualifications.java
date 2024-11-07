@@ -38,8 +38,8 @@ public class Qualifications {
 
     public static List<Qualification> parse(List<QualificationDto> qualifications, Resume resume) {
         return qualifications.stream()
-                .map(createQualification -> {
-                    Qualification qualification = createQualification.create();
+                .map(qualificationDto -> {
+                    Qualification qualification = qualificationDto.toModel();
                     qualification.setResume(resume);
                     return qualification;
                 }).toList();
@@ -48,4 +48,5 @@ public class Qualifications {
     public static boolean isValidate(List<QualificationDto> qualifications) {
         return !qualifications.isEmpty();
     }
+
 }

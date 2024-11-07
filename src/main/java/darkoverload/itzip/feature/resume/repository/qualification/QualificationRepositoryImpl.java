@@ -24,10 +24,7 @@ public class QualificationRepositoryImpl implements QualificationRepository {
     }
 
     @Override
-    public List<Qualification> update(List<Qualification> qualifications, Resume resume) {
-        List<Long> deleteQualifications = getQualificationDeleteIds(qualifications, resume);
-        deleteAllById(deleteQualifications);
-
+    public List<Qualification> update(List<Qualification> qualifications) {
         return saveAll(qualifications);
     }
 
@@ -39,6 +36,11 @@ public class QualificationRepositoryImpl implements QualificationRepository {
     @Override
     public void deleteAllById(List<Long> ids) {
         qualificationRepository.deleteAllById(ids);
+    }
+
+    @Override
+    public void deleteAllQualifications(List<Qualification> deleteQualifications) {
+        qualificationRepository.deleteAll(deleteQualifications.stream().map(Qualification::toEntity).toList());
     }
 
     @Override

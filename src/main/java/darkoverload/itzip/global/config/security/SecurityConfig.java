@@ -61,7 +61,7 @@ public class SecurityConfig {
 
             // 직업 정보 임시 허용
             "/job-info",
-            "/job-info/scrap",
+            "/job-info/scrap"
     };
 
     // 비로그인 유저 허용 페이지

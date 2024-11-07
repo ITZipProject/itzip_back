@@ -22,13 +22,7 @@ public class LanguageRepositoryImpl implements LanguageRepository {
     }
 
     @Override
-    public List<Language> update(List<Language> languages, Resume resume) {
-        List<Long> deleteLanguages = getLanguageDeleteIds(languages, resume);
-
-        if (!deleteLanguages.isEmpty()) {
-            deleteAllById(deleteLanguages);
-        }
-
+    public List<Language> update(List<Language> languages) {
         return saveAll(languages);
     }
 
@@ -40,6 +34,11 @@ public class LanguageRepositoryImpl implements LanguageRepository {
     @Override
     public void deleteAllById(List<Long> ids) {
         repository.deleteAllById(ids);
+    }
+
+    @Override
+    public void deleteAllLanguages(List<Language> deleteLanguages) {
+        repository.deleteAll(deleteLanguages.stream().map(Language::toEntity).toList());
     }
 
     @Override

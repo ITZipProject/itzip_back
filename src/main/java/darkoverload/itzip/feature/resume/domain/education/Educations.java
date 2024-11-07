@@ -9,6 +9,7 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Getter
 @ToString
@@ -39,7 +40,7 @@ public class Educations {
     public static List<Education> parse(List<EducationDto> educations, Resume resume) {
         return educations.stream()
                 .map(educationDto -> {
-                    Education education = educationDto.create();
+                    Education education = educationDto.toModel();
                     education.setResume(resume);
                     return education;
                 }).toList();
@@ -48,4 +49,11 @@ public class Educations {
     public static boolean isValidate(List<EducationDto> educations) {
         return !educations.isEmpty();
     }
+
+    public List<Education> deleteEducations(List<Education> allEducations) {
+        return educations.stream().filter(education -> {
+            return !allEducations.contains(education);
+        }).collect(Collectors.toList());
+    }
+
 }

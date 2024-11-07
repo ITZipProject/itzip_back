@@ -3,7 +3,6 @@ package darkoverload.itzip.feature.resume.domain.qualification;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.dto.qualification.QualificationDto;
 import darkoverload.itzip.feature.resume.entity.QualificationEntity;
-import darkoverload.itzip.feature.resume.entity.ResumeEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -29,20 +28,16 @@ public class Qualification {
     // 점수
     private int score;
 
-    // 급
-    private String level;
-
     // 아이디
     private Long qualificationId;
 
     @Builder
-    public Qualification(Resume resume, String organization, LocalDateTime qualificationDate, String name, int score, String level, Long qualificationId) {
+    public Qualification(Resume resume, String organization, LocalDateTime qualificationDate, String name, int score, Long qualificationId) {
         this.resume = resume;
         this.organization = organization;
         this.qualificationDate = qualificationDate;
         this.name = name;
         this.score = score;
-        this.level = level;
         this.qualificationId = qualificationId;
     }
 
@@ -54,7 +49,6 @@ public class Qualification {
                 .qualificationDate(qualification.getQualificationDate())
                 .name(qualification.getName())
                 .score(qualification.getScore())
-                .level(qualification.getLevel())
                 .qualificationId(qualification.getQualificationId())
                 .build();
     }
@@ -66,7 +60,6 @@ public class Qualification {
                 .qualificationDate(this.qualificationDate)
                 .name(this.name)
                 .score(this.score)
-                .level(this.level)
                 .id(this.qualificationId)
                 .build();
     }

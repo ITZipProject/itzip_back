@@ -18,7 +18,7 @@ public class MySkillsDto {
     // 아이디
     private Long mySkillId;
 
-    public MySkill create() {
+    public MySkill toModel() {
         return MySkill.builder()
                 .name(this.name)
                 .mySkillId(this.mySkillId)

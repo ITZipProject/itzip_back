@@ -9,7 +9,9 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @SpringBootApplication
 public class ItzipApplication {
+
     public static void main(String[] args) {
         SpringApplication.run(ItzipApplication.class, args);
     }
+
 }

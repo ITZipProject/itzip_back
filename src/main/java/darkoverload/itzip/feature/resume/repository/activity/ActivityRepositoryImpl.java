@@ -29,13 +29,7 @@ public class ActivityRepositoryImpl implements ActivityRepository {
     }
 
     @Override
-    public List<Activity> update(List<Activity> activities, Resume resume) {
-        List<Long> deleteActivities = getDeleteActivityIds(activities, resume);
-
-        if (!deleteActivities.isEmpty()) {
-            deleteAllByIds(deleteActivities);
-        }
-
+    public List<Activity> update(List<Activity> activities) {
         return saveAll(activities);
     }
 
@@ -48,6 +42,11 @@ public class ActivityRepositoryImpl implements ActivityRepository {
     public List<Activity> saveAll(List<Activity> activities) {
         List<ActivityEntity> activityEntities = activities.stream().map(Activity::toEntity).toList();
         return repository.saveAll(activityEntities).stream().map(ActivityEntity::convertToDomain).toList();
+    }
+
+    @Override
+    public void deleteAllActivities(List<Activity> deleteActivities) {
+        repository.deleteAll(deleteActivities.stream().map(Activity::toEntity).toList());
     }
 
     private List<Long> getDeleteActivityIds(List<Activity> activities, Resume resume) {

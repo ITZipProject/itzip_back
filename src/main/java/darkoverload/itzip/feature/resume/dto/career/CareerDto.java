@@ -38,17 +38,7 @@ public class CareerDto {
         this.endDate = endDate;
     }
 
-    public Career create(){
-        return Career.builder()
-                .companyName(this.companyName)
-                .careerPosition(this.careerPosition)
-                .department(this.department)
-                .startDate(this.startDate)
-                .endDate(this.endDate)
-                .build();
-    }
-
-    public Career update() {
+    public Career toModel(){
         return Career.builder()
                 .companyName(this.companyName)
                 .careerPosition(this.careerPosition)
@@ -58,4 +48,5 @@ public class CareerDto {
                 .careerId(this.careerId)
                 .build();
     }
+
 }

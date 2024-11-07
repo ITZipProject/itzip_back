@@ -3,6 +3,7 @@ package darkoverload.itzip.feature.resume.controller;
 import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.response.CreateResumeResponse;
+import darkoverload.itzip.feature.resume.controller.response.UpdateResumeResponse;
 import darkoverload.itzip.feature.resume.service.resume.ResumeService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
@@ -44,13 +45,11 @@ public class ResumeController {
             description = "이력서 수정 시 객체 리스트에 존재하는 값 체크"
     )
     @PatchMapping("")
-    public String updateResume(@SwaggerRequestBody(description = "이력서 수정 정보", content= @Content(
+    public UpdateResumeResponse updateResume(@SwaggerRequestBody(description = "이력서 수정 정보", content= @Content(
             schema = @Schema(implementation = UpdateResumeRequest.class)
     )) @Valid @RequestBody UpdateResumeRequest request) {
 
-        service.update(request);
-
-        return "이력서 수정을 성공하였습니다.";
+        return service.update(request);
     }
 
 }

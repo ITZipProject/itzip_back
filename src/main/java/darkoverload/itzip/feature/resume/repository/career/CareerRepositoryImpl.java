@@ -31,13 +31,7 @@ public class CareerRepositoryImpl implements CareerRepository {
     }
 
     @Override
-    public List<Career> update(List<Career> careers, Resume resume) {
-        List<Long> deleteCareers = getDeleteCareerIds(careers, resume);
-
-        if (!deleteCareers.isEmpty()) {
-            deleteAllById(deleteCareers);
-        }
-
+    public List<Career> update(List<Career> careers) {
         return saveAll(careers);
     }
 
@@ -50,6 +44,13 @@ public class CareerRepositoryImpl implements CareerRepository {
     @Override
     public void deleteAllById(List<Long> ids) {
         repository.deleteAllById(ids);
+    }
+
+    @Override
+    public void deleteAllCareers(List<Career> deleteCareers) {
+        repository.deleteAll(deleteCareers.stream()
+                .map(Career::toEntity)
+                .toList());
     }
 
     private List<Long> getDeleteCareerIds(List<Career> careers, Resume resume) {

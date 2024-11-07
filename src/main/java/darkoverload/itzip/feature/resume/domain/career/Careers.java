@@ -9,6 +9,7 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Getter
 @ToString
@@ -38,8 +39,8 @@ public class Careers {
 
     public static List<Career> parse(List<CareerDto> careers, Resume resume) {
         return careers.stream()
-                .map(createCareerDto -> {
-                    Career career = createCareerDto.create();
+                .map(careerDto -> {
+                    Career career = careerDto.toModel();
                     career.setResume(resume);
                     return career;
                 }).toList();
@@ -47,6 +48,12 @@ public class Careers {
 
     public static boolean isValidate(List<CareerDto> careers) {
         return !careers.isEmpty();
+    }
+
+    public List<Career> deleteCareers(List<Career> allCareers) {
+        return careers.stream().filter(career -> {
+                    return !allCareers.contains(career);
+                }).collect(Collectors.toList());
     }
 
 }

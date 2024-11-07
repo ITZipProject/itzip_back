@@ -9,11 +9,14 @@ import java.util.List;
 public interface LanguageRepository {
     List<Language> findAllByResumeId(Long resumeId);
 
-    List<Language> update(List<Language> languages, Resume resume);
+    List<Language> update(List<Language> languages);
 
     Language save(Language language);
 
     List<Language> saveAll(List<Language> languages);
 
     void deleteAllById(List<Long> ids);
+
+    void deleteAllLanguages(List<Language> deleteLanguages);
+
 }

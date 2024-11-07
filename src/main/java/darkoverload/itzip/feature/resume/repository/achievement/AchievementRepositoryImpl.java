@@ -27,13 +27,7 @@ public class AchievementRepositoryImpl implements AchievementRepository {
     }
 
     @Override
-    public List<Achievement> update(List<Achievement> achievements, Resume resume) {
-        List<Long> deleteAchievements = getDeleteAchievementIds(achievements, resume);
-
-        if (!deleteAchievements.isEmpty()) {
-            deleteAllById(deleteAchievements);
-        }
-
+    public List<Achievement> update(List<Achievement> achievements) {
         return saveAll(achievements);
     }
 
@@ -46,6 +40,11 @@ public class AchievementRepositoryImpl implements AchievementRepository {
     @Override
     public void deleteAllById(List<Long> ids) {
         repository.deleteAllById(ids);
+    }
+
+    @Override
+    public void deleteAllAchievements(List<Achievement> deleteAchievements) {
+        repository.deleteAll(deleteAchievements.stream().map(Achievement::toEntity).toList());
     }
 
     private List<Long> getDeleteAchievementIds(List<Achievement> achievements, Resume resume) {

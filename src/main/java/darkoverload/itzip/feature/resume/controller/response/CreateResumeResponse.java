@@ -20,14 +20,14 @@ public record CreateResumeResponse(Achievements achievements, Activities activit
 
     public static CreateResumeResponse from(ResumeDetails details) {
         return CreateResumeResponse.builder()
-                .achievements(details.getAchievements())
-                .activities(details.getActivities())
-                .careers(details.getCareers())
-                .educations(details.getEducations())
-                .languages(details.getLanguages())
-                .mySkills(details.getMySkills())
-                .qualifications(details.getQualifications())
-                .resume(details.getResume())
+                .achievements(details.achievements())
+                .activities(details.activities())
+                .careers(details.careers())
+                .educations(details.educations())
+                .languages(details.languages())
+                .mySkills(details.mySkills())
+                .qualifications(details.qualifications())
+                .resume(details.resume())
                 .build();
     }
 }
