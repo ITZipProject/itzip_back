@@ -43,6 +43,7 @@ public class FakeEducationRepository implements EducationRepository {
 
             return newEducation;
         }
+
         data.removeIf(item -> Objects.equals(item.getEducationId(), education.getEducationId()));
         data.add(education);
 
