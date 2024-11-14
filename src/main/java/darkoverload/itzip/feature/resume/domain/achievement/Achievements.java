@@ -51,7 +51,7 @@ public class Achievements {
 
     public List<Achievement> deleteAchievements(List<Achievement> allAchievements) {
         return achievements.stream().filter(achievement -> {
-            return !achievements.contains(achievement);
+            return !allAchievements.contains(achievement);
         }).toList();
     }
 
