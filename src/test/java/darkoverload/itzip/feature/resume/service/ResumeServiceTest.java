@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.resume.service;
 
-
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
 import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
@@ -29,21 +29,23 @@ import darkoverload.itzip.feature.resume.dto.language.LanguageDto;
 import darkoverload.itzip.feature.resume.dto.qualification.QualificationDto;
 import darkoverload.itzip.feature.resume.dto.resume.ResumeDto;
 import darkoverload.itzip.feature.resume.mock.TestResumeContainer;
+import darkoverload.itzip.feature.user.entity.Authority;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+
 @Slf4j
 public class ResumeServiceTest {
 
-    TestResumeContainer testResumeContainer = new TestResumeContainer();
-
+    private TestResumeContainer testResumeContainer = new TestResumeContainer();
+    private CustomUserDetails customUserDetails;
     @BeforeEach
     void init() {
 
@@ -59,6 +61,9 @@ public class ResumeServiceTest {
                 .build();
 
         testResumeContainer.resumeService.create(createResumeRequest);
+
+        customUserDetails = new CustomUserDetails("itzip@gmail.com", "aaaa1234@@", "itzip", Collections.singletonList(Authority.USER));
+
     }
 
     @Test
@@ -121,7 +126,7 @@ public class ResumeServiceTest {
 
         ResumeDetails expectedResumeDetails = updateExcepectedResumeDetails();
 
-        assertThat(testResumeContainer.resumeService.update(updateResumeRequest)).isEqualTo(UpdateResumeResponse.from(expectedResumeDetails));
+        assertThat(testResumeContainer.resumeService.update(updateResumeRequest, customUserDetails)).isEqualTo(UpdateResumeResponse.from(expectedResumeDetails));
     }
 
     private static ResumeDetails updateExcepectedResumeDetails() {

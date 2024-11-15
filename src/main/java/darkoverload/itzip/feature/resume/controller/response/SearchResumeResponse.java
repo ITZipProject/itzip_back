@@ -1,10 +1,11 @@
 package darkoverload.itzip.feature.resume.controller.response;
 
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
+import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.entity.ResumeEntity;
 import lombok.Builder;
 
-public record SearchResumeResponse(Long resumeId, String subject, PublicOnOff publicOnOff, String imageUrl, Long userId) {
+public record SearchResumeResponse(Long resumeId, String subject, PublicOnOff publicOnOff, String imageUrl, Long userId, String workLongTerm) {
 
 
     @Builder
@@ -12,12 +13,13 @@ public record SearchResumeResponse(Long resumeId, String subject, PublicOnOff pu
 
     }
 
-    public static SearchResumeResponse from(ResumeEntity entity) {
+    public static SearchResumeResponse from(Resume resume) {
         return SearchResumeResponse.builder()
-                .resumeId(entity.getId())
-                .subject(entity.getSubject())
-                .publicOnOff(entity.getPublicOnOff())
-                .imageUrl(entity.getImageUrl())
+                .resumeId(resume.getResumeId())
+                .subject(resume.getSubject())
+                .publicOnOff(resume.getPublicOnOff())
+                .imageUrl(resume.getImageUrl())
+                .workLongTerm(resume.getWorkLongTerm())
                 .build();
     }
 

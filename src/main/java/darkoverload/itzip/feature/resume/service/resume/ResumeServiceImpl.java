@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.resume.service.resume;
 
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.response.CreateResumeResponse;
@@ -130,7 +131,7 @@ public class ResumeServiceImpl implements ResumeService {
 
 
     @Override
-    public UpdateResumeResponse update(UpdateResumeRequest request) {
+    public UpdateResumeResponse update(UpdateResumeRequest request, CustomUserDetails customUserDetails) {
         Resume updateResume = Resume.update(request.getResume(), request.getResumeId(), request.getUserId());
 
         return UpdateResumeResponse.from(update(request, resumeRepository.update(updateResume)));
