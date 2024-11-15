@@ -27,8 +27,6 @@ public class QualificationEntity extends AuditingFields {
     @Column(length=50)
     private String name;
 
-    private int score;
-
     @Column(length=100)
     private String organization;
 
@@ -40,7 +38,6 @@ public class QualificationEntity extends AuditingFields {
                 .qualificationId(this.id)
                 .resume(this.resume.convertToDomain())
                 .name(this.name)
-                .score(this.score)
                 .organization(this.organization)
                 .qualificationDate(this.qualificationDate)
                 .build();
