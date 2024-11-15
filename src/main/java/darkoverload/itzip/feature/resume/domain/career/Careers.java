@@ -65,7 +65,6 @@ public class Careers {
         for(Long key : resumeMaps.keySet()) {
             long totalWorkLongTerm = getTotalCareerPeriod(key);
             long year = totalWorkLongTerm / 12;
-
             Resume resume = resumeMaps.get(key);
             // PublicOnOff 제거하고 주는 부분
             resumes.add(Resume.searchResume(resume, ResumeWorkTermType.from(year).getName()));

@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.resume.domain.qualification;
 
+import darkoverload.itzip.feature.resume.domain.myskill.MySkill;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.dto.qualification.QualificationDto;
 import lombok.EqualsAndHashCode;
@@ -9,6 +10,7 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Getter
 @ToString
@@ -47,6 +49,12 @@ public class Qualifications {
 
     public static boolean isValidate(List<QualificationDto> qualifications) {
         return !qualifications.isEmpty();
+    }
+
+    public List<Qualification> deleteQualifications(List<Qualification> allQualifications) {
+        return qualifications.stream().filter(mySkill -> {
+            return !allQualifications.contains(mySkill);
+        }).collect(Collectors.toList());
     }
 
 }

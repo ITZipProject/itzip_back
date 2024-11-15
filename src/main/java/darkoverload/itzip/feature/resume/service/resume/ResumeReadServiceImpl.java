@@ -1,0 +1,39 @@
+package darkoverload.itzip.feature.resume.service.resume;
+
+import darkoverload.itzip.feature.resume.domain.career.Career;
+import darkoverload.itzip.feature.resume.domain.career.Careers;
+import darkoverload.itzip.feature.resume.domain.resume.Resume;
+import darkoverload.itzip.feature.resume.domain.resume.Resumes;
+import darkoverload.itzip.feature.resume.service.resume.port.CareerRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeReadRepository;
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+@Service
+@RequiredArgsConstructor
+public class ResumeReadServiceImpl implements ResumeReadService{
+
+    private final ResumeReadRepository resumeReadRepository;
+    private final CareerRepository careerRepository;
+
+    @Override
+    public List<Resume> searchResumeInfos(String search, Pageable pageable) {
+        Resumes resumes  = Resumes.from(resumeReadRepository.searchResumeInfos(search, pageable));
+
+        Map<Long, Resume> resumeMaps = resumes.toMakeResumesMap();
+
+        List<Career> careers = new ArrayList<>();
+        resumeMaps.keySet()
+                .forEach(resumeId -> careers.addAll(careerRepository.findAllByResumeId(resumeId)));
+
+        return Careers.of(careers).orElseThrow(() -> new RestApiException(CommonExceptionCode.JOB_INFO_NOT_FOUND)).searchResumeMakeWorkPeriod(resumeMaps);
+    }
+
+}

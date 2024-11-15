@@ -28,8 +28,7 @@ import darkoverload.itzip.feature.resume.dto.education.EducationDto;
 import darkoverload.itzip.feature.resume.dto.language.LanguageDto;
 import darkoverload.itzip.feature.resume.dto.qualification.QualificationDto;
 import darkoverload.itzip.feature.resume.dto.resume.ResumeDto;
-import darkoverload.itzip.feature.resume.mock.*;
-import darkoverload.itzip.feature.resume.service.resume.ResumeServiceImpl;
+import darkoverload.itzip.feature.resume.mock.TestResumeContainer;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,38 +37,18 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 public class ResumeServiceTest {
 
-    private ResumeServiceImpl resumeService;
+    TestResumeContainer testResumeContainer = new TestResumeContainer();
 
     @BeforeEach
     void init() {
-        FakeActivityRepository fakeActivityRepository = new FakeActivityRepository();
-        FakeAchievementRepository fakeAchievementRepository = new FakeAchievementRepository();
-        FakeCareerRepository fakeCareerRepository = new FakeCareerRepository();
-        FakeEducationRepository fakeEducationRepository = new FakeEducationRepository();
-        FakeLanguageRepository fakeLanguageRepository = new FakeLanguageRepository();
-        FakeMySkillRepository fakeMySkillRepository = new FakeMySkillRepository();
-        FakeQualificationRepository fakeQualificationRepository = new FakeQualificationRepository();
-        FakeResumeRepository fakeResumeRepository = new FakeResumeRepository();
-
-        this.resumeService = ResumeServiceImpl.builder()
-                .resumeRepository(fakeResumeRepository)
-                .activityRepository(fakeActivityRepository)
-                .achievementRepository(fakeAchievementRepository)
-                .careerRepository(fakeCareerRepository)
-                .educationRepository(fakeEducationRepository)
-                .languageRepository(fakeLanguageRepository)
-                .mySkillRepository(fakeMySkillRepository)
-                .qualificationRepository(fakeQualificationRepository)
-                .build();
-
 
         CreateResumeRequest createResumeRequest = CreateResumeRequest.builder()
-                .qualifications(List.of(new QualificationDto("잇집기관", LocalDateTime.of(2024, 10, 1, 10, 30), "Java Programming", 95)))
+                .qualifications(List.of(new QualificationDto("잇집기관", LocalDateTime.of(2024, 10, 1, 10, 30), "Java Programming")))
                 .achievements(List.of(new AchievementDto("잇집자바상", "잇집", LocalDateTime.of(2024, 7, 30, 11, 20), "자바 잘해서줍니다.")))
                 .activities(List.of(new ActivityDto("해커톤상", "무박 3일동안 해커톤 통해서 우수상 수상하였습니다.", LocalDateTime.of(2024, 10, 11, 9, 30), LocalDateTime.of(2024, 10, 14, 9, 30))))
                 .educations(List.of(new EducationDto("잇집대", "소프트웨어학과", LocalDateTime.of(2018, 3, 10, 0, 0), LocalDateTime.of(2022, 3, 10, 0, 0))))
@@ -79,13 +58,13 @@ public class ResumeServiceTest {
                 .userId(1L)
                 .build();
 
-        resumeService.create(createResumeRequest);
+        testResumeContainer.resumeService.create(createResumeRequest);
     }
 
     @Test
     void 저장_로직_테스트() {
         CreateResumeRequest createResumeRequest = CreateResumeRequest.builder()
-                .qualifications(List.of(new QualificationDto("잇집", LocalDateTime.of(2023, 10, 1, 9, 30), "Python Programming", 85)))
+                .qualifications(List.of(new QualificationDto("잇집", LocalDateTime.of(2023, 10, 1, 9, 30), "Python Programming")))
                 .achievements(List.of(new AchievementDto("잇집파이썬상", "잇집", LocalDateTime.of(2024, 7, 30, 11, 20), "자바 잘해서줍니다.")))
                 .activities(List.of(new ActivityDto("잇집프로젝트상", "잇집을 정말 열심해서 상을 드립니다.", LocalDateTime.of(2022, 9, 23, 9, 30), LocalDateTime.of(2022, 9, 23, 9, 30))))
                 .educations(List.of(new EducationDto("잇집대", "소프트웨어학과", LocalDateTime.of(2019, 4, 20, 0, 0), LocalDateTime.of(2023, 3, 10, 0, 0))))
@@ -93,7 +72,7 @@ public class ResumeServiceTest {
                 .resume(new ResumeDto("itzip@gmail.com", "010-2987-8765", "잇집이력서", "안녕하세요 잇집 이력서입니다.", PublicOnOff.YES, List.of("https://naver.com"), null))
                 .build();
 
-        CreateResumeResponse createResumeResponse = resumeService.create(createResumeRequest);
+        CreateResumeResponse createResumeResponse = testResumeContainer.resumeService.create(createResumeRequest);
 
         ResumeDetails expectedResumeDetails = saveExpectedResumeDetails();
 
@@ -101,7 +80,7 @@ public class ResumeServiceTest {
     }
 
     private static ResumeDetails saveExpectedResumeDetails() {
-        Resume expectedResume = new Resume("itzip@gmail.com", "010-2987-8765", "잇집이력서", "안녕하세요 잇집 이력서입니다.", PublicOnOff.YES, List.of("https://naver.com"), null, null, 2L);
+        Resume expectedResume = new Resume("itzip@gmail.com", "010-2987-8765", "잇집이력서", "안녕하세요 잇집 이력서입니다.", PublicOnOff.YES, List.of("https://naver.com"), null, null, 2L, null);
 
         ResumeDetails expectedResumeDetails = new ResumeDetails(new Achievements(
                 List.of(new Achievement(expectedResume, "잇집파이썬상", "잇집", LocalDateTime.of(2024, 7, 30, 11, 20), "자바 잘해서줍니다.", 2L)
@@ -118,7 +97,7 @@ public class ResumeServiceTest {
                 new Languages(new ArrayList<>()),
                 new MySkills(new ArrayList<>()),
                 new Qualifications(
-                        List.of(new Qualification(expectedResume, "잇집", LocalDateTime.of(2023, 10, 1, 9, 30), "Python Programming", 85, 2L))
+                        List.of(new Qualification(expectedResume, "잇집", LocalDateTime.of(2023, 10, 1, 9, 30), "Python Programming", 2L))
                 ),
                 expectedResume
         );
@@ -128,7 +107,7 @@ public class ResumeServiceTest {
     @Test
     void 이력서_업데이트_테스트() {
         UpdateResumeRequest updateResumeRequest = UpdateResumeRequest.builder()
-                .qualifications(List.of(new QualificationDto("잇집기관", LocalDateTime.of(2024, 10, 1, 10, 30), "Java Programming", 95, 1L), new QualificationDto("원티드", LocalDateTime.of(2024, 11, 1, 10, 30), "TDD SOLID TEST", 95)))
+                .qualifications(List.of(new QualificationDto("잇집기관", LocalDateTime.of(2024, 10, 1, 10, 30), "Java Programming", 1L), new QualificationDto("원티드", LocalDateTime.of(2024, 11, 1, 10, 30), "TDD SOLID TEST")))
                 .achievements(List.of(new AchievementDto("잇집자바상", "잇집", LocalDateTime.of(2024, 7, 30, 11, 20), "자바 잘해서줍니다.", 1L), new AchievementDto("잇집완주상", "잇집", LocalDateTime.of(2024, 11, 20, 11, 20), "완료해서 수여함.")))
                 .activities(List.of(new ActivityDto("해커톤상", "무박 3일동안 해커톤 통해서 우수상 수상하였습니다.", LocalDateTime.of(2024, 10, 11, 9, 30), LocalDateTime.of(2024, 10, 14, 9, 30), 1L)))
                 .educations(List.of(new EducationDto("잇집대", "소프트웨어학과", LocalDateTime.of(2018, 3, 10, 0, 0), LocalDateTime.of(2022, 3, 10, 0, 0), 1L)))
@@ -142,11 +121,11 @@ public class ResumeServiceTest {
 
         ResumeDetails expectedResumeDetails = updateExcepectedResumeDetails();
 
-        assertThat(resumeService.update(updateResumeRequest)).isEqualTo(UpdateResumeResponse.from(expectedResumeDetails));
+        assertThat(testResumeContainer.resumeService.update(updateResumeRequest)).isEqualTo(UpdateResumeResponse.from(expectedResumeDetails));
     }
 
     private static ResumeDetails updateExcepectedResumeDetails() {
-        Resume expectedResume = new Resume("itzip@gmail.com", "010-2987-8765", "잇집이력서", "안녕하세요 잇집 이력서입니다.", PublicOnOff.YES, List.of("https://naver.com"), null, 1L, 1L);
+        Resume expectedResume = new Resume("itzip@gmail.com", "010-2987-8765", "잇집이력서", "안녕하세요 잇집 이력서입니다.", PublicOnOff.YES, List.of("https://naver.com"), null, 1L, 1L, null);
 
         ResumeDetails expectedResumeDetails = new ResumeDetails(new Achievements(
                 List.of(new Achievement(expectedResume, "잇집자바상", "잇집", LocalDateTime.of(2024, 7, 30, 11, 20), "자바 잘해서줍니다.", 1L), new Achievement(expectedResume, "잇집완주상", "잇집", LocalDateTime.of(2024, 11, 20, 11, 20), "완료해서 수여함.", 2L)
@@ -165,7 +144,7 @@ public class ResumeServiceTest {
                 ),
                 new MySkills(new ArrayList<>()),
                 new Qualifications(
-                        List.of(new Qualification(expectedResume, "잇집기관", LocalDateTime.of(2024, 10, 1, 10, 30), "Java Programming", 95, 1L), new Qualification(expectedResume, "원티드", LocalDateTime.of(2024, 11, 1, 10, 30), "TDD SOLID TEST", 95, 2L))
+                        List.of(new Qualification(expectedResume, "잇집기관", LocalDateTime.of(2024, 10, 1, 10, 30), "Java Programming", 1L), new Qualification(expectedResume, "원티드", LocalDateTime.of(2024, 11, 1, 10, 30), "TDD SOLID TEST", 2L))
                 ),
                 expectedResume
         );

@@ -21,6 +21,7 @@ import darkoverload.itzip.feature.resume.domain.qualification.Qualifications;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.domain.resume.ResumeDetails;
 import darkoverload.itzip.feature.resume.service.resume.port.*;
+import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -204,7 +204,7 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<Qualifications> dataQualifications = Optional.empty();
         if (qualifications.isPresent()) {
             List<Qualification> allQualifications = qualificationRepository.findByAllResumeId(resume.getResumeId());
-            qualificationRepository.deleteAllQualifications(allQualifications);
+            qualificationRepository.deleteAllQualifications(qualifications.get().deleteQualifications(allQualifications));
             dataQualifications = Qualifications.of(qualificationRepository.update(qualifications.get().getQualifications()));
         }
 

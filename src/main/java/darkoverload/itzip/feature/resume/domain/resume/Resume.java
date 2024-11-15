@@ -5,7 +5,6 @@ import darkoverload.itzip.feature.resume.dto.resume.ResumeDto;
 import darkoverload.itzip.feature.resume.entity.ResumeEntity;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -29,7 +28,7 @@ public class Resume {
     private PublicOnOff publicOnOff;
 
     // 링크
-    private List<String> links = new ArrayList<>();
+    private List<String> links;
 
     // 이미지
     private String imageUrl;
@@ -40,11 +39,14 @@ public class Resume {
     // 이력서 아이디
     private Long resumeId;
 
+    // 경력
+    private String workLongTerm;
+
     public Resume() {
     }
 
     @Builder
-    public Resume(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff, List<String> links, String imageUrl, Long userId, Long resumeId) {
+    public Resume(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff, List<String> links, String imageUrl, Long userId, Long resumeId, String workLongTerm) {
         this.email = email;
         this.phone = phone;
         this.subject = subject;
@@ -54,6 +56,7 @@ public class Resume {
         this.imageUrl = imageUrl;
         this.userId = userId;
         this.resumeId = resumeId;
+        this.workLongTerm = workLongTerm;
     }
 
     public static Resume create(ResumeDto resume, Long userId){
@@ -83,6 +86,20 @@ public class Resume {
                 .build();
     }
 
+    public static Resume searchResume(Resume resume, String workLongTerm) {
+        return Resume.builder()
+                .resumeId(resume.getResumeId())
+                .email(resume.getEmail())
+                .phone(resume.getPhone())
+                .subject(resume.getSubject())
+                .introduction(resume.getIntroduction())
+                .links(resume.getLinks())
+                .imageUrl(resume.getImageUrl())
+                .userId(resume.getUserId())
+                .workLongTerm(workLongTerm)
+                .build();
+    }
+
     public ResumeEntity toEntity() {
         return ResumeEntity.builder()
                 .email(this.email)
@@ -96,6 +113,6 @@ public class Resume {
                 .userId(this.userId)
                 .id(this.resumeId)
                 .build();
-
     }
+
 }
