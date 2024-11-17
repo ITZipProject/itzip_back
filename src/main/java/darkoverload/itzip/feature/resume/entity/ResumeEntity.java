@@ -11,11 +11,11 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@ToString
 @Getter
-@AllArgsConstructor
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name="resumes")
+@EqualsAndHashCode(callSuper = false)
 public class ResumeEntity extends AuditingFields {
 
     @Id
@@ -45,7 +45,18 @@ public class ResumeEntity extends AuditingFields {
     @Column(name="public_on_off", nullable = false)
     private PublicOnOff publicOnOff;
 
-
+    @Builder
+    public ResumeEntity(Long id, Long userId, String email, String imageUrl, String subject, String phone, String introduction, List<String> links, PublicOnOff publicOnOff) {
+        this.id = id;
+        this.userId = userId;
+        this.email = email;
+        this.imageUrl = imageUrl;
+        this.subject = subject;
+        this.phone = phone;
+        this.introduction = introduction;
+        this.links = links;
+        this.publicOnOff = publicOnOff;
+    }
 
     public Resume convertToDomain(){
         return Resume.builder()
@@ -60,4 +71,5 @@ public class ResumeEntity extends AuditingFields {
                 .publicOnOff(this.publicOnOff)
                 .build();
     }
+
 }

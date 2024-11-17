@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 
 @ToString
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class EducationDto {
 
@@ -34,6 +33,14 @@ public class EducationDto {
         this.major = major;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public EducationDto(String schoolName, String major, LocalDateTime startDate, LocalDateTime endDate, Long educationId) {
+        this.schoolName = schoolName;
+        this.major = major;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.educationId = educationId;
     }
 
     public Education toModel(){

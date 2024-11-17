@@ -5,7 +5,10 @@ import darkoverload.itzip.feature.resume.dto.career.CareerDto;
 import darkoverload.itzip.feature.resume.entity.CareerEntity;
 import lombok.*;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.Objects;
 
 @Setter
@@ -68,6 +71,14 @@ public class Career {
                 .endDate(this.endDate)
                 .id(this.careerId)
                 .build();
+    }
+
+    public boolean isResumeIdEquals(Long resumeId) {
+        return Objects.equals(resume.getResumeId(), resumeId);
+    }
+
+    public long workTerm() {
+        return ChronoUnit.MONTHS.between(startDate, endDate);
     }
 
 }

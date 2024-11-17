@@ -3,6 +3,7 @@ package darkoverload.itzip.feature.resume.mock;
 import darkoverload.itzip.feature.resume.service.resume.ResumeService;
 import darkoverload.itzip.feature.resume.service.resume.ResumeServiceImpl;
 import darkoverload.itzip.feature.resume.service.resume.port.*;
+import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeRepository;
 import lombok.Builder;
 
 public class TestResumeContainer {

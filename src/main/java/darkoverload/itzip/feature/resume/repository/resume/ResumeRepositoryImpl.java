@@ -1,7 +1,7 @@
 package darkoverload.itzip.feature.resume.repository.resume;
 
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
-import darkoverload.itzip.feature.resume.service.resume.port.ResumeRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
@@ -30,4 +30,6 @@ public class ResumeRepositoryImpl implements ResumeRepository {
     public Resume getReferenceById(Long id) {
         return repository.getReferenceById(id).convertToDomain();
     }
+
+
 }

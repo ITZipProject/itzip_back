@@ -23,6 +23,7 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class JobInfoServiceImpl implements JobInfoService{
 
@@ -61,7 +62,6 @@ public class JobInfoServiceImpl implements JobInfoService{
      * @param request JobInfoScrapRequest: 채용정보 ID와 사용자 이메일을 포함한 스크랩 요청 정보
      * @return String: 스크랩 처리 결과 메시지 (스크랩 완료 또는 취소 메시지)
      */
-    @Transactional
     @Override
     public String jobInfoScrap(JobInfoScrapRequest request) {
         // 1. 사용자가 해당 채용 정보를 이미 스크랩했는지 확인
@@ -97,9 +97,9 @@ public class JobInfoServiceImpl implements JobInfoService{
         infoEntity.setScrapCount(count);
     }
 
-
     @Transactional(readOnly = true)
     public JobInfo getById(Long id) {
         return jobInfoRepository.findById(id).orElseThrow(() -> new RestApiException(CommonExceptionCode.JOB_INFO_NOT_FOUND)).convertToDomain();
     }
+
 }

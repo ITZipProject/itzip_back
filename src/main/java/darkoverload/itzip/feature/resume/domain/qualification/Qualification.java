@@ -32,12 +32,11 @@ public class Qualification {
     private Long qualificationId;
 
     @Builder
-    public Qualification(Resume resume, String organization, LocalDateTime qualificationDate, String name, int score, Long qualificationId) {
+    public Qualification(Resume resume, String organization, LocalDateTime qualificationDate, String name, Long qualificationId) {
         this.resume = resume;
         this.organization = organization;
         this.qualificationDate = qualificationDate;
         this.name = name;
-        this.score = score;
         this.qualificationId = qualificationId;
     }
 
@@ -48,7 +47,6 @@ public class Qualification {
                 .organization(qualification.getOrganization())
                 .qualificationDate(qualification.getQualificationDate())
                 .name(qualification.getName())
-                .score(qualification.getScore())
                 .qualificationId(qualification.getQualificationId())
                 .build();
     }
@@ -59,7 +57,6 @@ public class Qualification {
                 .organization(this.organization)
                 .qualificationDate(this.qualificationDate)
                 .name(this.name)
-                .score(this.score)
                 .id(this.qualificationId)
                 .build();
     }

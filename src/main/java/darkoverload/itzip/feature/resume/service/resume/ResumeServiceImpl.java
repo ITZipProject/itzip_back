@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.resume.service.resume;
 
+import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.response.CreateResumeResponse;
@@ -21,6 +22,7 @@ import darkoverload.itzip.feature.resume.domain.qualification.Qualifications;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.domain.resume.ResumeDetails;
 import darkoverload.itzip.feature.resume.service.resume.port.*;
+import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -130,7 +131,7 @@ public class ResumeServiceImpl implements ResumeService {
 
 
     @Override
-    public UpdateResumeResponse update(UpdateResumeRequest request) {
+    public UpdateResumeResponse update(UpdateResumeRequest request, CustomUserDetails customUserDetails) {
         Resume updateResume = Resume.update(request.getResume(), request.getResumeId(), request.getUserId());
 
         return UpdateResumeResponse.from(update(request, resumeRepository.update(updateResume)));
@@ -204,7 +205,7 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<Qualifications> dataQualifications = Optional.empty();
         if (qualifications.isPresent()) {
             List<Qualification> allQualifications = qualificationRepository.findByAllResumeId(resume.getResumeId());
-            qualificationRepository.deleteAllQualifications(allQualifications);
+            qualificationRepository.deleteAllQualifications(qualifications.get().deleteQualifications(allQualifications));
             dataQualifications = Qualifications.of(qualificationRepository.update(qualifications.get().getQualifications()));
         }
 

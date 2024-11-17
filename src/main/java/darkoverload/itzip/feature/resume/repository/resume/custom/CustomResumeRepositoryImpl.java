@@ -1,20 +1,35 @@
 package darkoverload.itzip.feature.resume.repository.resume.custom;
 
+import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Expression;
+import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.core.types.dsl.PathBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.querydsl.jpa.impl.JPAUpdateClause;
+import darkoverload.itzip.feature.resume.controller.response.SearchResumeResponse;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.entity.QResumeEntity;
+import darkoverload.itzip.feature.resume.entity.ResumeEntity;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.StringUtils;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+
+import static org.springframework.util.StringUtils.*;
 
 
 @Repository
 @RequiredArgsConstructor
-public class CustomResumeRepositoryImpl implements CustomResumeRepository{
+public class CustomResumeRepositoryImpl implements CustomResumeRepository {
 
     private final JPAQueryFactory queryFactory;
 
@@ -48,33 +63,34 @@ public class CustomResumeRepositoryImpl implements CustomResumeRepository{
 
     private void updates(Resume resume, Map<PathBuilder<Object>, Object> updates) {
         // email
-        if(resume.getEmail() != null) {
+        if (resume.getEmail() != null) {
             updates.put(new PathBuilder<>(String.class, qResume.email.getMetadata()), resume.getEmail());
         }
 
         // phone
-        if(resume.getPhone() != null) {
+        if (resume.getPhone() != null) {
             updates.put(new PathBuilder<>(String.class, qResume.phone.getMetadata()), resume.getPhone());
         }
 
         // subject
-        if(resume.getSubject() != null) {
+        if (resume.getSubject() != null) {
             updates.put(new PathBuilder<>(String.class, qResume.subject.getMetadata()), resume.getSubject());
         }
 
         // introduction
-        if(resume.getIntroduction() != null) {
+        if (resume.getIntroduction() != null) {
             updates.put(new PathBuilder<>(String.class, qResume.introduction.getMetadata()), resume.getIntroduction());
         }
 
         // PublicOnOff
-        if(resume.getPublicOnOff() != null) {
+        if (resume.getPublicOnOff() != null) {
             updates.put(new PathBuilder<>(Enum.class, qResume.publicOnOff.getMetadata()), resume.getPublicOnOff());
         }
 
         // Links
-        if(resume.getLinks() != null && !resume.getLinks().isEmpty()) {
+        if (resume.getLinks() != null && !resume.getLinks().isEmpty()) {
             updates.put(new PathBuilder<>(List.class, qResume.links.getMetadata()), resume.getLinks());
         }
     }
+
 }

@@ -23,17 +23,13 @@ public class QualificationDto {
     // 자격증명
     private String name;
 
-    // 점수
-    private int score;
-
     // 아이디
     private Long qualificationId;
 
-    public QualificationDto(String organization, LocalDateTime qualificationDate, String name, int score) {
+    public QualificationDto(String organization, LocalDateTime qualificationDate, String name) {
         this.organization = organization;
         this.qualificationDate = qualificationDate;
         this.name = name;
-        this.score = score;
     }
 
     public Qualification toModel() {
@@ -42,7 +38,6 @@ public class QualificationDto {
                 .organization(this.organization)
                 .qualificationDate(this.qualificationDate)
                 .name(this.name)
-                .score(this.score)
                 .build();
     }
 }
