@@ -27,20 +27,22 @@ jobs:
         run: |
           mkdir -p ./src/test/resources/properties
           echo "${{ secrets.TEST_ENV_FILE }}" > ./src/test/resources/properties/test-env.properties
+
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+        uses: gradle/actions/setup-gradle@v4.0.0
 
       - name: Build with Gradle Wrapper
         id: build
         run: ./gradlew build
 
-      - name: Login Dokcer
+      - name: Login Docker
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build with Docker Push
+      - name: Build and Push Docker Image
+        id: docker_build
         uses: docker/build-push-action@v3
         with:
           context: .
@@ -50,7 +52,8 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/jdk-21-spring-boot-3.3.1:${{ github.sha }}
             ${{ secrets.DOCKER_USERNAME }}/jdk-21-spring-boot-3.3.1:latest
 
-      - name: SSH to Remote Server and Deploy
+      - name: Deploy to Remote Server
+        id: deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.REMOTE_HOST }}
@@ -74,19 +77,19 @@ jobs:
         if: failure()
         run: |
           outcome_message=""
-          
+
           if [ "${{ steps.build.outcome }}" == "failure" ]; then
             outcome_message+="빌드 단계에서 오류 발생. "
           fi
-          
+
           if [ "${{ steps.docker_build.outcome }}" == "failure" ]; then
             outcome_message+="Docker 빌드 단계에서 오류 발생. "
           fi
-          
+
           if [ "${{ steps.deploy.outcome }}" == "failure" ]; then
             outcome_message+="배포 단계에서 오류 발생. "
           fi
-          
+
           curl -H "Content-Type: application/json" \
-            -d '{"content": "**배포 실패!** :x: \n빌드 및 배포 과정에서 오류가 발생했습니다. \n오류 내용: '"${outcome_message}"'"}' \ 
+            -d "$(jq -n --arg content "**배포 실패!** :x: \n빌드 및 배포 과정에서 오류가 발생했습니다. \n오류 내용: $outcome_message" '{content: $content}')" \
             ${{ secrets.DISCORD_WEBHOOK_URL }}
