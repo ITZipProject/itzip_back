@@ -13,6 +13,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="educations")
+@EqualsAndHashCode(callSuper = false)
+@ToString
 public class EducationEntity extends AuditingFields {
 
     @Id

@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="qualifications")
+@EqualsAndHashCode(callSuper = false)
 public class QualificationEntity extends AuditingFields {
 
     @Id

@@ -4,10 +4,7 @@ package darkoverload.itzip.feature.resume.repository.resume;
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
 import darkoverload.itzip.feature.resume.entity.ResumeEntity;
 import darkoverload.itzip.global.config.querydsl.TestQueryDslConfig;
-import jakarta.persistence.AttributeConverter;
-import jakarta.persistence.Converter;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -18,12 +15,9 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 @Slf4j
@@ -37,13 +31,13 @@ import static org.assertj.core.api.Assertions.*;
 class ResumeReadRepositoryTest {
 
     @Autowired
-    ResumeReadJpaRepository resumeReadRepository;
+    private ResumeReadJpaRepository repository;
 
     @Test
     void 이력서_페이징_조회() {
         PageRequest page = PageRequest.of(0, 10, Sort.by("modify_date").descending());
 
-        List<ResumeEntity> resumes = resumeReadRepository.searchResumeInfos(null, page);
+        List<ResumeEntity> resumes = repository.searchResumeInfos(null, page);
 
         assertThat(resumes).isEqualTo(List.of(
                 new ResumeEntity(1L, 1L, "itzip@gmail.com", "https://itzip.com", "잇집 홍길동", "010-2355-9839", "잇집입니다.", List.of("잇집이력서"), PublicOnOff.YES),
