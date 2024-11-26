@@ -4,6 +4,7 @@ import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.response.CreateResumeResponse;
+import darkoverload.itzip.feature.resume.controller.response.GetResumeDetailsResponse;
 import darkoverload.itzip.feature.resume.controller.response.SearchResumeResponse;
 import darkoverload.itzip.feature.resume.controller.response.UpdateResumeResponse;
 import darkoverload.itzip.feature.resume.service.resume.ResumeReadService;
