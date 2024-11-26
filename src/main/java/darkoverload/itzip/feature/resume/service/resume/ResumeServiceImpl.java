@@ -21,7 +21,20 @@ import darkoverload.itzip.feature.resume.domain.qualification.Qualification;
 import darkoverload.itzip.feature.resume.domain.qualification.Qualifications;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.domain.resume.ResumeDetails;
-import darkoverload.itzip.feature.resume.service.resume.port.*;
+import darkoverload.itzip.feature.resume.service.resume.port.achievement.AchievementReadRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.achievement.AchievementRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.activity.ActivityReadRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.activity.ActivityRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.career.CareerReadRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.career.CareerRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.education.EducationReadRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.education.EducationRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.language.LanguageReadRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.language.LanguageRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.myskill.MySkillReadRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.myskill.MySkillRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationReadRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
@@ -42,18 +55,25 @@ public class ResumeServiceImpl implements ResumeService {
     private final ResumeRepository resumeRepository;
 
     private final EducationRepository educationRepository;
+    private final EducationReadRepository educationReadRepository;
 
     private final LanguageRepository languageRepository;
+    private final LanguageReadRepository languageReadRepository;
 
     private final QualificationRepository qualificationRepository;
+    private final QualificationReadRepository qualificationReadRepository;
 
     private final MySkillRepository mySkillRepository;
+    private final MySkillReadRepository mySkillReadRepository;
 
     private final CareerRepository careerRepository;
+    private final CareerReadRepository careerReadRepository;
 
     private final AchievementRepository achievementRepository;
+    private final AchievementReadRepository achievementReadRepository;
 
     private final ActivityRepository activityRepository;
+    private final ActivityReadRepository activityReadRepository;
 
     @Transactional
     @Override
@@ -150,7 +170,7 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<Careers> careers = Careers.of(request.getCareers(), resume);
         Optional<Careers> dataCareers = Optional.empty();
         if (careers.isPresent()) {
-            List<Career> allCareers = careerRepository.findAllByResumeId(resume.getResumeId());
+            List<Career> allCareers = careerReadRepository.findAllByResumeId(resume.getResumeId());
             careerRepository.deleteAllCareers(careers.get().deleteCareers(allCareers));
             dataCareers = Careers.of(careerRepository.update(careers.get().getCareers()));
         }
@@ -159,7 +179,7 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<Achievements> achievements = Achievements.of(request.getAchievements(), resume);
         Optional<Achievements> dataAchievements = Optional.empty();
         if (achievements.isPresent()) {
-            List<Achievement> allAchievements = achievementRepository.findAllByResumeId(resume.getResumeId());
+            List<Achievement> allAchievements = achievementReadRepository.findAllByResumeId(resume.getResumeId());
             achievementRepository.deleteAllAchievements(achievements.get().deleteAchievements(allAchievements));
             dataAchievements = Achievements.of(achievementRepository.update(achievements.get().getAchievements()));
         }
@@ -168,7 +188,7 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<Activities> activities = Activities.of(request.getActivities(), resume);
         Optional<Activities> dataActivities = Optional.empty();
         if (activities.isPresent()) {
-            List<Activity> allActivities = activityRepository.findAllByResumeId(resume.getResumeId());
+            List<Activity> allActivities = activityReadRepository.findAllByResumeId(resume.getResumeId());
             activityRepository.deleteAllActivities(activities.get().deleteActivities(allActivities));
             dataActivities = Activities.of(activityRepository.update(activities.get().getActivities()));
         }
@@ -177,7 +197,7 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<Languages> languages = Languages.of(request.getLanguages(), resume);
         Optional<Languages> dataLanguages = Optional.empty();
         if (languages.isPresent()) {
-            List<Language> allLanguages = languageRepository.findAllByResumeId(resume.getResumeId());
+            List<Language> allLanguages = languageReadRepository.findAllByResumeId(resume.getResumeId());
             languageRepository.deleteAllLanguages(languages.get().deleteLanguages(allLanguages));
             dataLanguages = Languages.of(languageRepository.update(languages.get().getLanguages()));
         }
@@ -186,7 +206,7 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<Educations> educations = Educations.of(request.getEducations(), resume);
         Optional<Educations> dataEducations = Optional.empty();
         if (educations.isPresent()) {
-            List<Education> allEducations = educationRepository.findAllByResumeId(resume.getResumeId());
+            List<Education> allEducations = educationReadRepository.findAllByResumeId(resume.getResumeId());
             educationRepository.deleteAllEducations(educations.get().deleteEducations(allEducations));
             dataEducations = Educations.of(educationRepository.update(educations.get().getEducations()));
         }
@@ -195,7 +215,7 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<MySkills> mySkills = MySkills.of(request.getMySkills(), resume);
         Optional<MySkills> dataMySkills = Optional.empty();
         if (mySkills.isPresent()) {
-            List<MySkill> allMySkills = mySkillRepository.findByAllResumeId(resume.getResumeId());
+            List<MySkill> allMySkills = mySkillReadRepository.findByAllResumeId(resume.getResumeId());
             mySkillRepository.deleteAllMySkills(mySkills.get().deleteMySkills(allMySkills));
             dataMySkills = MySkills.of(mySkillRepository.update(mySkills.get().getMySkills()));
         }
@@ -204,7 +224,7 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<Qualifications> qualifications = Qualifications.of(request.getQualifications(), resume);
         Optional<Qualifications> dataQualifications = Optional.empty();
         if (qualifications.isPresent()) {
-            List<Qualification> allQualifications = qualificationRepository.findByAllResumeId(resume.getResumeId());
+            List<Qualification> allQualifications = qualificationReadRepository.findAllByResumeId(resume.getResumeId());
             qualificationRepository.deleteAllQualifications(qualifications.get().deleteQualifications(allQualifications));
             dataQualifications = Qualifications.of(qualificationRepository.update(qualifications.get().getQualifications()));
         }

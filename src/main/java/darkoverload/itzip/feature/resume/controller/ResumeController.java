@@ -6,7 +6,6 @@ import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.response.CreateResumeResponse;
 import darkoverload.itzip.feature.resume.controller.response.SearchResumeResponse;
 import darkoverload.itzip.feature.resume.controller.response.UpdateResumeResponse;
-import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.service.resume.ResumeReadService;
 import darkoverload.itzip.feature.resume.service.resume.ResumeService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
@@ -30,7 +29,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -58,6 +56,8 @@ public class ResumeController {
             summary = "이력서 수정",
             description = "이력서 수정 시 객체 리스트에 존재하는 값 체크"
     )
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations(CommonExceptionCode.BAD_REQUEST)
     @PatchMapping("")
     public UpdateResumeResponse updateResume(@SwaggerRequestBody(description = "이력서 수정 정보", content = @Content(
             schema = @Schema(implementation = UpdateResumeRequest.class)

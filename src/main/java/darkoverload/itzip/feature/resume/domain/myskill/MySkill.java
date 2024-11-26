@@ -8,7 +8,6 @@ import lombok.*;
 @Setter
 @Getter
 @ToString
-@EqualsAndHashCode
 public class MySkill {
     // 이력서
     private Resume resume;

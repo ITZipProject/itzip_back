@@ -12,7 +12,9 @@ import java.time.LocalDateTime;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name="activites")
+@Table(name="activities")
+@EqualsAndHashCode(callSuper = false)
+@ToString
 public class ActivityEntity extends AuditingFields {
 
     @Id

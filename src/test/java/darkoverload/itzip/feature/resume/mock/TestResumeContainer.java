@@ -2,7 +2,13 @@ package darkoverload.itzip.feature.resume.mock;
 
 import darkoverload.itzip.feature.resume.service.resume.ResumeService;
 import darkoverload.itzip.feature.resume.service.resume.ResumeServiceImpl;
-import darkoverload.itzip.feature.resume.service.resume.port.*;
+import darkoverload.itzip.feature.resume.service.resume.port.achievement.AchievementRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.activity.ActivityRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.career.CareerRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.education.EducationRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.language.LanguageRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.myskill.MySkillRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeRepository;
 import lombok.Builder;
 

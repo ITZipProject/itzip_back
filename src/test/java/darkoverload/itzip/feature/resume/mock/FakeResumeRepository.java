@@ -2,7 +2,6 @@ package darkoverload.itzip.feature.resume.mock;
 
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeRepository;
-import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.Collections;

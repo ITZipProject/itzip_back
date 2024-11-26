@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="careers")
+@EqualsAndHashCode(callSuper = false)
 public class CareerEntity extends AuditingFields {
 
     @Id
@@ -50,4 +51,5 @@ public class CareerEntity extends AuditingFields {
                 .endDate(this.endDate)
                 .build();
     }
+
 }
