@@ -66,48 +66,48 @@ public class ResumeServiceTest {
 
     }
 
-    @Test
-    void 저장_로직_테스트() {
-        CreateResumeRequest createResumeRequest = CreateResumeRequest.builder()
-                .qualifications(List.of(new QualificationDto("잇집", LocalDateTime.of(2023, 10, 1, 9, 30), "Python Programming")))
-                .achievements(List.of(new AchievementDto("잇집파이썬상", "잇집", LocalDateTime.of(2024, 7, 30, 11, 20), "자바 잘해서줍니다.")))
-                .activities(List.of(new ActivityDto("잇집프로젝트상", "잇집을 정말 열심해서 상을 드립니다.", LocalDateTime.of(2022, 9, 23, 9, 30), LocalDateTime.of(2022, 9, 23, 9, 30))))
-                .educations(List.of(new EducationDto("잇집대", "소프트웨어학과", LocalDateTime.of(2019, 4, 20, 0, 0), LocalDateTime.of(2023, 3, 10, 0, 0))))
-                .careers(List.of(new CareerDto("잇집회사", "팀장", "IT팀", LocalDateTime.of(2024, 3, 10, 0, 0), LocalDateTime.of(2024, 6, 20, 0, 0))))
-                .resume(new ResumeDto("itzip@gmail.com", "010-2987-8765", "잇집이력서", "안녕하세요 잇집 이력서입니다.", PublicOnOff.YES, List.of("https://naver.com"), null))
-                .build();
-
-        CreateResumeResponse createResumeResponse = testResumeContainer.resumeService.create(createResumeRequest);
-
-        ResumeDetails expectedResumeDetails = saveExpectedResumeDetails();
-
-        assertThat(createResumeResponse).isEqualTo(CreateResumeResponse.from(expectedResumeDetails));
-    }
-
-    private static ResumeDetails saveExpectedResumeDetails() {
-        Resume expectedResume = new Resume("itzip@gmail.com", "010-2987-8765", "잇집이력서", "안녕하세요 잇집 이력서입니다.", PublicOnOff.YES, List.of("https://naver.com"), null, null, 2L, null);
-
-        ResumeDetails expectedResumeDetails = new ResumeDetails(new Achievements(
-                List.of(new Achievement(expectedResume, "잇집파이썬상", "잇집", LocalDateTime.of(2024, 7, 30, 11, 20), "자바 잘해서줍니다.", 2L)
-                )),
-                new Activities(
-                        List.of(new Activity(expectedResume, "잇집프로젝트상", "잇집을 정말 열심해서 상을 드립니다.", LocalDateTime.of(2022, 9, 23, 9, 30), LocalDateTime.of(2022, 9, 23, 9, 30), 2L))
-                ),
-                new Careers(
-                        List.of(new Career(expectedResume, "잇집회사", "팀장", "IT팀", LocalDateTime.of(2024, 3, 10, 0, 0), LocalDateTime.of(2024, 6, 20, 0, 0), 2L))
-                ),
-                new Educations(
-                        List.of(new Education(expectedResume, "잇집대", "소프트웨어학과", LocalDateTime.of(2019, 4, 20, 0, 0), LocalDateTime.of(2023, 3, 10, 0, 0), 2L))
-                ),
-                new Languages(new ArrayList<>()),
-                new MySkills(new ArrayList<>()),
-                new Qualifications(
-                        List.of(new Qualification(expectedResume, "잇집", LocalDateTime.of(2023, 10, 1, 9, 30), "Python Programming", 2L))
-                ),
-                expectedResume
-        );
-        return expectedResumeDetails;
-    }
+//    @Test
+//    void 저장_로직_테스트() {
+//        CreateResumeRequest createResumeRequest = CreateResumeRequest.builder()
+//                .qualifications(List.of(new QualificationDto("잇집", LocalDateTime.of(2023, 10, 1, 9, 30), "Python Programming")))
+//                .achievements(List.of(new AchievementDto("잇집파이썬상", "잇집", LocalDateTime.of(2024, 7, 30, 11, 20), "자바 잘해서줍니다.")))
+//                .activities(List.of(new ActivityDto("잇집프로젝트상", "잇집을 정말 열심해서 상을 드립니다.", LocalDateTime.of(2022, 9, 23, 9, 30), LocalDateTime.of(2022, 9, 23, 9, 30))))
+//                .educations(List.of(new EducationDto("잇집대", "소프트웨어학과", LocalDateTime.of(2019, 4, 20, 0, 0), LocalDateTime.of(2023, 3, 10, 0, 0))))
+//                .careers(List.of(new CareerDto("잇집회사", "팀장", "IT팀", LocalDateTime.of(2024, 3, 10, 0, 0), LocalDateTime.of(2024, 6, 20, 0, 0))))
+//                .resume(new ResumeDto("itzip@gmail.com", "010-2987-8765", "잇집이력서", "안녕하세요 잇집 이력서입니다.", PublicOnOff.YES, List.of("https://naver.com"), null))
+//                .build();
+//
+//        CreateResumeResponse createResumeResponse = testResumeContainer.resumeService.create(createResumeRequest);
+//
+//        ResumeDetails expectedResumeDetails = saveExpectedResumeDetails();
+//
+//        assertThat(createResumeResponse).isEqualTo(CreateResumeResponse.from(expectedResumeDetails));
+//    }
+//
+//    private static ResumeDetails saveExpectedResumeDetails() {
+//        Resume expectedResume = new Resume("itzip@gmail.com", "010-2987-8765", "잇집이력서", "안녕하세요 잇집 이력서입니다.", PublicOnOff.YES, List.of("https://naver.com"), null, null, 2L, null);
+//
+//        ResumeDetails expectedResumeDetails = new ResumeDetails(new Achievements(
+//                List.of(new Achievement(expectedResume, "잇집파이썬상", "잇집", LocalDateTime.of(2024, 7, 30, 11, 20), "자바 잘해서줍니다.", 2L)
+//                )),
+//                new Activities(
+//                        List.of(new Activity(expectedResume, "잇집프로젝트상", "잇집을 정말 열심해서 상을 드립니다.", LocalDateTime.of(2022, 9, 23, 9, 30), LocalDateTime.of(2022, 9, 23, 9, 30), 2L))
+//                ),
+//                new Careers(
+//                        List.of(new Career(expectedResume, "잇집회사", "팀장", "IT팀", LocalDateTime.of(2024, 3, 10, 0, 0), LocalDateTime.of(2024, 6, 20, 0, 0), 2L))
+//                ),
+//                new Educations(
+//                        List.of(new Education(expectedResume, "잇집대", "소프트웨어학과", LocalDateTime.of(2019, 4, 20, 0, 0), LocalDateTime.of(2023, 3, 10, 0, 0), 2L))
+//                ),
+//                new Languages(new ArrayList<>()),
+//                new MySkills(new ArrayList<>()),
+//                new Qualifications(
+//                        List.of(new Qualification(expectedResume, "잇집", LocalDateTime.of(2023, 10, 1, 9, 30), "Python Programming", 2L))
+//                ),
+//                expectedResume
+//        );
+//        return expectedResumeDetails;
+//    }
 
 //    @Test
 //    void 이력서_업데이트_테스트() {

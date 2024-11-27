@@ -39,4 +39,12 @@ public class ResumeReadServiceImpl implements ResumeReadService{
         return Careers.of(careers).orElseThrow(() -> new RestApiException(CommonExceptionCode.JOB_INFO_NOT_FOUND)).searchResumeMakeWorkPeriod(resumeMaps).stream().map(SearchResumeResponse::from).collect(Collectors.toList());
     }
 
+    @Override
+    public GetResumeDetailsResponse getResumeDetails(Long id) {
+
+
+        return null;
+    }
+
+
 }

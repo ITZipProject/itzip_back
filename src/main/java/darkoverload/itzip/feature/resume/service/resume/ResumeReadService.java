@@ -10,4 +10,6 @@ import java.util.List;
 public interface ResumeReadService {
     List<SearchResumeResponse> searchResumeInfos(String search, Pageable pageable);
 
+
+    GetResumeDetailsResponse getResumeDetails(Long id);
 }

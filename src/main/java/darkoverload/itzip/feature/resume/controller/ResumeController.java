@@ -78,4 +78,13 @@ public class ResumeController {
         return new PageImpl<>(searchResumeResponses, pageable,searchResumeResponses.size());
     }
 
+    @Operation(
+            summary = "이력서 상세 조화",
+            description = "사용자 상세 조회"
+    )
+    @GetMapping("/details/{id}")
+    public GetResumeDetailsResponse getResumeDetails(@PathVariable Long id) {
+        resumeReadService.getResumeDetails(id);
+        return null;
+    }
 }
