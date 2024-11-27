@@ -140,6 +140,9 @@ public enum CommonExceptionCode implements ResponseCode {
     INSERT_FAIL_RESUME(HttpStatus.BAD_REQUEST, "이력서 생성 오류"),
     // 이력서 업데이트 오류
     UPDATE_FAIL_RESUME(HttpStatus.BAD_REQUEST, "이력서 업데이트 오류"),
+    // 이력서 조회 오류 발생
+    NOT_FOUND_RESUME(HttpStatus.BAD_REQUEST, "이력서 정보 조회 중 오류가 발생하였습니다."),
+    NOT_MATCH_RESUME_USERID(HttpStatus.NOT_FOUND, "작성자 아이디가 일치하지 않습니다."),
 
     /**
      * MongoDb
