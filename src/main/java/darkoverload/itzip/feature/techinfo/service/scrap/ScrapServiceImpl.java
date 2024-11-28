@@ -66,5 +66,5 @@ public class ScrapServiceImpl implements ScrapService {
 
         return isScrapped;
     }
-    ㅋ
+
 }
