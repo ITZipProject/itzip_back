@@ -1,9 +1,8 @@
 package darkoverload.itzip.feature.resume.repository.activity;
 
 import darkoverload.itzip.feature.resume.entity.ActivityEntity;
-import darkoverload.itzip.feature.resume.repository.activity.Custom.CustomActivityRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ActivityJpaRepository extends JpaRepository<ActivityEntity, Long> , CustomActivityRepository {
+public interface ActivityJpaRepository extends JpaRepository<ActivityEntity, Long>  {
 
 }

@@ -4,9 +4,9 @@ import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.response.CreateResumeResponse;
+import darkoverload.itzip.feature.resume.controller.response.GetResumeDetailsResponse;
 import darkoverload.itzip.feature.resume.controller.response.SearchResumeResponse;
 import darkoverload.itzip.feature.resume.controller.response.UpdateResumeResponse;
-import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.service.resume.ResumeReadService;
 import darkoverload.itzip.feature.resume.service.resume.ResumeService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Description;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +31,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 @Slf4j
@@ -49,15 +49,17 @@ public class ResumeController {
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.BAD_REQUEST)
     @PostMapping("")
-    public CreateResumeResponse createResume(@Valid @RequestBody CreateResumeRequest request) {
+    public CreateResumeResponse createResume(@Valid @RequestBody CreateResumeRequest request, @AuthenticationPrincipal CustomUserDetails user) {
 
-        return service.create(request);
+        return service.create(request, user);
     }
 
     @Operation(
             summary = "이력서 수정",
             description = "이력서 수정 시 객체 리스트에 존재하는 값 체크"
     )
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations(CommonExceptionCode.BAD_REQUEST)
     @PatchMapping("")
     public UpdateResumeResponse updateResume(@SwaggerRequestBody(description = "이력서 수정 정보", content = @Content(
             schema = @Schema(implementation = UpdateResumeRequest.class)
@@ -75,6 +77,15 @@ public class ResumeController {
         List<SearchResumeResponse> searchResumeResponses = resumeReadService.searchResumeInfos(search, pageable);
 
         return new PageImpl<>(searchResumeResponses, pageable,searchResumeResponses.size());
+    }
+
+    @Operation(
+            summary = "이력서 상세 조화",
+            description = "사용자 상세 조회"
+    )
+    @GetMapping("/details/{id}")
+    public GetResumeDetailsResponse getResumeDetails(@Parameter(description = "이력서 아이디", example = "1") @PathVariable Long id, @AuthenticationPrincipal CustomUserDetails user) {
+        return resumeReadService.getResumeDetails(id, user);
     }
 
 }

@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="languages")
+@EqualsAndHashCode(callSuper = false)
 public class LanguageEntity extends AuditingFields {
 
     @Id

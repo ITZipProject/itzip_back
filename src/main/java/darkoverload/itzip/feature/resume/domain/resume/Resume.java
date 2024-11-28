@@ -3,6 +3,8 @@ package darkoverload.itzip.feature.resume.domain.resume;
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
 import darkoverload.itzip.feature.resume.dto.resume.ResumeDto;
 import darkoverload.itzip.feature.resume.entity.ResumeEntity;
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.*;
 
 import java.util.List;
@@ -59,7 +61,9 @@ public class Resume {
         this.workLongTerm = workLongTerm;
     }
 
-    public static Resume create(ResumeDto resume, Long userId){
+    public static Resume create(ResumeDto resume, Long userId, Long dataBaseUserId){
+        userIdEqualsCheck(userId, dataBaseUserId);
+
         return Resume.builder()
                 .email(resume.getEmail())
                 .phone(resume.getPhone())
@@ -70,6 +74,18 @@ public class Resume {
                 .imageUrl(resume.getImageUrl())
                 .userId(userId)
                 .build();
+    }
+
+    private static void userIdEqualsCheck(Long userId, Long databaseUserId) {
+        if(!userId.equals(databaseUserId)) {
+            throw new RestApiException(CommonExceptionCode.NOT_MATCH_RESUME_USERID);
+        }
+    }
+
+    public void userIdEqualsCheck(Long databaseUserId) {
+        if(!this.userId.equals(databaseUserId)) {
+            throw new RestApiException(CommonExceptionCode.NOT_MATCH_RESUME_USERID);
+        }
     }
 
     public static Resume update(ResumeDto resume, Long resumeId, Long userId) {
@@ -114,5 +130,14 @@ public class Resume {
                 .id(this.resumeId)
                 .build();
     }
+
+    public Resume emptyCheck() {
+        if(resumeId == null) {
+            throw new RestApiException(CommonExceptionCode.NOT_FOUND_RESUME);
+        }
+        return this;
+    }
+
+
 
 }
