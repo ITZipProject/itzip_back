@@ -4,20 +4,23 @@ import darkoverload.itzip.feature.jwt.domain.Token;
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.jwt.service.TokenService;
 import darkoverload.itzip.feature.jwt.util.JwtTokenizer;
-import darkoverload.itzip.feature.user.controller.request.*;
-import darkoverload.itzip.feature.user.controller.response.*;
+import darkoverload.itzip.feature.techinfo.service.blog.BlogCommandService;
+import darkoverload.itzip.feature.user.controller.request.AuthEmailSendRequest;
+import darkoverload.itzip.feature.user.controller.request.RefreshAccessTokenRequest;
+import darkoverload.itzip.feature.user.controller.request.UserJoinRequest;
+import darkoverload.itzip.feature.user.controller.request.UserLoginRequest;
+import darkoverload.itzip.feature.user.controller.response.UserInfoResponse;
+import darkoverload.itzip.feature.user.controller.response.UserLoginResponse;
 import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.Authority;
 import darkoverload.itzip.feature.user.entity.UserEntity;
 import darkoverload.itzip.feature.user.repository.UserRepository;
-import darkoverload.itzip.feature.user.util.CookieUtils;
 import darkoverload.itzip.feature.user.util.RandomAuthCode;
 import darkoverload.itzip.feature.user.util.RandomNickname;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,11 +34,13 @@ import java.util.Optional;
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
     private final RandomNickname randomNickname;
     private final VerificationService verificationService;
     private final EmailService emailService;
     private final TokenService tokenService;
+    private final BlogCommandService blogCommandService;
 
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenizer jwtTokenizer;
@@ -175,6 +180,9 @@ public class UserServiceImpl implements UserService {
         user.setNickname(getUniqueNickname());
 
         userRepository.save(user.convertToEntity());
+
+        blogCommandService.create(user);
+
         return "회원가입이 완료되었습니다.";
     }
 

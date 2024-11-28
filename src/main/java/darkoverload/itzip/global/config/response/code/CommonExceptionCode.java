@@ -16,7 +16,6 @@ public enum CommonExceptionCode implements ResponseCode {
      */
     JOB_INFO_NOT_FOUND(HttpStatus.NOT_FOUND, "채용 정보를 찾을 수 없습니다."),
 
-
     /**
      * school Error
      */
@@ -28,7 +27,7 @@ public enum CommonExceptionCode implements ResponseCode {
     FILE_ERROR(HttpStatus.BAD_REQUEST, "파일 에러"),
 
     /**
-     *  image Error
+     * image Error
      */
     // 파일 전역 IO Error 처리
     IMAGE_ERROR(HttpStatus.BAD_REQUEST, "이미지 업로드 에러"),
@@ -76,23 +75,34 @@ public enum CommonExceptionCode implements ResponseCode {
     NOT_FOUND_USER(HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다."),
 
     /**
-     * TechInfo Error
+     * TechInfo - Blog Error
      */
     // ID에 해당하는 블로그를 찾을 수 없는 경우
     NOT_FOUND_BLOG(HttpStatus.NOT_FOUND, "블로그를 찾을 수 없습니다."),
-    // ID에 해당하는 게시물를 찾을 수 없는 경우
-    NOT_FOUND_POST(HttpStatus.NOT_FOUND, "포스트를 찾을 수 없습니다."),
-    // ID에 해당하는 댓글을 찾을 수 없는 경우
-    NOT_FOUND_COMMENT(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
-    // 해당 블로그에 게시물이 없는 경우
-    NOT_FOUND_POSTS_FOR_BLOG(HttpStatus.NOT_FOUND, "해당 블로그에 대한 게시물을 찾을 수 없습니다."),
-    // 해당 카테고리에 게시물이 없는 경우
-    NOT_FOUND_POSTS_FOR_CATEGORY(HttpStatus.NOT_FOUND, "해당 카테고리에 대한 게시물을 찾을 수 없습니다."),
-    // 잘못된 형식의 포스트 ID가 입력된 경우
-    INVALID_POST_ID(HttpStatus.BAD_REQUEST, "잘못된 POST ID 형식입니다."),
-    // 잘못된 형식의 카테고리 ID가 입력된 경우
-    INVALID_CATEGORY_ID(HttpStatus.BAD_REQUEST, "잘못된 카테고리 ID 형식입니다."),
+    // 블로그 업데이트 작업이 실패한 경우
+    UPDATE_FAIL_BLOG(HttpStatus.BAD_REQUEST, "블로그 업데이트 오류"),
 
+    /**
+     * TechInfo - Post Error
+     */
+    // ID에 해당하는 게시글를 찾을 수 없는 경우
+    NOT_FOUND_POST(HttpStatus.NOT_FOUND, "게시글를 찾을 수 없습니다."),
+    // 블로그에 해당하는 게시글를 찾을 수 없는 경우
+    NOT_FOUND_POST_IN_BLOG(HttpStatus.NOT_FOUND, "해당 블로그에 대한 게시물을 찾을 수 없습니다."),
+    // 카테고리에 해당하는 게시글를 찾을 수 없는 경우
+    NOT_FOUND_POST_IN_CATEGORY(HttpStatus.NOT_FOUND, "해당 카테고리에 대한 게시물을 찾을 수 없습니다."),
+    // 포스트 업데이트 작업이 실패한 경우
+    UPDATE_FAIL_POST(HttpStatus.BAD_REQUEST, "게시글 업데이트 오류"),
+    // 게시글에 해당하는 좋아요 삭제 작업이 실패한 경우
+    DELETE_FAIL_LIKE_IN_POST(HttpStatus.BAD_REQUEST, "해당 게시물에 대한 좋아요 삭제 오류"),
+    // 게시글에 해당하는 스크랩 삭제 작업이 실패한 경우
+    DELETE_FAIL_SCRAP_IN_POST(HttpStatus.BAD_REQUEST, "해당 게시물에 대한 스크랩 삭제 오류"),
+
+    /**
+     * TechInfo - Post - Comment Error
+     */
+    NOT_FOUND_COMMENT_IN_POST(HttpStatus.NOT_FOUND, "해당 게시글에 대한 댓글을 찾을 수 없습니다."),
+    UPDATE_FAIL_COMMENT(HttpStatus.BAD_REQUEST, "댓글 업데이트 오류"),
 
     /**
      * Quiz Error
@@ -149,7 +159,6 @@ public enum CommonExceptionCode implements ResponseCode {
      */
     //몽고 저장소 에러
     MONGO_DB_EXCEPTION(HttpStatus.INTERNAL_SERVER_ERROR, "몽고 저장소에서 에러가 생겼습니다."),
-
 
     /**
      * 4** client
