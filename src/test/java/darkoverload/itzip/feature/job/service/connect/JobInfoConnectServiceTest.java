@@ -1,7 +1,6 @@
 package darkoverload.itzip.feature.job.service.connect;
 
 import darkoverload.itzip.feature.job.domain.JobInfo;
-import darkoverload.itzip.feature.job.entity.JobInfoEntity;
 import darkoverload.itzip.feature.job.util.TimeStampUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -170,10 +169,10 @@ public class JobInfoConnectServiceTest {
     void 채용정보_저장_리스트_성공(){
 
         // given
-        List<JobInfoEntity> jobInfoEntities = service.makeSaveList(apiData, dbData);
+        List<JobInfo> jobInfoEntities = service.makeSaveList(apiData, dbData);
 
         // when
-        JobInfo jobInfo = jobInfoEntities.getFirst().convertToDomain();
+        JobInfo jobInfo = jobInfoEntities.getFirst();
 
         // then
         assertEquals(jobInfo.getPositionId(),48952926L);
@@ -196,11 +195,10 @@ public class JobInfoConnectServiceTest {
     @Test
     void 채용정보_업데이트_리스트_성공(){
         // given
-        List<JobInfoEntity> jobInfoEntities = service.makeUpdateList(apiData, dbData);
+        List<JobInfo> jobInfoEntities = service.makeUpdateList(apiData, dbData);
 
         // when
-        JobInfo jobInfo = jobInfoEntities.getFirst().convertToDomain();
-
+        JobInfo jobInfo = jobInfoEntities.getFirst();
 
         // then
         assertAll(

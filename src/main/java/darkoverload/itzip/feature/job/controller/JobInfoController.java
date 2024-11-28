@@ -36,9 +36,9 @@ public class JobInfoController {
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.BAD_REQUEST)
     @GetMapping("")
-    public Page<JobInfoSearchResponse> searchJobInfo(@Parameter(description = "검색어") @RequestParam(value="search", required = false) String search, @Parameter(description = "기술 정보 필터") @RequestParam(value="techName", required = false) String category, @Parameter(description = "경력 최소 값") @RequestParam(value="experienceMin", required = false) Integer experienceMin, @Parameter(description = "경력 최대 값")@RequestParam(value="experienceMax", required = false) Integer experienceMax, @Parameter(description = "Size : 페이지당 출력할 항목의 개수 (기본값: 10) \n sort`: 정렬 기준 필드 (기본값: `scrap`) \n direction`: 정렬 순서 (기본값: 내림차순 `DESC`)") @PageableDefault(size = 10,sort="scrap",direction = Sort.Direction.DESC)Pageable pageable) {
+    public Page<JobInfoSearchResponse> searchJobInfo(@Parameter(description = "검색어") @RequestParam(value = "search", required = false) String search, @Parameter(description = "기술 정보 필터") @RequestParam(value = "techName", required = false) String category, @Parameter(description = "경력 최소 값") @RequestParam(value = "experienceMin", required = false) Integer experienceMin, @Parameter(description = "지역정보") @RequestParam(required = false) String location, @Parameter(description = "경력 최대 값") @RequestParam(value = "experienceMax", required = false) Integer experienceMax, @Parameter(description = "Size : 페이지당 출력할 항목의 개수 (기본값: 10) \n sort`: 정렬 기준 필드 (기본값: `scrap`) \n direction`: 정렬 순서 (기본값: 내림차순 `DESC`)") @PageableDefault(size = 10, sort = "scrap", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        return jobInfoService.searchJobInfo(search, category, experienceMin, experienceMax ,pageable);
+        return jobInfoService.searchJobInfo(search, category, experienceMin, experienceMax, location, pageable);
     }
 
     @Operation(

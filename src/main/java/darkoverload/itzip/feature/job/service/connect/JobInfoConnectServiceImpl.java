@@ -2,13 +2,13 @@ package darkoverload.itzip.feature.job.service.connect;
 
 import darkoverload.itzip.feature.job.domain.ConnectJobInfo;
 import darkoverload.itzip.feature.job.domain.JobInfo;
-import darkoverload.itzip.feature.job.entity.JobInfoEntity;
 import darkoverload.itzip.feature.job.repository.JobInfoRepository;
 import darkoverload.itzip.feature.job.repository.JobInfoScrapRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -92,7 +92,7 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
     @Override
     public Long jobInfoUpdate(List<JobInfo> apiDataList, List<JobInfo> dbList) {
         // 변경된 JobInfo 객체들을 찾기 위한 리스트 생성
-        List<JobInfoEntity> updateList = makeUpdateList(apiDataList, dbList);
+        List<JobInfo> updateList = makeUpdateList(apiDataList, dbList);
 
         // 업데이트된 레코드의 총 개수를 저장할 변수
         long totalUpdatedCount = 0L;
@@ -101,10 +101,11 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
         for(int i=0; i< updateList.size(); i+=500){
 
             // 500개씩 잘라낸 부분 리스트를 배치로 처리
-            List<JobInfoEntity> batch = updateList.subList(i, Math.min(i + 500, updateList.size()));
+            List<JobInfo> batch = updateList.subList(i, Math.min(i + 500, updateList.size()));
 
             // 현재 배치를 데이터베이스에 저장하고, 저장된 레코드 수를 총 개수에 누적
-            totalUpdatedCount += jobInfoRepository.saveAll(batch).size();
+            totalUpdatedCount += jobInfoRepository.saveAll(batch)
+                                                  .size();
         }
 
         // 최종적으로 업데이트된 레코드의 총 개수를 반환
@@ -123,15 +124,16 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
      */
     @Override
     public Long jobInfoSave(List<JobInfo> apiDataList, List<JobInfo> dbList) {
-        List<JobInfoEntity> insertList = makeSaveList(apiDataList, dbList);
+        List<JobInfo> insertList = makeSaveList(apiDataList, dbList);
 
         long totalSaveCount = 0L;
 
         // 배치 단위로 500개씩 나누어 저장 작업을 수행
         for(int i=0; i < insertList.size() ; i+=500) {
-            List<JobInfoEntity> batch =insertList.subList(i, Math.min(i + 500, insertList.size()));
+            List<JobInfo> batch =insertList.subList(i, Math.min(i + 500, insertList.size()));
 
-            totalSaveCount += jobInfoRepository.saveAll(batch).size();
+            totalSaveCount += jobInfoRepository.saveAll(batch)
+                                               .size();
         }
 
         // 배치 단위로 500개씩 나누어 저장 작업을 수행
@@ -169,7 +171,6 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
                 || !dbJobInfo.getTitle().equals(apiJobInfo.getTitle()) // 제목 필드 비교
                 || !dbJobInfo.getIndustryCode().equals(apiJobInfo.getIndustryCode()) // 산업 코드 비교
                 || !dbJobInfo.getIndustryName().equals(apiJobInfo.getIndustryName()) // 산업 이름 비교
-                || !dbJobInfo.getLocationCode().equals(apiJobInfo.getLocationCode()) // 위치 코드 비교
                 || !dbJobInfo.getLocationName().equals(apiJobInfo.getLocationName()) // 위치 이름 비교
                 || !dbJobInfo.getJobMidCode().equals(apiJobInfo.getJobMidCode()) // 중간 직무 코드 비교
                 || !dbJobInfo.getJobMidName().equals(apiJobInfo.getJobMidName()) // 중간 직무 이름 비교
@@ -219,7 +220,7 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
      * @param dbList 데이터베이스에서 조회한 기존 JobInfo 데이터 목록
      * @return 업데이트가 필요한 JobInfoEntity 객체들의 리스트
      */
-    protected List<JobInfoEntity> makeUpdateList(List<JobInfo> apiDataList, List<JobInfo> dbList) {
+    protected List<JobInfo> makeUpdateList(List<JobInfo> apiDataList, List<JobInfo> dbList) {
         // API 데이터 목록을 Position ID를 키로 하는 맵으로 변환하여, 빠른 조회가 가능하도록 함
         Map<Long, JobInfo> apiDataMap = apiDataList.stream()
                 .collect(Collectors.toMap(
@@ -227,14 +228,14 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
                         jobInfo -> jobInfo,
                         (existing, replacement) -> replacement
                 ));
-        List<JobInfoEntity> updateList = new ArrayList<>();
+        List<JobInfo> updateList = new ArrayList<>();
 
         // 데이터베이스의 JobInfo와 API 데이터를 비교하여 업데이트가 필요한 항목을 리스트에 추가
         dbList.forEach(dbJobInfo -> {
             JobInfo apiJobInfo = apiDataMap.get(dbJobInfo.getPositionId()); // 동일한 Position ID를 가진 API 데이터 조회
             // API 데이터가 존재하고, 해당 데이터가 기존 데이터와 다를 경우 업데이트 리스트에 추가
             if (apiJobInfo != null && checkNotEquals(dbJobInfo, apiJobInfo)) {
-                updateList.add(apiJobInfo.toIdEntity()); // API 데이터를 엔티티로 변환하여 리스트에 추가
+                updateList.add(apiJobInfo); // API 데이터를 엔티티로 변환하여 리스트에 추가
             }
         });
 
@@ -249,18 +250,15 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
      * @param dbList 데이터베이스에서 조회한 기존 JobInfo 데이터 목록
      * @return 저장할 새로운 JobInfoEntity 객체들의 리스트
      */
-    protected static List<JobInfoEntity> makeSaveList(List<JobInfo> apiDataList, List<JobInfo> dbList) {
+    protected List<JobInfo> makeSaveList(List<JobInfo> apiDataList, List<JobInfo> dbList) {
         // 데이터베이스에 있는 JobInfo들의 Position ID를 Set에 저장
         Set<Long> dbSet = new HashSet<>();
         dbList.stream().map(JobInfo::getPositionId).forEach(dbSet::add);
 
         // API 데이터 중에서 DB에 존재하지 않는 JobInfo들을 필터링하여 저장할 리스트 생성
-        List<JobInfoEntity> insertList = apiDataList.stream()
+        return apiDataList.stream()
                 .filter(jobInfo -> !dbSet.contains(jobInfo.getPositionId()))
-                .map(JobInfo::toEntity)
                 .collect(Collectors.toList());
-
-        return insertList;
     }
 
 }
