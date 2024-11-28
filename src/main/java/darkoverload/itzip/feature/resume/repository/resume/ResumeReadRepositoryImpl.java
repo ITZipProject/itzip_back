@@ -22,4 +22,9 @@ public class ResumeReadRepositoryImpl implements ResumeReadRepository{
         return resumeEntities.stream().map(ResumeEntity::convertToDomain).collect(Collectors.toList());
     }
 
+    @Override
+    public Resume getReferenceById(Long id) {
+        return repository.getReferenceById(id).convertToDomain();
+    }
+
 }

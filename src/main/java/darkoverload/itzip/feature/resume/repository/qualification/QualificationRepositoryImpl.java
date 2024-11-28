@@ -2,14 +2,12 @@ package darkoverload.itzip.feature.resume.repository.qualification;
 
 
 import darkoverload.itzip.feature.resume.domain.qualification.Qualification;
-import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.entity.QualificationEntity;
 import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 @Repository

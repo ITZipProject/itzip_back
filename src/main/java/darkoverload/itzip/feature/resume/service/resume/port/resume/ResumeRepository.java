@@ -10,7 +10,4 @@ public interface ResumeRepository {
 
     Resume update(Resume resume);
 
-    Resume getReferenceById(Long id);
-
-
 }

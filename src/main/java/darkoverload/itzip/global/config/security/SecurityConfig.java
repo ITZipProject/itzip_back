@@ -55,10 +55,8 @@ public class SecurityConfig {
 
             // 학교 정보 검색 허용
             "/schoolsearch",
-
-            // 이력서 임시 허용
-            "/resume",
-
+            // 이력서 전체 검색 허용
+            "/resume/search",
             // 직업 정보 임시 허용
             "/job-info",
             "/job-info/scrap"

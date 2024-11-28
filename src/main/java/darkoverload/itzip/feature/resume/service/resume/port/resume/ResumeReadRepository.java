@@ -9,4 +9,6 @@ public interface ResumeReadRepository {
 
     List<Resume> searchResumeInfos(String search, Pageable pageable);
 
+    Resume getReferenceById(Long id);
+
 }

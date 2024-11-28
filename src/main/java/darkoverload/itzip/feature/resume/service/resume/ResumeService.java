@@ -7,8 +7,8 @@ import darkoverload.itzip.feature.resume.controller.response.CreateResumeRespons
 import darkoverload.itzip.feature.resume.controller.response.UpdateResumeResponse;
 
 public interface ResumeService {
-    CreateResumeResponse create(CreateResumeRequest request);
+    CreateResumeResponse create(CreateResumeRequest request, CustomUserDetails user);
 
-    UpdateResumeResponse update(UpdateResumeRequest request, CustomUserDetails customUserDetails);
+    UpdateResumeResponse update(UpdateResumeRequest request, CustomUserDetails user);
 
 }
