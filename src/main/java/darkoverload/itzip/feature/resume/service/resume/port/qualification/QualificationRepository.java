@@ -7,7 +7,6 @@ import java.util.List;
 
 public interface QualificationRepository {
 
-
     List<Qualification> update(List<Qualification> qualifications);
 
     Qualification save(Qualification qualification);

@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Description;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -48,9 +49,9 @@ public class ResumeController {
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.BAD_REQUEST)
     @PostMapping("")
-    public CreateResumeResponse createResume(@Valid @RequestBody CreateResumeRequest request) {
+    public CreateResumeResponse createResume(@Valid @RequestBody CreateResumeRequest request, @AuthenticationPrincipal CustomUserDetails user) {
 
-        return service.create(request);
+        return service.create(request, user);
     }
 
     @Operation(
@@ -76,6 +77,15 @@ public class ResumeController {
         List<SearchResumeResponse> searchResumeResponses = resumeReadService.searchResumeInfos(search, pageable);
 
         return new PageImpl<>(searchResumeResponses, pageable,searchResumeResponses.size());
+    }
+
+    @Operation(
+            summary = "이력서 상세 조화",
+            description = "사용자 상세 조회"
+    )
+    @GetMapping("/details/{id}")
+    public GetResumeDetailsResponse getResumeDetails(@Parameter(description = "이력서 아이디", example = "1") @PathVariable Long id, @AuthenticationPrincipal CustomUserDetails user) {
+        return resumeReadService.getResumeDetails(id, user);
     }
 
 }

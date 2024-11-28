@@ -36,6 +36,10 @@ import darkoverload.itzip.feature.resume.service.resume.port.myskill.MySkillRepo
 import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationReadRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeRepository;
+import darkoverload.itzip.feature.user.entity.UserEntity;
+import darkoverload.itzip.feature.user.repository.UserRepository;
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,7 +55,7 @@ import java.util.Optional;
 @Builder
 @RequiredArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
-
+    private final UserRepository userRepository;
     private final ResumeRepository resumeRepository;
 
     private final EducationRepository educationRepository;
@@ -77,10 +81,10 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Transactional
     @Override
-    public CreateResumeResponse create(CreateResumeRequest request) {
+    public CreateResumeResponse create(CreateResumeRequest request, CustomUserDetails user) {
+        Long userId = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)).getId();
 
-        //"career", "skill", "language", "qualification", "education", "activity", "achievement"
-        Resume resume = Resume.create(request.getResume(), request.getUserId());
+        Resume resume = Resume.create(request.getResume(), request.getUserId(), userId);
 
         // 이력서 저장
         // 이력서와 관련된 내용들 저장
