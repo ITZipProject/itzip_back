@@ -23,8 +23,6 @@ public class PagedModelUtil {
      * @return 생성된 PagedModel 객체
      */
     public static <T> PagedModel<EntityModel<T>> create(Page<T> page) {
-
-        // 페이지 메타데이터 생성
         PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(
                 page.getSize(),
                 page.getNumber(),
@@ -32,7 +30,6 @@ public class PagedModelUtil {
                 page.getTotalPages()
         );
 
-        // PagedModel 생성 및 반환
         return PagedModel.of(
                 page.stream()
                         .map(EntityModel::of)
