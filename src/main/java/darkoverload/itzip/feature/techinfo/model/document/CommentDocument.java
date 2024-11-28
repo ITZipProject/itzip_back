@@ -1,70 +1,69 @@
 package darkoverload.itzip.feature.techinfo.model.document;
 
-import darkoverload.itzip.feature.techinfo.domain.Comment;
+import darkoverload.itzip.feature.techinfo.domain.comment.Comment;
 import darkoverload.itzip.global.entity.MongoAuditingFields;
-
+import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-
 /**
- * MongoDB에 저장되는 댓글 정보를 나타내는 문서 클래스.
- * {@link MongoAuditingFields}를 상속받아 생성 및 수정 날짜를 자동으로 관리하며,
- * 이 클래스는 MongoDB에서 댓글 정보를 다루기 위한 필드를 포함한다.
+ * MongoDb에 저장되는 댓글 문서를 나타내는 클래스.
+ * MongoAuditingFields 를 상속받아 생성 및 수정 일자를 자동으로 관리합니다.
  */
 @Getter
 @Builder
 @AllArgsConstructor
 @Document(collection = "comments")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentDocument extends MongoAuditingFields {
 
-    /**
-     * 댓글의 고유 식별자 (MongoDB ObjectId).
-     */
     @Id
     @Field("_id")
     private ObjectId id;
 
-    /**
-     * 해당 댓글이 속한 포스트의 ID (MongoDB ObjectId).
-     */
     @Field(name = "post_id")
     private ObjectId postId;
 
-    /**
-     * 댓글 작성자의 ID.
-     */
     @Field(name = "user_id")
     private Long userId;
 
-    /**
-     * 댓글 내용.
-     */
     @Field(name = "content")
     private String content;
 
-    /**
-     * 댓글의 공개 여부.
-     */
     @Field(name = "is_public")
     private Boolean isPublic;
 
     /**
-     * CommentDocument를 PostId 없이 Comment 도메인 객체로 변환.
+     * Comment 로부터 CommentDocument 생성합니다.
      *
-     * @return 변환된 Comment 객체
+     * @param comment
+     * @return
      */
-    public Comment convertToDocumentWithoutPostId() {
+    public static CommentDocument from(Comment comment) {
+        return CommentDocument.builder()
+                .postId(new ObjectId(comment.getPostId()))
+                .userId(comment.getUserId())
+                .content(comment.getContent())
+                .isPublic(comment.getIsPublic())
+                .build();
+    }
+
+    /**
+     * CommentDocument 를 Comment 로 변환합니다.
+     *
+     * @return Comment
+     */
+    public Comment toModel() {
         return Comment.builder()
                 .id(this.id.toHexString())
-                .content(this.content)
+                .postId(this.postId.toHexString())
                 .userId(this.userId)
+                .content(this.content)
+                .isPublic(this.isPublic)
                 .createDate(this.createDate)
                 .build();
     }
+
 }

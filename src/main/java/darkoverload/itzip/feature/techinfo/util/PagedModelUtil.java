@@ -1,48 +1,44 @@
 package darkoverload.itzip.feature.techinfo.util;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 
-import java.util.List;
-
 /**
- * 페이징된 응답을 생성하기 위한 유틸리티 클래스.
- * HATEOAS 기반의 PagedModel 객체를 생성합니다.
+ * 페이징된 모델(PagedModel) 생성을 위한 유틸리티 클래스.
  */
 public class PagedModelUtil {
 
     /**
-     * 유틸리티 클래스이므로 인스턴스화 방지를 위한 private 생성자.
+     * 유틸리티 클래스의 인스턴스화를 방지하기 위한 private 생성자.
      */
     private PagedModelUtil() {
-        // 인스턴스화 방지: 유틸리티 클래스는 모든 메서드가 정적이므로 인스턴스화될 필요가 없음
     }
 
     /**
-     * 리스트 응답을 기반으로 HATEOAS PagedModel 객체를 생성합니다.
+     * Page 객체로부터 PagedModel 을 생성합니다.
      *
-     * @param <T> 응답의 타입
-     * @param responses 응답 객체 리스트
-     * @param page 페이징 처리된 Page 객체
-     * @param pageable 페이지 정보
-     * @return HATEOAS 기반 PagedModel 객체
+     * @param page 변환할 Page 객체
+     * @param <T>  페이지 내 요소의 타입
+     * @return 생성된 PagedModel 객체
      */
-    public static <T> PagedModel<EntityModel<T>> createPagedResponse(List<T> responses, Page<T> page, Pageable pageable) {
+    public static <T> PagedModel<EntityModel<T>> create(Page<T> page) {
 
+        // 페이지 메타데이터 생성
         PagedModel.PageMetadata pageMetadata = new PagedModel.PageMetadata(
-                pageable.getPageSize(),
-                pageable.getPageNumber(),
+                page.getSize(),
+                page.getNumber(),
                 page.getTotalElements(),
                 page.getTotalPages()
         );
 
+        // PagedModel 생성 및 반환
         return PagedModel.of(
-                responses.stream()
+                page.stream()
                         .map(EntityModel::of)
                         .toList(),
                 pageMetadata
         );
     }
+
 }

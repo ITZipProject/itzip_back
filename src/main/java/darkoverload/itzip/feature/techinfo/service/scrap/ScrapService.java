@@ -7,4 +7,5 @@ public interface ScrapService {
     boolean toggleScrap(CustomUserDetails userDetails, String postId);
 
     boolean isScrapped(Long userId, String postId);
+
 }

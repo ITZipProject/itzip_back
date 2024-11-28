@@ -1,27 +1,26 @@
 package darkoverload.itzip.feature.techinfo.util;
 
 /**
- * RedisKeyUtil은 Redis 키 생성을 위한 유틸리티 클래스이다.
- * 이 클래스는 포스트 ID와 사용자 ID를 결합하여 Redis 키를 생성하는 기능을 제공한다.
+ * Redis 키 생성을 위한 유틸리티 클래스.
  */
 public class RedisKeyUtil {
 
     /**
-     * 유틸리티 클래스이므로 인스턴스화 방지를 위한 private 생성자.
+     * 유틸리티 클래스의 인스턴스화를 방지하기 위한 private 생성자.
      */
     private RedisKeyUtil() {
-        // 인스턴스화 방지: 유틸리티 클래스는 모든 메서드가 정적이므로 인스턴스화될 필요가 없음
     }
 
     /**
-     * 포스트 ID와 사용자 ID를 사용하여 Redis 키를 생성한다.
+     * 사용자 ID, 포스트 ID, 키 접미사를 조합하여 Redis 키를 생성합니다.
      *
-     * @param userId 사용자의 ID
-     * @param postId 포스트의 ID
-     * @param keySuffix 키의 끝부분(예: "scrap", "like")
-     * @return Redis 키 문자열, 형식: "post:{postId}:user:{userId}:{keySuffix}"
+     * @param userId    사용자 ID
+     * @param postId    포스트 ID
+     * @param keySuffix 키 접미사 (예: "like", "scrap" 등)
+     * @return 생성된 Redis 키 문자열
      */
     public static String buildRedisKey(Long userId, String postId, String keySuffix) {
         return "post:" + postId + ":user:" + userId + ":" + keySuffix;
     }
+
 }
