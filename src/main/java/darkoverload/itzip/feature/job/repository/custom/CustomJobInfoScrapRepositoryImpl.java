@@ -2,9 +2,8 @@ package darkoverload.itzip.feature.job.repository.custom;
 
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import darkoverload.itzip.feature.job.domain.JobInfoScrap;
-import darkoverload.itzip.feature.job.domain.QJobInfoScrap;
-import jakarta.persistence.LockModeType;
+import darkoverload.itzip.feature.job.domain.scrap.JobInfoScrap;
+import darkoverload.itzip.feature.job.domain.scrap.QJobInfoScrap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

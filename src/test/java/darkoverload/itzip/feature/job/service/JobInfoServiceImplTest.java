@@ -1,8 +1,8 @@
 package darkoverload.itzip.feature.job.service;
 
 import darkoverload.itzip.feature.job.controller.request.JobInfoScrapRequest;
-import darkoverload.itzip.feature.job.domain.JobInfo;
-import darkoverload.itzip.feature.job.domain.JobInfoScrap;
+import darkoverload.itzip.feature.job.domain.job.JobInfo;
+import darkoverload.itzip.feature.job.domain.scrap.JobInfoScrap;
 import darkoverload.itzip.feature.job.repository.JobInfoRepository;
 import darkoverload.itzip.feature.job.repository.JobInfoScrapRepository;
 import lombok.extern.slf4j.Slf4j;

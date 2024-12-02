@@ -1,7 +1,7 @@
 package darkoverload.itzip.feature.job.service.connect;
 
 import darkoverload.itzip.feature.job.domain.ConnectJobInfo;
-import darkoverload.itzip.feature.job.domain.JobInfo;
+import darkoverload.itzip.feature.job.domain.job.JobInfo;
 import darkoverload.itzip.feature.job.repository.JobInfoRepository;
 import darkoverload.itzip.feature.job.repository.JobInfoScrapRepository;
 import lombok.RequiredArgsConstructor;

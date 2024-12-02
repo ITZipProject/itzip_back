@@ -2,22 +2,19 @@ package darkoverload.itzip.feature.job.service;
 
 import darkoverload.itzip.feature.job.controller.request.JobInfoScrapRequest;
 import darkoverload.itzip.feature.job.controller.response.JobInfoSearchResponse;
-import darkoverload.itzip.feature.job.domain.JobInfo;
-import darkoverload.itzip.feature.job.domain.JobInfoScrap;
+import darkoverload.itzip.feature.job.domain.job.JobInfo;
+import darkoverload.itzip.feature.job.domain.scrap.JobInfoScrap;
 import darkoverload.itzip.feature.job.repository.JobInfoRepository;
 import darkoverload.itzip.feature.job.repository.JobInfoScrapRepository;
-import darkoverload.itzip.feature.user.entity.UserEntity;
-import darkoverload.itzip.feature.user.repository.UserRepository;
-import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
-import darkoverload.itzip.global.config.response.exception.RestApiException;
+import darkoverload.itzip.feature.job.service.port.JobInfoScrapRedisRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.Optional;
+import java.util.Set;
 
 @Slf4j
 @Service
@@ -25,9 +22,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class JobInfoServiceImpl implements JobInfoService{
 
-    private final UserRepository userRepository;
     private final JobInfoRepository jobInfoRepository;
     private final JobInfoScrapRepository jobInfoScrapRepository;
+    private final JobInfoScrapRedisRepository jobInfoScrapRedisRepository;
 
     /**
      * 주어진 검색 조건에 따른 채용 정보 검색 메서드.
@@ -48,54 +45,79 @@ public class JobInfoServiceImpl implements JobInfoService{
         return jobInfoRepository.searchJobInfo(search, category, experienceMin, experienceMax, pageable);
     }
 
-
-    /**
-     * 채용정보 스크랩 또는 스크랩 취소 로직을 처리하는 메서드
-     * 1. 사용자가 해당 채용 정보를 이미 스크랩했는지 확인
-     * 2. 스크랩이 이미 존재하면 스크랩 취소 처리
-     * 3. 스크랩이 존재하지 않으면 새로운 스크랩을 생성하여 저장
-     *
-     * @param request JobInfoScrapRequest: 채용정보 ID와 사용자 이메일을 포함한 스크랩 요청 정보
-     * @return String: 스크랩 처리 결과 메시지 (스크랩 완료 또는 취소 메시지)
-     */
     @Override
     public String jobInfoScrap(JobInfoScrapRequest request) {
-        // 1. 사용자가 해당 채용 정보를 이미 스크랩했는지 확인
-        Optional<JobInfoScrap> data = jobInfoScrapRepository.findByJobInfoId(request.getId(), request.getEmail());
+        Long id = request.getId();
+        String email = request.getEmail();
 
-        // 2. 스크랩이 이미 존재하면 스크랩을 취소하고 메시지를 반환
-        if(data.isPresent()) {
-            cancelScrap(request, data.get());
+        if(jobInfoScrapRedisRepository.hasSameJobInfoScrap(id, email) || jobInfoScrapRedisRepository.isJobInfoScrapStatus(id, email)) {
+            jobInfoScrapRedisRepository.unScrapInfoFromRedis(id, email);
+            jobInfoScrapRedisRepository.decrementScrapCountFromRedis(id);
             return "채용정보 스크랩을 취소하였습니다.";
         }
 
-        // 3. 스크랩이 존재하지 않으면 채용 정보와 사용자 정보를 조회하여 새로운 스크랩 생성
-        JobInfo entity = jobInfoRepository.findById(request.getId()).orElseThrow(() -> new RestApiException(CommonExceptionCode.JOB_INFO_NOT_FOUND));
+        Optional<JobInfoScrap> optionalData = jobInfoScrapRepository.findByJobInfoId(id, email);
+        if(optionalData.isPresent()) {
+            jobInfoScrapRedisRepository.notCacheUnScrapInfoToRedis(request.getId(), request.getEmail());
+            jobInfoScrapRedisRepository.decrementScrapCountFromRedis(id);
+            return "채용정보 스크랩을 취소하였습니다.";
+        }
 
-        UserEntity user = userRepository.findByEmail(request.getEmail()).orElseThrow(()-> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
-
-        // 4. 채용 정보의 스크랩 카운트를 1 증가
-        entity.setScrapCount(entity.getScrapCount() + 1);
-
-        // 5. 새로운 스크랩 생성 (도메인 객체로 변환하여 생성)
-        JobInfoScrap scrap = JobInfoScrap.createScrap(user, entity);
-
-        // 6. 스크랩 정보를 저장
-        jobInfoScrapRepository.save(scrap);
-
+        jobInfoScrapRedisRepository.saveScrapInfoToRedis(id, email);
+        jobInfoScrapRedisRepository.incrementScrapCountToRedis(id);
         return "채용정보 스크랩을 하였습니다.";
     }
 
-    private void cancelScrap(JobInfoScrapRequest request, JobInfoScrap data) {
-        jobInfoScrapRepository.delete(data);
-        JobInfo infoEntity = jobInfoRepository.getReferenceById(request.getId());
-        Integer count = infoEntity.getScrapCount()-1;
-        infoEntity.setScrapCount(count);
+    /**
+     * Redis에서 저장된 스크랩 키들을 가져옵니다.
+     *
+     * @return Redis에 저장된 스크랩 키들의 집합(Set)
+     */
+    @Override
+    public Set<String> getScrapKeysFromRedis() {
+        return jobInfoScrapRedisRepository.getJobInfoScrapListFromRedis();
     }
 
+    @Override
     @Transactional(readOnly = true)
-    public JobInfo getById(Long id) {
-        return jobInfoRepository.findById(id).orElseThrow(() -> new RestApiException(CommonExceptionCode.JOB_INFO_NOT_FOUND));
+    public JobInfo getById(Long jobInfoId) {
+        return jobInfoRepository.getReferenceById(jobInfoId);
+    }
+
+    @Override
+    public void jobInfoScrapSave(JobInfoScrap jobInfoScrap) {
+        jobInfoScrapRepository.save(jobInfoScrap);
+    }
+
+    @Override
+    public void jobInfoScrapDeleteToRedis(Long jobInfoId, String email) {
+        jobInfoScrapRedisRepository.deleteScrapInfo(jobInfoId, email);
+        jobInfoScrapRedisRepository.deleteScrapCountToRedis(jobInfoId);
+    }
+
+    @Override
+    public String getJobInfoScrapCountFromRedis(Long jobInfoId) {
+        return jobInfoScrapRedisRepository.getJobInfoScrapCount(jobInfoId);
+    }
+
+    @Override
+    public void updateScrapCount(JobInfo jobInfo) {
+        jobInfoRepository.save(jobInfo);
+    }
+
+    @Override
+    public void delete(JobInfoScrap jobInfoScrap) {
+        jobInfoScrapRepository.delete(jobInfoScrap);
+    }
+
+    @Override
+    public String getJobInfoStatusFromRedis(Long jobInfoId, String email) {
+        return jobInfoScrapRedisRepository.getJobInfoStatus(jobInfoId, email);
+    }
+
+    @Override
+    public JobInfoScrap findByJobInfoId(Long jobInfoId, String email) {
+        return jobInfoScrapRepository.findByJobInfoId(jobInfoId, email).orElse(null);
     }
 
 }

@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.job.repository;
 
-import darkoverload.itzip.feature.job.domain.JobInfoScrap;
+import darkoverload.itzip.feature.job.domain.scrap.JobInfoScrap;
 import darkoverload.itzip.global.config.querydsl.TestQueryDslConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

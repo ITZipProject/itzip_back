@@ -44,6 +44,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email).map(UserEntity::convertToDomain);
     }
 
+    @Override
+    public User getByEmail(String email) {
+        return userRepository.findByEmail(email).map(UserEntity::convertToDomain).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
+    }
+
     /**
      * 로그인 유저 정보 반환
      */

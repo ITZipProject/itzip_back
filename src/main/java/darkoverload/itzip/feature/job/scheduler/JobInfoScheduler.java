@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.job.scheduler;
 
-import darkoverload.itzip.feature.job.domain.JobInfo;
+import darkoverload.itzip.feature.job.domain.job.JobInfo;
 import darkoverload.itzip.feature.job.repository.JobInfoRepository;
 import darkoverload.itzip.feature.job.service.connect.JobInfoConnectService;
 import lombok.RequiredArgsConstructor;

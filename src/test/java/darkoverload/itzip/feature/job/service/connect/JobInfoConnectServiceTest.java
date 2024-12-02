@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.job.service.connect;
 
-import darkoverload.itzip.feature.job.domain.JobInfo;
+import darkoverload.itzip.feature.job.domain.job.JobInfo;
 import darkoverload.itzip.feature.job.util.TimeStampUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

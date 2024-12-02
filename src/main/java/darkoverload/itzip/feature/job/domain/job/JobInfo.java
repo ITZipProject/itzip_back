@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.job.domain;
+package darkoverload.itzip.feature.job.domain.job;
 
 import darkoverload.itzip.global.entity.AuditingFields;
 import jakarta.persistence.*;
@@ -15,6 +15,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
 @Table(name="job_infos")
 public class JobInfo extends AuditingFields {
+
+    private static final String MAP_JOB_SCARP_COUNT_KEY = "jobScrapCount:";
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -140,5 +143,17 @@ public class JobInfo extends AuditingFields {
     @Column(name="scrap_count")
     @ColumnDefault("0")
     private Integer scrapCount;
+
+    public static String makeScrapCountRedisKey(Long jobInfoId) {
+        StringBuilder sb = new StringBuilder();
+        return sb.append(MAP_JOB_SCARP_COUNT_KEY)
+                .append(jobInfoId).toString();
+    }
+
+
+    public long updateScrapCount(int scrapCount) {
+       this.scrapCount += scrapCount;
+       return this.scrapCount;
+    }
 
 }

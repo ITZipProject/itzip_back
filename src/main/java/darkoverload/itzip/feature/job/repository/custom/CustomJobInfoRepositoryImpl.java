@@ -6,7 +6,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import darkoverload.itzip.feature.job.controller.response.JobInfoSearchResponse;
-import darkoverload.itzip.feature.job.domain.QJobInfo;
+import darkoverload.itzip.feature.job.domain.job.QJobInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
