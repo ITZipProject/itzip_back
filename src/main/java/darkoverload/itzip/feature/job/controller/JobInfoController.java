@@ -2,6 +2,7 @@ package darkoverload.itzip.feature.job.controller;
 
 import darkoverload.itzip.feature.job.controller.request.JobInfoScrapRequest;
 import darkoverload.itzip.feature.job.controller.response.JobInfoSearchResponse;
+import darkoverload.itzip.feature.job.service.JobInfoScrapRedisService;
 import darkoverload.itzip.feature.job.service.JobInfoService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.*;
 public class JobInfoController {
 
     private final JobInfoService jobInfoService;
+    private final JobInfoScrapRedisService jobInfoScrapRedisService;
 
     @Operation(
             summary = "채용공고 조회",
@@ -50,7 +52,7 @@ public class JobInfoController {
     public String scrapJobInfo(@SwaggerRequestBody(description = "채용정보 스크립에 대한 정보", required = true, content = @Content(schema = @Schema(implementation = JobInfoScrapRequest.class)
     )) @RequestBody JobInfoScrapRequest request) {
 
-        return jobInfoService.jobInfoScrap(request);
+        return jobInfoScrapRedisService.jobInfoScrapToRedis(request);
     }
 
 }

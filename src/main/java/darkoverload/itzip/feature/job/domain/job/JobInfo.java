@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
+@EqualsAndHashCode(callSuper = false)
 @Table(name="job_infos")
 public class JobInfo extends AuditingFields {
 
@@ -151,7 +152,7 @@ public class JobInfo extends AuditingFields {
     }
 
 
-    public long updateScrapCount(int scrapCount) {
+    public int updateScrapCount(int scrapCount) {
        this.scrapCount += scrapCount;
        return this.scrapCount;
     }

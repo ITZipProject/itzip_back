@@ -51,4 +51,8 @@ public class JobInfoScrap extends AuditingFields {
                 .append(userEmail).toString();
     }
 
+    public static String[] redisKeyParts(String redisKey) {
+        return redisKey.split(DELIMITER);
+    }
+
 }

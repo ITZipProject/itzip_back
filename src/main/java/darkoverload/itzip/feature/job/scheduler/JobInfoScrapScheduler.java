@@ -3,6 +3,7 @@ package darkoverload.itzip.feature.job.scheduler;
 import darkoverload.itzip.feature.job.domain.job.JobInfo;
 import darkoverload.itzip.feature.job.domain.scrap.JobInfoScrap;
 import darkoverload.itzip.feature.job.domain.scrap.JobInfoScrapType;
+import darkoverload.itzip.feature.job.service.JobInfoScrapRedisService;
 import darkoverload.itzip.feature.job.service.JobInfoService;
 import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.service.UserService;
@@ -23,38 +24,39 @@ public class JobInfoScrapScheduler {
     private final static int delayNumber = 10000;
 
     private final JobInfoService jobInfoService;
+
+    private final JobInfoScrapRedisService jobInfoScrapRedisService;
+
     private final UserService userService;
 
     @Transactional
     @Scheduled(fixedDelay = delayNumber)
     public void synchronizeJobInfoScraps() {
-        Set<String> redisKeys = jobInfoService.getScrapKeysFromRedis();
+        Set<String> redisKeys = jobInfoScrapRedisService.getScrapKeysFromRedis();
 
         if(redisKeys.isEmpty()) {
             return ;
         }
 
         for (String redisKey : redisKeys) {
-            syncJobInfoScrapToDatabase(redisKey);
+            String[] keyParts = JobInfoScrap.redisKeyParts(redisKey);
+            String userEmail = keyParts[2];
+            Long jobInfoId = Long.valueOf(keyParts[1]);
+            syncJobInfoScrapToDatabase(userEmail, jobInfoId);
         }
     }
 
-    private void syncJobInfoScrapToDatabase(String redisKey) {
-        String[] keyParts = redisKey.split(":");
-
-        String userEmail = keyParts[2];
-        Long jobInfoId = Long.valueOf(keyParts[1]);
-
+    private void syncJobInfoScrapToDatabase(String userEmail, Long jobInfoId) {
         User user = userService.getByEmail(userEmail);
         JobInfo jobInfo = jobInfoService.getById(jobInfoId);
 
         JobInfoScrap jobInfoScrap = JobInfoScrap.createScrap(user.convertToEntity(), jobInfo);
         JobInfoScrap scrapDatabase= jobInfoService.findByJobInfoId(jobInfoId, userEmail);
 
-        if(JobInfoScrapType.isUnScrapEqual(jobInfoService.getJobInfoStatusFromRedis(jobInfoId, userEmail)) && scrapDatabase != null) {
+        if(JobInfoScrapType.isUnScrapEqual(jobInfoScrapRedisService.getJobInfoStatusFromRedis(jobInfoId, userEmail)) && scrapDatabase != null) {
             jobInfoService.delete(scrapDatabase);
             updateScrapCount(jobInfoId, jobInfo);
-            jobInfoService.jobInfoScrapDeleteToRedis(jobInfoId, userEmail);
+            jobInfoScrapRedisService.jobInfoScrapDeleteToRedis(jobInfoId, userEmail);
             log.info("=== jobInfoScrap delete ===");
             return ;
         }
@@ -62,13 +64,13 @@ public class JobInfoScrapScheduler {
         log.info("=== jobInfo save ===");
         jobInfoService.jobInfoScrapSave(jobInfoScrap);
         updateScrapCount(jobInfoId, jobInfo);
-        jobInfoService.jobInfoScrapDeleteToRedis(jobInfoId, userEmail);
+        jobInfoScrapRedisService.jobInfoScrapDeleteToRedis(jobInfoId, userEmail);
 
     }
 
     private void updateScrapCount(Long jobInfoId, JobInfo jobInfo) {
-        int scrapCountFromRedis = Integer.parseInt(jobInfoService.getJobInfoScrapCountFromRedis(jobInfoId));
-        long scrapCount = jobInfo.updateScrapCount(scrapCountFromRedis);
+        int scrapCountFromRedis = Integer.parseInt(jobInfoScrapRedisService.getJobInfoScrapCountFromRedis(jobInfoId));
+        int scrapCount = jobInfo.updateScrapCount(scrapCountFromRedis);
         log.info("==== scrapCount :: {} ====", scrapCount);
         jobInfoService.updateScrapCount(jobInfo);
     }
