@@ -31,7 +31,6 @@ class JobInfoScrapRepositoryTest {
         // when
         JobInfoScrap jobInfo = jobInfoScrapRepository.findByJobInfoId(12L, "test@test.com").get();
 
-
         // then
         assertEquals(jobInfo.getId(), 100L);
     }
