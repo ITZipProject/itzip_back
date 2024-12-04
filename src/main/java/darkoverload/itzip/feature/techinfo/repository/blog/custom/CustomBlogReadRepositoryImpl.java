@@ -75,4 +75,5 @@ public class CustomBlogReadRepositoryImpl implements CustomBlogReadRepository {
 
         return Optional.ofNullable(result);
     }
+
 }

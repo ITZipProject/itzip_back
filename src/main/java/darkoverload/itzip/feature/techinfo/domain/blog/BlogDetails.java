@@ -3,7 +3,6 @@ package darkoverload.itzip.feature.techinfo.domain.blog;
 import darkoverload.itzip.feature.techinfo.dto.post.YearlyPostStats;
 import lombok.Builder;
 import lombok.Getter;
-
 import java.util.List;
 
 /**

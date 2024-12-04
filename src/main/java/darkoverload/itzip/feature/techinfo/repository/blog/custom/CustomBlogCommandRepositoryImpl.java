@@ -53,4 +53,5 @@ public class CustomBlogCommandRepositoryImpl implements CustomBlogCommandReposit
                 )
                 .execute();
     }
+
 }

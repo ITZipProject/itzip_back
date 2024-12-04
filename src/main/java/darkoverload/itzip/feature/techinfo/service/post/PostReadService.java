@@ -41,5 +41,4 @@ public interface PostReadService {
 
     long getPostCount();
 
-
 }
