@@ -54,4 +54,5 @@ public class BlogCommandRepositoryImpl implements BlogCommandRepository {
             throw new RestApiException(CommonExceptionCode.UPDATE_FAIL_BLOG);
         }
     }
+
 }
