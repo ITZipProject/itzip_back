@@ -34,12 +34,12 @@ public class JobInfoScrapScheduler {
     public void synchronizeJobInfoScraps() {
         Set<String> redisKeys = jobInfoScrapRedisService.getScrapKeysFromRedis();
 
-        if(redisKeys.isEmpty()) {
-            return ;
+        if (redisKeys.isEmpty()) {
+            return;
         }
 
         for (String redisKey : redisKeys) {
-            String[] keyParts = JobInfoScrap.redisKeyParts(redisKey);
+            String[] keyParts = JobInfoScrap.getRedisKeyParts(redisKey);
             String userEmail = keyParts[2];
             Long jobInfoId = Long.valueOf(keyParts[1]);
             syncJobInfoScrapToDatabase(userEmail, jobInfoId);
@@ -51,14 +51,14 @@ public class JobInfoScrapScheduler {
         JobInfo jobInfo = jobInfoService.getById(jobInfoId);
 
         JobInfoScrap jobInfoScrap = JobInfoScrap.createScrap(user.convertToEntity(), jobInfo);
-        JobInfoScrap scrapDatabase= jobInfoService.findByJobInfoId(jobInfoId, userEmail);
+        JobInfoScrap scrapDatabase = jobInfoService.findByJobInfoId(jobInfoId, userEmail);
 
-        if(JobInfoScrapType.isUnScrapEqual(jobInfoScrapRedisService.getJobInfoStatusFromRedis(jobInfoId, userEmail)) && scrapDatabase != null) {
+        if (JobInfoScrapType.isUnScrapEqual(jobInfoScrapRedisService.getJobInfoStatusFromRedis(jobInfoId, userEmail)) && scrapDatabase != null) {
             jobInfoService.delete(scrapDatabase);
             updateScrapCount(jobInfoId, jobInfo);
             jobInfoScrapRedisService.jobInfoScrapDeleteToRedis(jobInfoId, userEmail);
             log.info("=== jobInfoScrap delete ===");
-            return ;
+            return;
         }
 
         log.info("=== jobInfo save ===");

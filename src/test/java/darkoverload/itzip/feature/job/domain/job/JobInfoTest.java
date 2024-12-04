@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.job.domain;
+package darkoverload.itzip.feature.job.domain.job;
 
 import darkoverload.itzip.feature.job.domain.job.JobInfo;
 import org.assertj.core.api.Assertions;
