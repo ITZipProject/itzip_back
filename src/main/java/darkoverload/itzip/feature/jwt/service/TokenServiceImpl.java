@@ -17,13 +17,14 @@ public class TokenServiceImpl implements TokenService {
     private final TokenRepository tokenRepository;
 
     /**
-     * 토큰 사용자의 토큰이 저장되어 있을 경우 update, 없을 경우 create
+     * 토큰 사용자의 토큰이 저장되어 있을 경우 updateFieldWithValue, 없을 경우 create
      *
      * @param token Token domain
      */
     @Transactional
     public void saveOrUpdate(Token token) {
-        Optional<Token> oldToken = tokenRepository.findByUserEntityId(token.getUser().getId()).map(TokenEntity::convertToDomain);
+        Optional<Token> oldToken = tokenRepository.findByUserEntityId(token.getUser().getId())
+                .map(TokenEntity::convertToDomain);
 
         if (oldToken.isEmpty()) {
             tokenRepository.save(token.convertToEntity());

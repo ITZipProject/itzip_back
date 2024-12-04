@@ -1,25 +1,32 @@
 package darkoverload.itzip.feature.techinfo.controller.blog.response;
 
-import darkoverload.itzip.feature.techinfo.controller.post.response.PostBasicResponse;
+import darkoverload.itzip.feature.techinfo.controller.post.response.PostResponse;
+import darkoverload.itzip.feature.techinfo.domain.blog.BlogPostTimeline;
 import io.swagger.v3.oas.annotations.media.Schema;
-
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-
 import java.util.List;
+import lombok.Builder;
 
 @Schema(
-        description = "블로그에서 특정 게시글의 생성일을 기준으로 이전/이후에 위치한 인접한 게시글 목록을 포함하는 응답 객체"
+        description = "기술 정보 블로그의 최근 게시글 타임라인 응답"
 )
-@Getter
 @Builder
-@AllArgsConstructor
-public class BlogRecentPostsResponse {
+public record BlogRecentPostsResponse(
+        @Schema(description = "블로그 소유자 닉네임", example = "hyoseung")
+        String nickname,
 
-    @Schema(description = "블로그 회원의 닉네임", example = "hyoseung")
-    private String nickname;
+        @Schema(description = "기준 포스트 주변의 최근 포스트 목록")
+        List<PostResponse> posts
+) {
 
-    @Schema(description = "특정 게시글를 기준으로 생성일 순서에 따라 최신 및 이전 게시글를 포함한 인접한 게시글 목록을 제공합니다.")
-    private List<PostBasicResponse> posts;
+    public static BlogRecentPostsResponse from(BlogPostTimeline blogPostTimeline) {
+        List<PostResponse> postResponses = blogPostTimeline.getPosts().stream()
+                .map(PostResponse::from)
+                .toList();
+
+        return BlogRecentPostsResponse.builder()
+                .nickname(blogPostTimeline.getNickname())
+                .posts(postResponses)
+                .build();
+    }
+
 }
