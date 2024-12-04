@@ -1,9 +1,9 @@
-package darkoverload.itzip.feature.job.repository.custom;
+package darkoverload.itzip.feature.job.repository.custom.scrap;
 
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import darkoverload.itzip.feature.job.entity.JobInfoScrapEntity;
-import darkoverload.itzip.feature.job.entity.QJobInfoScrapEntity;
+import darkoverload.itzip.feature.job.domain.scrap.JobInfoScrap;
+import darkoverload.itzip.feature.job.domain.scrap.QJobInfoScrap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -15,7 +15,7 @@ import java.util.Optional;
 public class CustomJobInfoScrapRepositoryImpl implements CustomJobInfoScrapRepository {
 
     private final JPAQueryFactory queryFactory;
-    private final QJobInfoScrapEntity jobInfoScrapEntity = QJobInfoScrapEntity.jobInfoScrapEntity;
+    private final QJobInfoScrap jobInfoScrapEntity = QJobInfoScrap.jobInfoScrap;
 
 
     @Override
@@ -26,12 +26,13 @@ public class CustomJobInfoScrapRepositoryImpl implements CustomJobInfoScrapRepos
     }
 
     @Override
-    public Optional<JobInfoScrapEntity> findByJobInfoId(Long id, String email) {
-        JobInfoScrapEntity scrap = queryFactory.selectFrom(jobInfoScrapEntity)
+    public Optional<JobInfoScrap> findByJobInfoId(Long id, String email) {
+        JobInfoScrap scrap = queryFactory.selectFrom(jobInfoScrapEntity)
                 .where(
                         (jobInfoScrapEntity.jobInfo.id.eq(id))
                                 .and(jobInfoScrapEntity.user.email.eq(email))
-                ).fetchOne();
+                )
+                .fetchOne();
 
         return Optional.ofNullable(scrap);
     }

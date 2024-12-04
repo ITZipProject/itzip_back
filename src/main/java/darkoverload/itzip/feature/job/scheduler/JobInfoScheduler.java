@@ -1,7 +1,6 @@
 package darkoverload.itzip.feature.job.scheduler;
 
-import darkoverload.itzip.feature.job.domain.JobInfo;
-import darkoverload.itzip.feature.job.entity.JobInfoEntity;
+import darkoverload.itzip.feature.job.domain.job.JobInfo;
 import darkoverload.itzip.feature.job.repository.JobInfoRepository;
 import darkoverload.itzip.feature.job.service.connect.JobInfoConnectService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Slf4j
@@ -33,7 +33,7 @@ public class JobInfoScheduler {
     @Scheduled(cron = JOB_INFO_SCHEDULER_CON)
     public void jobInfoConnectApi() {
         // 데이터베이스에서 모든 JobInfo 데이터를 조회하고, 도메인 객체 리스트로 변환
-        List<JobInfo> dbList = jobInfoRepository.findAll().stream().map(JobInfoEntity::convertToDomain).toList();
+        List<JobInfo> dbList = jobInfoRepository.findAll().stream().toList();
 
         // Saramin API를 호출하여 최신 JobInfo 데이터를 가져옴
         List<JobInfo> apiDataList = service.jobInfoConnect();

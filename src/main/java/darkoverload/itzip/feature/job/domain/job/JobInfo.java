@@ -1,9 +1,10 @@
-package darkoverload.itzip.feature.job.entity;
+package darkoverload.itzip.feature.job.domain.job;
 
-import darkoverload.itzip.feature.job.domain.JobInfo;
 import darkoverload.itzip.global.entity.AuditingFields;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+
 import java.time.LocalDateTime;
 
 @ToString
@@ -12,8 +13,12 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access= AccessLevel.PROTECTED)
+@EqualsAndHashCode(callSuper = false)
 @Table(name="job_infos")
-public class JobInfoEntity extends AuditingFields {
+public class JobInfo extends AuditingFields {
+
+    private static final String MAP_JOB_SCARP_COUNT_KEY = "jobScrapCount:";
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -136,43 +141,20 @@ public class JobInfoEntity extends AuditingFields {
     private String closeTypeName;
 
 
-    @Column(name="scrap_count", columnDefinition = "INTEGER DEFAULT 0")
+    @Column(name="scrap_count")
+    @ColumnDefault("0")
     private Integer scrapCount;
 
-
-    public JobInfo convertToDomain() {
-        return JobInfo.builder()
-                .id(this.id)
-                .positionId(this.positionId)
-                .companyName(this.companyName)
-                .companyHref(this.companyHref)
-                .url(this.url)
-                .active(this.active)
-                .title(this.title)
-                .industryCode(this.industryCode)
-                .industryName(this.industryName)
-                .locationCode(this.locationCode)
-                .locationName(this.locationName)
-                .jobTypeCode(this.jobTypeCode)
-                .jobTypeName(this.jobTypeName)
-                .jobMidCode(this.jobMidCode)
-                .jobMidName(this.jobMidName)
-                .jobName(this.jobName)
-                .jobCode(this.jobCode)
-                .experienceCode(this.experienceCode)
-                .experienceMin(this.experienceMin)
-                .experienceMax(this.experienceMax)
-                .experienceName(this.experienceName)
-                .requiredEducationName(this.requiredEducationName)
-                .requiredEducationCode(this.requiredEducationCode)
-                .keyword(this.keyword)
-                .salaryCode(this.salaryCode)
-                .salaryName(this.salaryName)
-                .postingDate(this.postingDate)
-                .expirationDate(this.expirationDate)
-                .closeTypeCode(this.closeTypeCode)
-                .closeTypeName(this.closeTypeName)
-                .scrapCount(this.scrapCount)
-                .build();
+    public static String makeScrapCountRedisKey(Long jobInfoId) {
+        StringBuilder sb = new StringBuilder();
+        return sb.append(MAP_JOB_SCARP_COUNT_KEY)
+                .append(jobInfoId).toString();
     }
+
+
+    public int updateScrapCount(int scrapCount) {
+       this.scrapCount += scrapCount;
+       return this.scrapCount;
+    }
+
 }

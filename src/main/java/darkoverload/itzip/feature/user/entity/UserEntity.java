@@ -5,6 +5,7 @@ import darkoverload.itzip.global.entity.AuditingFields;
 import jakarta.persistence.*;
 import lombok.*;
 
+@ToString
 @Entity
 @Table(name = "users")
 @Getter

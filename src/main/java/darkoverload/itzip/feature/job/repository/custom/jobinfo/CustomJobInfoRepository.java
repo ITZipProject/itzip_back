@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.job.repository.custom;
+package darkoverload.itzip.feature.job.repository.custom.jobinfo;
 
 import darkoverload.itzip.feature.job.controller.response.JobInfoSearchResponse;
 import org.springframework.data.domain.Page;

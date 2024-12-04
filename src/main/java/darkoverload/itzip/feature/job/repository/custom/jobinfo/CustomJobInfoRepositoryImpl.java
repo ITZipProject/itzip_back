@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.job.repository.custom;
+package darkoverload.itzip.feature.job.repository.custom.jobinfo;
 
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -6,22 +6,24 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import darkoverload.itzip.feature.job.controller.response.JobInfoSearchResponse;
-import darkoverload.itzip.feature.job.entity.QJobInfoEntity;
+import darkoverload.itzip.feature.job.domain.job.QJobInfo;
+import darkoverload.itzip.feature.job.repository.custom.jobinfo.CustomJobInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Objects;
 
 import static org.springframework.util.StringUtils.hasText;
 @Repository
 @RequiredArgsConstructor
-public class CustomJobInfoRepositoryImpl implements CustomJobInfoRepository{
+public class CustomJobInfoRepositoryImpl implements CustomJobInfoRepository {
 
     private final JPAQueryFactory queryFactory;
-    private final QJobInfoEntity jobInfoEntity = QJobInfoEntity.jobInfoEntity;
+    private final QJobInfo jobInfoEntity = QJobInfo.jobInfo;
 
     @Override
     public long bulkDeleteByPositionIds(List<Long> positionIds) {

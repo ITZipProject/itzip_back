@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.job.repository;
 
-import darkoverload.itzip.feature.job.entity.JobInfoScrapEntity;
+import darkoverload.itzip.feature.job.domain.scrap.JobInfoScrap;
 import darkoverload.itzip.global.config.querydsl.TestQueryDslConfig;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 @SqlGroup({
@@ -29,8 +29,7 @@ class JobInfoScrapRepositoryTest {
 
         // given
         // when
-        JobInfoScrapEntity jobInfo = jobInfoScrapRepository.findByJobInfoId(12L, "test@test.com").get();
-
+        JobInfoScrap jobInfo = jobInfoScrapRepository.findByJobInfoId(12L, "test@test.com").get();
 
         // then
         assertEquals(jobInfo.getId(), 100L);

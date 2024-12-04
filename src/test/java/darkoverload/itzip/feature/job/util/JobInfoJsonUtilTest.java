@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.job.util;
 
-import darkoverload.itzip.feature.job.domain.JobInfo;
+import darkoverload.itzip.feature.job.domain.job.JobInfo;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;

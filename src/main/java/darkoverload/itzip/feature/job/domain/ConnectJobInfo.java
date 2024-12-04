@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.job.domain;
 
+import darkoverload.itzip.feature.job.domain.job.JobInfo;
 import darkoverload.itzip.feature.job.util.JobInfoJsonUtil;
 import darkoverload.itzip.global.config.webclient.WebClientWrapper;
 import lombok.Builder;
