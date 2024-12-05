@@ -37,7 +37,7 @@ public class JobInfoServiceImpl implements JobInfoService{
     @Override
     public Page<JobInfoSearchResponse> searchJobInfo(String search, String category, Integer experienceMin, Integer experienceMax, String locationName, Pageable pageable) {
 
-        return jobInfoRepository.searchJobInfo(search, category, experienceMin, experienceMax, pageable);
+        return jobInfoRepository.searchJobInfo(search, category, experienceMin, experienceMax, locationName, pageable);
     }
 
     @Override

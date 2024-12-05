@@ -14,10 +14,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 import static org.springframework.util.StringUtils.hasText;
+
 @Repository
 @RequiredArgsConstructor
 public class CustomJobInfoRepositoryImpl implements CustomJobInfoRepository {
@@ -35,23 +37,23 @@ public class CustomJobInfoRepositoryImpl implements CustomJobInfoRepository {
 
     /**
      * 주어진 검색 조건에 따라 채용 정보를 검색하고 페이징 처리된 결과를 반환하는 메서드.
-     *
+     * <p>
      * 1. 검색 조건 (검색어, 카테고리, 최소 및 최대 경력)에 따라 조건을 생성합니다.
      * 2. 정렬 조건을 적용하여 결과를 정렬합니다.
      * 3. 페이징 처리를 통해 페이지 번호, 페이지 크기 및 정렬 조건을 반영하여 데이터를 가져옵니다.
      * 4. 페이징된 채용 정보 목록과 전체 레코드 수를 반환합니다.
      *
-     * @param search String: 검색어 (채용 정보의 제목 또는 기타 필드를 기준으로 검색)
-     * @param category String: 카테고리 (해당 카테고리에 속하는 채용 정보를 필터링)
+     * @param search        String: 검색어 (채용 정보의 제목 또는 기타 필드를 기준으로 검색)
+     * @param category      String: 카테고리 (해당 카테고리에 속하는 채용 정보를 필터링)
      * @param experienceMin Integer: 최소 경력 (해당 값 이상 경력을 가진 채용 정보를 필터링)
      * @param experienceMax Integer: 최대 경력 (해당 값 이하 경력을 가진 채용 정보를 필터링)
-     * @param pageable Pageable: 페이지 정보와 정렬 조건을 포함한 페이징 처리 정보 (페이지 번호, 페이지 크기, 정렬 조건)
+     * @param pageable      Pageable: 페이지 정보와 정렬 조건을 포함한 페이징 처리 정보 (페이지 번호, 페이지 크기, 정렬 조건)
      * @return Page<JobInfoSearchResponse>: 페이징된 채용 정보 목록을 반환
      */
     @Override
-    public Page<JobInfoSearchResponse> searchJobInfo(String search, String category, Integer experienceMin, Integer experienceMax, Pageable pageable) {
+    public Page<JobInfoSearchResponse> searchJobInfo(String search, String category, Integer experienceMin, Integer experienceMax, String locationCode, Pageable pageable) {
         // 검색 조건에 따라 동적으로 Where 절 생성
-        BooleanExpression whereClause = createWhereClause(search, category, experienceMin, experienceMax);
+        BooleanExpression whereClause = createWhereClause(search, category, experienceMin, experienceMax, locationCode);
 
         // Pageable에서 정렬 조건을 추출하여 적용
         OrderSpecifier<?>[] sortOrder = createSortOrder(pageable);
@@ -99,33 +101,34 @@ public class CustomJobInfoRepositoryImpl implements CustomJobInfoRepository {
 
     /**
      * 주어진 검색 조건을 기반으로 동적으로 WHERE 절을 생성하는 메서드.
-     *
+     * <p>
      * 1. 검색어, 카테고리, 최소 경력, 최대 경력 조건을 동적으로 결합하여 WHERE 절을 구성합니다.
      * 2. 각각의 조건이 `null`일 수 있기 때문에, 조건이 존재하는 경우에만 해당 조건을 추가합니다.
      * 3. 여러 조건을 조합하기 위해 QueryDSL의 `Expressions.allOf()`를 사용합니다.
      *
-     * @param search String: 검색어 (null 가능, 특정 키워드로 검색할 때 사용)
-     * @param category String: 카테고리 (null 가능, 특정 카테고리로 필터링할 때 사용)
+     * @param search        String: 검색어 (null 가능, 특정 키워드로 검색할 때 사용)
+     * @param category      String: 카테고리 (null 가능, 특정 카테고리로 필터링할 때 사용)
      * @param experienceMin Integer: 최소 경력 (null 가능, 이 값 이상 경력의 채용 정보를 필터링)
      * @param experienceMax Integer: 최대 경력 (null 가능, 이 값 이하 경력의 채용 정보를 필터링)
      * @return BooleanExpression: 동적으로 생성된 검색 조건을 포함한 WHERE 절
      */
-    private BooleanExpression createWhereClause(String search, String category, Integer experienceMin, Integer experienceMax) {
+    private BooleanExpression createWhereClause(String search, String category, Integer experienceMin, Integer experienceMax, String locationCode) {
         return Expressions.allOf(
                 searchEq(search),
                 categoryEq(category),
                 experienceMinGoe(experienceMin),
-                experienceMaxLoe(experienceMax)
+                experienceMaxLoe(experienceMax),
+                searchLocationCodeEq(locationCode)
         );
     }
 
     /**
      * Pageable 객체로부터 정렬 정보를 추출하여 QueryDSL의 OrderSpecifier 배열을 생성하는 메서드.
-     *
+     * <p>
      * 1. Pageable 객체에 포함된 Sort 정보를 기반으로 정렬 필드를 추출합니다.
      * 2. 각 필드에 대해 오름차순 또는 내림차순 정렬을 적용합니다.
      * 3. 필드명이 "modifyDate" 또는 "scrap"인 경우에만 정렬 조건을 설정하며,
-     *    그 외 필드는 처리하지 않고 null을 반환합니다.
+     * 그 외 필드는 처리하지 않고 null을 반환합니다.
      * 4. null 값을 필터링하여 유효한 정렬 조건만 배열로 반환합니다.
      *
      * @param pageable Pageable: 페이지 정보와 정렬 조건을 포함하는 객체
@@ -148,6 +151,19 @@ public class CustomJobInfoRepositoryImpl implements CustomJobInfoRepository {
                 })
                 .filter(Objects::nonNull) // null 값 필터링
                 .toArray(OrderSpecifier[]::new); // 배열로 변환하여 반환
+    }
+
+    private BooleanExpression searchLocationCodeEq(String locationCode) {
+        if(!hasText(locationCode)) {
+            return null;
+        }
+        String[] locationCodeArr = locationCode.split(",");
+
+
+        return Arrays.stream(locationCodeArr)
+                .map(name-> jobInfoEntity.locationCode.contains(name))
+                .reduce(BooleanExpression::or)
+                .orElse(null);
     }
 
     // 검색어 조건
