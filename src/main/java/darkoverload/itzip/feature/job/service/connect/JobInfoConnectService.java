@@ -1,15 +1,18 @@
 package darkoverload.itzip.feature.job.service.connect;
 
 import darkoverload.itzip.feature.job.domain.job.JobInfo;
+import darkoverload.itzip.feature.job.domain.job.JobInfoAggregator;
+import darkoverload.itzip.feature.job.domain.job.JobInfos;
 
 import java.util.List;
 
 public interface JobInfoConnectService {
     List<JobInfo> jobInfoConnect();
 
-    Long jobInfoDelete(List<JobInfo> apiDataList, List<JobInfo> dbList);
+    Long jobInfoDelete(JobInfoAggregator jobInfoAggregator);
 
-    Long jobInfoUpdate(List<JobInfo> apiDataList, List<JobInfo> dbList);
+    Long jobInfoUpdate(JobInfoAggregator jobInfoAggregator);
 
-    Long jobInfoSave(List<JobInfo> apiDataList, List<JobInfo> dbList);
+    Long jobInfoSave(JobInfoAggregator jobInfoAggregator);
+
 }

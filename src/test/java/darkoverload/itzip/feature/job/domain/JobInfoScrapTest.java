@@ -23,7 +23,7 @@ public class JobInfoScrapTest {
 
     @Test
     void 취업_정보_스크랩_레디스_키_배열_생성_테스트() {
-        assertThat(JobInfoScrap.redisKeyParts("JOB_SCRAP:13:test@gmail.com")).containsExactly("JOB_SCRAP", "13", "test@gmail.com");
+        assertThat(JobInfoScrap.getRedisKeyParts("JOB_SCRAP:13:test@gmail.com")).containsExactly("JOB_SCRAP", "13", "test@gmail.com");
     }
 
     @Test
