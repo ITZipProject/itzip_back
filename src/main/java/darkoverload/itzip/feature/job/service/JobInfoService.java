@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Set;
 
 public interface JobInfoService {
-    Page<JobInfoSearchResponse> searchJobInfo(String search, String techName, Integer experienceMin, Integer experienceMax, String location, Pageable pageable);
+    Page<JobInfoSearchResponse> searchJobInfo(String search, String techName, Integer experienceMin, Integer experienceMax, String locationCode, Pageable pageable);
 
     JobInfo getById(Long jobInfoId);
 

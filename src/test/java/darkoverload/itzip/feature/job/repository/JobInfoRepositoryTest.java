@@ -32,7 +32,7 @@ class JobInfoRepositoryTest {
     @Test
     void 채용정보_페이징_조회() {
         Pageable pageable = PageRequest.of(0, 10);
-        Page<JobInfoSearchResponse> jobInfoSearchResponses = repository.searchJobInfo("LG", "모바일", 0, null, pageable);
+        Page<JobInfoSearchResponse> jobInfoSearchResponses = repository.searchJobInfo("LG", "모바일", 0, null, null,pageable);
         List<String> jobNameList = Arrays.asList("CDMA","모바일","무선통신","텔레콤","통신","네트워크","정보통신","솔루션");
 
 
