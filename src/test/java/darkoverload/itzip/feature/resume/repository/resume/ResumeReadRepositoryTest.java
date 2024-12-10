@@ -40,10 +40,10 @@ class ResumeReadRepositoryTest {
         List<ResumeEntity> resumes = repository.searchResumeInfos(null, page);
 
         assertThat(resumes).isEqualTo(List.of(
-                new ResumeEntity(1L, 1L, "itzip@gmail.com", "https://itzip.com", "잇집 홍길동", "010-2355-9839", "잇집입니다.", List.of("잇집이력서"), PublicOnOff.YES),
-                new ResumeEntity(2L, 2L, "park@gmail.com", "https://itzip.com", "잇집 박길동", "010-2354-4444", "park입니다.", List.of("park이력서"), PublicOnOff.YES),
-                new ResumeEntity(3L, 3L, "sin@gmail.com", "https://itzip.com", "sin 홍길동", "010-2355-2331", "sin입니다.", List.of("sin이력서"), PublicOnOff.YES),
-                new ResumeEntity(4L, 2L, "lev@gmail.com", "https://itzip.com", "lev 잇집 박길동", "010-2354-4444", "lev입니다.", List.of("lev이력서"), PublicOnOff.YES)
+                new ResumeEntity(1L, 1L, "itzip@gmail.com", "https://itzip.com", "잇집 홍길동", "010-2355-9839", "잇집입니다.", List.of("잇집이력서"), PublicOnOff.YES, null),
+                new ResumeEntity(2L, 2L, "park@gmail.com", "https://itzip.com", "잇집 박길동", "010-2354-4444", "park입니다.", List.of("park이력서"), PublicOnOff.YES, null),
+                new ResumeEntity(3L, 3L, "sin@gmail.com", "https://itzip.com", "sin 홍길동", "010-2355-2331", "sin입니다.", List.of("sin이력서"), PublicOnOff.YES, null),
+                new ResumeEntity(4L, 2L, "lev@gmail.com", "https://itzip.com", "lev 잇집 박길동", "010-2354-4444", "lev입니다.", List.of("lev이력서"), PublicOnOff.YES, null)
         ));
     }
 

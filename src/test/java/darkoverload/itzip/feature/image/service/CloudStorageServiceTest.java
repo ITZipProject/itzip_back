@@ -5,8 +5,6 @@ package darkoverload.itzip.feature.image.service;
 import com.amazonaws.services.s3.AmazonS3;
 import darkoverload.itzip.feature.image.domain.Image;
 import darkoverload.itzip.feature.image.domain.ImageConst;
-import darkoverload.itzip.feature.image.service.CloudStorageService;
-import darkoverload.itzip.feature.image.service.ImageService;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import darkoverload.itzip.infra.bucket.domain.AWSFile;
 import darkoverload.itzip.infra.bucket.service.AWSService;
@@ -15,7 +13,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import java.io.*;
@@ -60,7 +57,7 @@ class CloudStorageServiceTest {
 
         Image image = Image.createImage(file, ImageConst.TEMPDIR);
 
-        given(awsService.upload(any(Image.class), any(InputStream.class))).willReturn(
+        given(awsService.uploadImage(any(Image.class), any(InputStream.class))).willReturn(
                 AWSFile.builder()
                         .size(image.getImageSize())
                         .filename(image.getImageName())

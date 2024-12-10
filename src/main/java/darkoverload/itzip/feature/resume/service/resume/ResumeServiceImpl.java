@@ -36,7 +36,6 @@ import darkoverload.itzip.feature.resume.service.resume.port.myskill.MySkillRepo
 import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationReadRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeRepository;
-import darkoverload.itzip.feature.user.entity.UserEntity;
 import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
@@ -84,7 +83,7 @@ public class ResumeServiceImpl implements ResumeService {
     public CreateResumeResponse create(CreateResumeRequest request, CustomUserDetails user) {
         Long userId = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)).getId();
 
-        Resume resume = Resume.create(request.getResume(), request.getUserId(), userId);
+        Resume resume = Resume.create(request.getResume(), userId);
 
         // 이력서 저장
         // 이력서와 관련된 내용들 저장
@@ -165,7 +164,7 @@ public class ResumeServiceImpl implements ResumeService {
      * 제공된 업데이트 요청을 기반으로 이력서 세부 정보를 업데이트합니다.
      *
      * @param request 이력서의 새 세부 정보를 포함하는 업데이트 요청 객체입니다.
-     * @param resume 업데이트할 기존 이력서 객체입니다.
+     * @param resume  업데이트할 기존 이력서 객체입니다.
      * @return 수정된 이력서의 모든 섹션을 포함하는 ResumeDetails 객체입니다.
      */
     private ResumeDetails update(UpdateResumeRequest request, Resume resume) {

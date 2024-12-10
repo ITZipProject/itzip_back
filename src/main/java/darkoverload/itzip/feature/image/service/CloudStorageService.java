@@ -2,9 +2,11 @@ package darkoverload.itzip.feature.image.service;
 
 import darkoverload.itzip.feature.image.domain.Image;
 import darkoverload.itzip.feature.image.util.FileUtil;
+import darkoverload.itzip.feature.resume.util.holder.UUIDHolderImpl;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import darkoverload.itzip.infra.bucket.domain.AWSFile;
+import darkoverload.itzip.infra.bucket.domain.DocumentFiles;
 import darkoverload.itzip.infra.bucket.service.AWSService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,8 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
-
-import static darkoverload.itzip.feature.image.util.FileUtil.resizeImage;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -35,7 +36,9 @@ public class CloudStorageService implements StorageService {
     @Transactional
     @Override
     public Image temporaryImageUpload(MultipartFile multipartFile, String featureDir) {
-        if(multipartFile.isEmpty()) throw new RestApiException(CommonExceptionCode.IMAGE_NOT_FOUND);
+        if(multipartFile.isEmpty()) {
+            throw new RestApiException(CommonExceptionCode.IMAGE_NOT_FOUND);
+        }
 
         InputStream inputStream = null;
 
@@ -52,7 +55,7 @@ public class CloudStorageService implements StorageService {
             AWSFile awsFile = null;
             try {
                 // aws 실질적으로 upload
-                awsFile = awsService.upload(originImage, inputStream);
+                awsFile = awsService.uploadImage(originImage, inputStream);
             } catch (IOException e) {
                 throw new RestApiException(CommonExceptionCode.IMAGE_ERROR);
             }
@@ -69,6 +72,7 @@ public class CloudStorageService implements StorageService {
         return result;
     }
 
+
     /**
      * 이미지 실질 저장
      * @param imagePath 이미지 경로
@@ -84,20 +88,31 @@ public class CloudStorageService implements StorageService {
 
         imageService.imagePathUpdate(moveImagePath, findImage.getImageSeq());
 
-        Image result = Image.builder()
+        return Image.builder()
                 .imageSeq(findImage.getImageSeq())
                 .imagePath(moveImagePath)
                 .build();
+    }
 
-        return result;
+    @Override
+    public List<String> documentUpload(List<MultipartFile> multipartFile) {
+
+        if(multipartFile.isEmpty()) {
+            throw new RestApiException(CommonExceptionCode.FILE_ERROR);
+        }
+
+        DocumentFiles documentFiles = DocumentFiles.create(new UUIDHolderImpl(), multipartFile);
+
+        return awsService.uploadDocument(documentFiles);
     }
 
     @Override
     public Image imageUpload(MultipartFile multipartFile, String featureDir) {
-        if(multipartFile.isEmpty()) throw new RestApiException(CommonExceptionCode.IMAGE_NOT_FOUND);
+        if(multipartFile.isEmpty()) {
+            throw new RestApiException(CommonExceptionCode.IMAGE_NOT_FOUND);
+        }
 
         InputStream inputStream = null;
-
         Image result = null;
         try {
             inputStream = multipartFile.getInputStream();
@@ -112,7 +127,7 @@ public class CloudStorageService implements StorageService {
             AWSFile awsFile = null;
             try {
                 // aws 실질적으로 upload
-                awsFile = awsService.upload(originImage, inputStream);
+                awsFile = awsService.uploadImage(originImage, inputStream);
             } catch (IOException e) {
                 throw new RestApiException(CommonExceptionCode.IMAGE_ERROR);
             }
@@ -141,4 +156,5 @@ public class CloudStorageService implements StorageService {
 
         awsService.delete(findImage.getImageName(), featureDir);
     }
+
 }

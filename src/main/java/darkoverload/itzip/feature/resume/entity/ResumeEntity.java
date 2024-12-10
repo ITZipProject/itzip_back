@@ -45,8 +45,11 @@ public class ResumeEntity extends AuditingFields {
     @Column(name="public_on_off", nullable = false)
     private PublicOnOff publicOnOff;
 
+    @Convert(converter = StringListConverter.class)
+    private List<String> fileUrls;
+
     @Builder
-    public ResumeEntity(Long id, Long userId, String email, String imageUrl, String subject, String phone, String introduction, List<String> links, PublicOnOff publicOnOff) {
+    public ResumeEntity(Long id, Long userId, String email, String imageUrl, String subject, String phone, String introduction, List<String> links, PublicOnOff publicOnOff, List<String> fileUrls) {
         this.id = id;
         this.userId = userId;
         this.email = email;
@@ -56,6 +59,7 @@ public class ResumeEntity extends AuditingFields {
         this.introduction = introduction;
         this.links = links;
         this.publicOnOff = publicOnOff;
+        this.fileUrls = fileUrls;
     }
 
     public Resume convertToDomain(){
@@ -69,6 +73,7 @@ public class ResumeEntity extends AuditingFields {
                 .introduction(this.introduction)
                 .links(this.links)
                 .publicOnOff(this.publicOnOff)
+                .fileUrls(this.fileUrls)
                 .build();
     }
 
