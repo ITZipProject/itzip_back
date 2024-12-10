@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class DocumentFiles {
-    private List<DocumentFile> documentFiles;
+    private final List<DocumentFile> documentFiles;
 
     private DocumentFiles(List<DocumentFile> documentFiles) {
         this.documentFiles = documentFiles;
