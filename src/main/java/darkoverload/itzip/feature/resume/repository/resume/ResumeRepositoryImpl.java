@@ -22,7 +22,9 @@ public class ResumeRepositoryImpl implements ResumeRepository {
     @Override
     public Resume update(Resume resume) {
         Long resumeId = repository.update(resume);
-        if (resumeId < 0) throw new RestApiException(CommonExceptionCode.UPDATE_FAIL_RESUME);
+        if (resumeId < 0) {
+            throw new RestApiException(CommonExceptionCode.UPDATE_FAIL_RESUME);
+        }
 
         return resumeReadRepository.getReferenceById(resumeId);
     }
