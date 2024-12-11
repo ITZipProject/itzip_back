@@ -21,7 +21,7 @@ class AchievementTest {
         Achievement achievement = Achievement.update(achievementDto, resume);
 
 
-        assertThat(achievement).isEqualTo(Achievement.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null)).achievementId(1L).name("잇집상").organization("잇집기관").content("잇집상을 수여합니다.").achievementId(1L).build());
+        assertThat(achievement).isEqualTo(Achievement.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null)).achievementId(1L).name("잇집상").organization("잇집기관").content("잇집상을 수여합니다.").achievementId(1L).build());
     }
 
 }
