@@ -44,11 +44,14 @@ public class Resume {
     // 경력
     private String workLongTerm;
 
+    // url
+    private List<String> fileUrls;
+
     public Resume() {
     }
 
     @Builder
-    public Resume(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff, List<String> links, String imageUrl, Long userId, Long resumeId, String workLongTerm) {
+    public Resume(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff, List<String> links, String imageUrl, Long userId, Long resumeId, String workLongTerm, List<String> fileUrls) {
         this.email = email;
         this.phone = phone;
         this.subject = subject;
@@ -59,10 +62,10 @@ public class Resume {
         this.userId = userId;
         this.resumeId = resumeId;
         this.workLongTerm = workLongTerm;
+        this.fileUrls = fileUrls;
     }
 
-    public static Resume create(ResumeDto resume, Long userId, Long dataBaseUserId){
-        userIdEqualsCheck(userId, dataBaseUserId);
+    public static Resume create(ResumeDto resume, Long userId){
 
         return Resume.builder()
                 .email(resume.getEmail())
@@ -73,19 +76,8 @@ public class Resume {
                 .links(resume.getLinks())
                 .imageUrl(resume.getImageUrl())
                 .userId(userId)
+                .fileUrls(resume.getFileUrls())
                 .build();
-    }
-
-    private static void userIdEqualsCheck(Long userId, Long databaseUserId) {
-        if(!userId.equals(databaseUserId)) {
-            throw new RestApiException(CommonExceptionCode.NOT_MATCH_RESUME_USERID);
-        }
-    }
-
-    public void userIdEqualsCheck(Long databaseUserId) {
-        if(!this.userId.equals(databaseUserId)) {
-            throw new RestApiException(CommonExceptionCode.NOT_MATCH_RESUME_USERID);
-        }
     }
 
     public static Resume update(ResumeDto resume, Long resumeId, Long userId) {
@@ -128,6 +120,7 @@ public class Resume {
                 .links(this.links)
                 .userId(this.userId)
                 .id(this.resumeId)
+                .fileUrls(this.fileUrls)
                 .build();
     }
 
@@ -138,6 +131,10 @@ public class Resume {
         return this;
     }
 
-
+    public void userIdEqualsCheck(Long databaseUserId) {
+        if(!this.userId.equals(databaseUserId)) {
+            throw new RestApiException(CommonExceptionCode.NOT_MATCH_RESUME_USERID);
+        }
+    }
 
 }

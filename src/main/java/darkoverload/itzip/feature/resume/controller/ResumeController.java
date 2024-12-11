@@ -21,7 +21,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Description;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -48,7 +47,7 @@ public class ResumeController {
     )
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations(CommonExceptionCode.BAD_REQUEST)
-    @PostMapping("")
+    @PostMapping(value = "")
     public CreateResumeResponse createResume(@Valid @RequestBody CreateResumeRequest request, @AuthenticationPrincipal CustomUserDetails user) {
 
         return service.create(request, user);
@@ -73,10 +72,10 @@ public class ResumeController {
             description = "사용자 이력서 전체 조회"
     )
     @GetMapping("/search")
-    public Page<SearchResumeResponse> searchResume(@Parameter(description = "검색어") @RequestParam(value = "search", required = false) String search, @Parameter(description = "Size : 페이지당 출력할 항목의 개수 (기본값: 10) \n sort`: 정렬 기준 필드 (기본값: `modifyDate`) \n direction`: 정렬 순서 (기본값: 내림차순 `DESC`)") @PageableDefault(size= 10, sort="modifyDate", direction = Sort.Direction.DESC)Pageable pageable){
+    public Page<SearchResumeResponse> searchResume(@Parameter(description = "검색어") @RequestParam(value = "search", required = false) String search, @Parameter(description = "Size : 페이지당 출력할 항목의 개수 (기본값: 10) \n sort`: 정렬 기준 필드 (기본값: `modifyDate`) \n direction`: 정렬 순서 (기본값: 내림차순 `DESC`)") @PageableDefault(size = 10, sort = "modifyDate", direction = Sort.Direction.DESC) Pageable pageable) {
         List<SearchResumeResponse> searchResumeResponses = resumeReadService.searchResumeInfos(search, pageable);
 
-        return new PageImpl<>(searchResumeResponses, pageable,searchResumeResponses.size());
+        return new PageImpl<>(searchResumeResponses, pageable, searchResumeResponses.size());
     }
 
     @Operation(

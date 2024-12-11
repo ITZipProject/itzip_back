@@ -17,6 +17,7 @@ import java.util.List;
 
 @ToString
 @Getter
+@Setter
 public class CreateResumeRequest {
 
     @Schema(description = "수상 리스트", example = """
@@ -132,6 +133,7 @@ public class CreateResumeRequest {
                 "https://github.com/user",
                 "https://linkedin.com/in/user"
               ],
+              "fileUrls": ["https://example.com"],
               "imageUrl": "https://example.com/profile.jpg",
               "userId": 123
             }

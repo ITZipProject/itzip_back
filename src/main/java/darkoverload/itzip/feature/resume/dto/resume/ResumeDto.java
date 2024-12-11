@@ -39,7 +39,10 @@ public class ResumeDto {
     // 이미지
     private String imageUrl;
 
-    public ResumeDto(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff, List<String> links, String imageUrl) {
+    // 파일 경로
+    private List<String> fileUrls;
+
+    public ResumeDto(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff, List<String> links, String imageUrl, List<String> fileUrls) {
         this.email = email;
         this.phone = phone;
         this.subject = subject;
@@ -47,6 +50,7 @@ public class ResumeDto {
         this.publicOnOff = publicOnOff;
         this.links = links;
         this.imageUrl = imageUrl;
+        this.fileUrls = fileUrls;
     }
 
 }

@@ -54,6 +54,15 @@ public class ImageController {
             return ResponseEntity.ok(response);
     }
 
+    @ResponseCodeAnnotation(CommonResponseCode.CREATED)
+    @ExceptionCodeAnnotations(CommonExceptionCode.BAD_REQUEST)
+    @PostMapping(value="/document", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public List<String> documentUpload(@RequestParam("files") List<MultipartFile> multipartFiles) {
+
+        return storageService.documentUpload(multipartFiles);
+    }
+
+
     /**
      * 실제 파일 저장 Controller
      * @param request
