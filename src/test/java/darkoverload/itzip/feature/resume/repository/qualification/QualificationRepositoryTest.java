@@ -15,6 +15,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -32,7 +33,7 @@ public class QualificationRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        resume = ResumeEntity.builder().id(1L).email("itzip@gmail.com").imageUrl("https://itzip.com").introduction("잇집입니다.").links(List.of("잇집이력서")).phone("010-2355-9839").publicOnOff(PublicOnOff.YES).subject("잇집 홍길동").userId(1L).build();
+        resume = ResumeEntity.builder().id(1L).email("itzip@gmail.com").imageUrl("https://itzip.com").introduction("잇집입니다.").links(List.of("잇집이력서")).phone("010-2355-9839").publicOnOff(PublicOnOff.YES).subject("잇집 홍길동").userId(1L).fileUrls(new ArrayList<>()).build();
     }
 
     @Test

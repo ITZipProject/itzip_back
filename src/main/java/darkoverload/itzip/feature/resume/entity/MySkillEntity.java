@@ -12,6 +12,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name="MySkills")
 @EqualsAndHashCode(callSuper = false)
+@ToString
 public class MySkillEntity extends AuditingFields {
 
     @Id

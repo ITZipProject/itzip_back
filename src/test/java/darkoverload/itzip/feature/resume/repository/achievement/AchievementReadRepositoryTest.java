@@ -16,6 +16,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
@@ -33,13 +34,13 @@ public class AchievementReadRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        resume = ResumeEntity.builder().id(1L).email("itzip@gmail.com").imageUrl("https://itzip.com").introduction("잇집입니다.").links(List.of("잇집이력서")).phone("010-2355-9839").publicOnOff(PublicOnOff.YES).subject("잇집 홍길동").userId(1L).build();
+        resume = ResumeEntity.builder().id(1L).email("itzip@gmail.com").imageUrl("https://itzip.com").introduction("잇집입니다.").links(List.of("잇집이력서")).phone("010-2355-9839").publicOnOff(PublicOnOff.YES).subject("잇집 홍길동").userId(1L).fileUrls(new ArrayList<>()).build();
     }
 
     @Test
     void 수상_이력_정보_리스트_조회() {
         List<AchievementEntity> allByResumeId = repository.findAllByResumeId(1L);
-
+        System.out.println(allByResumeId);
         assertThat(allByResumeId).isEqualTo(List.of(AchievementEntity.builder().id(1L).achievementDate(LocalDateTime.of(2024, 8, 20, 10, 10, 10)).content("자바 잘해서줍니다.").name("잇집자바상").organization("잇집").resume(resume).build(), AchievementEntity.builder().id(2L).achievementDate(LocalDateTime.of(2024, 6, 20, 9, 10, 10)).content("코틀린 잘해서줌").name("잇집코틀린상").organization("잇집").resume(resume).build()));
     }
 
