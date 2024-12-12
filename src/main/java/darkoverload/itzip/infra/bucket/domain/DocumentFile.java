@@ -1,7 +1,7 @@
 package darkoverload.itzip.infra.bucket.domain;
 
 import darkoverload.itzip.feature.image.util.FileUtil;
-import darkoverload.itzip.feature.resume.util.holder.UUIDHolder;
+import darkoverload.itzip.infra.bucket.util.holder.UUIDHolder;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.Builder;

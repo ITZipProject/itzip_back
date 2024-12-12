@@ -22,23 +22,24 @@ import darkoverload.itzip.feature.resume.domain.qualification.Qualifications;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.domain.resume.ResumeDetails;
 import darkoverload.itzip.feature.resume.service.resume.port.achievement.AchievementReadRepository;
-import darkoverload.itzip.feature.resume.service.resume.port.achievement.AchievementRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.achievement.AchievementCommandRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.activity.ActivityReadRepository;
-import darkoverload.itzip.feature.resume.service.resume.port.activity.ActivityRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.activity.ActivityCommandRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.career.CareerReadRepository;
-import darkoverload.itzip.feature.resume.service.resume.port.career.CareerRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.career.CareerCommandRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.education.EducationReadRepository;
-import darkoverload.itzip.feature.resume.service.resume.port.education.EducationRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.education.EducationCommandRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.language.LanguageReadRepository;
-import darkoverload.itzip.feature.resume.service.resume.port.language.LanguageRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.language.LanguageCommandRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.myskill.MySkillReadRepository;
-import darkoverload.itzip.feature.resume.service.resume.port.myskill.MySkillRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.myskill.MySkillCommandRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationReadRepository;
-import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationCommandRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeRepository;
 import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
+import darkoverload.itzip.infra.bucket.service.AWSService;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -51,39 +52,43 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @Builder
 @RequiredArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
+
     private final UserRepository userRepository;
     private final ResumeRepository resumeRepository;
 
-    private final EducationRepository educationRepository;
+    private final EducationCommandRepository educationCommandRepository;
     private final EducationReadRepository educationReadRepository;
 
-    private final LanguageRepository languageRepository;
+    private final LanguageCommandRepository languageCommandRepository;
     private final LanguageReadRepository languageReadRepository;
 
-    private final QualificationRepository qualificationRepository;
+    private final QualificationCommandRepository qualificationCommandRepository;
     private final QualificationReadRepository qualificationReadRepository;
 
-    private final MySkillRepository mySkillRepository;
+    private final MySkillCommandRepository mySkillCommandRepository;
     private final MySkillReadRepository mySkillReadRepository;
 
-    private final CareerRepository careerRepository;
+    private final CareerCommandRepository careerCommandRepository;
     private final CareerReadRepository careerReadRepository;
 
-    private final AchievementRepository achievementRepository;
+    private final AchievementCommandRepository achievementCommandRepository;
     private final AchievementReadRepository achievementReadRepository;
 
-    private final ActivityRepository activityRepository;
+    private final ActivityCommandRepository activityCommandRepository;
     private final ActivityReadRepository activityReadRepository;
 
-    @Transactional
+    private final AWSService awsService;
+
     @Override
     public CreateResumeResponse create(CreateResumeRequest request, CustomUserDetails user) {
-        Long userId = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)).getId();
+        Long dataUserId = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)).getId();
 
-        Resume resume = Resume.create(request.getResume(), userId);
+        Resume.checkUserIdEquals(request.getUserId(), dataUserId);
+        Resume resume = Resume.create(request.getResume(), dataUserId);
 
         // 이력서 저장
         // 이력서와 관련된 내용들 저장
@@ -104,49 +109,49 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<Careers> careers = Careers.of(request.getCareers(), resume);
         Optional<Careers> dataCareers = Optional.empty();
         if (careers.isPresent()) {
-            dataCareers = Careers.of(careerRepository.saveAll(careers.get().getCareers()));
+            dataCareers = Careers.of(careerCommandRepository.saveAll(careers.get().getCareers()));
         }
 
         // 요청에 성과 정보가 포함된 경우 성과 섹션을 생성하고 저장
         Optional<Achievements> achievements = Achievements.of(request.getAchievements(), resume);
         Optional<Achievements> dataAchievements = Optional.empty();
         if (achievements.isPresent()) {
-            dataAchievements = Achievements.of(achievementRepository.saveAll(achievements.get().getAchievements()));
+            dataAchievements = Achievements.of(achievementCommandRepository.saveAll(achievements.get().getAchievements()));
         }
 
         // 요청에 활동 정보가 포함된 경우 활동 섹션을 생성하고 저장
         Optional<Activities> activities = Activities.of(request.getActivities(), resume);
         Optional<Activities> dataActivities = Optional.empty();
         if (activities.isPresent()) {
-            dataActivities = Activities.of(activityRepository.saveAll(activities.get().getActivities()));
+            dataActivities = Activities.of(activityCommandRepository.saveAll(activities.get().getActivities()));
         }
 
         // 요청에 언어 정보가 포함된 경우 언어 섹션을 생성하고 저장
         Optional<Languages> languages = Languages.of(request.getLanguages(), resume);
         Optional<Languages> dataLanguages = Optional.empty();
         if (languages.isPresent()) {
-            dataLanguages = Languages.of(languageRepository.saveAll(languages.get().getLanguages()));
+            dataLanguages = Languages.of(languageCommandRepository.saveAll(languages.get().getLanguages()));
         }
 
         // 요청에 학력 정보가 포함된 경우 학력 섹션을 생성하고 저장
         Optional<Educations> educations = Educations.of(request.getEducations(), resume);
         Optional<Educations> dataEducations = Optional.empty();
         if (educations.isPresent()) {
-            dataEducations = Educations.of(educationRepository.saveAll(educations.get().getEducations()));
+            dataEducations = Educations.of(educationCommandRepository.saveAll(educations.get().getEducations()));
         }
 
         // 요청에 기술 정보가 포함된 경우 기술 섹션을 생성하고 저장
         Optional<MySkills> mySkills = MySkills.of(request.getMySkills(), resume);
         Optional<MySkills> dataMySkills = Optional.empty();
         if (mySkills.isPresent()) {
-            dataMySkills = MySkills.of(mySkillRepository.saveAll(mySkills.get().getMySkills()));
+            dataMySkills = MySkills.of(mySkillCommandRepository.saveAll(mySkills.get().getMySkills()));
         }
 
         // 요청에 자격증 정보가 포함된 경우 자격증 섹션을 생성하고 저장
         Optional<Qualifications> qualifications = Qualifications.of(request.getQualifications(), resume);
         Optional<Qualifications> dataQualifications = Optional.empty();
         if (qualifications.isPresent()) {
-            dataQualifications = Qualifications.of(qualificationRepository.saveAll(qualifications.get().getQualifications()));
+            dataQualifications = Qualifications.of(qualificationCommandRepository.saveAll(qualifications.get().getQualifications()));
         }
 
         return ResumeDetails.of(dataAchievements.orElse(null), dataActivities.orElse(null), dataCareers.orElse(null), dataEducations.orElse(null), dataLanguages.orElse(null), dataMySkills.orElse(null), dataQualifications.orElse(null), resume);
@@ -155,7 +160,14 @@ public class ResumeServiceImpl implements ResumeService {
 
     @Override
     public UpdateResumeResponse update(UpdateResumeRequest request, CustomUserDetails customUserDetails) {
+        long dataUserId = userRepository.findByEmail(customUserDetails.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)).getId();
+
+        Resume.checkUserIdEquals(request.getUserId(), dataUserId);
+
         Resume updateResume = Resume.update(request.getResume(), request.getResumeId(), request.getUserId());
+
+        Resume databaseResume = resumeRepository.findById(request.getResumeId());
+        awsService.deleteDocumentFiles(updateResume.notExistFileUrls(databaseResume.getFileUrls()), Resume.FEATURE_DIR);
 
         return UpdateResumeResponse.from(update(request, resumeRepository.update(updateResume)));
     }
@@ -174,8 +186,8 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<Careers> dataCareers = Optional.empty();
         if (careers.isPresent()) {
             List<Career> allCareers = careerReadRepository.findAllByResumeId(resume.getResumeId());
-            careerRepository.deleteAllCareers(careers.get().deleteCareers(allCareers));
-            dataCareers = Careers.of(careerRepository.update(careers.get().getCareers()));
+            careerCommandRepository.deleteAllCareers(careers.get().deleteCareers(allCareers));
+            dataCareers = Careers.of(careerCommandRepository.update(careers.get().getCareers()));
         }
 
         // 요청에 성과 정보가 포함된 경우 성과 섹션 업데이트
@@ -183,8 +195,8 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<Achievements> dataAchievements = Optional.empty();
         if (achievements.isPresent()) {
             List<Achievement> allAchievements = achievementReadRepository.findAllByResumeId(resume.getResumeId());
-            achievementRepository.deleteAllAchievements(achievements.get().deleteAchievements(allAchievements));
-            dataAchievements = Achievements.of(achievementRepository.update(achievements.get().getAchievements()));
+            achievementCommandRepository.deleteAllAchievements(achievements.get().deleteAchievements(allAchievements));
+            dataAchievements = Achievements.of(achievementCommandRepository.update(achievements.get().getAchievements()));
         }
 
         // 요청에 활동 정보가 포함된 경우 활동 섹션 업데이트
@@ -192,8 +204,8 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<Activities> dataActivities = Optional.empty();
         if (activities.isPresent()) {
             List<Activity> allActivities = activityReadRepository.findAllByResumeId(resume.getResumeId());
-            activityRepository.deleteAllActivities(activities.get().deleteActivities(allActivities));
-            dataActivities = Activities.of(activityRepository.update(activities.get().getActivities()));
+            activityCommandRepository.deleteAllActivities(activities.get().deleteActivities(allActivities));
+            dataActivities = Activities.of(activityCommandRepository.update(activities.get().getActivities()));
         }
 
         // 요청에 언어 정보가 포함된 경우 언어 섹션 업데이트
@@ -201,8 +213,8 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<Languages> dataLanguages = Optional.empty();
         if (languages.isPresent()) {
             List<Language> allLanguages = languageReadRepository.findAllByResumeId(resume.getResumeId());
-            languageRepository.deleteAllLanguages(languages.get().deleteLanguages(allLanguages));
-            dataLanguages = Languages.of(languageRepository.update(languages.get().getLanguages()));
+            languageCommandRepository.deleteAllLanguages(languages.get().deleteLanguages(allLanguages));
+            dataLanguages = Languages.of(languageCommandRepository.update(languages.get().getLanguages()));
         }
 
         // 요청에 교육 정보가 포함된 경우 교육 섹션 업데이트
@@ -210,8 +222,8 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<Educations> dataEducations = Optional.empty();
         if (educations.isPresent()) {
             List<Education> allEducations = educationReadRepository.findAllByResumeId(resume.getResumeId());
-            educationRepository.deleteAllEducations(educations.get().deleteEducations(allEducations));
-            dataEducations = Educations.of(educationRepository.update(educations.get().getEducations()));
+            educationCommandRepository.deleteAllEducations(educations.get().deleteEducations(allEducations));
+            dataEducations = Educations.of(educationCommandRepository.update(educations.get().getEducations()));
         }
 
         // 요청에 스킬 정보가 포함된 경우 스킬 섹션 업데이트
@@ -219,8 +231,8 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<MySkills> dataMySkills = Optional.empty();
         if (mySkills.isPresent()) {
             List<MySkill> allMySkills = mySkillReadRepository.findByAllResumeId(resume.getResumeId());
-            mySkillRepository.deleteAllMySkills(mySkills.get().deleteMySkills(allMySkills));
-            dataMySkills = MySkills.of(mySkillRepository.update(mySkills.get().getMySkills()));
+            mySkillCommandRepository.deleteAllMySkills(mySkills.get().deleteMySkills(allMySkills));
+            dataMySkills = MySkills.of(mySkillCommandRepository.update(mySkills.get().getMySkills()));
         }
 
         // 요청에 자격증 정보가 포함된 경우 자격증 섹션 업데이트
@@ -228,8 +240,8 @@ public class ResumeServiceImpl implements ResumeService {
         Optional<Qualifications> dataQualifications = Optional.empty();
         if (qualifications.isPresent()) {
             List<Qualification> allQualifications = qualificationReadRepository.findAllByResumeId(resume.getResumeId());
-            qualificationRepository.deleteAllQualifications(qualifications.get().deleteQualifications(allQualifications));
-            dataQualifications = Qualifications.of(qualificationRepository.update(qualifications.get().getQualifications()));
+            qualificationCommandRepository.deleteAllQualifications(qualifications.get().deleteQualifications(allQualifications));
+            dataQualifications = Qualifications.of(qualificationCommandRepository.update(qualifications.get().getQualifications()));
         }
 
         // 업데이트된 모든 섹션을 포함하는 ResumeDetails 객체 반환

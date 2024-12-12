@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import darkoverload.itzip.feature.image.domain.Image;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
 import darkoverload.itzip.global.config.response.handler.Util.ExceptionHandlerUtil;
 import darkoverload.itzip.infra.bucket.domain.AWSFile;
 import darkoverload.itzip.infra.bucket.domain.DocumentFile;
@@ -68,13 +69,14 @@ public class AWSService {
 
     /**
      * 버킷에 문서 업로드
+     *
      * @param documentFiles
      * @return
      */
     public List<String> uploadDocument(DocumentFiles documentFiles) {
         String bucketDir = DocumentFile.getBucketDir(bucketName);
         List<String> documentFileList = new ArrayList<>();
-        for(DocumentFile documentFile : documentFiles.getDocumentFiles()) {
+        for (DocumentFile documentFile : documentFiles.getDocumentFiles()) {
             amazonS3.putObject(new PutObjectRequest(bucketDir, documentFile.getFileName(), documentFile.getInputStream(), getObjectMetadata(documentFile)).withCannedAcl(CannedAccessControlList.PublicRead));
             String fileUrl = filePath + getFeatureDir() + documentFile.getFileName();
             documentFileList.add(fileUrl);
@@ -110,6 +112,23 @@ public class AWSService {
         objectMetadata.setContentLength(file.getSize());
 
         return objectMetadata;
+    }
+
+    public void deleteDocumentFiles(List<String> documentUrls, String featureDir) {
+        String bucketDir = bucketName + File.separator + featureDir;
+
+        documentUrls.forEach(documentUrl -> {
+            String keyName = documentUrl.substring(documentUrl.lastIndexOf("/")+1);
+
+            log.info("documentUrl :: {} :: {}", bucketDir, keyName);
+            boolean isObjectExists = amazonS3.doesObjectExist(bucketDir, keyName);
+            if(isObjectExists) {
+                amazonS3.deleteObject(bucketDir, keyName);
+            } else {
+                throw new RestApiException(CommonExceptionCode.FILE_NOT_FOUND_ERROR);
+            }
+        });
+
     }
 
     /**

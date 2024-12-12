@@ -25,6 +25,7 @@ public enum CommonExceptionCode implements ResponseCode {
      * file error
      */
     FILE_ERROR(HttpStatus.BAD_REQUEST, "파일 에러"),
+    FILE_NOT_FOUND_ERROR(HttpStatus.BAD_REQUEST, "파일 정보를 찾을 수 없습니다."),
 
     /**
      * image Error
@@ -153,6 +154,8 @@ public enum CommonExceptionCode implements ResponseCode {
     // 이력서 조회 오류 발생
     NOT_FOUND_RESUME(HttpStatus.BAD_REQUEST, "이력서 정보 조회 중 오류가 발생하였습니다."),
     NOT_MATCH_RESUME_USERID(HttpStatus.NOT_FOUND, "작성자 아이디가 일치하지 않습니다."),
+    // 이력서 파일 타입 오류 발생
+    FILE_TYPE_RESUME_ERROR(HttpStatus.BAD_REQUEST, "파일 형식이 pdf, 워드 형식이 아닙니다."),
 
     /**
      * MongoDb

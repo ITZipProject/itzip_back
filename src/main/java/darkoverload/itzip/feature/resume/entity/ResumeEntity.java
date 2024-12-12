@@ -25,54 +25,36 @@ public class ResumeEntity extends AuditingFields {
     @Column(name="user_id", nullable = false, updatable = false)
     private Long userId;
 
-    private String email;
+    @Embedded
+    private ProfileInfoEntity profileInfo;
 
     private String imageUrl;
-
-    @Column(length=50)
-    private String subject;
-
-    @Column(length=50)
-    private String phone;
-
-    @Column(length=5000)
-    private String introduction;
 
     @Convert(converter = StringListConverter.class)
     private List<String> links;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name="public_on_off", nullable = false)
-    private PublicOnOff publicOnOff;
+
 
     @Convert(converter = StringListConverter.class)
     private List<String> fileUrls;
 
     @Builder
-    public ResumeEntity(Long id, Long userId, String email, String imageUrl, String subject, String phone, String introduction, List<String> links, PublicOnOff publicOnOff, List<String> fileUrls) {
+    public ResumeEntity(Long id, Long userId, String imageUrl, ProfileInfoEntity profileInfo,List<String> links, List<String> fileUrls) {
         this.id = id;
         this.userId = userId;
-        this.email = email;
         this.imageUrl = imageUrl;
-        this.subject = subject;
-        this.phone = phone;
-        this.introduction = introduction;
+        this.profileInfo = profileInfo;
         this.links = links;
-        this.publicOnOff = publicOnOff;
         this.fileUrls = fileUrls;
     }
 
     public Resume convertToDomain(){
         return Resume.builder()
+                .profileInfo(this.profileInfo.convertToDomain())
                 .resumeId(this.id)
                 .userId(this.userId)
-                .email(this.email)
                 .imageUrl(this.imageUrl)
-                .subject(this.subject)
-                .phone(this.phone)
-                .introduction(this.introduction)
                 .links(this.links)
-                .publicOnOff(this.publicOnOff)
                 .fileUrls(this.fileUrls)
                 .build();
     }
