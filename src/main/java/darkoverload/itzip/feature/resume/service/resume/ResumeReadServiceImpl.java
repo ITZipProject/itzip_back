@@ -61,8 +61,8 @@ public class ResumeReadServiceImpl implements ResumeReadService {
     @Override
     public GetResumeDetailsResponse getResumeDetails(Long id, CustomUserDetails userDetails) {
 
-        Resume resume = resumeReadRepository.getReferenceById(id).emptyCheck();
-        resume.userIdEqualsCheck(userRepository.findByEmail(userDetails.getUsername())
+        Resume resume = resumeReadRepository.getReferenceById(id).checkIdNull();
+        Resume.checkUserIdEquals(resume.getUserId(), userRepository.findByEmail(userDetails.getUsername())
                 .orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_MATCH_RESUME_USERID)).getId());
 
         Achievements achievements = Achievements.of(achievementReadRepository.findAllByResumeId(id)).orElse(null);

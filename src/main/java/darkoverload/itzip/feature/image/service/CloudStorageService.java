@@ -2,7 +2,7 @@ package darkoverload.itzip.feature.image.service;
 
 import darkoverload.itzip.feature.image.domain.Image;
 import darkoverload.itzip.feature.image.util.FileUtil;
-import darkoverload.itzip.feature.resume.util.holder.UUIDHolderImpl;
+import darkoverload.itzip.infra.bucket.util.holder.UUIDHolderImpl;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import darkoverload.itzip.infra.bucket.domain.AWSFile;
@@ -25,7 +25,6 @@ public class CloudStorageService implements StorageService {
 
     private final ImageService imageService;
     private final AWSService awsService;
-
 
     /**
      * 임시 저장
@@ -67,7 +66,6 @@ public class CloudStorageService implements StorageService {
         } catch (IOException e) {
             throw new RestApiException(CommonExceptionCode.IMAGE_ERROR);
         }
-
 
         return result;
     }
@@ -150,7 +148,6 @@ public class CloudStorageService implements StorageService {
      */
     @Transactional
     public void imageDelete(String imagePath, String featureDir) {
-
         Image findImage = imageService.findByImagePath(imagePath);
         imageService.delete(findImage.getImageSeq());
 
