@@ -52,4 +52,13 @@ public class LikeCacheRepositoryImpl implements LikeCacheRepository {
         return repository.getAllLikeStatuses();
     }
 
+    /**
+     * 캐시에 저장된 모든 좋아요 데이터를 삭제합니다.
+     * 주로 테스트 환경이나 캐시 초기화 용도로 사용됩니다.
+     */
+    @Override
+    public void deleteAll() {
+        repository.deleteAll();
+    }
+
 }

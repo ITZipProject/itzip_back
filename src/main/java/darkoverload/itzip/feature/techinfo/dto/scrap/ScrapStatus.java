@@ -6,14 +6,12 @@ import lombok.Getter;
 @Getter
 public class ScrapStatus {
 
-    private final String id;
     private final String postId;
     private final Long userId;
     private final Boolean isScrapped;
 
     @Builder
-    public ScrapStatus(String id, String postId, Long userId, Boolean isScrapped) {
-        this.id = id;
+    public ScrapStatus(String postId, Long userId, Boolean isScrapped) {
         this.postId = postId;
         this.userId = userId;
         this.isScrapped = isScrapped;

@@ -8,5 +8,5 @@ import org.springframework.context.annotation.PropertySources;
 @PropertySources({
         @PropertySource("classpath:properties/test-env.properties")
 })
-public class PropertyConfig {
+public class TestPropertyConfig {
 }

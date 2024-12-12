@@ -25,8 +25,8 @@ public class LikeRepositoryImpl implements LikeRepository {
      * @param like 좋아요
      */
     @Override
-    public void save(Like like) {
-        repository.save(LikeDocument.from(like));
+    public Like save(Like like) {
+        return repository.save(LikeDocument.from(like)).toModel();
     }
 
     /**
@@ -50,9 +50,18 @@ public class LikeRepositoryImpl implements LikeRepository {
      */
     @Override
     public void deleteByUserIdAndPostId(Long userId, ObjectId postId) {
-        if (repository.deleteByUserIdAndPostId(userId, postId) < 0) {
+        if (repository.deleteByUserIdAndPostId(userId, postId) <= 0) {
             throw new RestApiException(CommonExceptionCode.DELETE_FAIL_LIKE_IN_POST);
         }
+    }
+
+    /**
+     * 저장된 모든 좋아요 데이터를 삭제합니다.
+     * 주로 테스트 환경이나 데이터 초기화 시 사용됩니다.
+     */
+    @Override
+    public void deleteAll() {
+        repository.deleteAll();
     }
 
 }

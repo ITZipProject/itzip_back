@@ -17,6 +17,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @Profile("test")
 @TestConfiguration
 public class TestQueryDslConfig {
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -24,4 +25,5 @@ public class TestQueryDslConfig {
     public JPAQueryFactory jpaQueryFactory() {
         return new JPAQueryFactory(entityManager);
     }
+
 }

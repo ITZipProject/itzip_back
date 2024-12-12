@@ -169,7 +169,7 @@ public class PostReadServiceImpl implements PostReadService {
     @Override
     @Transactional(readOnly = true)
     public Page<Post> getPostsByNickname(String nickname, int page, int size, SortType sortType) {
-        Pageable pageable = PageRequest.of(page, size, SortUtil.getSort(sortType));
+        Pageable pageable = PageRequest.of(page, size, SortUtil.getType(sortType));
         Long blogId = blogReadRepository.getByNickname(nickname).getId();
         return this.findPostsByBlogId(blogId, pageable);
     }
@@ -187,14 +187,13 @@ public class PostReadServiceImpl implements PostReadService {
     @Override
     @Transactional(readOnly = true)
     public Page<PostDetails> getAllOrPostsByCategoryId(String categoryId, int page, int size, SortType sortType) {
-        Pageable pageable = PageRequest.of(page, size, SortUtil.getSort(sortType));
+        Pageable pageable = PageRequest.of(page, size, SortUtil.getType(sortType));
 
         Page<Post> posts = (categoryId != null) ? this.findPostsByCategoryId(categoryId, pageable) : this.findAll(pageable);
 
         if (posts.isEmpty()) {
             throw new RestApiException(
-                    categoryId != null ? CommonExceptionCode.NOT_FOUND_POST_IN_CATEGORY
-                            : CommonExceptionCode.NOT_FOUND_POST
+                    categoryId != null ? CommonExceptionCode.NOT_FOUND_POST_IN_CATEGORY : CommonExceptionCode.NOT_FOUND_POST
             );
         }
 
@@ -233,13 +232,7 @@ public class PostReadServiceImpl implements PostReadService {
      */
     @Override
     public List<YearlyPostStats> getYearlyPostStatsByBlogId(Long blogId) {
-        List<YearlyPostStats> yearlyPostStats = this.findYearlyPostStatsByBlogId(blogId);
-
-        if (yearlyPostStats.isEmpty()) {
-            throw new RestApiException(CommonExceptionCode.NOT_FOUND_POST_IN_BLOG);
-        }
-
-        return yearlyPostStats;
+        return this.findYearlyPostStatsByBlogId(blogId);
     }
 
     /**

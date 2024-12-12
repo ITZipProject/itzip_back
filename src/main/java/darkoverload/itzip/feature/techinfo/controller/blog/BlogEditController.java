@@ -46,7 +46,10 @@ public class BlogEditController {
             summary = "블로그 임시 삭제 (비공개 처리)",
             description = "블로그를 비공개 상태로 설정합니다."
     )
-    @ExceptionCodeAnnotations({CommonExceptionCode.UPDATE_FAIL_BLOG})
+    @ExceptionCodeAnnotations({
+            CommonExceptionCode.NOT_FOUND_BLOG,
+            CommonExceptionCode.UPDATE_FAIL_BLOG
+    })
     @PatchMapping("/{blogId}/status")
     public String editBlogStatus(
             @Parameter(description = "블로그 ID", example = "1")

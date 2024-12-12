@@ -10,14 +10,12 @@ import lombok.Getter;
 @Getter
 public class LikeStatus {
 
-    private final String id;
     private final String postId;
     private final Long userId;
     private final Boolean isLiked;
 
     @Builder
-    public LikeStatus(String id, String postId, Long userId, Boolean isLiked) {
-        this.id = id;
+    public LikeStatus(String postId, Long userId, Boolean isLiked) {
         this.postId = postId;
         this.userId = userId;
         this.isLiked = isLiked;

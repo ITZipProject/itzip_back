@@ -4,10 +4,10 @@ import darkoverload.itzip.feature.techinfo.domain.blog.Blog;
 
 public interface BlogCommandRepository {
 
-    void save(Blog blog);
+    Blog save(Blog blog);
 
-    void update(Long userId, String newIntro);
+    Blog update(Long userId, String newIntro);
 
-    void update(Long blogId, boolean status);
+    Blog update(Long blogId, boolean status);
 
 }

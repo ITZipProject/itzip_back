@@ -94,4 +94,15 @@ public class BlogReadRepositoryImpl implements BlogReadRepository {
         );
     }
 
+    /**
+     * 블로그 ID로 블로그의 프록시 객체를 조회합니다.
+     *
+     * @param id 블로그 ID
+     * @return Blog
+     */
+    @Override
+    public Blog getReferenceById(Long id) {
+        return repository.getReferenceById(id).toModel();
+    }
+
 }

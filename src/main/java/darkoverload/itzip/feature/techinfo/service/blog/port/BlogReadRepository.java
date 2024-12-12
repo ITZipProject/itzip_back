@@ -18,4 +18,6 @@ public interface BlogReadRepository {
 
     Blog getByNickname(String nickname);
 
+    Blog getReferenceById(Long id);
+
 }

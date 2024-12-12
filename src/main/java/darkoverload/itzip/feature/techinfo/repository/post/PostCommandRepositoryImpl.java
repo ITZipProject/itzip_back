@@ -5,10 +5,9 @@ import darkoverload.itzip.feature.techinfo.model.document.PostDocument;
 import darkoverload.itzip.feature.techinfo.service.post.port.PostCommandRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
-import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
-
+import lombok.RequiredArgsConstructor;
 import java.util.List;
 
 /**
@@ -26,8 +25,19 @@ public class PostCommandRepositoryImpl implements PostCommandRepository {
      * @param post 저장할 Post
      */
     @Override
-    public void save(Post post) {
-        repository.save(PostDocument.from(post));
+    public Post save(Post post) {
+        return repository.save(PostDocument.from(post)).toModel();
+    }
+
+    @Override
+    public List<Post> saveAll(List<Post> post) {
+        return repository.saveAll(
+                post.stream()
+                        .map(PostDocument::from)
+                        .toList()
+        ).stream()
+                .map(PostDocument::toModel)
+                .toList();
     }
 
     /**
@@ -37,16 +47,24 @@ public class PostCommandRepositoryImpl implements PostCommandRepository {
      * @param categoryId         카테고리 ID
      * @param title              제목
      * @param content            내용
-     * @param thumbnailImagePath 썸네일 이미지 URL
-     * @param contentImagePaths  본문 이미지 URL 목록
+     * @param thumbnailImageUrl 썸네일 이미지 URL
+     * @param contentImageUrls  본문 이미지 URL 목록
      * @throws RestApiException 포스트 업데이트 실패 시 발생
      */
     @Override
-    public void update(ObjectId postId, ObjectId categoryId, String title, String content, String thumbnailImagePath,
-                       List<String> contentImagePaths) {
-        if (repository.update(postId, categoryId, title, content, thumbnailImagePath, contentImagePaths) < 0) {
-            throw new RestApiException(CommonExceptionCode.UPDATE_FAIL_POST);
-        }
+    public Post update(
+            ObjectId postId,
+            ObjectId categoryId,
+            String title,
+            String content,
+            String thumbnailImageUrl,
+            List<String> contentImageUrls
+    ) {
+        return repository.update(postId, categoryId, title, content, thumbnailImageUrl, contentImageUrls)
+                .map(PostDocument::toModel)
+                .orElseThrow(
+                        () -> new RestApiException(CommonExceptionCode.UPDATE_FAIL_POST)
+                );
     }
 
     /**
@@ -57,10 +75,12 @@ public class PostCommandRepositoryImpl implements PostCommandRepository {
      * @throws RestApiException 포스트 상태 업데이트 실패 시 발생
      */
     @Override
-    public void update(ObjectId postId, boolean status) {
-        if (repository.update(postId, status) < 0) {
-            throw new RestApiException(CommonExceptionCode.UPDATE_FAIL_POST);
-        }
+    public Post update(ObjectId postId, boolean status) {
+        return repository.update(postId, status)
+                .map(PostDocument::toModel)
+                .orElseThrow(
+                        () -> new RestApiException(CommonExceptionCode.UPDATE_FAIL_POST)
+                );
     }
 
     /**
@@ -72,10 +92,21 @@ public class PostCommandRepositoryImpl implements PostCommandRepository {
      * @throws RestApiException 포스트 필드 업데이트 실패 시 발생
      */
     @Override
-    public void updateFieldWithValue(ObjectId postId, String fieldName, int value) {
-        if (repository.updateFieldWithValue(postId, fieldName, value) < 0) {
-            throw new RestApiException(CommonExceptionCode.UPDATE_FAIL_POST);
-        }
+    public Post updateFieldWithValue(ObjectId postId, String fieldName, int value) {
+        return repository.updateFieldWithValue(postId, fieldName, value)
+                .map(PostDocument::toModel)
+                .orElseThrow(
+                        () -> new RestApiException(CommonExceptionCode.UPDATE_FAIL_POST)
+                );
+    }
+
+    /**
+     * 모든 포스트를 삭제합니다.
+     * 주로 테스트 환경이나 데이터 초기화 시 사용됩니다.
+     */
+    @Override
+    public void deleteAll() {
+        repository.deleteAll();
     }
 
 }

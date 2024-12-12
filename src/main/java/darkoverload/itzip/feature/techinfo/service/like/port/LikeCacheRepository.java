@@ -11,4 +11,6 @@ public interface LikeCacheRepository {
 
     List<LikeStatus> getAllLikeStatuses();
 
+    void deleteAll();
+
 }

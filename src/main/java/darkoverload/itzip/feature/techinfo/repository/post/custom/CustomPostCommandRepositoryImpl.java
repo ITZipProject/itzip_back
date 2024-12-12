@@ -4,13 +4,14 @@ import com.mongodb.client.result.UpdateResult;
 import darkoverload.itzip.feature.techinfo.model.document.PostDocument;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
-
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * MongoDB를 사용하여 포스트 정보를 수정하는 커스텀 레포지토리 구현 클래스.
@@ -29,11 +30,11 @@ public class CustomPostCommandRepositoryImpl implements CustomPostCommandReposit
      * @param content            내용
      * @param thumbnailImagePath 썸네일 이미지 URL
      * @param contentImagePaths  본문 이미지 URL 목록
-     * @return 업데이트된 문서의 수
+     * @return Optional<PostDocument>
      */
     @Override
-    public long update(ObjectId postId, ObjectId categoryId, String title, String content,
-                       String thumbnailImagePath, List<String> contentImagePaths) {
+    public Optional<PostDocument> update(ObjectId postId, ObjectId categoryId, String title, String content,
+                                        String thumbnailImagePath, List<String> contentImagePaths) {
         Query query = new Query(Criteria.where("_id").is(postId));
 
         Update update = new Update()
@@ -44,8 +45,11 @@ public class CustomPostCommandRepositoryImpl implements CustomPostCommandReposit
                 .set("content_image_paths", contentImagePaths)
                 .set("modify_date", LocalDateTime.now());
 
-        UpdateResult result = mongoTemplate.updateFirst(query, update, PostDocument.class);
-        return result.getModifiedCount();
+        FindAndModifyOptions options = FindAndModifyOptions.options()
+                .returnNew(true)
+                .upsert(false);
+
+        return Optional.ofNullable(mongoTemplate.findAndModify(query, update, options, PostDocument.class));
     }
 
     /**
@@ -53,14 +57,18 @@ public class CustomPostCommandRepositoryImpl implements CustomPostCommandReposit
      *
      * @param postId 포스트 ID
      * @param status 새로운 공개 상태
-     * @return 업데이트된 문서의 수
+     * @return Optional<PostDocument>
      */
     @Override
-    public long update(ObjectId postId, boolean status) {
+    public Optional<PostDocument> update(ObjectId postId, boolean status) {
         Query query = new Query(Criteria.where("_id").is(postId));
         Update update = new Update().set("is_public", status);
-        UpdateResult result = mongoTemplate.updateFirst(query, update, PostDocument.class);
-        return result.getModifiedCount();
+
+        FindAndModifyOptions options = FindAndModifyOptions.options()
+                .returnNew(true)
+                .upsert(false);
+
+        return Optional.ofNullable(mongoTemplate.findAndModify(query, update, options, PostDocument.class));
     }
 
     /**
@@ -69,14 +77,18 @@ public class CustomPostCommandRepositoryImpl implements CustomPostCommandReposit
      * @param postId    포스트 ID
      * @param fieldName 업데이트할 필드 이름
      * @param value     증가시킬 값
-     * @return 업데이트된 문서의 수
+     * @return PostDocument
      */
     @Override
-    public long updateFieldWithValue(ObjectId postId, String fieldName, int value) {
+    public Optional<PostDocument> updateFieldWithValue(ObjectId postId, String fieldName, int value) {
         Query query = new Query(Criteria.where("_id").is(postId));
         Update update = new Update().inc(fieldName, value);
-        UpdateResult result = mongoTemplate.updateFirst(query, update, PostDocument.class);
-        return result.getModifiedCount();
+
+        FindAndModifyOptions options = FindAndModifyOptions.options()
+                .returnNew(true)
+                .upsert(false);
+
+        return Optional.ofNullable(mongoTemplate.findAndModify(query, update, options, PostDocument.class));
     }
 
 }

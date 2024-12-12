@@ -12,4 +12,6 @@ public interface RedisScrapRepository {
 
     List<ScrapStatus> getAllScrapStatuses();
 
+    void deleteAll();
+
 }
