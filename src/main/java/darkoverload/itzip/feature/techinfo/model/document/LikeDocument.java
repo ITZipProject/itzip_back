@@ -32,12 +32,12 @@ public class LikeDocument extends MongoAuditingFields {
     /**
      * Like 로부터 LikeDocument 생성합니다.
      *
-     * @param like
-     * @return
+     * @param like 변환할 Like
+     * @return LikeDocument
      */
     public static LikeDocument from(Like like) {
         return LikeDocument.builder()
-                .id(new ObjectId(like.getId()))
+                .id(like.getId() != null ? new ObjectId(like.getId()) : null)
                 .postId(new ObjectId(like.getPostId()))
                 .userId(like.getUserId())
                 .build();

@@ -2,9 +2,9 @@ package darkoverload.itzip.feature.techinfo.model.document;
 
 import darkoverload.itzip.feature.techinfo.domain.scrap.Scrap;
 import darkoverload.itzip.global.entity.MongoAuditingFields;
-import jakarta.persistence.Id;
 import lombok.*;
 import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -37,7 +37,7 @@ public class ScrapDocument extends MongoAuditingFields {
      */
     public static ScrapDocument from(Scrap scrap) {
         return ScrapDocument.builder()
-                .id(new ObjectId(scrap.getId()))
+                .id(scrap.getId() != null ? new ObjectId(scrap.getId()) : null)
                 .postId(new ObjectId(scrap.getPostId()))
                 .userId(scrap.getUserId())
                 .build();
@@ -50,7 +50,6 @@ public class ScrapDocument extends MongoAuditingFields {
      */
     public Scrap toModel() {
         return Scrap.builder()
-                .id(this.id.toHexString())
                 .postId(this.postId.toHexString())
                 .userId(this.userId)
                 .build();

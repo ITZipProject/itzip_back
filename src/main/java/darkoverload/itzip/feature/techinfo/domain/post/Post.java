@@ -66,6 +66,8 @@ public class Post {
                 .categoryId(request.categoryId())
                 .title(request.title())
                 .content(request.content())
+                .viewCount(0)
+                .likeCount(0)
                 .isPublic(true)
                 .thumbnailImagePath(request.thumbnailImagePath())
                 .contentImagePaths(request.contentImagePaths())

@@ -75,4 +75,14 @@ public class RedisLikeRepositoryImpl implements RedisLikeRepository {
         return likeStatuses;
     }
 
+    /**
+     * Redis에 저장된 모든 좋아요 데이터를 삭제합니다.
+     * 주로 테스트 환경이나 데이터 초기화에 사용됩니다.
+     */
+    @Override
+    public void deleteAll() {
+        // 좋아요 관련 모든 키 삭제
+        redisTemplate.delete(redisTemplate.keys("post:*:user:*:like"));
+    }
+
 }

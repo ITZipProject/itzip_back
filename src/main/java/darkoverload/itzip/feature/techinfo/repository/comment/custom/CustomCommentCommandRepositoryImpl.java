@@ -1,16 +1,16 @@
 package darkoverload.itzip.feature.techinfo.repository.comment.custom;
 
-import com.mongodb.client.result.UpdateResult;
 import darkoverload.itzip.feature.techinfo.model.document.CommentDocument;
-import lombok.RequiredArgsConstructor;
-import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Repository;
-
+import org.bson.types.ObjectId;
+import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 /**
  * 댓글 명령(수정, 삭제)을 처리하는 커스텀 레포지토리 구현 클래스.
@@ -30,15 +30,18 @@ public class CustomCommentCommandRepositoryImpl implements CustomCommentCommandR
      * @return 업데이트된 댓글의 수
      */
     @Override
-    public long update(ObjectId commentId, Long userId, String content) {
+    public Optional<CommentDocument> update(ObjectId commentId, Long userId, String content) {
         Query query = new Query(Criteria.where("_id").is(commentId).and("user_id").is(userId));
 
         Update update = new Update()
                 .set("content", content)
                 .set("modify_date", LocalDateTime.now());
 
-        UpdateResult result = mongoTemplate.updateFirst(query, update, CommentDocument.class);
-        return result.getModifiedCount();
+        FindAndModifyOptions options = FindAndModifyOptions.options()
+                .returnNew(true)
+                .upsert(false);
+
+        return Optional.ofNullable(mongoTemplate.findAndModify(query, update, options, CommentDocument.class));
     }
 
     /**
@@ -50,11 +53,15 @@ public class CustomCommentCommandRepositoryImpl implements CustomCommentCommandR
      * @return 업데이트된 댓글의 수
      */
     @Override
-    public long update(ObjectId commentId, Long userId, boolean status) {
+    public Optional<CommentDocument> update(ObjectId commentId, Long userId, boolean status) {
         Query query = new Query(Criteria.where("_id").is(commentId).and("user_id").is(userId));
         Update update = new Update().set("is_public", status);
-        UpdateResult result = mongoTemplate.updateFirst(query, update, CommentDocument.class);
-        return result.getModifiedCount();
+
+        FindAndModifyOptions options = FindAndModifyOptions.options()
+                .returnNew(true)
+                .upsert(false);
+
+        return Optional.ofNullable(mongoTemplate.findAndModify(query, update, options, CommentDocument.class));
     }
 
 }

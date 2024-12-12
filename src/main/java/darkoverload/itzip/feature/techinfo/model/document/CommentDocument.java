@@ -43,6 +43,7 @@ public class CommentDocument extends MongoAuditingFields {
      */
     public static CommentDocument from(Comment comment) {
         return CommentDocument.builder()
+                .id(comment.getId() != null ? new ObjectId(comment.getId()) : null)
                 .postId(new ObjectId(comment.getPostId()))
                 .userId(comment.getUserId())
                 .content(comment.getContent())
@@ -58,10 +59,10 @@ public class CommentDocument extends MongoAuditingFields {
     public Comment toModel() {
         return Comment.builder()
                 .id(this.id.toHexString())
-                .postId(this.postId.toHexString())
+                .postId(this.postId != null ? this.postId.toHexString() : null)
                 .userId(this.userId)
                 .content(this.content)
-                .isPublic(this.isPublic)
+                .isPublic(this.isPublic != null ? this.isPublic : null)
                 .createDate(this.createDate)
                 .build();
     }

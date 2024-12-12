@@ -30,7 +30,6 @@ public class Like {
      */
     public static Like from(LikeStatus likeStatus) {
         return Like.builder()
-                .id(likeStatus.getId())
                 .postId(likeStatus.getPostId())
                 .userId(likeStatus.getUserId())
                 .build();

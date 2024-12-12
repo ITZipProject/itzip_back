@@ -60,8 +60,9 @@ public class PostDocument extends MongoAuditingFields {
      */
     public static PostDocument from(Post post) {
         return PostDocument.builder()
-                .id(new ObjectId(post.getId()))
+                .id(post.getId() != null ? new ObjectId(post.getId()) : null)
                 .blogId(post.getBlogId())
+                .categoryId(new ObjectId(post.getCategoryId()))
                 .title(post.getTitle())
                 .content(post.getContent())
                 .viewCount(post.getViewCount())

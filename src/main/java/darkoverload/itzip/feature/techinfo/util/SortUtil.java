@@ -24,7 +24,7 @@ public class SortUtil {
      * @param sortType 정렬 유형
      * @return 생성된 Sort 객체
      */
-    public static Sort getSort(SortType sortType) {
+    public static Sort getType(SortType sortType) {
         return switch (sortType) {
             case VIEWCOUNT -> Sort.by(Sort.Direction.DESC, VIEW_COUNT_FIELD);
             case LIKECOUNT -> Sort.by(Sort.Direction.DESC, LIKE_COUNT_FIELD);

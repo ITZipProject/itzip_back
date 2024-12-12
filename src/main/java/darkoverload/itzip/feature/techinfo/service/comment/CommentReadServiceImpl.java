@@ -10,6 +10,7 @@ import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
+import org.bson.types.ObjectId;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,7 +35,7 @@ public class CommentReadServiceImpl implements CommentReadService {
      */
     @Override
     public Page<Comment> findCommentsByPostId(String postId, Pageable pageable) {
-        return commentReadRepository.findCommentsByPostId(postId, pageable);
+        return commentReadRepository.findCommentsByPostId(new ObjectId(postId), pageable);
     }
 
     /**
@@ -48,7 +49,7 @@ public class CommentReadServiceImpl implements CommentReadService {
      */
     @Override
     public Page<CommentDetails> getCommentsByPostId(String postId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, SortUtil.getSort(SortType.NEWEST));
+        Pageable pageable = PageRequest.of(page, size, SortUtil.getType(SortType.NEWEST));
 
         Page<Comment> comments = findCommentsByPostId(postId, pageable);
 

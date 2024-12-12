@@ -52,4 +52,13 @@ public class ScrapCacheRepositoryImpl implements ScrapCacheRepository {
         return repository.getAllScrapStatuses();
     }
 
+    /**
+     * 캐시에 저장된 모든 스크랩 데이터를 삭제합니다.
+     * 주로 테스트 환경이나 데이터 초기화에 사용됩니다.
+     */
+    @Override
+    public void deleteAll() {
+        repository.deleteAll();
+    }
+
 }

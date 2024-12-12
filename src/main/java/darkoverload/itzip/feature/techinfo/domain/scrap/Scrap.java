@@ -30,7 +30,6 @@ public class Scrap {
      */
     public static Scrap from(ScrapStatus scrapStatus) {
         return Scrap.builder()
-                .id(scrapStatus.getId())
                 .postId(scrapStatus.getPostId())
                 .userId(scrapStatus.getUserId())
                 .build();

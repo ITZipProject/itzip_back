@@ -11,4 +11,6 @@ public interface RedisLikeRepository {
 
     List<LikeStatus> getAllLikeStatuses();
 
+    void deleteAll();
+
 }

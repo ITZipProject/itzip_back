@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * 댓글 명령(생성, 수정, 삭제)을 처리하는 레포지토리 구현 클래스.
  */
@@ -24,8 +26,25 @@ public class CommentCommandRepositoryImpl implements CommentCommandRepository {
      * @param comment 저장할 댓글
      */
     @Override
-    public void save(Comment comment) {
-        repository.save(CommentDocument.from(comment));
+    public Comment save(Comment comment) {
+        return repository.save(CommentDocument.from(comment)).toModel();
+    }
+
+    /**
+     * 여러 댓글을 한꺼번에 저장합니다.
+     *
+     * @param comments 저장할 댓글 리스트
+     * @return 저장된 댓글 리스트
+     */
+    @Override
+    public List<Comment> saveAll(List<Comment> comments) {
+        return repository.saveAll(
+                comments.stream()
+                        .map(CommentDocument::from)
+                        .toList()
+        ).stream()
+                .map(CommentDocument::toModel)
+                .toList();
     }
 
     /**
@@ -36,10 +55,13 @@ public class CommentCommandRepositoryImpl implements CommentCommandRepository {
      * @param content   새로운 댓글 내용
      * @throws RestApiException 댓글 업데이트 실패 시 발생
      */
-    public void update(ObjectId commentId, Long userId, String content) {
-        if (repository.update(commentId, userId, content) < 0) {
-            throw new RestApiException(CommonExceptionCode.UPDATE_FAIL_COMMENT);
-        }
+    @Override
+    public Comment update(ObjectId commentId, Long userId, String content) {
+        return repository.update(commentId, userId, content)
+                .map(CommentDocument::toModel)
+                .orElseThrow(
+                        () -> new RestApiException(CommonExceptionCode.UPDATE_FAIL_COMMENT)
+                );
     }
 
     /**
@@ -50,10 +72,22 @@ public class CommentCommandRepositoryImpl implements CommentCommandRepository {
      * @param status    새로운 공개 상태
      * @throws RestApiException 댓글 상태 업데이트 실패 시 발생
      */
-    public void update(ObjectId commentId, Long userId, boolean status) {
-        if (repository.update(commentId, userId, status) < 0) {
-            throw new RestApiException(CommonExceptionCode.UPDATE_FAIL_COMMENT);
-        }
+    @Override
+    public Comment update(ObjectId commentId, Long userId, boolean status) {
+        return repository.update(commentId, userId, status)
+                .map(CommentDocument::toModel)
+                .orElseThrow(
+                        () -> new RestApiException(CommonExceptionCode.UPDATE_FAIL_COMMENT)
+                );
+    }
+
+    /**
+     * 모든 댓글을 삭제합니다.
+     * 주로 테스트 환경이나 데이터 초기화에 사용됩니다.
+     */
+    @Override
+    public void deleteAll() {
+        repository.deleteAll();
     }
 
 }
