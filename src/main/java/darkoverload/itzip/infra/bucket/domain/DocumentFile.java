@@ -6,6 +6,7 @@ import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +17,7 @@ import java.util.Objects;
 
 @Slf4j
 @Getter
+@ToString
 public class DocumentFile {
     public static final String FEATURE = "resume" + File.separator;
     private static final String RESUME_FILE_PATH = File.separator + "resume";
@@ -62,6 +64,19 @@ public class DocumentFile {
 
     public static String getFeatureDir() {
         return FEATURE;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DocumentFile that = (DocumentFile) o;
+        return size == that.size && Objects.equals(fileName, that.fileName) && Objects.equals(fileType, that.fileType);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(fileName, fileType, size);
     }
 
 }
