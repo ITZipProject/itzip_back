@@ -53,7 +53,7 @@ public class DocumentFile {
         String type = FileUtil.getMimeType(inputStream);
         log.info("type :: {}", type);
 
-        return type.equals("application/pdf") || type.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document") || type.equals("application/msword");
+        return type.equals("application/pdf") || type.equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document") || type.equals("application/msword") || type.equals("text/plain");
     }
 
     public static String getBucketDir(String bucketName) {
