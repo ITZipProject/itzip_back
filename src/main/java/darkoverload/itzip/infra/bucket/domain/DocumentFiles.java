@@ -3,6 +3,7 @@ package darkoverload.itzip.infra.bucket.domain;
 import darkoverload.itzip.infra.bucket.util.holder.UUIDHolder;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
+import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
