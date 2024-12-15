@@ -2,7 +2,7 @@
     <!-- Console logging (optional) -->
     <!-- 콘솔(Appender)로 로그를 출력하는 설정 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!-- 로그 출력 형식을 정의(기본 형식)
                  %d: 로그의 날짜와 시간 (밀리초 단위)
                  %thread: 로그를 기록하는 스레드 이름
@@ -10,7 +10,7 @@
                  %logger{36}: 로그를 발생시킨 로거 이름 (최대 36자)
                  %msg: 로그 메시지
                  %n: 줄 바꿈 -->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %logger{36} - %msg%n</pattern>
         </encoder>
     </appender>
 
