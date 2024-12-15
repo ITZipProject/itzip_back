@@ -4,7 +4,6 @@ import darkoverload.itzip.feature.csQuiz.controller.request.QuizQueryRequest;
 import darkoverload.itzip.feature.csQuiz.entity.SortBy;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizDetailResponse;
 import darkoverload.itzip.feature.csQuiz.service.QuizService;
-import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.swagger.ExceptionCodeAnnotations;
@@ -15,7 +14,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -51,20 +49,21 @@ public class CsQuizzesController {
             @Parameter(description = "퀴즈 난이도 입력칸 1~3") @RequestParam(required = false) Integer difficulty,
             @Parameter(description = "카테고리 식별값 입력칸") @RequestParam(required = false) Long categoryId,
             @Parameter(description = "NEWEST 새로운 순, OLDEST 오래된 순, RECOMMENED 추천순 아무것도 없으면 새로운순") @RequestParam(required = false, defaultValue = "NEWEST") SortBy sortBy,
+            @Parameter(description = "사용자 ID") @RequestParam(required = false) Long userId,
             @Parameter(description = "사용자가 푼 문제를 포함 하는지 true면 포함 false면 미포함") @RequestParam(required = false, defaultValue = "false") boolean inUserSolved,
             @Parameter(description = "문제 페이지 0부터 시작") @RequestParam(defaultValue = "0") int page,
             @Parameter(description = "가져올 문제 수") @RequestParam(defaultValue = "10") int size,
-            @Parameter(description = "검색할 단어") @RequestParam(required = false) String keyword,
-            @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+            @Parameter(description = "검색할 단어") @RequestParam(required = false) String keyword) {
         QuizQueryRequest quizQueryRequest = QuizQueryRequest.builder()
                 .difficulty(difficulty)
                 .categoryId(categoryId)
                 .sortBy(sortBy)
+                .userId(userId)
                 .inUserSolved(inUserSolved)
                 .page(page)
                 .size(size)
                 .keyword(keyword)
                 .build();
-        return quizService.findQuizzesByQuery(quizQueryRequest, customUserDetails);
+        return quizService.findQuizzesByQuery(quizQueryRequest);
     }
 }

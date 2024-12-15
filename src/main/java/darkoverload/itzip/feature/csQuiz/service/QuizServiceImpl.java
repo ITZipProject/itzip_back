@@ -51,8 +51,8 @@ public class QuizServiceImpl implements QuizService {
      * @return 필터링되고 정렬된 퀴즈 목록
      */
     @Override
-    public PagedModel<EntityModel<QuizDetailResponse>> findQuizzesByQuery(QuizQueryRequest quizQueryRequest, CustomUserDetails customUserDetails) {
-        return getFilteredAndSortedQuizzes.findQuizzesByQuery(quizQueryRequest, customUserDetails);
+    public PagedModel<EntityModel<QuizDetailResponse>> findQuizzesByQuery(QuizQueryRequest quizQueryRequest) {
+        return getFilteredAndSortedQuizzes.findQuizzesByQuery(quizQueryRequest);
     }
 
     /**

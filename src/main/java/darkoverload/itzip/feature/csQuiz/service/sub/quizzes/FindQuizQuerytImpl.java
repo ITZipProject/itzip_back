@@ -8,16 +8,10 @@ import darkoverload.itzip.feature.csQuiz.entity.QuizDocument;
 import darkoverload.itzip.feature.csQuiz.repository.quiz.QuizRepository;
 import darkoverload.itzip.feature.csQuiz.repository.quizusersolvedmapping.QuizUserSolvedMappingRepository;
 import darkoverload.itzip.feature.csQuiz.util.QuizMapper;
-import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
-import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.UserEntity;
-import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.feature.user.service.UserService;
-import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
-import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
-import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.stereotype.Service;
@@ -47,8 +41,8 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
      * @return 필터링되고 정렬된 퀴즈 목록
      */
     @Override
-    @Transactional
-    public PagedModel<EntityModel<QuizDetailResponse>> findQuizzesByQuery(QuizQueryRequest quizQueryRequest, CustomUserDetails customUserDetails) {
+    @Transactional(readOnly = true)
+    public PagedModel<EntityModel<QuizDetailResponse>> findQuizzesByQuery(QuizQueryRequest quizQueryRequest) {
         // 페이지 정보와 정렬 기준을 기반으로 Pageable 객체 생성
         Pageable pageable = PageRequest.of(quizQueryRequest.getPage(), quizQueryRequest.getSize(), getSort(quizQueryRequest.getSortBy()));
 
@@ -57,17 +51,18 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
         // 사용자가 푼 문제의 Id값들만 저장할 리스트 초기화
         List<String> solvedProblemIds = new ArrayList<>();
 
-        //사용자를 찾고 사용자가 없을시 사용자가 없음 예외 출력
-        UserEntity userEntity = userService.findByEmail(customUserDetails.getEmail())
-                .map(User::convertToEntity)
-                .orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
+        if (quizQueryRequest.getUserId() != null){
+            //사용자를 찾고 사용자가 없을시 사용자가 없음 예외 출력
+            UserEntity userEntity = userService.getById(quizQueryRequest.getUserId())
+                    .convertToEntity();
 
-        //사용자가 푼문제매핑 테이블 list로 받아옴
-        solvedProblemsEntity = quizUserSolvedMappingRepository.findAllByUser(userEntity);
-        // 사용자가 푼 문제의 problemId를 리스트로 추출
-        solvedProblemIds = solvedProblemsEntity.stream()
-                .map(QuizUserSolvedMapping::getProblemId)
-                .toList();
+            //사용자가 푼문제매핑 테이블 list로 받아옴
+            solvedProblemsEntity = quizUserSolvedMappingRepository.findAllByUser(userEntity);
+            // 사용자가 푼 문제의 problemId를 리스트로 추출
+            solvedProblemIds = solvedProblemsEntity.stream()
+                    .map(QuizUserSolvedMapping::getProblemId)
+                    .toList();
+        }
         //사용자가 푼문제들을 HashSet으로 만들어서 빠른 검색을 할수 있게함 key는 problemid값
         Set<QuizUserSolvedMapping> solvedProblemsSet = new HashSet<>(solvedProblemsEntity);
 
