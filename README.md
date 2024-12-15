@@ -1,4 +1,7 @@
 ## 📽️ 프로젝트 개요
+### ERD - 다이어그램
+![entityManagerFactory(EntityManagerFactoryBuilder, PersistenceManagedTypes)](https://github.com/user-attachments/assets/0e4f14c5-9ae5-41bc-8b56-4a78860eb4b9)
+
 
 ### 💡 아이디어명
 **프로덕트 이름** : ITZip
