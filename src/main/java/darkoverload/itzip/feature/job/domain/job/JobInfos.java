@@ -73,7 +73,6 @@ public class JobInfos {
                 || !dbJobInfo.getTitle().equals(apiJobInfo.getTitle()) // 제목 필드 비교
                 || !dbJobInfo.getIndustryCode().equals(apiJobInfo.getIndustryCode()) // 산업 코드 비교
                 || !dbJobInfo.getIndustryName().equals(apiJobInfo.getIndustryName()) // 산업 이름 비교
-                || !dbJobInfo.getLocationName().equals(apiJobInfo.getLocationName()) // 위치 이름 비교
                 || !dbJobInfo.getJobMidCode().equals(apiJobInfo.getJobMidCode()) // 중간 직무 코드 비교
                 || !dbJobInfo.getJobMidName().equals(apiJobInfo.getJobMidName()) // 중간 직무 이름 비교
                 || !dbJobInfo.getJobName().equals(apiJobInfo.getJobName()) // 직무 이름 비교
