@@ -1,7 +1,10 @@
 ## 📽️ 프로젝트 개요
+
+### Software Architecture
+<img width="2199" alt="software architecture" src="https://github.com/user-attachments/assets/68c3ee1a-17b5-4898-9c82-7fc221990bbb" />
+
 ### ERD - 다이어그램
 ![entityManagerFactory(EntityManagerFactoryBuilder, PersistenceManagedTypes)](https://github.com/user-attachments/assets/0e4f14c5-9ae5-41bc-8b56-4a78860eb4b9)
-
 
 ### 💡 아이디어명
 **프로덕트 이름** : ITZip
