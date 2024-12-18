@@ -35,7 +35,9 @@ import darkoverload.itzip.feature.resume.service.resume.port.myskill.MySkillRead
 import darkoverload.itzip.feature.resume.service.resume.port.myskill.MySkillCommandRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationReadRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationCommandRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeReadRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeRepository;
+import darkoverload.itzip.feature.user.entity.UserEntity;
 import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
@@ -59,6 +61,7 @@ public class ResumeServiceImpl implements ResumeService {
 
     private final UserRepository userRepository;
     private final ResumeRepository resumeRepository;
+    private final ResumeReadRepository resumeReadRepository;
 
     private final EducationCommandRepository educationCommandRepository;
     private final EducationReadRepository educationReadRepository;
@@ -159,17 +162,27 @@ public class ResumeServiceImpl implements ResumeService {
 
 
     @Override
-    public UpdateResumeResponse update(UpdateResumeRequest request, CustomUserDetails customUserDetails) {
-        long dataUserId = userRepository.findByEmail(customUserDetails.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)).getId();
+    public UpdateResumeResponse update(UpdateResumeRequest request, CustomUserDetails user) {
+        long dataUserId = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)).getId();
 
         Resume.checkUserIdEquals(request.getUserId(), dataUserId);
 
         Resume updateResume = Resume.update(request.getResume(), request.getResumeId(), request.getUserId());
 
-        Resume databaseResume = resumeRepository.findById(request.getResumeId());
+        Resume databaseResume = resumeReadRepository.getReferenceById(request.getResumeId());
         awsService.deleteDocumentFiles(updateResume.notExistFileUrls(databaseResume.getFileUrls()), Resume.FEATURE_DIR);
 
         return UpdateResumeResponse.from(update(request, resumeRepository.update(updateResume)));
+    }
+
+    @Override
+    public void delete(Long id, CustomUserDetails user) {
+        long dataUserId = userRepository.findByEmail(user.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER)).getId();
+
+        Resume resume = resumeReadRepository.getReferenceById(id).checkIdNull();
+        Resume.checkUserIdEquals(resume.getUserId(), dataUserId);
+
+        resumeRepository.delete(resume);
     }
 
     /**

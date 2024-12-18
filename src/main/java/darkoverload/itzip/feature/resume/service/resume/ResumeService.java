@@ -14,4 +14,5 @@ public interface ResumeService {
 
     UpdateResumeResponse update(UpdateResumeRequest request, CustomUserDetails user);
 
+    void delete(Long id, CustomUserDetails user);
 }

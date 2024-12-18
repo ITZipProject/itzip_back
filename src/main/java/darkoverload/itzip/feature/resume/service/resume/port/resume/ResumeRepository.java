@@ -7,5 +7,6 @@ public interface ResumeRepository {
 
     Resume update(Resume resume);
 
-    Resume findById(long id);
+    void delete(Resume resume);
+
 }
