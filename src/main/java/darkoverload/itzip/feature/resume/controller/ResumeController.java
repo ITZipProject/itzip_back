@@ -2,6 +2,7 @@ package darkoverload.itzip.feature.resume.controller;
 
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
+import darkoverload.itzip.feature.resume.controller.request.ResumeInfoScrapRequest;
 import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.response.CreateResumeResponse;
 import darkoverload.itzip.feature.resume.controller.response.GetResumeDetailsResponse;
@@ -103,4 +104,15 @@ public class ResumeController {
         return "성공";
     }
 
+    @Operation(
+            summary = "이력서 스크랩",
+            description = "이력서 스크랩 기능 추가"
+    )
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations({CommonExceptionCode.NOT_FOUND})
+    @PostMapping("/scrap")
+    public String scrapResumeInfo(@SwaggerRequestBody(description = "이력서 스크랩에 대한 정보", required = true, content = @Content(schema = @Schema(implementation = ResumeInfoScrapRequest.class)
+    )) @RequestBody ResumeInfoScrapRequest request) {
+        return null;
+    }
 }

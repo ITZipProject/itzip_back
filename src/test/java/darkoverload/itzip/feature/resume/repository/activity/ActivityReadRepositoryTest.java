@@ -3,7 +3,7 @@ package darkoverload.itzip.feature.resume.repository.activity;
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
 import darkoverload.itzip.feature.resume.entity.ActivityEntity;
 import darkoverload.itzip.feature.resume.entity.ProfileInfoEntity;
-import darkoverload.itzip.feature.resume.entity.ResumeEntity;
+import darkoverload.itzip.feature.resume.entity.resume.ResumeEntity;
 import darkoverload.itzip.global.config.querydsl.TestQueryDslConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -1,20 +1,22 @@
-package darkoverload.itzip.feature.resume.entity;
+package darkoverload.itzip.feature.resume.entity.resume;
 
 
-import darkoverload.itzip.feature.resume.code.PublicOnOff;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
+import darkoverload.itzip.feature.resume.entity.ProfileInfoEntity;
 import darkoverload.itzip.feature.resume.util.StringListConverter;
 import darkoverload.itzip.global.entity.AuditingFields;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity(name="resumes")
+@EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(callSuper = false)
 public class ResumeEntity extends AuditingFields {
 
@@ -28,24 +30,28 @@ public class ResumeEntity extends AuditingFields {
     @Embedded
     private ProfileInfoEntity profileInfo;
 
+    @Column(name="image_url")
     private String imageUrl;
 
     @Convert(converter = StringListConverter.class)
     private List<String> links;
 
-
-
     @Convert(converter = StringListConverter.class)
+    @Column(name="file_urls")
     private List<String> fileUrls;
 
+    @ColumnDefault(value = "0")
+    private int scrapCount;
+
     @Builder
-    public ResumeEntity(Long id, Long userId, String imageUrl, ProfileInfoEntity profileInfo,List<String> links, List<String> fileUrls) {
+    public ResumeEntity(Long id, Long userId, String imageUrl, ProfileInfoEntity profileInfo,List<String> links, List<String> fileUrls, int scrapCount) {
         this.id = id;
         this.userId = userId;
         this.imageUrl = imageUrl;
         this.profileInfo = profileInfo;
         this.links = links;
         this.fileUrls = fileUrls;
+        this.scrapCount = scrapCount;
     }
 
     public Resume convertToDomain(){

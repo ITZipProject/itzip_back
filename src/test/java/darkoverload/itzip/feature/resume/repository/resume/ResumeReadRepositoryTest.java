@@ -3,7 +3,7 @@ package darkoverload.itzip.feature.resume.repository.resume;
 
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
 import darkoverload.itzip.feature.resume.entity.ProfileInfoEntity;
-import darkoverload.itzip.feature.resume.entity.ResumeEntity;
+import darkoverload.itzip.feature.resume.entity.resume.ResumeEntity;
 import darkoverload.itzip.global.config.querydsl.TestQueryDslConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -44,10 +44,10 @@ class ResumeReadRepositoryTest {
 
 
         assertThat(resumes).isEqualTo(List.of(
-                new ResumeEntity(1L, 1L, "https://itzip.com", new ProfileInfoEntity("itzip@gmail.com", PublicOnOff.YES, "잇집 홍길동", "010-2355-9839", "잇집입니다."), List.of("잇집이력서"), new ArrayList<>()),
-                new ResumeEntity(2L, 2L, "https://itzip.com", new ProfileInfoEntity("park@gmail.com", PublicOnOff.YES, "잇집 박길동", "010-2354-4444", "park입니다."), List.of("park이력서"), new ArrayList<>()),
-                new ResumeEntity(3L, 3L, "https://itzip.com", new ProfileInfoEntity("sin@gmail.com", PublicOnOff.YES, "sin 홍길동", "010-2355-2331", "sin입니다."), List.of("sin이력서"), new ArrayList<>()),
-                new ResumeEntity(4L, 2L, "https://itzip.com", new ProfileInfoEntity("lev@gmail.com", PublicOnOff.YES, "lev 잇집 박길동", "010-2354-4444", "lev입니다."), List.of("lev이력서"), new ArrayList<>())
+                new ResumeEntity(1L, 1L, "https://itzip.com", new ProfileInfoEntity("itzip@gmail.com", PublicOnOff.YES, "잇집 홍길동", "010-2355-9839", "잇집입니다."), List.of("잇집이력서"), new ArrayList<>(), 0),
+                new ResumeEntity(2L, 2L, "https://itzip.com", new ProfileInfoEntity("park@gmail.com", PublicOnOff.YES, "잇집 박길동", "010-2354-4444", "park입니다."), List.of("park이력서"), new ArrayList<>(), 0),
+                new ResumeEntity(3L, 3L, "https://itzip.com", new ProfileInfoEntity("sin@gmail.com", PublicOnOff.YES, "sin 홍길동", "010-2355-2331", "sin입니다."), List.of("sin이력서"), new ArrayList<>(), 0),
+                new ResumeEntity(4L, 2L, "https://itzip.com", new ProfileInfoEntity("lev@gmail.com", PublicOnOff.YES, "lev 잇집 박길동", "010-2354-4444", "lev입니다."), List.of("lev이력서"), new ArrayList<>(), 0)
         ));
     }
 
