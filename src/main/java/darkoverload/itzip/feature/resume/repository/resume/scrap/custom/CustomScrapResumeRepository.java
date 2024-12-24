@@ -1,9 +1,9 @@
 package darkoverload.itzip.feature.resume.repository.resume.scrap.custom;
 
-import darkoverload.itzip.feature.resume.entity.resume.ResumeScrapEntity;
+import darkoverload.itzip.feature.resume.domain.resume.scrap.ResumeScrap;
 
 import java.util.Optional;
 
 public interface CustomScrapResumeRepository {
-    Optional<ResumeScrapEntity> findByResumeScrap(Long userId, Long resumeId);
+    Optional<ResumeScrap> findByResumeScrap(Long userId, Long resumeId);
 }

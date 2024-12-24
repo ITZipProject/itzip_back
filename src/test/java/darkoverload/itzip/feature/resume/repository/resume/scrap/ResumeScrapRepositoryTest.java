@@ -2,15 +2,13 @@ package darkoverload.itzip.feature.resume.repository.resume.scrap;
 
 
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
+import darkoverload.itzip.feature.resume.domain.resume.scrap.ResumeScrap;
 import darkoverload.itzip.feature.resume.entity.ProfileInfoEntity;
 import darkoverload.itzip.feature.resume.entity.resume.ResumeEntity;
-import darkoverload.itzip.feature.resume.entity.resume.ResumeScrapEntity;
-import darkoverload.itzip.feature.resume.repository.resume.ResumeReadJpaRepository;
 import darkoverload.itzip.feature.user.entity.Authority;
 import darkoverload.itzip.feature.user.entity.UserEntity;
 import darkoverload.itzip.global.config.querydsl.TestQueryDslConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -22,7 +20,7 @@ import org.springframework.test.context.jdbc.SqlGroup;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 @Slf4j
@@ -40,10 +38,10 @@ public class ResumeScrapRepositoryTest {
 
     @Test
     void 내가_스크랩_한_이력서_확인() {
-        Optional<ResumeScrapEntity> resumeScrapEntity = repository.findByResumeScrap(1L, 1L);
+        Optional<ResumeScrap> resumeScrap = repository.findByResumeScrap(1L, 1L);
 
-        assertThat(resumeScrapEntity.get())
-                .isEqualTo(ResumeScrapEntity.builder()
+        assertThat(resumeScrap.get())
+                .isEqualTo(ResumeScrap.builder()
                 .id(1L)
                 .user(
                         UserEntity.builder()
