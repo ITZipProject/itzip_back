@@ -3,6 +3,7 @@ package darkoverload.itzip.feature.job.repository;
 import darkoverload.itzip.feature.job.domain.scrap.JobInfoScrapType;
 import darkoverload.itzip.feature.job.repository.redis.JobInfoScrapRedisReadRepositoryImpl;
 import darkoverload.itzip.feature.job.service.port.JobInfoScrapRedisCommandRepository;
+import darkoverload.itzip.feature.job.service.port.JobInfoScrapRedisReadRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class JobInfoScrapRedisRepositoryTest {
 
     @Autowired
-    private JobInfoScrapRedisReadRepositoryImpl readRepository;
+    private JobInfoScrapRedisReadRepository readRepository;
     
     @Autowired
     private JobInfoScrapRedisCommandRepository commandRepository;
@@ -40,7 +41,7 @@ public class JobInfoScrapRedisRepositoryTest {
     }
 
     @AfterEach
-    void before() {
+    void after() {
         commandRepository.deleteScrapInfo(jobInfoId, scrapUserEmail);
         commandRepository.deleteScrapInfo(unJobInfoId, unScrapUserEmail);
         commandRepository.deleteScrapCountToRedis(jobInfoId);

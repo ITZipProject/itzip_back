@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 public class Resume {
     public static final String FEATURE_DIR = "resume";
+    private static final String MAP_RESUME_SCARP_COUNT_KEY = "resumeScrapCount:";
 
     // 이메일
     private ProfileInfo profileInfo;
@@ -38,10 +39,12 @@ public class Resume {
     // url
     private List<String> fileUrls;
 
+    private Long scrapCount;
+
     public Resume() {
     }
 
-    public Resume(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff, List<String> links, String imageUrl, Long userId, Long resumeId, String workLongTerm, List<String> fileUrls) {
+    public Resume(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff, List<String> links, String imageUrl, Long userId, Long resumeId, String workLongTerm, List<String> fileUrls,  Long scrapCount) {
         this.profileInfo = new ProfileInfo(email, phone, subject, introduction, publicOnOff);
         this.links = links;
         this.imageUrl = imageUrl;
@@ -49,10 +52,11 @@ public class Resume {
         this.resumeId = resumeId;
         this.workLongTerm = workLongTerm;
         this.fileUrls = fileUrls;
+        this.scrapCount = scrapCount;
     }
 
     @Builder
-    public Resume(ProfileInfo profileInfo, List<String> links, String imageUrl, Long userId, Long resumeId, String workLongTerm, List<String> fileUrls) {
+    public Resume(ProfileInfo profileInfo, List<String> links, String imageUrl, Long userId, Long resumeId, String workLongTerm, List<String> fileUrls, Long scrapCount) {
         this.profileInfo = profileInfo;
         this.links = links;
         this.imageUrl = imageUrl;
@@ -60,6 +64,7 @@ public class Resume {
         this.resumeId = resumeId;
         this.workLongTerm = workLongTerm;
         this.fileUrls = fileUrls;
+        this.scrapCount = scrapCount;
     }
 
     public static Resume create(ResumeDto resume, Long userId) {
@@ -77,6 +82,7 @@ public class Resume {
                 .imageUrl(resume.getImageUrl())
                 .userId(userId)
                 .fileUrls(resume.getFileUrls())
+                .scrapCount(resume.getScrapCount())
                 .build();
     }
 
@@ -96,6 +102,7 @@ public class Resume {
                 .resumeId(resumeId)
                 .userId(userId)
                 .fileUrls(resume.getFileUrls())
+                .scrapCount(resume.getScrapCount())
                 .build();
     }
 
@@ -109,6 +116,7 @@ public class Resume {
                 .userId(resume.getUserId())
                 .workLongTerm(workLongTerm)
                 .fileUrls(resume.getFileUrls())
+                .scrapCount(resume.getScrapCount())
                 .build();
     }
 
@@ -141,6 +149,12 @@ public class Resume {
         return this.fileUrls.stream()
                 .filter(url -> !dataFileUrls.contains(url))
                 .collect(Collectors.toList());
+    }
+
+    public static String makeScrapCountRedisKey(Long jobInfoId) {
+        StringBuilder sb = new StringBuilder();
+        return sb.append(MAP_RESUME_SCARP_COUNT_KEY)
+                .append(jobInfoId).toString();
     }
 
 }

@@ -19,48 +19,48 @@ class CareersTest {
 
     @BeforeEach
     void setUp() {
-        careers = Careers.of(List.of(Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null)).companyName("잇집회사").careerPosition("사원").department("개발팀").startDate(LocalDateTime.of(2022, 6, 10, 0, 0)).endDate(LocalDateTime.of(2023, 6, 10, 0, 0)).careerId(1L).build(), Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null)).companyName("잇집회사").careerPosition("팀장").department("개발팀").startDate(LocalDateTime.of(2015, 6, 10, 0, 0)).endDate(LocalDateTime.of(2023, 6, 10, 0, 0)).careerId(2L).build()));
+        careers = Careers.of(List.of(Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L)).companyName("잇집회사").careerPosition("사원").department("개발팀").startDate(LocalDateTime.of(2022, 6, 10, 0, 0)).endDate(LocalDateTime.of(2023, 6, 10, 0, 0)).careerId(1L).build(), Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L)).companyName("잇집회사").careerPosition("팀장").department("개발팀").startDate(LocalDateTime.of(2015, 6, 10, 0, 0)).endDate(LocalDateTime.of(2023, 6, 10, 0, 0)).careerId(2L).build()));
     }
 
     @Test
     void 경력_일급_컬렉션_of_저장_테스트() {
-        assertThat(careers).isEqualTo(Careers.of(List.of(new CareerDto("잇집회사", "사원", "개발팀", LocalDateTime.of(2022, 6, 10, 0, 0), LocalDateTime.of(2023, 6, 10, 0, 0), 1L), new CareerDto("잇집회사", "팀장", "개발팀", LocalDateTime.of(2015, 6, 10, 0, 0), LocalDateTime.of(2023, 6, 10, 0, 0), 2L)), new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null)));
+        assertThat(careers).isEqualTo(Careers.of(List.of(new CareerDto("잇집회사", "사원", "개발팀", LocalDateTime.of(2022, 6, 10, 0, 0), LocalDateTime.of(2023, 6, 10, 0, 0), 1L), new CareerDto("잇집회사", "팀장", "개발팀", LocalDateTime.of(2015, 6, 10, 0, 0), LocalDateTime.of(2023, 6, 10, 0, 0), 2L)), new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L)));
     }
 
     @Test
     void 경력_일급_컬렉션_저장_테스트() {
-        assertThat(careers.get()).isEqualTo(new Careers(List.of(Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null)).companyName("잇집회사").careerPosition("사원").department("개발팀").startDate(LocalDateTime.of(2022, 6, 10, 0, 0)).endDate(LocalDateTime.of(2023, 6, 10, 0, 0)).careerId(1L).build(), Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null)).companyName("잇집회사").careerPosition("팀장").department("개발팀").startDate(LocalDateTime.of(2015, 6, 10, 0, 0)).endDate(LocalDateTime.of(2023, 6, 10, 0, 0)).careerId(2L).build())));
+        assertThat(careers.get()).isEqualTo(new Careers(List.of(Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L)).companyName("잇집회사").careerPosition("사원").department("개발팀").startDate(LocalDateTime.of(2022, 6, 10, 0, 0)).endDate(LocalDateTime.of(2023, 6, 10, 0, 0)).careerId(1L).build(), Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L)).companyName("잇집회사").careerPosition("팀장").department("개발팀").startDate(LocalDateTime.of(2015, 6, 10, 0, 0)).endDate(LocalDateTime.of(2023, 6, 10, 0, 0)).careerId(2L).build())));
     }
 
     @Test
     void 일급_컬렉션_경력_삭제_테스트() {
-        assertThat(careers.get().deleteCareers(List.of(Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null)).companyName("잇집회사").careerPosition("사원").department("개발팀").startDate(LocalDateTime.of(2022, 6, 10, 0, 0)).endDate(LocalDateTime.of(2023, 6, 10, 0, 0)).careerId(1L).build()))).isEqualTo(List.of(Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null)).companyName("잇집회사").careerPosition("팀장").department("개발팀").startDate(LocalDateTime.of(2015, 6, 10, 0, 0)).endDate(LocalDateTime.of(2023, 6, 10, 0, 0)).careerId(2L).build()));
+        assertThat(careers.get().deleteCareers(List.of(Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L)).companyName("잇집회사").careerPosition("사원").department("개발팀").startDate(LocalDateTime.of(2022, 6, 10, 0, 0)).endDate(LocalDateTime.of(2023, 6, 10, 0, 0)).careerId(1L).build()))).isEqualTo(List.of(Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L)).companyName("잇집회사").careerPosition("팀장").department("개발팀").startDate(LocalDateTime.of(2015, 6, 10, 0, 0)).endDate(LocalDateTime.of(2023, 6, 10, 0, 0)).careerId(2L).build()));
     }
 
     @Test
     void 이력서_경력_근무_기간_시니어_총합_성공_테스트() {
-        Map<Long, Resume> longResumeMap = Map.of(1L, new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null));
+        Map<Long, Resume> longResumeMap = Map.of(1L, new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L));
 
-        Careers newCareer = Careers.of(List.of(Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null)).companyName("잇집회사").careerPosition("팀장").department("개발팀").startDate(LocalDateTime.of(2022, 6, 10, 0, 0)).endDate(LocalDateTime.of(2023, 6, 10, 0, 0)).careerId(1L).build(), Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null)).companyName("잇집외국계회사").careerPosition("사원").department("개발팀").startDate(LocalDateTime.of(2015, 6, 10, 0, 0)).endDate(LocalDateTime.of(2022, 6, 10, 0, 0)).careerId(2L).build())).orElse(null);
+        Careers newCareer = Careers.of(List.of(Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L)).companyName("잇집회사").careerPosition("팀장").department("개발팀").startDate(LocalDateTime.of(2022, 6, 10, 0, 0)).endDate(LocalDateTime.of(2023, 6, 10, 0, 0)).careerId(1L).build(), Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L)).companyName("잇집외국계회사").careerPosition("사원").department("개발팀").startDate(LocalDateTime.of(2015, 6, 10, 0, 0)).endDate(LocalDateTime.of(2022, 6, 10, 0, 0)).careerId(2L).build())).orElse(null);
 
-        assertThat(newCareer.searchResumeMakeWorkPeriod(longResumeMap)).isEqualTo(List.of(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, ResumeWorkTermType.SENIOR.getName(), null)));
+        assertThat(newCareer.searchResumeMakeWorkPeriod(longResumeMap)).isEqualTo(List.of(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, ResumeWorkTermType.SENIOR.getName(), null, 0L)));
     }
 
     @Test
     void 이력서_경력_근무_기간_주니어_총합_성공_테스트() {
-        Map<Long, Resume> longResumeMap = Map.of(1L, new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null));
+        Map<Long, Resume> longResumeMap = Map.of(1L, new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L));
 
-        Careers newCareer = Careers.of(List.of(Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null)).companyName("잇집회사").careerPosition("팀장").department("개발팀").startDate(LocalDateTime.of(2022, 6, 10, 0, 0)).endDate(LocalDateTime.of(2023, 6, 10, 0, 0)).careerId(1L).build())).orElse(null);
+        Careers newCareer = Careers.of(List.of(Career.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L)).companyName("잇집회사").careerPosition("팀장").department("개발팀").startDate(LocalDateTime.of(2022, 6, 10, 0, 0)).endDate(LocalDateTime.of(2023, 6, 10, 0, 0)).careerId(1L).build())).orElse(null);
 
-        assertThat(newCareer.searchResumeMakeWorkPeriod(longResumeMap)).isEqualTo(List.of(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, ResumeWorkTermType.JUNIOR.getName(), null)));
+        assertThat(newCareer.searchResumeMakeWorkPeriod(longResumeMap)).isEqualTo(List.of(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, ResumeWorkTermType.JUNIOR.getName(), null, 0L)));
     }
 
     @Test
     void 이력서_경력_근무_기간_신입_성공_테스트() {
-        Map<Long, Resume> longResumeMap = Map.of(1L, new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null));
+        Map<Long, Resume> longResumeMap = Map.of(1L, new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L));
 
         Careers newCareer = new Careers();
-        assertThat(newCareer.searchResumeMakeWorkPeriod(longResumeMap)).isEqualTo(List.of(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, ResumeWorkTermType.NEW_PERSON.getName(), null)));
+        assertThat(newCareer.searchResumeMakeWorkPeriod(longResumeMap)).isEqualTo(List.of(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, ResumeWorkTermType.NEW_PERSON.getName(), null, 0L)));
     }
 
 }

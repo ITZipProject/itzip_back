@@ -27,9 +27,9 @@ class LanguageTest {
 
     @Test
     void 언어_정적_메소드_저장_성공_테스트() {
-        Language language = Language.update(new LanguageDto("잇집토익상", "780", LocalDateTime.of(2024, 10, 25, 0, 0), 1L), new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null));
+        Language language = Language.update(new LanguageDto("잇집토익상", "780", LocalDateTime.of(2024, 10, 25, 0, 0), 1L), new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L));
 
-        Assertions.assertThat(language).isEqualTo(new Language(Resume.builder().links(List.of("https://itzip.com")).profileInfo(profileInfo).userId(1L).resumeId(1L).build(), "잇집토익상", "780", LocalDateTime.of(2024, 10, 25, 0, 0), 1L));
+        Assertions.assertThat(language).isEqualTo(new Language(Resume.builder().links(List.of("https://itzip.com")).profileInfo(profileInfo).userId(1L).resumeId(1L).scrapCount(0L).build(), "잇집토익상", "780", LocalDateTime.of(2024, 10, 25, 0, 0), 1L));
     }
 
 }
