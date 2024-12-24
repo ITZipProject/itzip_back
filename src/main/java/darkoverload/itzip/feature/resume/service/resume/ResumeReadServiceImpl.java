@@ -13,6 +13,9 @@ import darkoverload.itzip.feature.resume.domain.myskill.MySkills;
 import darkoverload.itzip.feature.resume.domain.qualification.Qualifications;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.domain.resume.Resumes;
+import darkoverload.itzip.feature.resume.domain.resume.scrap.ResumeScrap;
+import darkoverload.itzip.feature.resume.entity.resume.ResumeEntity;
+import darkoverload.itzip.feature.resume.repository.resume.scrap.ResumeScrapJpaRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.achievement.AchievementReadRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.activity.ActivityReadRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.career.CareerReadRepository;
@@ -45,6 +48,7 @@ public class ResumeReadServiceImpl implements ResumeReadService {
     private final LanguageReadRepository languageReadRepository;
     private final MySkillReadRepository mySkillReadRepository;
     private final QualificationReadRepository qualificationReadRepository;
+    private final ResumeScrapJpaRepository resumeScrapJpaRepository;
 
     @Override
     public List<SearchResumeResponse> searchResumeInfos(String search, Pageable pageable) {
@@ -74,6 +78,21 @@ public class ResumeReadServiceImpl implements ResumeReadService {
         Qualifications qualifications = Qualifications.of(qualificationReadRepository.findAllByResumeId(id)).orElse(null);
 
         return GetResumeDetailsResponse.of(resume, achievements, activities, careers, educations, languages, mySkills, qualifications);
+    }
+
+    @Override
+    public Resume getReferenceById(Long resumeId) {
+        return resumeReadRepository.getReferenceById(resumeId);
+    }
+
+    @Override
+    public ResumeEntity getById(Long resumeId) {
+        return resumeReadRepository.getEntityById(resumeId);
+    }
+
+    @Override
+    public ResumeScrap findByResumeScrap(Long resumeId, String userEmail) {
+        return resumeScrapJpaRepository.findByResumeScrap(resumeId, userEmail).orElse(null);
     }
 
 }

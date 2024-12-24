@@ -27,4 +27,9 @@ public class ResumeReadRepositoryImpl implements ResumeReadRepository{
         return repository.getReferenceById(id).convertToDomain();
     }
 
+    @Override
+    public ResumeEntity getEntityById(Long resumeId) {
+        return repository.getReferenceById(resumeId);
+    }
+
 }

@@ -51,10 +51,10 @@ public class JobInfoScrapScheduler {
         JobInfo jobInfo = jobInfoService.getById(jobInfoId);
 
         JobInfoScrap jobInfoScrap = JobInfoScrap.createScrap(user.convertToEntity(), jobInfo);
-        JobInfoScrap scrapDatabase = jobInfoService.findByJobInfoId(jobInfoId, userEmail);
+        JobInfoScrap databaseScrap = jobInfoService.findByJobInfoId(jobInfoId, userEmail);
 
-        if (JobInfoScrapType.isUnScrapEqual(jobInfoScrapRedisService.getJobInfoStatusFromRedis(jobInfoId, userEmail)) && scrapDatabase != null) {
-            jobInfoService.delete(scrapDatabase);
+        if (JobInfoScrapType.isUnScrapEqual(jobInfoScrapRedisService.getJobInfoStatusFromRedis(jobInfoId, userEmail)) && databaseScrap != null) {
+            jobInfoService.delete(databaseScrap);
             updateScrapCount(jobInfoId, jobInfo);
             jobInfoScrapRedisService.jobInfoScrapDeleteToRedis(jobInfoId, userEmail);
             log.info("=== jobInfoScrap delete ===");

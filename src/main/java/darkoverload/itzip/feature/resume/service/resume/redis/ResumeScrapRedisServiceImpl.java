@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -35,11 +36,32 @@ public class ResumeScrapRedisServiceImpl implements ResumeScrapRedisService {
         if(optionalData.isPresent()) {
             resumeScrapRedisCommandRepository.notCacheUnScrapInfoToRedis(id, email);
             resumeScrapRedisCommandRepository.decrementScrapCountFromRedis(id);
-            return "이력서 스크랩으ㅏㄹ 취소하였습니다.";
+            return "이력서 스크랩을 취소하였습니다.";
         }
 
         resumeScrapRedisCommandRepository.saveResumeScrapToRedis(id, email);
         resumeScrapRedisCommandRepository.incrementScrapCountToRedis(id);
         return "채용정보 스크랩을 하였습니다.";
     }
+
+    @Override
+    public Set<String> getScrapKeysFromRedis() {
+        return resumeScrapRedisReadRepository.getResumeScrapListFromRedis();
+    }
+
+    public String getResumeStatusFromRedis(Long resumeId, String userEmail) {
+        return resumeScrapRedisReadRepository.getResumeStatus(resumeId, userEmail);
+    }
+
+    @Override
+    public String getJobInfoScrapCountFromRedis(Long resumeId) {
+        return resumeScrapRedisReadRepository.getResumeScrapCount(resumeId);
+    }
+
+    @Override
+    public void resumeScrapDeleteToRedis(Long resumeId, String userEmail) {
+        resumeScrapRedisCommandRepository.deleteResumeInfo(resumeId, userEmail);
+        resumeScrapRedisCommandRepository.deleteResumeCountToRedis(resumeId);
+    }
+
 }

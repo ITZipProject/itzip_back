@@ -19,7 +19,7 @@ public class Resume {
     private static final String MAP_RESUME_SCARP_COUNT_KEY = "resumeScrapCount:";
 
     // 이메일
-    private ProfileInfo profileInfo;
+    private ResumeBasicInfo resumeBasicInfo;
 
     // 링크
     private List<String> links;
@@ -39,13 +39,13 @@ public class Resume {
     // url
     private List<String> fileUrls;
 
-    private Long scrapCount;
+    private int scrapCount;
 
     public Resume() {
     }
 
-    public Resume(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff, List<String> links, String imageUrl, Long userId, Long resumeId, String workLongTerm, List<String> fileUrls,  Long scrapCount) {
-        this.profileInfo = new ProfileInfo(email, phone, subject, introduction, publicOnOff);
+    public Resume(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff, List<String> links, String imageUrl, Long userId, Long resumeId, String workLongTerm, List<String> fileUrls,  int scrapCount) {
+        this.resumeBasicInfo = new ResumeBasicInfo(email, phone, subject, introduction, publicOnOff);
         this.links = links;
         this.imageUrl = imageUrl;
         this.userId = userId;
@@ -56,8 +56,8 @@ public class Resume {
     }
 
     @Builder
-    public Resume(ProfileInfo profileInfo, List<String> links, String imageUrl, Long userId, Long resumeId, String workLongTerm, List<String> fileUrls, Long scrapCount) {
-        this.profileInfo = profileInfo;
+    public Resume(ResumeBasicInfo resumeBasicInfo, List<String> links, String imageUrl, Long userId, Long resumeId, String workLongTerm, List<String> fileUrls, int scrapCount) {
+        this.resumeBasicInfo = resumeBasicInfo;
         this.links = links;
         this.imageUrl = imageUrl;
         this.userId = userId;
@@ -68,7 +68,7 @@ public class Resume {
     }
 
     public static Resume create(ResumeDto resume, Long userId) {
-        ProfileInfo profileInfo = ProfileInfo.builder()
+        ResumeBasicInfo resumeBasicInfo = ResumeBasicInfo.builder()
                 .email(resume.getEmail())
                 .phone(resume.getPhone())
                 .subject(resume.getSubject())
@@ -77,7 +77,7 @@ public class Resume {
                 .build();
 
         return Resume.builder()
-                .profileInfo(profileInfo)
+                .resumeBasicInfo(resumeBasicInfo)
                 .links(resume.getLinks())
                 .imageUrl(resume.getImageUrl())
                 .userId(userId)
@@ -87,7 +87,7 @@ public class Resume {
     }
 
     public static Resume update(ResumeDto resume, long resumeId, long userId) {
-        ProfileInfo profileInfo = ProfileInfo.builder()
+        ResumeBasicInfo resumeBasicInfo = ResumeBasicInfo.builder()
                 .email(resume.getEmail())
                 .phone(resume.getPhone())
                 .subject(resume.getSubject())
@@ -96,7 +96,7 @@ public class Resume {
                 .build();
 
         return Resume.builder()
-                .profileInfo(profileInfo)
+                .resumeBasicInfo(resumeBasicInfo)
                 .links(resume.getLinks())
                 .imageUrl(resume.getImageUrl())
                 .resumeId(resumeId)
@@ -110,7 +110,7 @@ public class Resume {
 
         return Resume.builder()
                 .resumeId(resume.getResumeId())
-                .profileInfo(resume.getProfileInfo())
+                .resumeBasicInfo(resume.getResumeBasicInfo())
                 .links(resume.getLinks())
                 .imageUrl(resume.getImageUrl())
                 .userId(resume.getUserId())
@@ -124,11 +124,12 @@ public class Resume {
         return ResumeEntity.builder()
                 .userId(this.userId)
                 .imageUrl(this.imageUrl)
-                .profileInfo(this.profileInfo.toEntity())
+                .basicInfo(this.resumeBasicInfo.toEntity())
                 .links(this.links)
                 .userId(this.userId)
                 .id(this.resumeId)
                 .fileUrls(this.fileUrls)
+                .scrapCount(this.scrapCount)
                 .build();
     }
 
@@ -155,6 +156,11 @@ public class Resume {
         StringBuilder sb = new StringBuilder();
         return sb.append(MAP_RESUME_SCARP_COUNT_KEY)
                 .append(jobInfoId).toString();
+    }
+
+    public int updateScrapCount(int scrapCount) {
+        this.scrapCount += scrapCount;
+        return this.scrapCount;
     }
 
 }

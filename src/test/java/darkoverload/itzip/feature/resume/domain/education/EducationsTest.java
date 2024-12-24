@@ -18,7 +18,7 @@ class EducationsTest {
 
     @BeforeEach
     void setUp() {
-        educations = Educations.of(List.of(Education.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L)).schoolName("잇집대학교").major("소프트웨어 잇집과").startDate(LocalDateTime.of(2009, 3, 7, 0, 0)).endDate(LocalDateTime.of(2013, 3, 7, 0, 0)).educationId(1L).build(), Education.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L)).schoolName("잇집대학원").major("인공지능").startDate(LocalDateTime.of(2013, 4, 7, 0, 0)).endDate(LocalDateTime.of(2016, 3, 7, 0, 0)).educationId(2L).build()));
+        educations = Educations.of(List.of(Education.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0)).schoolName("잇집대학교").major("소프트웨어 잇집과").startDate(LocalDateTime.of(2009, 3, 7, 0, 0)).endDate(LocalDateTime.of(2013, 3, 7, 0, 0)).educationId(1L).build(), Education.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0)).schoolName("잇집대학원").major("인공지능").startDate(LocalDateTime.of(2013, 4, 7, 0, 0)).endDate(LocalDateTime.of(2016, 3, 7, 0, 0)).educationId(2L).build()));
     }
 
     @Test
@@ -26,12 +26,12 @@ class EducationsTest {
         List<EducationDto> educationDtoList = List.of(new EducationDto("잇집대학교", "소프트웨어 잇집과", LocalDateTime.of(2009, 3, 7, 0, 0), LocalDateTime.of(2013, 3, 7, 0, 0), 1L), new EducationDto("잇집대학원", "인공지능", LocalDateTime.of(2013, 4, 7, 0, 0), LocalDateTime.of(2016, 3, 7, 0, 0), 2L));
 
 
-        assertThat(educations).isEqualTo(Educations.of(educationDtoList, new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L)));
+        assertThat(educations).isEqualTo(Educations.of(educationDtoList, new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0)));
     }
 
     @Test
     void 일급_컬렉션_삭제_리스트_성공_테스트() {
-        assertThat(educations.get().deleteEducations(List.of(new Education(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L), "잇집대학교", "소프트웨어 잇집과", LocalDateTime.of(2009, 3, 7, 0, 0), LocalDateTime.of(2013, 3, 7, 0, 0), 1L)))).isEqualTo(List.of(new Education(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0L), "잇집대학원", "인공지능", LocalDateTime.of(2013, 4, 7, 0, 0), LocalDateTime.of(2016, 3, 7, 0, 0), 2L)));
+        assertThat(educations.get().deleteEducations(List.of(new Education(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0), "잇집대학교", "소프트웨어 잇집과", LocalDateTime.of(2009, 3, 7, 0, 0), LocalDateTime.of(2013, 3, 7, 0, 0), 1L)))).isEqualTo(List.of(new Education(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0), "잇집대학원", "인공지능", LocalDateTime.of(2013, 4, 7, 0, 0), LocalDateTime.of(2016, 3, 7, 0, 0), 2L)));
     }
 
 }

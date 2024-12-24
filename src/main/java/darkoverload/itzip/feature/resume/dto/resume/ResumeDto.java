@@ -42,9 +42,9 @@ public class ResumeDto {
     // 파일 경로
     private List<String> fileUrls;
 
-    private Long scrapCount;
+    private int scrapCount;
 
-    public ResumeDto(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff, List<String> links, String imageUrl, List<String> fileUrls, Long scrapCount) {
+    public ResumeDto(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff, List<String> links, String imageUrl, List<String> fileUrls, int scrapCount) {
         this.email = email;
         this.phone = phone;
         this.subject = subject;

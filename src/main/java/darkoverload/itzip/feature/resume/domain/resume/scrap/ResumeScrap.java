@@ -10,7 +10,11 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @ToString
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity(name="resume_scraps")
+@Entity
+@Table(
+        name="resume_scraps",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "resume_id"})
+)
 @EntityListeners(AuditingEntityListener.class)
 @EqualsAndHashCode(callSuper = false)
 public class ResumeScrap extends AuditingFields {

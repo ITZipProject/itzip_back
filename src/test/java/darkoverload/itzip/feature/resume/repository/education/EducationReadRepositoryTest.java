@@ -2,7 +2,7 @@ package darkoverload.itzip.feature.resume.repository.education;
 
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
 import darkoverload.itzip.feature.resume.entity.EducationEntity;
-import darkoverload.itzip.feature.resume.entity.ProfileInfoEntity;
+import darkoverload.itzip.feature.resume.entity.ResumeBasicInfoEntity;
 import darkoverload.itzip.feature.resume.entity.resume.ResumeEntity;
 import darkoverload.itzip.global.config.querydsl.TestQueryDslConfig;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,7 +33,7 @@ public class EducationReadRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        ProfileInfoEntity profileInfo = ProfileInfoEntity.builder()
+        ResumeBasicInfoEntity profileInfo = ResumeBasicInfoEntity.builder()
                 .email("itzip@gmail.com")
                 .introduction("잇집입니다.")
                 .phone("010-2355-9839")
@@ -41,7 +41,7 @@ public class EducationReadRepositoryTest {
                 .subject("잇집 홍길동")
                 .build();
 
-        resume = ResumeEntity.builder().id(1L).profileInfo(profileInfo).imageUrl("https://itzip.com").links(List.of("잇집이력서")).userId(1L).fileUrls(new ArrayList<>()).build();
+        resume = ResumeEntity.builder().id(1L).basicInfo(profileInfo).imageUrl("https://itzip.com").links(List.of("잇집이력서")).userId(1L).fileUrls(new ArrayList<>()).build();
     }
 
     @Test

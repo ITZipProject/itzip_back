@@ -1,7 +1,7 @@
 package darkoverload.itzip.feature.resume.entity;
 
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
-import darkoverload.itzip.feature.resume.domain.resume.ProfileInfo;
+import darkoverload.itzip.feature.resume.domain.resume.ResumeBasicInfo;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
@@ -13,7 +13,7 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode
 @ToString
-public class ProfileInfoEntity {
+public class ResumeBasicInfoEntity {
     private String email;
 
     @Enumerated(EnumType.STRING)
@@ -30,7 +30,7 @@ public class ProfileInfoEntity {
     private String introduction;
 
     @Builder
-    public ProfileInfoEntity(String email, PublicOnOff publicOnOff, String subject, String phone, String introduction) {
+    public ResumeBasicInfoEntity(String email, PublicOnOff publicOnOff, String subject, String phone, String introduction) {
         this.email = email;
         this.publicOnOff = publicOnOff;
         this.subject = subject;
@@ -40,8 +40,8 @@ public class ProfileInfoEntity {
 
 
 
-    public ProfileInfo convertToDomain() {
-        return ProfileInfo.builder()
+    public ResumeBasicInfo convertToDomain() {
+        return ResumeBasicInfo.builder()
                 .email(this.email)
                 .introduction(this.introduction)
                 .publicOnOff(this.publicOnOff)

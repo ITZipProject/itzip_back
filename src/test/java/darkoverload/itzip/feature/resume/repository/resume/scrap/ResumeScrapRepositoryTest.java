@@ -3,7 +3,7 @@ package darkoverload.itzip.feature.resume.repository.resume.scrap;
 
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
 import darkoverload.itzip.feature.resume.domain.resume.scrap.ResumeScrap;
-import darkoverload.itzip.feature.resume.entity.ProfileInfoEntity;
+import darkoverload.itzip.feature.resume.entity.ResumeBasicInfoEntity;
 import darkoverload.itzip.feature.resume.entity.resume.ResumeEntity;
 import darkoverload.itzip.feature.user.entity.Authority;
 import darkoverload.itzip.feature.user.entity.UserEntity;
@@ -59,8 +59,8 @@ public class ResumeScrapRepositoryTest {
                                 .userId(1L)
                                 .imageUrl("https://itzip.com")
                                 .links(List.of("잇집이력서"))
-                                .profileInfo(
-                                        ProfileInfoEntity.builder()
+                                .basicInfo(
+                                        ResumeBasicInfoEntity.builder()
                                                 .email("itzip@gmail.com")
                                                 .subject("잇집 홍길동")
                                                 .introduction("잇집입니다.")

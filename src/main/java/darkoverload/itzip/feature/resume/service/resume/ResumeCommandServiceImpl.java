@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.resume.service.resume;
 
+import darkoverload.itzip.feature.job.repository.JobInfoScrapRepository;
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
@@ -21,6 +22,8 @@ import darkoverload.itzip.feature.resume.domain.qualification.Qualification;
 import darkoverload.itzip.feature.resume.domain.qualification.Qualifications;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.domain.resume.ResumeDetails;
+import darkoverload.itzip.feature.resume.domain.resume.scrap.ResumeScrap;
+import darkoverload.itzip.feature.resume.repository.resume.scrap.ResumeScrapJpaRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.achievement.AchievementCommandRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.achievement.AchievementReadRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.activity.ActivityCommandRepository;
@@ -82,6 +85,8 @@ public class ResumeCommandServiceImpl implements ResumeCommandService {
 
     private final ActivityCommandRepository activityCommandRepository;
     private final ActivityReadRepository activityReadRepository;
+
+    private final ResumeScrapJpaRepository resumeScrapJpaRepository;
 
     private final AWSService awsService;
 
@@ -182,6 +187,21 @@ public class ResumeCommandServiceImpl implements ResumeCommandService {
         Resume.checkUserIdEquals(resume.getUserId(), dataUserId);
 
         resumeCommandRepository.delete(resume);
+    }
+
+    @Override
+    public void scrapDelete(ResumeScrap resumeScrap) {
+        resumeScrapJpaRepository.delete(resumeScrap);
+    }
+
+    @Override
+    public void updateScrapCount(Resume resume) {
+        resumeCommandRepository.update(resume);
+    }
+
+    @Override
+    public void resumeScrapSave(ResumeScrap resumeScrap) {
+        resumeScrapJpaRepository.save(resumeScrap);
     }
 
     /**

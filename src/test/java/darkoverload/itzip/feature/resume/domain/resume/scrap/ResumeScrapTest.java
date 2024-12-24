@@ -1,7 +1,7 @@
 package darkoverload.itzip.feature.resume.domain.resume.scrap;
 
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
-import darkoverload.itzip.feature.resume.domain.resume.ProfileInfo;
+import darkoverload.itzip.feature.resume.domain.resume.ResumeBasicInfo;
 import darkoverload.itzip.feature.resume.entity.resume.ResumeEntity;
 import darkoverload.itzip.feature.user.entity.Authority;
 import darkoverload.itzip.feature.user.entity.UserEntity;
@@ -33,7 +33,7 @@ class ResumeScrapTest {
                 .authority(Authority.USER)
                 .build();
 
-        ProfileInfo profileInfo = ProfileInfo.builder()
+        ResumeBasicInfo resumeBasicInfo = ResumeBasicInfo.builder()
                 .email("itzip@gmail.com")
                 .phone("010-0009-3845")
                 .subject("잇집입니다.")
@@ -43,7 +43,7 @@ class ResumeScrapTest {
 
         ResumeEntity resume = ResumeEntity.builder()
                 .id(13L)
-                .profileInfo(profileInfo.toEntity())
+                .basicInfo(resumeBasicInfo.toEntity())
                 .links(List.of("han@itzip.com"))
                 .imageUrl("https://itzip.co.kr")
                 .userId(13L)
