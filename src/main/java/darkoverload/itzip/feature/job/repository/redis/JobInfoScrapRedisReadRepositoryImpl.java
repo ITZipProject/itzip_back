@@ -20,7 +20,7 @@ public class JobInfoScrapRedisReadRepositoryImpl implements JobInfoScrapRedisRea
     @Override
     public boolean hasSameJobInfoScrap(Long jobInfoId, String userEmail) {
         String redisKey = JobInfoScrap.makeRedisKey(jobInfoId, userEmail);
-        return redisTemplate.hasKey(redisKey);
+        return Boolean.TRUE.equals(redisTemplate.hasKey(redisKey));
     }
 
     @Override
@@ -32,11 +32,7 @@ public class JobInfoScrapRedisReadRepositoryImpl implements JobInfoScrapRedisRea
             return false;
         }
 
-        if(scrapStatus.equals(JobInfoScrapType.UN_SCRAP.name())) {
-            return false;
-        }
-
-        return true;
+        return !scrapStatus.equals(JobInfoScrapType.UN_SCRAP.name());
     }
 
     @Override

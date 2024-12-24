@@ -156,6 +156,7 @@ public enum CommonExceptionCode implements ResponseCode {
     NOT_MATCH_RESUME_USERID(HttpStatus.NOT_FOUND, "작성자 아이디가 일치하지 않습니다."),
     // 이력서 파일 타입 오류 발생
     FILE_TYPE_RESUME_ERROR(HttpStatus.BAD_REQUEST, "파일 형식이 pdf, 워드 형식이 아닙니다."),
+    NOT_FOUND_RESUME_SCRAP(HttpStatus.BAD_REQUEST, "스크랩한 채용공고를 찾을 수 없습니다."),
 
     /**
      * MongoDb

@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.resume.service.resume;
 
+import darkoverload.itzip.feature.job.repository.JobInfoScrapRepository;
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.resume.controller.request.CreateResumeRequest;
 import darkoverload.itzip.feature.resume.controller.request.UpdateResumeRequest;
@@ -21,23 +22,24 @@ import darkoverload.itzip.feature.resume.domain.qualification.Qualification;
 import darkoverload.itzip.feature.resume.domain.qualification.Qualifications;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.domain.resume.ResumeDetails;
-import darkoverload.itzip.feature.resume.service.resume.port.achievement.AchievementReadRepository;
+import darkoverload.itzip.feature.resume.domain.resume.scrap.ResumeScrap;
+import darkoverload.itzip.feature.resume.repository.resume.scrap.ResumeScrapJpaRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.achievement.AchievementCommandRepository;
-import darkoverload.itzip.feature.resume.service.resume.port.activity.ActivityReadRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.achievement.AchievementReadRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.activity.ActivityCommandRepository;
-import darkoverload.itzip.feature.resume.service.resume.port.career.CareerReadRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.activity.ActivityReadRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.career.CareerCommandRepository;
-import darkoverload.itzip.feature.resume.service.resume.port.education.EducationReadRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.career.CareerReadRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.education.EducationCommandRepository;
-import darkoverload.itzip.feature.resume.service.resume.port.language.LanguageReadRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.education.EducationReadRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.language.LanguageCommandRepository;
-import darkoverload.itzip.feature.resume.service.resume.port.myskill.MySkillReadRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.language.LanguageReadRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.myskill.MySkillCommandRepository;
-import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationReadRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.myskill.MySkillReadRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationCommandRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationReadRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeReadRepository;
-import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeRepository;
-import darkoverload.itzip.feature.user.entity.UserEntity;
+import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeCommandRepository;
 import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
@@ -57,10 +59,10 @@ import java.util.Optional;
 @Transactional
 @Builder
 @RequiredArgsConstructor
-public class ResumeServiceImpl implements ResumeService {
+public class ResumeCommandServiceImpl implements ResumeCommandService {
 
     private final UserRepository userRepository;
-    private final ResumeRepository resumeRepository;
+    private final ResumeCommandRepository resumeCommandRepository;
     private final ResumeReadRepository resumeReadRepository;
 
     private final EducationCommandRepository educationCommandRepository;
@@ -84,6 +86,8 @@ public class ResumeServiceImpl implements ResumeService {
     private final ActivityCommandRepository activityCommandRepository;
     private final ActivityReadRepository activityReadRepository;
 
+    private final ResumeScrapJpaRepository resumeScrapJpaRepository;
+
     private final AWSService awsService;
 
     @Override
@@ -95,7 +99,7 @@ public class ResumeServiceImpl implements ResumeService {
 
         // 이력서 저장
         // 이력서와 관련된 내용들 저장
-        return CreateResumeResponse.from(create(request, resumeRepository.save(resume)));
+        return CreateResumeResponse.from(create(request, resumeCommandRepository.save(resume)));
     }
 
     /**
@@ -172,7 +176,7 @@ public class ResumeServiceImpl implements ResumeService {
         Resume databaseResume = resumeReadRepository.getReferenceById(request.getResumeId());
         awsService.deleteDocumentFiles(updateResume.notExistFileUrls(databaseResume.getFileUrls()), Resume.FEATURE_DIR);
 
-        return UpdateResumeResponse.from(update(request, resumeRepository.update(updateResume)));
+        return UpdateResumeResponse.from(update(request, resumeCommandRepository.update(updateResume)));
     }
 
     @Override
@@ -182,7 +186,22 @@ public class ResumeServiceImpl implements ResumeService {
         Resume resume = resumeReadRepository.getReferenceById(id).checkIdNull();
         Resume.checkUserIdEquals(resume.getUserId(), dataUserId);
 
-        resumeRepository.delete(resume);
+        resumeCommandRepository.delete(resume);
+    }
+
+    @Override
+    public void scrapDelete(ResumeScrap resumeScrap) {
+        resumeScrapJpaRepository.delete(resumeScrap);
+    }
+
+    @Override
+    public void updateScrapCount(Resume resume) {
+        resumeCommandRepository.update(resume);
+    }
+
+    @Override
+    public void resumeScrapSave(ResumeScrap resumeScrap) {
+        resumeScrapJpaRepository.save(resumeScrap);
     }
 
     /**

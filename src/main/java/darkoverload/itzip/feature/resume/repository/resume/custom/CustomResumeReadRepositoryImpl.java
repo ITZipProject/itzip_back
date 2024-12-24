@@ -5,8 +5,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
-import darkoverload.itzip.feature.resume.entity.QResumeEntity;
-import darkoverload.itzip.feature.resume.entity.ResumeEntity;
+import darkoverload.itzip.feature.resume.entity.resume.QResumeEntity;
+import darkoverload.itzip.feature.resume.entity.resume.ResumeEntity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -30,7 +30,7 @@ public class CustomResumeReadRepositoryImpl implements CustomResumeReadRepositor
     public List<ResumeEntity> searchResumeInfos(String search, Pageable pageable) {
         OrderSpecifier<?>[] sortOrder = sortResumeSpecifier(pageable);
         BooleanExpression expression = Expressions.allOf(searchEq(search),
-                qResume.profileInfo.publicOnOff.eq(PublicOnOff.YES));
+                qResume.basicInfo.publicOnOff.eq(PublicOnOff.YES));
 
 
         return queryFactory.selectFrom(qResume)
@@ -56,7 +56,7 @@ public class CustomResumeReadRepositoryImpl implements CustomResumeReadRepositor
     }
 
     private BooleanExpression searchEq(String search) {
-        return hasText(search) ? qResume.profileInfo.subject.contains(search) : null;
+        return hasText(search) ? qResume.basicInfo.subject.contains(search) : null;
     }
 
 }

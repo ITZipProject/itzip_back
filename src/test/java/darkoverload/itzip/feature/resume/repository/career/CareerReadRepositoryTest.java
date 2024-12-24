@@ -1,16 +1,14 @@
 package darkoverload.itzip.feature.resume.repository.career;
 
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
-import darkoverload.itzip.feature.resume.domain.resume.ProfileInfo;
 import darkoverload.itzip.feature.resume.entity.CareerEntity;
-import darkoverload.itzip.feature.resume.entity.ProfileInfoEntity;
-import darkoverload.itzip.feature.resume.entity.ResumeEntity;
+import darkoverload.itzip.feature.resume.entity.ResumeBasicInfoEntity;
+import darkoverload.itzip.feature.resume.entity.resume.ResumeEntity;
 import darkoverload.itzip.global.config.querydsl.TestQueryDslConfig;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
@@ -35,7 +33,7 @@ public class CareerReadRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        ProfileInfoEntity profileInfo = ProfileInfoEntity.builder()
+        ResumeBasicInfoEntity profileInfo = ResumeBasicInfoEntity.builder()
                 .email("itzip@gmail.com")
                 .introduction("잇집입니다.")
                 .phone("010-2355-9839")
@@ -43,7 +41,7 @@ public class CareerReadRepositoryTest {
                 .subject("잇집 홍길동")
                 .build();
 
-        resume = ResumeEntity.builder().id(1L).imageUrl("https://itzip.com").links(List.of("잇집이력서")).profileInfo(profileInfo).userId(1L).fileUrls(new ArrayList<>()).build();
+        resume = ResumeEntity.builder().id(1L).imageUrl("https://itzip.com").links(List.of("잇집이력서")).basicInfo(profileInfo).userId(1L).fileUrls(new ArrayList<>()).build();
     }
 
     @Test

@@ -1,6 +1,7 @@
 package darkoverload.itzip.feature.resume.entity;
 
 import darkoverload.itzip.feature.resume.domain.activity.Activity;
+import darkoverload.itzip.feature.resume.entity.resume.ResumeEntity;
 import darkoverload.itzip.global.entity.AuditingFields;
 import jakarta.persistence.*;
 import lombok.*;

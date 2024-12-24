@@ -1,7 +1,7 @@
 package darkoverload.itzip.feature.resume.repository.resume;
 
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
-import darkoverload.itzip.feature.resume.entity.ResumeEntity;
+import darkoverload.itzip.feature.resume.entity.resume.ResumeEntity;
 import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeReadRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -25,6 +25,11 @@ public class ResumeReadRepositoryImpl implements ResumeReadRepository{
     @Override
     public Resume getReferenceById(Long id) {
         return repository.getReferenceById(id).convertToDomain();
+    }
+
+    @Override
+    public ResumeEntity getEntityById(Long resumeId) {
+        return repository.getReferenceById(resumeId);
     }
 
 }

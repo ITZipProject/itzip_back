@@ -17,17 +17,17 @@ class MySkillsTest {
 
     @BeforeEach
     void setUp() {
-        mySkills = MySkills.of(List.of(MySkill.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null)).name("python").mySkillId(1L).build(), MySkill.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null)).name("java").mySkillId(2L).build()));
+        mySkills = MySkills.of(List.of(MySkill.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0)).name("python").mySkillId(1L).build(), MySkill.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0)).name("java").mySkillId(2L).build()));
     }
 
     @Test
     void 일급_컬렉션_스킬_리스트_저장_성공() {
-        assertThat(mySkills).isEqualTo(MySkills.of(List.of(new MySkillsDto("python", 1L), new MySkillsDto("java", 2L)), new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null)));
+        assertThat(mySkills).isEqualTo(MySkills.of(List.of(new MySkillsDto("python", 1L), new MySkillsDto("java", 2L)), new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0)));
     }
 
     @Test
     void 일급_컬렉션_스킬_삭제_리스트_성공() {
-        assertThat(mySkills.get().deleteMySkills(List.of(MySkill.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null)).name("python").mySkillId(1L).build()))).isEqualTo(List.of(MySkill.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null)).name("java").mySkillId(2L).build()));
+        assertThat(mySkills.get().deleteMySkills(List.of(MySkill.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0)).name("python").mySkillId(1L).build()))).isEqualTo(List.of(MySkill.builder().resume(new Resume("itzip@gmail.com", "010-9955-0938", "잇집 park입니다.", "잇집 park 입니다. 저는 코딩이 좋아요.", PublicOnOff.YES, List.of("https://itzip.com"), null, 1L, 1L, null, null, 0)).name("java").mySkillId(2L).build()));
     }
 
 }

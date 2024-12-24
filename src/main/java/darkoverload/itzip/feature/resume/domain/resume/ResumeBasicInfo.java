@@ -1,7 +1,7 @@
 package darkoverload.itzip.feature.resume.domain.resume;
 
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
-import darkoverload.itzip.feature.resume.entity.ProfileInfoEntity;
+import darkoverload.itzip.feature.resume.entity.ResumeBasicInfoEntity;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode
-public class ProfileInfo {
+public class ResumeBasicInfo {
     // 이메일
     private final String email;
 
@@ -28,7 +28,7 @@ public class ProfileInfo {
 
 
     @Builder
-    public ProfileInfo(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff) {
+    public ResumeBasicInfo(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff) {
         this.email = email;
         this.phone = phone;
         this.subject = subject;
@@ -36,8 +36,8 @@ public class ProfileInfo {
         this.publicOnOff = publicOnOff;
     }
 
-    public ProfileInfoEntity toEntity() {
-        return ProfileInfoEntity.builder()
+    public ResumeBasicInfoEntity toEntity() {
+        return ResumeBasicInfoEntity.builder()
                 .email(this.email)
                 .introduction(this.introduction)
                 .phone(this.phone)

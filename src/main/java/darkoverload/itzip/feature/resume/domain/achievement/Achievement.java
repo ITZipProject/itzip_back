@@ -4,11 +4,9 @@ package darkoverload.itzip.feature.resume.domain.achievement;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.dto.achievement.AchievementDto;
 import darkoverload.itzip.feature.resume.entity.AchievementEntity;
-import darkoverload.itzip.feature.resume.entity.ResumeEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Setter
 @Getter

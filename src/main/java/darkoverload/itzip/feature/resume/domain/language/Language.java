@@ -3,11 +3,9 @@ package darkoverload.itzip.feature.resume.domain.language;
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
 import darkoverload.itzip.feature.resume.dto.language.LanguageDto;
 import darkoverload.itzip.feature.resume.entity.LanguageEntity;
-import darkoverload.itzip.feature.resume.entity.ResumeEntity;
 import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Setter
 @Getter

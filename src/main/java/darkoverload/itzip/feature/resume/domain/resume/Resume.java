@@ -2,7 +2,7 @@ package darkoverload.itzip.feature.resume.domain.resume;
 
 import darkoverload.itzip.feature.resume.code.PublicOnOff;
 import darkoverload.itzip.feature.resume.dto.resume.ResumeDto;
-import darkoverload.itzip.feature.resume.entity.ResumeEntity;
+import darkoverload.itzip.feature.resume.entity.resume.ResumeEntity;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.*;
@@ -16,9 +16,10 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode
 public class Resume {
     public static final String FEATURE_DIR = "resume";
+    private static final String MAP_RESUME_SCARP_COUNT_KEY = "resumeScrapCount:";
 
     // 이메일
-    private ProfileInfo profileInfo;
+    private ResumeBasicInfo resumeBasicInfo;
 
     // 링크
     private List<String> links;
@@ -38,32 +39,36 @@ public class Resume {
     // url
     private List<String> fileUrls;
 
+    private int scrapCount;
+
     public Resume() {
     }
 
-    public Resume(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff, List<String> links, String imageUrl, Long userId, Long resumeId, String workLongTerm, List<String> fileUrls) {
-        this.profileInfo = new ProfileInfo(email, phone, subject, introduction, publicOnOff);
+    public Resume(String email, String phone, String subject, String introduction, PublicOnOff publicOnOff, List<String> links, String imageUrl, Long userId, Long resumeId, String workLongTerm, List<String> fileUrls,  int scrapCount) {
+        this.resumeBasicInfo = new ResumeBasicInfo(email, phone, subject, introduction, publicOnOff);
         this.links = links;
         this.imageUrl = imageUrl;
         this.userId = userId;
         this.resumeId = resumeId;
         this.workLongTerm = workLongTerm;
         this.fileUrls = fileUrls;
+        this.scrapCount = scrapCount;
     }
 
     @Builder
-    public Resume(ProfileInfo profileInfo, List<String> links, String imageUrl, Long userId, Long resumeId, String workLongTerm, List<String> fileUrls) {
-        this.profileInfo = profileInfo;
+    public Resume(ResumeBasicInfo resumeBasicInfo, List<String> links, String imageUrl, Long userId, Long resumeId, String workLongTerm, List<String> fileUrls, int scrapCount) {
+        this.resumeBasicInfo = resumeBasicInfo;
         this.links = links;
         this.imageUrl = imageUrl;
         this.userId = userId;
         this.resumeId = resumeId;
         this.workLongTerm = workLongTerm;
         this.fileUrls = fileUrls;
+        this.scrapCount = scrapCount;
     }
 
     public static Resume create(ResumeDto resume, Long userId) {
-        ProfileInfo profileInfo = ProfileInfo.builder()
+        ResumeBasicInfo resumeBasicInfo = ResumeBasicInfo.builder()
                 .email(resume.getEmail())
                 .phone(resume.getPhone())
                 .subject(resume.getSubject())
@@ -72,16 +77,17 @@ public class Resume {
                 .build();
 
         return Resume.builder()
-                .profileInfo(profileInfo)
+                .resumeBasicInfo(resumeBasicInfo)
                 .links(resume.getLinks())
                 .imageUrl(resume.getImageUrl())
                 .userId(userId)
                 .fileUrls(resume.getFileUrls())
+                .scrapCount(resume.getScrapCount())
                 .build();
     }
 
     public static Resume update(ResumeDto resume, long resumeId, long userId) {
-        ProfileInfo profileInfo = ProfileInfo.builder()
+        ResumeBasicInfo resumeBasicInfo = ResumeBasicInfo.builder()
                 .email(resume.getEmail())
                 .phone(resume.getPhone())
                 .subject(resume.getSubject())
@@ -90,12 +96,13 @@ public class Resume {
                 .build();
 
         return Resume.builder()
-                .profileInfo(profileInfo)
+                .resumeBasicInfo(resumeBasicInfo)
                 .links(resume.getLinks())
                 .imageUrl(resume.getImageUrl())
                 .resumeId(resumeId)
                 .userId(userId)
                 .fileUrls(resume.getFileUrls())
+                .scrapCount(resume.getScrapCount())
                 .build();
     }
 
@@ -103,12 +110,13 @@ public class Resume {
 
         return Resume.builder()
                 .resumeId(resume.getResumeId())
-                .profileInfo(resume.getProfileInfo())
+                .resumeBasicInfo(resume.getResumeBasicInfo())
                 .links(resume.getLinks())
                 .imageUrl(resume.getImageUrl())
                 .userId(resume.getUserId())
                 .workLongTerm(workLongTerm)
                 .fileUrls(resume.getFileUrls())
+                .scrapCount(resume.getScrapCount())
                 .build();
     }
 
@@ -116,11 +124,12 @@ public class Resume {
         return ResumeEntity.builder()
                 .userId(this.userId)
                 .imageUrl(this.imageUrl)
-                .profileInfo(this.profileInfo.toEntity())
+                .basicInfo(this.resumeBasicInfo.toEntity())
                 .links(this.links)
                 .userId(this.userId)
                 .id(this.resumeId)
                 .fileUrls(this.fileUrls)
+                .scrapCount(this.scrapCount)
                 .build();
     }
 
@@ -141,6 +150,17 @@ public class Resume {
         return this.fileUrls.stream()
                 .filter(url -> !dataFileUrls.contains(url))
                 .collect(Collectors.toList());
+    }
+
+    public static String makeScrapCountRedisKey(Long jobInfoId) {
+        StringBuilder sb = new StringBuilder();
+        return sb.append(MAP_RESUME_SCARP_COUNT_KEY)
+                .append(jobInfoId).toString();
+    }
+
+    public int updateScrapCount(int scrapCount) {
+        this.scrapCount += scrapCount;
+        return this.scrapCount;
     }
 
 }

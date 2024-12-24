@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.resume.repository.resume.custom;
 
-import darkoverload.itzip.feature.resume.entity.ResumeEntity;
+import darkoverload.itzip.feature.resume.entity.resume.ResumeEntity;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
