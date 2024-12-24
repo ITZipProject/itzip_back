@@ -38,7 +38,7 @@ public class ResumeScrapRepositoryTest {
 
     @Test
     void 내가_스크랩_한_이력서_확인() {
-        Optional<ResumeScrap> resumeScrap = repository.findByResumeScrap(1L, 1L);
+        Optional<ResumeScrap> resumeScrap = repository.findByResumeScrap(1L, "itzip@gmail.com");
 
         assertThat(resumeScrap.get())
                 .isEqualTo(ResumeScrap.builder()

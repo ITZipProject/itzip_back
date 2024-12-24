@@ -1,15 +1,15 @@
 package darkoverload.itzip.feature.resume.repository.resume;
 
 import darkoverload.itzip.feature.resume.domain.resume.Resume;
-import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeCommandRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 @Repository
 @RequiredArgsConstructor
-public class ResumeRepositoryImpl implements ResumeRepository {
+public class ResumeCommandRepositoryImpl implements ResumeCommandRepository {
 
-    private final ResumeJpaRepository repository;
+    private final ResumeCommandJpaRepository repository;
 
     @Override
     public Resume save(Resume resume) {

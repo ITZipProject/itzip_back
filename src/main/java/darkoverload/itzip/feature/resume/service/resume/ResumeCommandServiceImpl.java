@@ -36,7 +36,7 @@ import darkoverload.itzip.feature.resume.service.resume.port.myskill.MySkillRead
 import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationCommandRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.qualification.QualificationReadRepository;
 import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeReadRepository;
-import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeRepository;
+import darkoverload.itzip.feature.resume.service.resume.port.resume.ResumeCommandRepository;
 import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
@@ -56,10 +56,10 @@ import java.util.Optional;
 @Transactional
 @Builder
 @RequiredArgsConstructor
-public class ResumeServiceImpl implements ResumeService {
+public class ResumeCommandServiceImpl implements ResumeCommandService {
 
     private final UserRepository userRepository;
-    private final ResumeRepository resumeRepository;
+    private final ResumeCommandRepository resumeCommandRepository;
     private final ResumeReadRepository resumeReadRepository;
 
     private final EducationCommandRepository educationCommandRepository;
@@ -94,7 +94,7 @@ public class ResumeServiceImpl implements ResumeService {
 
         // 이력서 저장
         // 이력서와 관련된 내용들 저장
-        return CreateResumeResponse.from(create(request, resumeRepository.save(resume)));
+        return CreateResumeResponse.from(create(request, resumeCommandRepository.save(resume)));
     }
 
     /**
@@ -171,7 +171,7 @@ public class ResumeServiceImpl implements ResumeService {
         Resume databaseResume = resumeReadRepository.getReferenceById(request.getResumeId());
         awsService.deleteDocumentFiles(updateResume.notExistFileUrls(databaseResume.getFileUrls()), Resume.FEATURE_DIR);
 
-        return UpdateResumeResponse.from(update(request, resumeRepository.update(updateResume)));
+        return UpdateResumeResponse.from(update(request, resumeCommandRepository.update(updateResume)));
     }
 
     @Override
@@ -181,7 +181,7 @@ public class ResumeServiceImpl implements ResumeService {
         Resume resume = resumeReadRepository.getReferenceById(id).checkIdNull();
         Resume.checkUserIdEquals(resume.getUserId(), dataUserId);
 
-        resumeRepository.delete(resume);
+        resumeCommandRepository.delete(resume);
     }
 
     /**

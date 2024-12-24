@@ -6,6 +6,8 @@ public interface ResumeScrapRedisCommandRepository {
 
     void incrementScrapCountToRedis(Long resumeId);
 
+    void notCacheUnScrapInfoToRedis(Long resumeId, String userEmail);
+
     void decrementScrapCountFromRedis(Long resumeId);
 
     void unResumeScrapFromRedis(Long resumeId, String userEmail);

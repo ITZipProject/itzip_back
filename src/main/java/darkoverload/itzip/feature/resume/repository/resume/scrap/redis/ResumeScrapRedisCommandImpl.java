@@ -32,6 +32,15 @@ public class ResumeScrapRedisCommandImpl implements ResumeScrapRedisCommandRepos
     }
 
     @Override
+    public void notCacheUnScrapInfoToRedis(Long resumeId, String userEmail) {
+        String scrapRedisKey = ResumeScrap.makeRedisKey(resumeId, userEmail);
+
+        redisTemplate.opsForValue().set(scrapRedisKey, JobInfoScrapType.UN_SCRAP.name(), Duration.ofSeconds(30));
+    }
+
+
+
+    @Override
     public void decrementScrapCountFromRedis(Long resumeId) {
         String redisKey = Resume.makeScrapCountRedisKey(resumeId);
         redisTemplate.opsForValue().decrement(redisKey);

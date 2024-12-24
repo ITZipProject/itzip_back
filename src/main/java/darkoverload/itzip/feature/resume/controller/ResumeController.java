@@ -9,7 +9,8 @@ import darkoverload.itzip.feature.resume.controller.response.GetResumeDetailsRes
 import darkoverload.itzip.feature.resume.controller.response.SearchResumeResponse;
 import darkoverload.itzip.feature.resume.controller.response.UpdateResumeResponse;
 import darkoverload.itzip.feature.resume.service.resume.ResumeReadService;
-import darkoverload.itzip.feature.resume.service.resume.ResumeService;
+import darkoverload.itzip.feature.resume.service.resume.ResumeCommandService;
+import darkoverload.itzip.feature.resume.service.resume.redis.ResumeScrapRedisService;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
 import darkoverload.itzip.global.config.swagger.ExceptionCodeAnnotations;
@@ -39,8 +40,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ResumeController {
 
-    private final ResumeService service;
+    private final ResumeCommandService service;
     private final ResumeReadService resumeReadService;
+    private final ResumeScrapRedisService resumeScrapRedisService;
 
     @Operation(
             summary = "이력서 생성",
@@ -113,6 +115,7 @@ public class ResumeController {
     @PostMapping("/scrap")
     public String scrapResumeInfo(@SwaggerRequestBody(description = "이력서 스크랩에 대한 정보", required = true, content = @Content(schema = @Schema(implementation = ResumeInfoScrapRequest.class)
     )) @RequestBody ResumeInfoScrapRequest request) {
-        return null;
+        return resumeScrapRedisService.resumeScrapToRedis(request);
     }
+
 }

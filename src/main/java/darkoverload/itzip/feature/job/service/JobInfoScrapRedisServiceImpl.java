@@ -38,7 +38,7 @@ public class JobInfoScrapRedisServiceImpl implements JobInfoScrapRedisService {
         Long id = request.getId();
         String email = request.getEmail();
 
-        if (jobInfoScrapRedisReadRepository.hasSameJobInfoScrap(id, email) || jobInfoScrapRedisReadRepository.isJobInfoScrapStatus(id, email)) {
+        if (jobInfoScrapRedisReadRepository.hasSameJobInfoScrap(id, email) && jobInfoScrapRedisReadRepository.isJobInfoScrapStatus(id, email)) {
             jobInfoScrapRedisCommandRepository.unScrapInfoFromRedis(id, email);
             jobInfoScrapRedisCommandRepository.decrementScrapCountFromRedis(id);
             return "채용정보 스크랩을 취소하였습니다.";
@@ -46,7 +46,7 @@ public class JobInfoScrapRedisServiceImpl implements JobInfoScrapRedisService {
 
         Optional<JobInfoScrap> optionalData = jobInfoScrapRepository.findByJobInfoId(id, email);
         if (optionalData.isPresent()) {
-            jobInfoScrapRedisCommandRepository.notCacheUnScrapInfoToRedis(request.getId(), request.getEmail());
+            jobInfoScrapRedisCommandRepository.notCacheUnScrapInfoToRedis(id, email);
             jobInfoScrapRedisCommandRepository.decrementScrapCountFromRedis(id);
             return "채용정보 스크랩을 취소하였습니다.";
         }

@@ -19,9 +19,9 @@ public class CustomScrapResumeRepositoryImpl implements CustomScrapResumeReposit
     private final QResumeScrap qResumeScrap = QResumeScrap.resumeScrap;
 
     @Override
-    public Optional<ResumeScrap> findByResumeScrap(Long userId, Long resumeId) {
+    public Optional<ResumeScrap> findByResumeScrap(Long resumeId, String userEmail) {
         ResumeScrap resumeScrap = queryFactory.selectFrom(qResumeScrap)
-                .where(qResumeScrap.user.id.eq(userId).and(qResumeScrap.resume.id.eq(resumeId)))
+                .where(qResumeScrap.user.email.eq(userEmail).and(qResumeScrap.resume.id.eq(resumeId)))
                 .fetchOne();
 
         return Optional.ofNullable(resumeScrap);
