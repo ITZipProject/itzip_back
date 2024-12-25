@@ -3,7 +3,6 @@ package darkoverload.itzip.feature.techinfo.domain.comment;
 import darkoverload.itzip.feature.techinfo.controller.post.request.PostCommentCreateRequest;
 import lombok.Builder;
 import lombok.Getter;
-
 import java.time.LocalDateTime;
 
 /**
@@ -21,7 +20,14 @@ public class Comment {
     private final LocalDateTime createDate;
 
     @Builder
-    public Comment(String id, String postId, Long userId, String content, Boolean isPublic, LocalDateTime createDate) {
+    public Comment(
+            String id,
+            String postId,
+            Long userId,
+            String content,
+            Boolean isPublic,
+            LocalDateTime createDate
+    ) {
         this.id = id;
         this.postId = postId;
         this.userId = userId;
