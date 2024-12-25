@@ -1,7 +1,6 @@
 package darkoverload.itzip.feature.techinfo.mock;
 
 import darkoverload.itzip.feature.techinfo.domain.post.Post;
-
 import java.util.List;
 
 public class PostMockData {

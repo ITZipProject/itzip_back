@@ -3,7 +3,6 @@ package darkoverload.itzip.feature.techinfo.domain.comment;
 import darkoverload.itzip.feature.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
-
 import java.time.LocalDateTime;
 
 /**
@@ -20,8 +19,13 @@ public class CommentDetails {
     private final LocalDateTime createDate;
 
     @Builder
-    public CommentDetails(String commentId, String profileImagePath, String nickname, String content,
-                          LocalDateTime createDate) {
+    public CommentDetails(
+            String commentId,
+            String profileImagePath,
+            String nickname,
+            String content,
+            LocalDateTime createDate
+    ) {
         this.commentId = commentId;
         this.profileImagePath = profileImagePath;
         this.nickname = nickname;

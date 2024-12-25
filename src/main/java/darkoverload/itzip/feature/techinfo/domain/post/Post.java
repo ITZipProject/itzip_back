@@ -3,7 +3,6 @@ package darkoverload.itzip.feature.techinfo.domain.post;
 import darkoverload.itzip.feature.techinfo.controller.post.request.PostCreateRequest;
 import lombok.Builder;
 import lombok.Getter;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
