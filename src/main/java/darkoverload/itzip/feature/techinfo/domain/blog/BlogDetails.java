@@ -39,7 +39,7 @@ public class BlogDetails {
      */
     public static BlogDetails from(Blog blog, List<YearlyPostStats> yearlyPostCounts) {
         return BlogDetails.builder()
-                .blogId(blog.getUser().getId())
+                .blogId(blog.getId())
                 .profileImageUrl(blog.getUser().getImageUrl())
                 .nickname(blog.getUser().getNickname())
                 .email(blog.getUser().getEmail())

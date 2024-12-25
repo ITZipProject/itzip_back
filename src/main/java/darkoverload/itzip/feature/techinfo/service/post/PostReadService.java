@@ -3,6 +3,7 @@ package darkoverload.itzip.feature.techinfo.service.post;
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.techinfo.domain.post.Post;
 import darkoverload.itzip.feature.techinfo.domain.post.PostDetails;
+import darkoverload.itzip.feature.techinfo.domain.post.PostInfo;
 import darkoverload.itzip.feature.techinfo.dto.post.YearlyPostStats;
 import darkoverload.itzip.feature.techinfo.type.SortType;
 import org.bson.types.ObjectId;
@@ -33,7 +34,7 @@ public interface PostReadService {
 
     Page<Post> getPostsByNickname(String nickname, int page, int size, SortType sortType);
 
-    Page<PostDetails> getAllOrPostsByCategoryId(String categoryId, int page, int size, SortType sortType);
+    Page<PostInfo> getAllOrPostsByCategoryId(String categoryId, int page, int size, SortType sortType);
 
     List<Post> getPostsByDateRange(Long blogId, LocalDateTime creteDate, int limit);
 

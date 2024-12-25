@@ -2,11 +2,14 @@ package darkoverload.itzip.feature.techinfo.controller.post.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
+
 import java.util.List;
 
 @Schema(
         description = "기술 정보 포스트 생성 요청"
 )
+@Builder
 public record PostCreateRequest(
         @Schema(description = "카테고리 ID", example = "66ce18d84cb7d0b29ce602f5")
         @NotBlank(message = "카테고리 ID는 필수입니다.")

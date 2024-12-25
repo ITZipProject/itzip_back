@@ -80,6 +80,7 @@ public class PostDetails {
                 .profileImagePath(user.getImageUrl())
                 .author(user.getNickname())
                 .email(user.getEmail())
+                .blogId(post.getBlogId())
                 .postId(post.getId())
                 .categoryId(post.getCategoryId())
                 .createDate(post.getCreateDate())
@@ -91,28 +92,6 @@ public class PostDetails {
                 .contentImagePaths(post.getContentImagePaths())
                 .isLiked(liked)
                 .isScrapped(scrapped)
-                .build();
-    }
-
-    /**
-     * Post 와 User 로부터 기본 PostDetails 생성합니다.
-     * 좋아요와 스크랩 상태는 포함되지 않습니다.
-     *
-     * @param post 게시글 정보
-     * @param user 작성자 정보
-     * @return PostDetails
-     */
-    public static PostDetails from(Post post, User user) {
-        return PostDetails.builder()
-                .profileImagePath(user.getImageUrl())
-                .author(user.getNickname())
-                .postId(post.getId())
-                .categoryId(post.getCategoryId())
-                .createDate(post.getCreateDate())
-                .title(post.getTitle())
-                .content(post.getContent())
-                .thumbnailImagePath(post.getThumbnailImagePath())
-                .likeCount(post.getLikeCount())
                 .build();
     }
 
