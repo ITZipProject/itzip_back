@@ -4,6 +4,7 @@ import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.techinfo.domain.blog.Blog;
 import darkoverload.itzip.feature.techinfo.domain.post.Post;
 import darkoverload.itzip.feature.techinfo.domain.post.PostDetails;
+import darkoverload.itzip.feature.techinfo.domain.post.PostInfo;
 import darkoverload.itzip.feature.techinfo.dto.post.YearlyPostStats;
 import darkoverload.itzip.feature.techinfo.service.blog.port.BlogReadRepository;
 import darkoverload.itzip.feature.techinfo.service.like.LikeService;
@@ -186,7 +187,7 @@ public class PostReadServiceImpl implements PostReadService {
      */
     @Override
     @Transactional(readOnly = true)
-    public Page<PostDetails> getAllOrPostsByCategoryId(String categoryId, int page, int size, SortType sortType) {
+    public Page<PostInfo> getAllOrPostsByCategoryId(String categoryId, int page, int size, SortType sortType) {
         Pageable pageable = PageRequest.of(page, size, SortUtil.getType(sortType));
 
         Page<Post> posts = (categoryId != null) ? this.findPostsByCategoryId(categoryId, pageable) : this.findAll(pageable);
@@ -199,7 +200,7 @@ public class PostReadServiceImpl implements PostReadService {
 
         return posts.map(post -> {
             Blog blog = blogReadRepository.getById(post.getBlogId());
-            return PostDetails.from(post, blog.getUser());
+            return PostInfo.from(post, blog.getUser());
         });
     }
 

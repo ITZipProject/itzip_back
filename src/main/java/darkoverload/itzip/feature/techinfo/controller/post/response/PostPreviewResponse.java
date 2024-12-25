@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.techinfo.controller.post.response;
 
-import darkoverload.itzip.feature.techinfo.domain.post.PostDetails;
+import darkoverload.itzip.feature.techinfo.domain.post.PostInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 
@@ -48,17 +48,17 @@ public record PostPreviewResponse(
         String createDate
 ) {
 
-    public static PostPreviewResponse from(PostDetails postDetails) {
+    public static PostPreviewResponse from(PostInfo postInfo) {
         return PostPreviewResponse.builder()
-                .postId(postDetails.getPostId())
-                .categoryId(postDetails.getCategoryId())
-                .title(postDetails.getTitle())
-                .content(postDetails.getContent())
-                .thumbnailImagePath(postDetails.getThumbnailImagePath())
-                .likeCount(postDetails.getLikeCount())
-                .profileImagePath(postDetails.getProfileImagePath())
-                .author(postDetails.getAuthor())
-                .createDate(postDetails.getCreateDate().toString())
+                .postId(postInfo.getPostId())
+                .categoryId(postInfo.getCategoryId())
+                .title(postInfo.getTitle())
+                .content(postInfo.getContent())
+                .thumbnailImagePath(postInfo.getThumbnailImagePath())
+                .likeCount(postInfo.getLikeCount())
+                .profileImagePath(postInfo.getProfileImagePath())
+                .author(postInfo.getAuthor())
+                .createDate(postInfo.getCreateDate().toString())
                 .build();
     }
 
