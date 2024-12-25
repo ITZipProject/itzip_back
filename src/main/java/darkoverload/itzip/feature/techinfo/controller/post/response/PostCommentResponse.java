@@ -26,13 +26,13 @@ public record PostCommentResponse(
 ) {
 
     public static PostCommentResponse from(CommentDetails commentDetails) {
-        return new PostCommentResponse(
-                commentDetails.getCommentId(),
-                commentDetails.getProfileImagePath(),
-                commentDetails.getNickname(),
-                commentDetails.getContent(),
-                commentDetails.getCreateDate().toString()
-        );
+        return PostCommentResponse.builder()
+                .commentId(commentDetails.getCommentId())
+                .profileImagePath(commentDetails.getProfileImagePath())
+                .nickname(commentDetails.getNickname())
+                .content(commentDetails.getContent())
+                .createDate(commentDetails.getCreateDate().toString())
+                .build();
     }
 
 }
