@@ -71,14 +71,6 @@ public class JobInfo extends AuditingFields {
     @Column(length=5000)
     private String keyword;
 
-    // 연봉코드
-    @Column(name="salary_code", length=50)
-    private String salaryCode;
-
-    // 연봉명
-    @Column(name="salary_name", length=50)
-    private String salaryName;
-
     // 채용일
     @Column(name="posting_date")
     private LocalDateTime postingDate;
@@ -89,7 +81,8 @@ public class JobInfo extends AuditingFields {
 
     @Column(name="scrap_count")
     @ColumnDefault("0")
-    private Integer scrapCount;
+    @Builder.Default
+    private Integer scrapCount = 0;
 
     public static String makeScrapCountRedisKey(Long jobInfoId) {
         StringBuilder sb = new StringBuilder();

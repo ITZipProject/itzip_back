@@ -18,8 +18,6 @@ public class JobInfoMockData {
             .locationName("서울 &gt; 서울전체,서울 &gt; 서초구")
             .positionId(48953038L)
             .expirationDate(TimeStampUtil.convertToLocalDateTime("1726757999"))
-            .salaryCode("0")
-            .salaryName("회사내규에 따름")
             .title("Cloud 인사시스템 개발자")
             .url("http://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=48953038&utm_source=job-search-api&utm_medium=api&utm_campaign=saramin-job-search-api")
             .build();
@@ -37,8 +35,6 @@ public class JobInfoMockData {
             .locationName("서울 &gt; 서울전체")
             .positionId(48953031L)
             .expirationDate(TimeStampUtil.convertToLocalDateTime("1726757999"))
-            .salaryCode("99")
-            .salaryName("면접후 결정")
             .title("보안솔루션 및 네트워크장비 영업")
             .url("http://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=48953031&utm_source=job-search-api&utm_medium=api&utm_campaign=saramin-job-search-api")
             .build();
@@ -56,8 +52,6 @@ public class JobInfoMockData {
             .locationName("서울 &gt; 강서구")
             .positionId(48952926L)
             .expirationDate(TimeStampUtil.convertToLocalDateTime("1726757999"))
-            .salaryCode("99")
-            .salaryName("면접후 결정")
             .title("[베스트냅킨] 일회용품 쇼핑몰 편집 디자이너 모집")
             .url("http://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=48952926&utm_source=job-search-api&utm_medium=api&utm_campaign=saramin-job-search-api")
             .build();

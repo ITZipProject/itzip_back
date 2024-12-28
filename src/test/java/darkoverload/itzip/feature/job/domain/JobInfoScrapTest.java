@@ -51,8 +51,6 @@ public class JobInfoScrapTest {
                 .experienceMax(0L)
                 .experienceName("신입")
                 .keyword("개발")
-                .salaryCode("30,000,000")
-                .salaryName("3천만원이상")
                 .postingDate(LocalDateTime.of(2024, 12, 3, 23, 59, 59))
                 .expirationDate(LocalDateTime.of(2025, 2, 3, 23, 59, 59))
                 .scrapCount(0)

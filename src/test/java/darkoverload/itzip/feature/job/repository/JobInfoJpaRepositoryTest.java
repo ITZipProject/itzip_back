@@ -24,10 +24,10 @@ import static org.junit.jupiter.api.Assertions.*;
         @Sql(value = "/sql/jobinfo/jobinfo-repository-data.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 })
 @ActiveProfiles("test")
-class JobInfoRepositoryTest {
+class JobInfoJpaRepositoryTest {
 
     @Autowired
-    private JobInfoRepository repository;
+    private JobInfoJpaRepository repository;
 
     @Test
     void 채용정보_페이징_조회() {

@@ -1,9 +1,8 @@
 package darkoverload.itzip.feature.job.repository;
 
 import darkoverload.itzip.feature.job.domain.scrap.JobInfoScrapType;
-import darkoverload.itzip.feature.job.repository.redis.JobInfoScrapRedisReadRepositoryImpl;
-import darkoverload.itzip.feature.job.service.port.JobInfoScrapRedisCommandRepository;
-import darkoverload.itzip.feature.job.service.port.JobInfoScrapRedisReadRepository;
+import darkoverload.itzip.feature.job.service.port.redis.JobInfoScrapRedisCommandRepository;
+import darkoverload.itzip.feature.job.service.port.redis.JobInfoScrapRedisReadRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

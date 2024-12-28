@@ -8,10 +8,10 @@ import java.util.List;
 public interface JobInfoConnectService {
     List<JobInfo> jobInfoConnect();
 
-    Long jobInfoDelete(JobInfoAggregator jobInfoAggregator);
+    int jobInfoDelete(JobInfoAggregator jobInfoAggregator);
 
-    Long jobInfoUpdate(JobInfoAggregator jobInfoAggregator);
+    int jobInfoUpdate(JobInfoAggregator jobInfoAggregator);
 
-    Long jobInfoSave(JobInfoAggregator jobInfoAggregator);
+    int jobInfoSave(JobInfoAggregator jobInfoAggregator);
 
 }

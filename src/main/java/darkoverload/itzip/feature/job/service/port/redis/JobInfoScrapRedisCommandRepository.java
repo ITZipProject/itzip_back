@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.job.service.port;
+package darkoverload.itzip.feature.job.service.port.redis;
 
 import java.util.Set;
 

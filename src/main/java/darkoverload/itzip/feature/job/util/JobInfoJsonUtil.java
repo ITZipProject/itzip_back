@@ -125,18 +125,8 @@ public class JobInfoJsonUtil {
         Long experienceLevelMax = (Long) experienceLevel.get("max");
         String experienceLevelName = (String) experienceLevel.get("name");
 
-        // "required-education-level" JSON 객체 내에서 요구 학력 정보를 추출
-        JSONObject requiredEducationLevel = (JSONObject) position.get("required-education-level");
-        String requiredEducationLevelCode = (String) requiredEducationLevel.get("code");
-        String requiredEducationLevelName = (String) requiredEducationLevel.get("name");
-
         // JSON 객체에서 "keyword" 값을 추출
         String keyword = (String) object.get("keyword");
-
-        // "salary" JSON 객체 내에서 급여 정보를 추출
-        JSONObject salary = (JSONObject) object.get("salary");
-        String salaryCode = (String) salary.get("code");
-        String salaryName = (String) salary.get("name");
 
         // JSON 객체에서 "id", "expiration-timestamp", "posting-timestamp" 값을 추출
         String id = (String) object.get("id");
@@ -156,8 +146,6 @@ public class JobInfoJsonUtil {
                 .experienceMin(experienceLevelMin)
                 .experienceName(experienceLevelName)
                 .keyword(keyword)
-                .salaryCode(salaryCode)
-                .salaryName(salaryName)
                 .expirationDate(convertToLocalDateTime(expirationTimeStamp))
                 .postingDate(convertToLocalDateTime(postingTimeStamp))
                 .build();

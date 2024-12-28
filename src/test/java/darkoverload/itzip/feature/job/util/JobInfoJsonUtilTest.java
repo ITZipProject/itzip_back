@@ -74,8 +74,6 @@ class JobInfoJsonUtilTest {
                     () -> assertEquals(jobInfo.getExperienceMax(), 0),
                     () -> assertEquals(jobInfo.getExperienceName(), "경력3년↑"),
                     () -> assertEquals(jobInfo.getKeyword(), "소프트웨어개발,솔루션업체"),
-                    () -> assertEquals(jobInfo.getSalaryCode(), "99"),
-                    () -> assertEquals(jobInfo.getSalaryName(), "면접후 결정"),
                     () -> assertEquals(jobInfo.getPositionId(),48954525),
                     () -> assertEquals(jobInfo.getPostingDate(), TimeStampUtil.convertToLocalDateTime("1725438037")),
                     () -> assertEquals(jobInfo.getExpirationDate(), TimeStampUtil.convertToLocalDateTime("1988118000"))

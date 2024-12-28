@@ -24,8 +24,6 @@ class JobInfoAggregatorTest {
             .locationName("서울 &gt; 서울전체,서울 &gt; 서초구")
             .positionId(48953038L)
             .expirationDate(TimeStampUtil.convertToLocalDateTime("1726757999"))
-            .salaryCode("0")
-            .salaryName("회사내규에 따름")
             .title("Cloud 인사시스템 개발자")
             .url("https://itzip.co.kr")
             .build();

@@ -73,7 +73,6 @@ public class JobInfos {
                 || !dbJobInfo.getIndustryName().equals(apiJobInfo.getIndustryName()) // 산업 이름 비교
                 || !dbJobInfo.getJobName().equals(apiJobInfo.getJobName()) // 직무 이름 비교
                 || !dbJobInfo.getExperienceName().equals(apiJobInfo.getExperienceName()) // 경력 이름 비교
-                || !dbJobInfo.getSalaryName().equals(apiJobInfo.getSalaryName()) // 급여 이름 비교
                 || !dbJobInfo.getExpirationDate().equals(apiJobInfo.getExpirationDate()); // 만료 날짜 비교
     }
 
