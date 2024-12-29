@@ -3,7 +3,7 @@ package darkoverload.itzip.feature.job.service;
 import darkoverload.itzip.feature.job.controller.response.JobInfoSearchResponse;
 import darkoverload.itzip.feature.job.domain.job.JobInfo;
 import darkoverload.itzip.feature.job.domain.scrap.JobInfoScrap;
-import darkoverload.itzip.feature.job.repository.JobInfoRepository;
+import darkoverload.itzip.feature.job.repository.JobInfoJpaRepository;
 import darkoverload.itzip.feature.job.repository.JobInfoScrapRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class JobInfoServiceImpl implements JobInfoService{
 
-    private final JobInfoRepository jobInfoRepository;
+    private final JobInfoJpaRepository jobInfoJpaRepository;
     private final JobInfoScrapRepository jobInfoScrapRepository;
 
     /**
@@ -37,13 +37,13 @@ public class JobInfoServiceImpl implements JobInfoService{
     @Override
     public Page<JobInfoSearchResponse> searchJobInfo(String search, String category, Integer experienceMin, Integer experienceMax, String locationName, Pageable pageable) {
 
-        return jobInfoRepository.searchJobInfo(search, category, experienceMin, experienceMax, locationName, pageable);
+        return jobInfoJpaRepository.searchJobInfo(search, category, experienceMin, experienceMax, locationName, pageable);
     }
 
     @Override
     @Transactional(readOnly = true)
     public JobInfo getById(Long jobInfoId) {
-        return jobInfoRepository.getReferenceById(jobInfoId);
+        return jobInfoJpaRepository.getReferenceById(jobInfoId);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class JobInfoServiceImpl implements JobInfoService{
 
     @Override
     public void updateScrapCount(JobInfo jobInfo) {
-        jobInfoRepository.save(jobInfo);
+        jobInfoJpaRepository.save(jobInfo);
     }
 
     @Override

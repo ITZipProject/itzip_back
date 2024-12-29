@@ -3,7 +3,7 @@ package darkoverload.itzip.feature.job.repository.redis;
 import darkoverload.itzip.feature.job.domain.job.JobInfo;
 import darkoverload.itzip.feature.job.domain.scrap.JobInfoScrap;
 import darkoverload.itzip.feature.job.domain.scrap.JobInfoScrapType;
-import darkoverload.itzip.feature.job.service.port.JobInfoScrapRedisReadRepository;
+import darkoverload.itzip.feature.job.service.port.redis.JobInfoScrapRedisReadRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;

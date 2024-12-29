@@ -64,34 +64,19 @@ class JobInfoJsonUtilTest {
 
             assertAll(
                     ()-> assertEquals(jobInfo.getUrl(), "http://www.saramin.co.kr/zf_user/jobs/relay/view?rec_idx=48954525&utm_source=job-search-api&utm_medium=api&utm_campaign=saramin-job-search-api"),
-                    () -> assertEquals(jobInfo.getActive(), "1"),
-                    () -> assertEquals(jobInfo.getCompanyHref(), "http://www.saramin.co.kr/zf_user/company-info/view?csn=1448116437&utm_source=job-search-api&utm_medium=api&utm_campaign=saramin-job-search-api"),
                     () -> assertEquals(jobInfo.getCompanyName(), "(주)에이티지"),
                     () -> assertEquals(jobInfo.getTitle(), "(주)에이티지(대전연구소) 서버 개발자 경력자 채용"),
-                    () -> assertEquals(jobInfo.getIndustryCode(), "301"),
                     () -> assertEquals(jobInfo.getIndustryName(), "솔루션·SI·ERP·CRM"),
                     () -> assertEquals(jobInfo.getLocationCode(), "105000,105010,105020,105030,105040,118000"),
                     () -> assertEquals(jobInfo.getLocationName(), "대전 &gt; 대전전체,대전 &gt; 대덕구,대전 &gt; 동구,대전 &gt; 서구,대전 &gt; 유성구,세종 &gt; 세종특별자치시"),
-                    () -> assertEquals(jobInfo.getJobTypeCode(), "1"),
-                    () -> assertEquals(jobInfo.getJobTypeName(), "정규직"),
-                    () -> assertEquals(jobInfo.getJobMidCode(), "2"),
-                    () -> assertEquals(jobInfo.getJobMidName(), "IT개발·데이터"),
-                    ()-> assertEquals(jobInfo.getJobCode(),"84,108,109,217,222,235,244,254,270,292,108,167,197,241,254,270,291"),
                     () -> assertEquals(jobInfo.getJobName(), "소프트웨어개발,솔루션업체,백엔드/서버개발,딥러닝,머신러닝,ElasticStack,Git,Java,Kubernetes,MongoDB,PostgreSQL,SpringBoot,S/W,Apache,Kafka,Spring"),
-                    () -> assertEquals(jobInfo.getExperienceCode(), "2"),
                     () -> assertEquals(jobInfo.getExperienceMin(), 3),
                     () -> assertEquals(jobInfo.getExperienceMax(), 0),
                     () -> assertEquals(jobInfo.getExperienceName(), "경력3년↑"),
-                    () -> assertEquals(jobInfo.getRequiredEducationCode(), "8"),
-                    () -> assertEquals(jobInfo.getRequiredEducationName(), "대학교졸업(4년)이상"),
                     () -> assertEquals(jobInfo.getKeyword(), "소프트웨어개발,솔루션업체"),
-                    () -> assertEquals(jobInfo.getSalaryCode(), "99"),
-                    () -> assertEquals(jobInfo.getSalaryName(), "면접후 결정"),
                     () -> assertEquals(jobInfo.getPositionId(),48954525),
                     () -> assertEquals(jobInfo.getPostingDate(), TimeStampUtil.convertToLocalDateTime("1725438037")),
-                    () -> assertEquals(jobInfo.getExpirationDate(), TimeStampUtil.convertToLocalDateTime("1988118000")),
-                    () -> assertEquals(jobInfo.getCloseTypeCode(), "2"),
-                    () -> assertEquals(jobInfo.getCloseTypeName(), "채용시")
+                    () -> assertEquals(jobInfo.getExpirationDate(), TimeStampUtil.convertToLocalDateTime("1988118000"))
             );
         }
 

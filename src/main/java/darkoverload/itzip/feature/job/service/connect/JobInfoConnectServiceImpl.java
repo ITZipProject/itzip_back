@@ -5,16 +5,16 @@ import darkoverload.itzip.feature.job.domain.job.JobInfo;
 import darkoverload.itzip.feature.job.domain.job.JobInfoAggregator;
 import darkoverload.itzip.feature.job.domain.job.JobInfoIds;
 import darkoverload.itzip.feature.job.domain.job.JobInfos;
-import darkoverload.itzip.feature.job.repository.JobInfoRepository;
 import darkoverload.itzip.feature.job.repository.JobInfoScrapRepository;
+import darkoverload.itzip.feature.job.service.connect.port.JobInfoConnectRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
 @Slf4j
 @Service
@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JobInfoConnectServiceImpl implements JobInfoConnectService {
 
-    private final JobInfoRepository jobInfoRepository;
     private final JobInfoScrapRepository jobInfoScrapRepository;
+    private final JobInfoConnectRepository jobInfoConnectRepository;
 
     @Value("${job.api-url}")
     private String jobUrl;
@@ -54,39 +54,38 @@ public class JobInfoConnectServiceImpl implements JobInfoConnectService {
     }
 
     @Override
-    public Long jobInfoDelete(JobInfoAggregator jobInfoAggregator) {
-        if (jobInfoAggregator.isDbJobInfosEmpty()) return 0L;
+    public int jobInfoDelete(JobInfoAggregator jobInfoAggregator) {
+        if (jobInfoAggregator.isDbJobInfosEmpty()) return 0;
         JobInfoIds jobInfoIds = jobInfoAggregator.makeDeleteJobInfoIds();
 
-        long totalDeletedCount = 0L;
+        int totalDeletedCount = 0;
         for (int i = 0; i < jobInfoIds.size(); i += 500) {
             jobInfoScrapRepository.bulkDeleteByPositionIds(jobInfoIds.subList(i, Math.min(i + 500, jobInfoIds.size())));
-            totalDeletedCount += jobInfoRepository.bulkDeleteByPositionIds(jobInfoIds.subList(i, Math.min(i + 500, jobInfoIds.size())));
+            totalDeletedCount += jobInfoConnectRepository.deleteAll(jobInfoIds.subList(i, Math.min(i + 500, jobInfoIds.size())));
         }
 
         return totalDeletedCount;
     }
 
     @Override
-    public Long jobInfoUpdate(JobInfoAggregator jobInfoAggregator) {
+    public int jobInfoUpdate(JobInfoAggregator jobInfoAggregator) {
         JobInfos jobInfos = jobInfoAggregator.makeUpdateJobInfos();
 
-        long totalUpdatedCount = 0L;
+        int totalUpdateCount = 0;
         for (int i = 0; i < jobInfos.size(); i += 500) {
-            totalUpdatedCount += jobInfoRepository.saveAll(jobInfos.subList(i, Math.min(i + 500, jobInfos.size())))
-                    .size();
+            totalUpdateCount+= jobInfoConnectRepository.updateAll(jobInfos.subList(i, Math.min(i + 500, jobInfos.size())));
         }
 
-        return totalUpdatedCount;
+        return totalUpdateCount;
     }
 
     @Override
-    public Long jobInfoSave(JobInfoAggregator jobInfoAggregator) {
+    public int jobInfoSave(JobInfoAggregator jobInfoAggregator) {
         JobInfos saveJobInfos = jobInfoAggregator.makeSaveJobInfos();
 
-        long totalSaveCount = 0L;
+        int totalSaveCount = 0;
         for (int i = 0; i < saveJobInfos.size(); i += 500) {
-            totalSaveCount += jobInfoRepository.saveAll(saveJobInfos.subList(i, Math.min(i + 500, saveJobInfos.size()))).size();
+             totalSaveCount += jobInfoConnectRepository.saveAll(saveJobInfos.subList(i, Math.min(i + 500, saveJobInfos.size())));
         }
 
         return totalSaveCount;

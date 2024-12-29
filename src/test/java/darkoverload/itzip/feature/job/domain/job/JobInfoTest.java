@@ -1,10 +1,8 @@
 package darkoverload.itzip.feature.job.domain.job;
 
-import darkoverload.itzip.feature.job.domain.job.JobInfo;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class JobInfoTest {
 

@@ -68,20 +68,12 @@ public class JobInfos {
      */
     private boolean checkNotEquals(JobInfo dbJobInfo, JobInfo apiJobInfo) {
 
-        return !dbJobInfo.getActive().equals(apiJobInfo.getActive()) // active 필드 비교
-                || !dbJobInfo.getUrl().equals(apiJobInfo.getUrl()) // URL 필드 비교
+        return !dbJobInfo.getUrl().equals(apiJobInfo.getUrl()) // URL 필드 비교
                 || !dbJobInfo.getTitle().equals(apiJobInfo.getTitle()) // 제목 필드 비교
-                || !dbJobInfo.getIndustryCode().equals(apiJobInfo.getIndustryCode()) // 산업 코드 비교
                 || !dbJobInfo.getIndustryName().equals(apiJobInfo.getIndustryName()) // 산업 이름 비교
-                || !dbJobInfo.getJobMidCode().equals(apiJobInfo.getJobMidCode()) // 중간 직무 코드 비교
-                || !dbJobInfo.getJobMidName().equals(apiJobInfo.getJobMidName()) // 중간 직무 이름 비교
                 || !dbJobInfo.getJobName().equals(apiJobInfo.getJobName()) // 직무 이름 비교
-                || !dbJobInfo.getJobCode().equals(apiJobInfo.getJobCode()) // 직무 코드 비교
-                || !dbJobInfo.getExperienceCode().equals(apiJobInfo.getExperienceCode()) // 경력 코드 비교
                 || !dbJobInfo.getExperienceName().equals(apiJobInfo.getExperienceName()) // 경력 이름 비교
-                || !dbJobInfo.getSalaryName().equals(apiJobInfo.getSalaryName()) // 급여 이름 비교
-                || !dbJobInfo.getExpirationDate().equals(apiJobInfo.getExpirationDate()) // 만료 날짜 비교
-                || !dbJobInfo.getCloseTypeCode().equals(apiJobInfo.getCloseTypeCode()); // 마감 유형 코드 비교
+                || !dbJobInfo.getExpirationDate().equals(apiJobInfo.getExpirationDate()); // 만료 날짜 비교
     }
 
     public Set<Long> makeSetIds() {
