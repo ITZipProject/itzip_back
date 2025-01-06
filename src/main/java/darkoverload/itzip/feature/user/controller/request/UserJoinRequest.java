@@ -32,12 +32,10 @@ public class UserJoinRequest {
     @Schema(description = "비밀번호", example = "ExamPass123!!")
     private String password;
 
-    @JsonProperty("password_check")
     @NotEmpty(message = "비밀번호 확인을 입력해주세요.")
     @Schema(description = "비밀번호 확인", example = "ExamPass123!!")
     private String passwordCheck;
 
-    @JsonProperty("auth_code")
     @NotEmpty(message = "이메일을 인증해주세요.")
     @Schema(description = "이메일 인증번호", example = "bct76t")
     private String authCode;
