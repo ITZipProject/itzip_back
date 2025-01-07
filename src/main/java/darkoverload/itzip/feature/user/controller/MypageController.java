@@ -13,10 +13,10 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,7 +40,14 @@ public class MypageController {
     @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
     @ExceptionCodeAnnotations({CommonExceptionCode.FILED_ERROR})
     public String checkDuplicateNickname(
-            @Parameter(description = "사용할 닉네임") @RequestParam @NotBlank String nickname
+            @Parameter(description = "사용할 닉네임")
+            @RequestParam
+            @NotBlank
+            @Pattern(
+                    regexp = "^(?=.*[가-힣a-zA-Z])[가-힣a-zA-Z0-9 _-]{2,16}$",
+                    message = "올바르지 않은 닉네임 형식입니다."
+            )
+            String nickname
     ) {
         return mypageService.checkDuplicateNickname(nickname);
     }
