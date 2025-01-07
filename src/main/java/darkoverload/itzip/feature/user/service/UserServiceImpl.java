@@ -184,9 +184,9 @@ public class UserServiceImpl implements UserService {
         user.setPassword(encryptedPassword);
         user.setNickname(getUniqueNickname());
 
-        userRepository.save(user.convertToEntity());
+        User savedUser = userRepository.save(user.convertToEntity()).convertToDomain();
 
-        blogCommandService.create(user);
+        blogCommandService.create(savedUser);
 
         return "회원가입이 완료되었습니다.";
     }

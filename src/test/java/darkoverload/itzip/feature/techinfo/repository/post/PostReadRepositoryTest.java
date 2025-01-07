@@ -138,7 +138,7 @@ class PostReadRepositoryTest {
 
         // then
         assertThat(result).isNotNull();
-        assertThat(result.getFirst().getYear()).isEqualTo(2024);
+        assertThat(result.getFirst().getYear()).isEqualTo(2025);
     }
 
 }
