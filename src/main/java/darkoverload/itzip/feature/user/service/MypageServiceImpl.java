@@ -10,7 +10,6 @@ import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -94,7 +93,7 @@ public class MypageServiceImpl implements MypageService {
         User user = userService.findByEmail(userDetails.getEmail()).orElseThrow(() -> new RestApiException(CommonExceptionCode.NOT_FOUND_USER));
 
         // 기존 프로필 이미지 삭제
-        if (!user.getImageUrl().isEmpty()) {
+        if (user.getImageUrl() != null && !user.getImageUrl().isEmpty()) {
             storageService.imageDelete(user.getImageUrl(), profileDir);
         }
 
