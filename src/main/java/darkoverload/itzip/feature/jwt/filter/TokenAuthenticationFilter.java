@@ -37,7 +37,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TokenAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenizer jwtTokenizer;
-    private final ObjectMapper objectMapper;
 
     /**
      * 필터 메서드
@@ -113,6 +112,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
                 .data(code.getData())
                 .build();
 
+        ObjectMapper objectMapper = new ObjectMapper();
         String jsonResponse = objectMapper.writeValueAsString(errorResponse);
 
         response.getWriter().write(jsonResponse);
