@@ -47,6 +47,7 @@ public class AWSService {
      * @throws IOException
      */
     public AWSFile uploadImage(Image file, InputStream inputStream) throws IOException {
+
         // 버킷 directory 생성
         String bucketDir = bucketName + "/" + file.getFeatureDir();
         // 이미지 bucket 저장
