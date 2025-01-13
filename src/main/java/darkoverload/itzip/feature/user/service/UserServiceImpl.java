@@ -5,22 +5,21 @@ import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.jwt.service.TokenService;
 import darkoverload.itzip.feature.jwt.util.JwtTokenizer;
 import darkoverload.itzip.feature.techinfo.service.blog.BlogCommandService;
-import darkoverload.itzip.feature.user.controller.request.AuthEmailSendRequest;
-import darkoverload.itzip.feature.user.controller.request.RefreshAccessTokenRequest;
-import darkoverload.itzip.feature.user.controller.request.UserJoinRequest;
-import darkoverload.itzip.feature.user.controller.request.UserLoginRequest;
+import darkoverload.itzip.feature.user.controller.request.*;
 import darkoverload.itzip.feature.user.controller.response.UserInfoResponse;
 import darkoverload.itzip.feature.user.controller.response.UserLoginResponse;
 import darkoverload.itzip.feature.user.domain.User;
 import darkoverload.itzip.feature.user.entity.Authority;
 import darkoverload.itzip.feature.user.entity.UserEntity;
 import darkoverload.itzip.feature.user.repository.UserRepository;
+import darkoverload.itzip.feature.user.util.PasswordUtil;
 import darkoverload.itzip.feature.user.util.RandomAuthCode;
 import darkoverload.itzip.feature.user.util.RandomNickname;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Service
@@ -262,6 +262,62 @@ public class UserServiceImpl implements UserService {
         userRepository.delete(user.convertToEntity());
 
         return "정상적으로 탈퇴 되었습니다.";
+    }
+
+    /**
+     * 비밀번호 재설정 요청 메서드
+     * @param passwordResetRequest 비밀번호 재설정 요청 dto
+     * @param request 요청 객체
+     */
+    @Override
+    public String requestPasswordReset(PasswordResetRequest passwordResetRequest, HttpServletRequest request) {
+        String email = passwordResetRequest.getEmail();
+
+        // 올바른 이메일인지 체크
+        User user = getByEmail(email);
+
+        String tempPassword = PasswordUtil.generatePassword();
+
+        // JWT 토큰 생성
+        String token = jwtTokenizer.createTempPasswordToken(email, tempPassword);
+
+        // 비밀번호 변경 링크 생성
+        String appUrl = request.getRequestURL().toString().replace(request.getRequestURI(), request.getContextPath());
+        String resetLink = appUrl + "/user/passwordReset?token=" + token;
+
+        // 메일 제목
+        String subject = "[ITZIP] 비밀번호 재설정";
+
+        // 메일 본문
+        String body = emailService.setPwResetMail(resetLink, tempPassword);
+
+        // 메일 발송
+        emailService.sendFormMail(email, subject, body);
+        return "비밀번호 초기화 메일이 전송되었습니다.";
+    }
+
+    /**
+     * 비밀번호 재설정 승인 메서드
+     * @param response 응답 객체
+     * @param token 비밀번호 재설정 토큰
+     */
+    @Override
+    public void confirmPasswordReset(HttpServletResponse response, String token) {
+        Claims claims = jwtTokenizer.parseTempPwToken(token);
+
+        String email = claims.get("email", String.class);
+        String tempPassword = claims.get("tempPassword", String.class);
+
+        User user = getByEmail(email);
+        user.setPassword(encryptPassword(tempPassword));
+
+        userRepository.save(user.convertToEntity());
+
+        try {
+            response.sendRedirect("https://itzip.co.kr");
+        } catch (IOException e) {
+            throw new RestApiException(CommonExceptionCode.INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**

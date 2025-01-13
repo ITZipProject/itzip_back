@@ -35,6 +35,8 @@ public class UserEntity extends AuditingFields {
     @Enumerated(EnumType.STRING)
     private Authority authority;
 
+    private String snsType;
+
     public User convertToDomain(){
         return User.builder()
                 .id(this.id)
@@ -43,6 +45,7 @@ public class UserEntity extends AuditingFields {
                 .password(this.password)
                 .imageUrl(this.imageUrl)
                 .authority(this.authority)
+                .snsType(this.snsType)
                 .build();
     }
 }
