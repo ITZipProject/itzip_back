@@ -97,8 +97,6 @@
 
 - **Swagger** :  [swagger 사이트](http://3.39.78.0:8080/api/swagger-ui/index.html)
 
-- **Figma** : [피그마 사이트](https://www.figma.com/design/ALY0rJLloDoU43tzvVrdsg/%EC%B7%A8%EC%B7%A8%ED%94%84?node-id=124-250&t=z0xnhWO4g6lj4zJy-0)
-
 <br/>
 
 ## 👥 업무 분담
