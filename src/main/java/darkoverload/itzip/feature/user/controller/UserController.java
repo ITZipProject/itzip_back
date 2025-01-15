@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -161,5 +162,35 @@ public class UserController {
             HttpServletRequest request
     ) {
         return userService.tempUserOut(userDetails, request);
+    }
+
+    /**
+     * 비밀번호 재설정 요청 메소드
+     */
+    @Operation(
+            summary = "비밀번호 재설정 요청",
+            description = "비밀번호 재설정 메일을 발송합니다."
+    )
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations({CommonExceptionCode.INTERNAL_SERVER_ERROR, CommonExceptionCode.NOT_FOUND_USER})
+    @PostMapping("/passwordReset")
+    public String requestPasswordReset(HttpServletRequest request,
+                                       @RequestBody @Valid PasswordResetRequest passwordResetRequest) {
+        return userService.requestPasswordReset(passwordResetRequest, request);
+    }
+
+    /**
+     * 비밀번호 재설정 승인 메소드
+     */
+    @Operation(
+            summary = "비밀번호 재설정 승인",
+            description = "비밀번호 재설정 후 메인페이지로 이동합니다."
+    )
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations({CommonExceptionCode.INTERNAL_SERVER_ERROR, CommonExceptionCode.NOT_FOUND_USER})
+    @GetMapping("/passwordReset")
+    public void confirmPasswordReset(HttpServletResponse response,
+                                     @Parameter(description = "유저 정보를 포함한 토큰값") @RequestParam @NotBlank String token) {
+        userService.confirmPasswordReset(response, token);
     }
 }

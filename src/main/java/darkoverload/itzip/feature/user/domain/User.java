@@ -24,6 +24,8 @@ public class User {
 
     private Authority authority;
 
+    private String snsType;
+
     public UserEntity convertToEntity(){
         return UserEntity.builder()
                 .id(this.id)
@@ -32,6 +34,7 @@ public class User {
                 .password(this.password)
                 .imageUrl(this.imageUrl)
                 .authority(this.authority)
+                .snsType(this.snsType)
                 .build();
     }
 }

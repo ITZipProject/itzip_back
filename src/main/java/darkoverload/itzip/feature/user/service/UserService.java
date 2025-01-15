@@ -43,4 +43,8 @@ public interface UserService {
     String encryptPassword(String password);
 
     String tempUserOut(CustomUserDetails userDetails, HttpServletRequest request);
+
+    String requestPasswordReset(PasswordResetRequest passwordResetRequest, HttpServletRequest request);
+
+    void confirmPasswordReset(HttpServletResponse response, String token);
 }

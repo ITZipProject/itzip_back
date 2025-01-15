@@ -60,7 +60,9 @@ file:
 jwt:
   accessSecret: ${LOC_JWT_ACCESS_SECRET}
   refreshSecret: ${LOC_JWT_REFRESH_SECRET}
+  tempPwSecret: ${LOC_JWT_TEMP_SECRET}
   accessTokenExpire: ${LOC_JWT_ACCESS_EXPIRE}
   refreshTokenExpire: ${LOC_JWT_REFRESH_EXPIRE}
+  tempPwExpire: ${LOC_JWT_TEMP_EXPIRE}
 
 

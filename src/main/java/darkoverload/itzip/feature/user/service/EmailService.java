@@ -6,4 +6,6 @@ public interface EmailService {
     void sendFormMail(String to, String subject, String body);
 
     String setAuthForm(String authCode);
+
+    String setPwResetMail(String resetLink, String tempPassword);
 }

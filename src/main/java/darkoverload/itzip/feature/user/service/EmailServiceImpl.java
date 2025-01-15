@@ -91,4 +91,33 @@ public class EmailServiceImpl implements EmailService {
         return htmlContent;
     }
 
+    /**
+     * 비밀번호 재설정 메일 폼에 재설정 링크와 임시 비밀번호를 추가하여 반환하는 메소드
+     * @param resetLink
+     * @param tempPassword
+     * @return
+     */
+    @Override
+    public String setPwResetMail(String resetLink, String tempPassword) {
+        // 인증메일 폼 경로 설정
+        String templatePath = "/templates/tempPasswordForm.html";
+
+        // 인증메일 폼 읽어오기
+        String htmlContent = null;
+        try (InputStream inputStream = getClass().getResourceAsStream(templatePath)) {
+            if (inputStream == null) {
+                throw new RestApiException(CommonExceptionCode.INTERNAL_SERVER_ERROR);
+            }
+            htmlContent = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new RestApiException(CommonExceptionCode.INTERNAL_SERVER_ERROR);
+        }
+
+        // 폼에 재설정 링크와 임시 비밀번호를 추가
+        htmlContent = htmlContent.replace("{{resetLink}}", resetLink);
+        htmlContent = htmlContent.replace("{{tempPassword}}", tempPassword);
+
+        return htmlContent;
+    }
+
 }

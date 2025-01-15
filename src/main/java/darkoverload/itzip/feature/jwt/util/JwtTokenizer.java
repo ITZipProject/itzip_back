@@ -24,16 +24,20 @@ import java.util.Date;
 public class JwtTokenizer {
     private final byte[] accessSecret;
     private final byte[] refreshSecret;
+    private final byte[] tempPwSecret;
     public static Long accessTokenExpire;
     public static Long refreshTokenExpire;
+    public static Long tempPwExpire;
 
     public static final String AUTHORIZATION_HEADER = "Authorization";
 
-    public JwtTokenizer(@Value("${jwt.accessSecret}") String accessSecret, @Value("${jwt.refreshSecret}") String refreshSecret, @Value("${jwt.accessTokenExpire}") Long accessTokenExpire, @Value("${jwt.refreshTokenExpire}") Long refreshTokenExpire) {
+    public JwtTokenizer(@Value("${jwt.accessSecret}") String accessSecret, @Value("${jwt.refreshSecret}") String refreshSecret, @Value("${jwt.tempPwSecret}") String tempPwSecret, @Value("${jwt.accessTokenExpire}") Long accessTokenExpire, @Value("${jwt.refreshTokenExpire}") Long refreshTokenExpire, @Value("${jwt.tempPwExpire}") Long tempPwExpire) {
         this.accessSecret = accessSecret.getBytes(StandardCharsets.UTF_8);
         this.refreshSecret = refreshSecret.getBytes(StandardCharsets.UTF_8);
+        this.tempPwSecret = tempPwSecret.getBytes(StandardCharsets.UTF_8);
         this.accessTokenExpire = accessTokenExpire;
         this.refreshTokenExpire = refreshTokenExpire;
+        this.tempPwExpire = tempPwExpire;
     }
 
     /**
@@ -159,5 +163,32 @@ public class JwtTokenizer {
             return bearerToken.substring(7);
         }
         return null;
+    }
+
+    /**
+     * 비밀번호 재설정 토큰 생성 메서드
+     * @param email 유저 이메일
+     * @param tempPassword 임시 비밀번호
+     * @return 비밀번호 재설정 토큰
+     */
+    public String createTempPasswordToken(String email, String tempPassword) {
+        long now = System.currentTimeMillis();
+        return Jwts.builder()
+                .setSubject("TempPassword")
+                .claim("email", email)
+                .claim("tempPassword", tempPassword)
+                .setIssuedAt(new Date(now))
+                .setExpiration(new Date(now + tempPwExpire))
+                .signWith(getSigningKey(tempPwSecret))
+                .compact();
+    }
+
+    /**
+     * 비밀번호 재설정 토큰 파싱 메서드
+     * @param tempPwToken 비밀번호 재설정 토큰
+     * @return 파싱된 토큰
+     */
+    public Claims parseTempPwToken(String tempPwToken) {
+        return parseToken(tempPwToken, tempPwSecret);
     }
 }
