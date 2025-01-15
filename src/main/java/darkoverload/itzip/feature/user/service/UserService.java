@@ -16,6 +16,8 @@ public interface UserService {
 
     ResponseEntity<UserLoginResponse> login(UserLoginRequest userLoginRequest);
 
+    ResponseEntity<UserLoginResponse> loginResponse(User user);
+
     String logout(HttpServletRequest request);
 
     ResponseEntity<UserLoginResponse> refreshAccessToken(RefreshAccessTokenRequest refreshAccessTokenRequest);

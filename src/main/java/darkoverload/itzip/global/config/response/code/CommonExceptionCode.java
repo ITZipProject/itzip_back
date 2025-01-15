@@ -74,6 +74,8 @@ public enum CommonExceptionCode implements ResponseCode {
     NOT_MATCH_PASSWORD(HttpStatus.BAD_REQUEST, "이메일과 비밀번호가 일치하지 않습니다."),
     // 유저를 찾을 수 없음
     NOT_FOUND_USER(HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다."),
+    // 이메일 회원이 sns 로그인 시
+    EMAIL_USER_SNS_LOGIN(HttpStatus.BAD_REQUEST, "이메일 회원가입 계정은 sns 로그인이 불가합니다."),
     // 비밀번호 재설정 시 구글 로그인 계정
     GOOGLE_LOGIN_USER(HttpStatus.BAD_REQUEST, "구글 로그인으로 회원가입한 계정은 비밀번호 재설정이 불가합니다."),
     // 비밀번호 재설정 시 깃허브 로그인 계정

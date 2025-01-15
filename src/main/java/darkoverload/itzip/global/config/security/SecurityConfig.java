@@ -34,6 +34,7 @@ public class SecurityConfig {
             "/user/authEmail", // 인증 메일 페이지
             "/user/checkDuplicateEmail", // 이메일 중복 체크 페이지
             "/user/passwordReset", // 이메일 중복 체크 페이지
+            "/oauth/**", // sns 로그인 관련 페이지
             "/swagger-ui/**", // Swagger UI
             "/v3/api-docs/**", // Swagger API docs
             "/swagger-resources/**", // Swagger resources

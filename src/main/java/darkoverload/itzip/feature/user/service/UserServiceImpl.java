@@ -87,7 +87,11 @@ public class UserServiceImpl implements UserService {
             throw new RestApiException(CommonExceptionCode.NOT_MATCH_PASSWORD);
         }
 
-        // 토큰 발급
+        // 토큰 발급 및 응답 처리
+        return loginResponse(user);
+    }
+
+    public ResponseEntity<UserLoginResponse> loginResponse(User user) {
         String accessToken = jwtTokenizer.createAccessToken(user.getId(), user.getEmail(), user.getNickname(), user.getAuthority());
         String refreshToken = jwtTokenizer.createRefreshToken(user.getId(), user.getEmail(), user.getNickname(), user.getAuthority());
 
