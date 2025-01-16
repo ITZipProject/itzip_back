@@ -76,6 +76,10 @@ public enum CommonExceptionCode implements ResponseCode {
     NOT_FOUND_USER(HttpStatus.BAD_REQUEST, "사용자를 찾을 수 없습니다."),
     // 이메일 회원이 sns 로그인 시
     EMAIL_USER_SNS_LOGIN(HttpStatus.BAD_REQUEST, "이메일 회원가입 계정은 sns 로그인이 불가합니다."),
+    // 구글 회원이 깃허브 로그인 시
+    GOOGLE_USER_GITHUB_LOGIN(HttpStatus.BAD_REQUEST, "구글 로그인 계정입니다. 구글 로그인으로 다시 시도해주세요."),
+    // 깃허브 회원이 구글 로그인 시
+    GITHUB_USER_GOOGLE_LOGIN(HttpStatus.BAD_REQUEST, "깃허브 로그인 계정입니다. 깃허브 로그인으로 다시 시도해주세요."),
     // 비밀번호 재설정 시 구글 로그인 계정
     GOOGLE_LOGIN_USER(HttpStatus.BAD_REQUEST, "구글 로그인으로 회원가입한 계정은 비밀번호 재설정이 불가합니다."),
     // 비밀번호 재설정 시 깃허브 로그인 계정

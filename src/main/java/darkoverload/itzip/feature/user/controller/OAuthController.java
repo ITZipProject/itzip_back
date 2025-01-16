@@ -1,5 +1,6 @@
 package darkoverload.itzip.feature.user.controller;
 
+import darkoverload.itzip.feature.user.controller.request.GithubUserRequest;
 import darkoverload.itzip.feature.user.controller.request.GoogleUserRequest;
 import darkoverload.itzip.feature.user.service.OAuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,5 +24,14 @@ public class OAuthController {
     @PostMapping("/google")
     public ResponseEntity<?> google(@RequestBody @Valid GoogleUserRequest googleUserRequest) {
         return oAuthService.google(googleUserRequest);
+    }
+
+    @Operation(
+            summary = "깃허브 로그인",
+            description = "깃허브 엑세스 토큰 입력받아 로그인에 필요한 itzip 엑세스 토큰을 발급하거나 회원가입 합니다."
+    )
+    @PostMapping("/github")
+    public ResponseEntity<?> github(@RequestBody @Valid GithubUserRequest githubUserRequest) {
+        return oAuthService.github(githubUserRequest);
     }
 }
