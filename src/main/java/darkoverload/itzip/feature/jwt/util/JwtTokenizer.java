@@ -4,6 +4,7 @@ import darkoverload.itzip.feature.user.entity.Authority;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
@@ -141,6 +142,8 @@ public class JwtTokenizer {
                     .getBody();
         } catch (SignatureException | MalformedJwtException e) {  // 토큰 유효성 체크 실패 시
             throw new RestApiException(CommonExceptionCode.JWT_INVALID_ERROR);
+        } catch (ExpiredJwtException e){ // 만료된 토큰일 경우
+            throw new RestApiException(CommonExceptionCode.JWT_EXPIRED_ERROR);
         }
 
         return claims;

@@ -87,7 +87,11 @@ public class UserServiceImpl implements UserService {
             throw new RestApiException(CommonExceptionCode.NOT_MATCH_PASSWORD);
         }
 
-        // 토큰 발급
+        // 토큰 발급 및 응답 처리
+        return loginResponse(user);
+    }
+
+    public ResponseEntity<UserLoginResponse> loginResponse(User user) {
         String accessToken = jwtTokenizer.createAccessToken(user.getId(), user.getEmail(), user.getNickname(), user.getAuthority());
         String refreshToken = jwtTokenizer.createRefreshToken(user.getId(), user.getEmail(), user.getNickname(), user.getAuthority());
 
@@ -266,8 +270,9 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 비밀번호 재설정 요청 메서드
+     *
      * @param passwordResetRequest 비밀번호 재설정 요청 dto
-     * @param request 요청 객체
+     * @param request              요청 객체
      */
     @Override
     public String requestPasswordReset(PasswordResetRequest passwordResetRequest, HttpServletRequest request) {
@@ -275,6 +280,15 @@ public class UserServiceImpl implements UserService {
 
         // 올바른 이메일인지 체크
         User user = getByEmail(email);
+
+        // sns 로그인 회원 체크
+        if (user.getSnsType() != null) {
+            switch (user.getSnsType()) {
+                case "google" -> throw new RestApiException(CommonExceptionCode.GOOGLE_LOGIN_USER);
+                case "github" -> throw new RestApiException(CommonExceptionCode.GITHUB_LOGIN_USER);
+            }
+        }
+
 
         String tempPassword = PasswordUtil.generatePassword();
 
@@ -298,8 +312,9 @@ public class UserServiceImpl implements UserService {
 
     /**
      * 비밀번호 재설정 승인 메서드
+     *
      * @param response 응답 객체
-     * @param token 비밀번호 재설정 토큰
+     * @param token    비밀번호 재설정 토큰
      */
     @Override
     public void confirmPasswordReset(HttpServletResponse response, String token) {

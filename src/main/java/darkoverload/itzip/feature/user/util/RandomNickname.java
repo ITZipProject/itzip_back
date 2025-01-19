@@ -29,7 +29,7 @@ public class RandomNickname {
         // 랜덤 형용사
         String adjective = ADJECTIVES[RANDOM.nextInt(ADJECTIVES.length)];
         // 랜덤 숫자
-        String randomInt = String.valueOf(RANDOM.nextInt(999));
+        String randomInt = String.valueOf(RANDOM.nextInt(999) + 1);
         // 랜덤 명사
         String noun = NOUNS[RANDOM.nextInt(NOUNS.length)];
 

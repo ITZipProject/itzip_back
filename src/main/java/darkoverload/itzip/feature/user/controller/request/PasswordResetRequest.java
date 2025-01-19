@@ -5,11 +5,13 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * 비밀번호 재설정 요청 dto
  */
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 public class PasswordResetRequest {
     @NotEmpty(message = "이메일을 입력해주세요.")
