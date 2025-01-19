@@ -78,8 +78,10 @@ file:
 jwt:
   accessSecret: ${TEST_JWT_ACCESS_SECRET}
   refreshSecret: ${TEST_JWT_REFRESH_SECRET}
+  tempPwSecret: ${TEST_JWT_TEMP_SECRET}
   accessTokenExpire: ${TEST_JWT_ACCESS_EXPIRE}
   refreshTokenExpire: ${TEST_JWT_REFRESH_EXPIRE}
+  tempPwExpire: ${TEST_JWT_TEMP_EXPIRE}
 
 school:
   api-url: ${TEST_SCHOOL_API_URL}
