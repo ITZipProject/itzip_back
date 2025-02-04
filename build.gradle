@@ -6,19 +6,6 @@ plugins {
     id "jacoco"
 }
 
-sonar {
-    properties {
-        property "sonar.projectKey", "ITZipProject_itzip_back_a08e7d1d-048d-4a24-882a-266ba11904c2"
-        property "sonar.projectName", "itzip_back"
-        property "sonar.sourceEncoding", "UTF-8"
-        property "sonar.sources", "src/main"
-        property "sonar.tests", "src/test"
-        property "sonar.java.binaries", "build/classes/java/main"
-        property "sonar.test.inclusions", "**/*Test.java"
-        property 'sonar.coverage.jacoco.xmlReportPaths', "build/reports/jacoco/test/jacocoTestReport.xml"
-    }
-}
-
 group = 'darkoverload'
 version = '0.0.1-SNAPSHOT'
 
@@ -159,13 +146,11 @@ sonar {
     properties {
         property "sonar.projectKey", "ITZipProject_itzip_back_a08e7d1d-048d-4a24-882a-266ba11904c2"
         property "sonar.projectName", "itzip_back"
-        property "sonar.language", "java"
         property "sonar.sourceEncoding", "UTF-8"
         property "sonar.sources", "src/main"
         property "sonar.tests", "src/test"
-        property "sonar.java.binaries", "${buildDir}/classes"
-        property "sonar.test.inclusions", "**/*Test.java"
-        property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+        property "sonar.java.binaries", "build/classes/java/main"
+        property "sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml"
     }
 }
 
@@ -181,8 +166,8 @@ jacocoTestReport {
 
     reports {
         xml.required = true
-        csv.required = false
         html.required = true
+        csv.required = false
     }
 
     def QEntityList = [
@@ -247,7 +232,6 @@ jacocoTestReport {
         classDirectories.setFrom(files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
                     'darkoverload/itzip/global/**',
-                    'darkoverload/itzip/infra/**',
                     'darkoverload/itzip/mongo/**',
                     'darkoverload/itzip/postgresql/**',
                     'darkoverload/itzip/sample/**',
