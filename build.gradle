@@ -2,6 +2,22 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.1'
     id 'io.spring.dependency-management' version '1.1.5'
+    id "org.sonarqube" version "6.0.1.5171"
+    id "jacoco"
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "ITZipProject_itzip_back_a08e7d1d-048d-4a24-882a-266ba11904c2"
+        property "sonar.projectName", "itzip_back"
+        property "sonar.language", "java"
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.sources", "src/main"
+        property "sonar.tests", "src/test"
+        property "sonar.java.binaries", "${buildDir}/classes"
+        property "sonar.test.inclusions", "**/*Test.java"
+        property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+    }
 }
 
 group = 'darkoverload'
@@ -138,4 +154,141 @@ clean {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+sonar {
+    properties {
+        property "sonar.projectKey", "ITZipProject_itzip_back_a08e7d1d-048d-4a24-882a-266ba11904c2"
+        property "sonar.projectName", "itzip_back"
+        property "sonar.language", "java"
+        property "sonar.sourceEncoding", "UTF-8"
+        property "sonar.sources", "src/main"
+        property "sonar.tests", "src/test"
+        property "sonar.java.binaries", "${buildDir}/classes"
+        property "sonar.test.inclusions", "**/*Test.java"
+        property 'sonar.coverage.jacoco.xmlReportPaths', "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
+    }
+}
+
+// jacoco 정보
+jacoco {
+    toolVersion = "0.8.11"
+    layout.buildDirectory.dir("reports/jacoco")
+}
+
+// jacoco Report 생성
+jacocoTestReport {
+    dependsOn test // test 종속성 추가
+
+    reports {
+        xml.required = true
+        csv.required = false
+        html.required = true
+    }
+
+    def QEntityList = [
+            'darkoverload/itzip/feature/**/entity/QA*',
+            'darkoverload/itzip/feature/**/entity/QB*',
+            'darkoverload/itzip/feature/**/entity/QC*',
+            'darkoverload/itzip/feature/**/entity/QD*',
+            'darkoverload/itzip/feature/**/entity/QE*',
+            'darkoverload/itzip/feature/**/entity/QF*',
+            'darkoverload/itzip/feature/**/entity/QG*',
+            'darkoverload/itzip/feature/**/entity/QH*',
+            'darkoverload/itzip/feature/**/entity/QI*',
+            'darkoverload/itzip/feature/**/entity/QJ*',
+            'darkoverload/itzip/feature/**/entity/QK*',
+            'darkoverload/itzip/feature/**/entity/QL*',
+            'darkoverload/itzip/feature/**/entity/QM*',
+            'darkoverload/itzip/feature/**/entity/QN*',
+            'darkoverload/itzip/feature/**/entity/QO*',
+            'darkoverload/itzip/feature/**/entity/QP*',
+            'darkoverload/itzip/feature/**/entity/QQ*',
+            'darkoverload/itzip/feature/**/entity/QR*',
+            'darkoverload/itzip/feature/**/entity/QS*',
+            'darkoverload/itzip/feature/**/entity/QT*',
+            'darkoverload/itzip/feature/**/entity/QU*',
+            'darkoverload/itzip/feature/**/entity/QV*',
+            'darkoverload/itzip/feature/**/entity/QW*',
+            'darkoverload/itzip/feature/**/entity/QX*',
+            'darkoverload/itzip/feature/**/entity/QY*',
+            'darkoverload/itzip/feature/**/entity/QZ*'
+    ]
+
+    def QDomainList = [
+            'darkoverload/itzip/feature/**/domain/QA*',
+            'darkoverload/itzip/feature/**/domain/QB*',
+            'darkoverload/itzip/feature/**/domain/QC*',
+            'darkoverload/itzip/feature/**/domain/QD*',
+            'darkoverload/itzip/feature/**/domain/QE*',
+            'darkoverload/itzip/feature/**/domain/QF*',
+            'darkoverload/itzip/feature/**/domain/QG*',
+            'darkoverload/itzip/feature/**/domain/QH*',
+            'darkoverload/itzip/feature/**/domain/QI*',
+            'darkoverload/itzip/feature/**/domain/QJ*',
+            'darkoverload/itzip/feature/**/domain/QK*',
+            'darkoverload/itzip/feature/**/domain/QL*',
+            'darkoverload/itzip/feature/**/domain/QM*',
+            'darkoverload/itzip/feature/**/domain/QN*',
+            'darkoverload/itzip/feature/**/domain/QO*',
+            'darkoverload/itzip/feature/**/domain/QP*',
+            'darkoverload/itzip/feature/**/domain/QQ*',
+            'darkoverload/itzip/feature/**/domain/QR*',
+            'darkoverload/itzip/feature/**/domain/QS*',
+            'darkoverload/itzip/feature/**/domain/QT*',
+            'darkoverload/itzip/feature/**/domain/QU*',
+            'darkoverload/itzip/feature/**/domain/QV*',
+            'darkoverload/itzip/feature/**/domain/QW*',
+            'darkoverload/itzip/feature/**/domain/QX*',
+            'darkoverload/itzip/feature/**/domain/QY*',
+            'darkoverload/itzip/feature/**/domain/QZ*'
+    ]
+
+    afterEvaluate {
+        classDirectories.setFrom(files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: [
+                    'darkoverload/itzip/global/**',
+                    'darkoverload/itzip/infra/**',
+                    'darkoverload/itzip/mongo/**',
+                    'darkoverload/itzip/postgresql/**',
+                    'darkoverload/itzip/sample/**',
+            ] + QEntityList + QDomainList)
+        }))
+    }
+
+    // finalizedBy 'jacocoTestCoverageVerification' // jacocoTestReport 태스크가 끝난 후 실행
+}
+
+// jacoco Test 유효성 확인
+jacocoTestCoverageVerification {
+    def QDomainList = []
+    for (qPattern in '*.QA'..'*.QZ') { // QClass 대응
+        QDomainList.add(qPattern + '*')
+    }
+
+    violationRules {
+        rule {
+            enabled = true // 규칙 활성화 여부
+            element = 'CLASS' // 커버리지를 체크할 단위 설정
+
+            // 코드 커버리지를 측정할 때 사용되는 지표
+            limit {
+                counter = 'LINE'
+                value = 'COVEREDRATIO'
+                minimum = 0.30
+            }
+
+            limit {
+                counter = 'BRANCH'
+                value = 'COVEREDRATIO'
+                minimum = 0.30
+            }
+
+            excludes = [
+                    '**/common/**',
+                    '**/*Application*'
+            ] + QDomainList
+        }
+    }
+
 }
