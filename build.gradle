@@ -233,6 +233,7 @@ jacocoTestReport {
                     'darkoverload/itzip/mongo/**',
                     'darkoverload/itzip/postgresql/**',
                     'darkoverload/itzip/sample/**',
+                    'darkoverload/itzip/*Application*'
             ] + QEntityList + QDomainList)
         }))
     }
