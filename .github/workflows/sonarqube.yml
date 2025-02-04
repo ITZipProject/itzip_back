@@ -34,6 +34,11 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
 
+      - name: Secret Prod Env File Download
+        run: |
+          mkdir -p ./src/main/resources/properties
+          echo "${{ secrets.PROD_ENV_FILE }}" > ./src/main/resources/properties/env.properties
+
       - name: Secret Test Env File Download
         run: |
           mkdir -p ./src/test/resources/properties
