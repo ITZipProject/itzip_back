@@ -8,11 +8,10 @@ import darkoverload.itzip.feature.csQuiz.controller.response.QuizCategoryDetailR
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.QuizCategory;
 import darkoverload.itzip.feature.csQuiz.entity.UserQuizStatus;
-import darkoverload.itzip.feature.csQuiz.repository.quiz.QuizRepository;
 import darkoverload.itzip.feature.csQuiz.service.sub.quiz.CheckAnswer;
 import darkoverload.itzip.feature.csQuiz.service.sub.quiz.CreateQuiz;
 import darkoverload.itzip.feature.csQuiz.service.sub.quiz.GivenPointToQuiz;
-import darkoverload.itzip.feature.csQuiz.service.sub.quizCategory.FindQuizCategory;
+import darkoverload.itzip.feature.csQuiz.service.sub.quizcategory.FindQuizCategory;
 import darkoverload.itzip.feature.csQuiz.service.sub.quizzes.FindQiuzQuery;
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +41,6 @@ public class QuizServiceImpl implements QuizService {
 
     @Qualifier("createQuizImpl")
     private final CreateQuiz createQuiz;
-    private final QuizRepository quizRepository;
 
     /**
      * 주어진 필터와 정렬 기준, 사용자 정보를 기반으로 퀴즈 목록을 조회하는 메서드
