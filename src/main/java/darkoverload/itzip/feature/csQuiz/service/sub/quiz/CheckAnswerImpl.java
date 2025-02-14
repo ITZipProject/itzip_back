@@ -2,9 +2,11 @@ package darkoverload.itzip.feature.csQuiz.service.sub.quiz;
 
 import darkoverload.itzip.feature.csQuiz.controller.request.QuizAnswerRequest;
 import darkoverload.itzip.feature.csQuiz.entity.QuizDocument;
+import darkoverload.itzip.feature.csQuiz.entity.QuizScore;
 import darkoverload.itzip.feature.csQuiz.entity.QuizUserSolvedMapping;
 import darkoverload.itzip.feature.csQuiz.entity.UserQuizStatus;
 import darkoverload.itzip.feature.csQuiz.repository.quiz.QuizRepository;
+import darkoverload.itzip.feature.csQuiz.repository.quizscore.QuizScoreRepository;
 import darkoverload.itzip.feature.csQuiz.repository.quizusersolvedmapping.QuizUserSolvedMappingRepository;
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.user.domain.User;
@@ -22,8 +24,18 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class CheckAnswerImpl implements CheckAnswer {
+
+    private static final int EASY = 1;
+    private static final int MEDIUM = 2;
+    private static final int HARD = 3;
+
+    private static final int EASY_SCORE = 10;
+    private static final int MEDIUM_SCORE = 20;
+    private static final int HARD_SCORE = 30;
+
     //퀴즈 정답 체크에 필요한 리파지토리
     private final QuizRepository quizRepository;
+    private final QuizScoreRepository quizScoreRepository;
     private final QuizUserSolvedMappingRepository quizUserSolvedMappingRepository;
 
     //User객체를 받아올 userRepository;
@@ -86,6 +98,31 @@ public class CheckAnswerImpl implements CheckAnswer {
                 .modifyDate(LocalDateTime.now())
                 .build());
 
+        if (isCorrect) {
+            final QuizScore quizScore = quizScoreRepository.findById(userEntity.getId())
+                    .orElseGet(() -> {
+                        QuizScore newQuizScore = QuizScore.create(userEntity);
+                        return quizScoreRepository.save(newQuizScore);
+                    });
+
+            switch (quizDocument.getDifficulty()) {
+                case HARD -> quizScore.incrementScore(calculateScore(HARD));
+                case MEDIUM -> quizScore.incrementScore(calculateScore(MEDIUM));
+                case EASY -> quizScore.incrementScore(calculateScore(EASY));
+                default -> throw new RestApiException(CommonExceptionCode.NOT_FOUND_DIFFICULTY);
+            }
+        }
+
         return quizStatus;
     }
+
+    private int calculateScore(final int difficulty) {
+        return switch (difficulty) {
+            case HARD -> HARD_SCORE;
+            case MEDIUM -> MEDIUM_SCORE;
+            case EASY -> EASY_SCORE;
+            default ->  throw new RestApiException(CommonExceptionCode.NOT_FOUND_DIFFICULTY);
+        };
+    }
+
 }
