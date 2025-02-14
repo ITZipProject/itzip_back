@@ -7,6 +7,7 @@ import darkoverload.itzip.feature.csQuiz.entity.QuizUserSolvedMapping;
 import darkoverload.itzip.feature.csQuiz.entity.UserQuizStatus;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 //퀴즈 Dto와 Entity사이의 변환로직을 가지고 있는 class
@@ -129,6 +130,8 @@ public class QuizMapper {
                 .points(0)
                 .createUserId(userId)
                 .choices(request.getChoices())
+                .createDate(LocalDateTime.now())
+                .modifyDate(LocalDateTime.now())
                 .build();
     }
 }

@@ -49,39 +49,42 @@ public class CheckAnswerImpl implements CheckAnswer {
 
         // 기존에 푼 문제인지 확인
         QuizUserSolvedMapping quizUserSolvedMapping = quizUserSolvedMappingRepository.findByUserAndProblemId(userEntity, quizAnswerRequest.getQuizId())
-                .orElseGet(() -> QuizUserSolvedMapping.builder()
-                        .user(userEntity)
-                        .problemId(quizAnswerRequest.getQuizId())
-                        .timeStamp(LocalDateTime.now())
-                        .givenPoints(0) // 기본 점수 설정
-                        .userQuizStatus(UserQuizStatus.UNSOLVED) // 기본 상태 설정
-                        .build());
+                .orElseGet(() -> {
+                    QuizUserSolvedMapping newMapping = QuizUserSolvedMapping.builder()
+                            .user(userEntity)
+                            .problemId(quizAnswerRequest.getQuizId())
+                            .timeStamp(LocalDateTime.now())
+                            .givenPoints(0) // 기본 점수 설정
+                            .userQuizStatus(UserQuizStatus.UNSOLVED) // 기본 상태 설정
+                            .build();
+                    return quizUserSolvedMappingRepository.save(newMapping); // 먼저 저장하여 ID 생성
+                });
 
-        //이미 문제를 맞췄을 경우 또 못 풀게 함
+        // 이미 문제를 맞췄을 경우 또 못 풀게 함
         if (quizUserSolvedMapping.getUserQuizStatus().equals(UserQuizStatus.CORRECT)) {
             throw new RestApiException(CommonExceptionCode.ALREADY_CORRECT);
         }
 
+        // 타임스탬프 및 상태 업데이트
         quizUserSolvedMapping = quizUserSolvedMapping.updateTimeStampAndIsCorrect(LocalDateTime.now(), quizStatus);
+        quizUserSolvedMappingRepository.save(quizUserSolvedMapping); // 변경 사항 저장
 
-        if (quizUserSolvedMapping.getId() != null)  {
-            // 새로운 기록이라면 시도 횟수와 맞춘 사람 수 업데이트
-            quizRepository.save(QuizDocument.builder()
-                    .id(quizDocument.getId())
-                    .questionText(quizDocument.getQuestionText())
-                    .difficulty(quizDocument.getDifficulty())
-                    .categoryId(quizDocument.getCategoryId())
-                    .category(quizDocument.getCategory())
-                    .answer(quizDocument.getAnswer())  // 기존 정답 유지
-                    .acceptedUserCount(quizDocument.getAcceptedUserCount() + (isCorrect ? 1 : 0))
-                    .triedUserCount(quizDocument.getTriedUserCount() + 1)
-                    .points(quizDocument.getPoints())
-                    .createUserId(quizDocument.getCreateUserId())
-                    .choices(quizDocument.getChoices())
-                    .build());
-        }
-
-        quizUserSolvedMappingRepository.save(quizUserSolvedMapping);
+        // quizRepository.save()가 항상 실행되도록 수정
+        quizRepository.save(QuizDocument.builder()
+                .id(quizDocument.getId())
+                .questionText(quizDocument.getQuestionText())
+                .difficulty(quizDocument.getDifficulty())
+                .categoryId(quizDocument.getCategoryId())
+                .category(quizDocument.getCategory())
+                .answer(quizDocument.getAnswer())  // 기존 정답 유지
+                .acceptedUserCount(quizDocument.getAcceptedUserCount() + (isCorrect ? 1 : 0))
+                .triedUserCount(quizDocument.getTriedUserCount() + 1)
+                .points(quizDocument.getPoints())
+                .createUserId(quizDocument.getCreateUserId())
+                .choices(quizDocument.getChoices())
+                .createDate(quizDocument.getCreateDate())
+                .modifyDate(LocalDateTime.now())
+                .build());
 
         return quizStatus;
     }

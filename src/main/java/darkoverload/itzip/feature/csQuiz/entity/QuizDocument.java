@@ -1,6 +1,5 @@
 package darkoverload.itzip.feature.csQuiz.entity;
 
-import darkoverload.itzip.global.entity.MongoAuditingFields;
 import lombok.AllArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
@@ -17,7 +16,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @Document(collection = "quizzes")
-public class QuizDocument extends MongoAuditingFields {
+public class QuizDocument {
     //문제의 id값
     @Id
     @Field("_id")
@@ -62,6 +61,13 @@ public class QuizDocument extends MongoAuditingFields {
     //문제 선택지 리스트
     @Field("choices")
     private List<QuizChoice> choices;
+
+    @Field("create_date")
+    private LocalDateTime createDate;
+
+    @Field("modify_date")
+    private LocalDateTime modifyDate;
+
     /**
      * 문제 points를 업데이트 하는 메서드
      * @param points 더해질 포인트 (음수거나 양수여야한다.)
@@ -79,7 +85,9 @@ public class QuizDocument extends MongoAuditingFields {
                 this.triedUserCount,
                 this.points + points,
                 this.createUserId,
-                this.choices
+                this.choices,
+                this.createDate,
+                this.modifyDate
         );
     }
 }
