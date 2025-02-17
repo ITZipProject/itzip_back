@@ -4,9 +4,13 @@ import darkoverload.itzip.feature.csQuiz.controller.request.QuizAnswerRequest;
 import darkoverload.itzip.feature.csQuiz.controller.request.QuizCreatedRequest;
 import darkoverload.itzip.feature.csQuiz.controller.request.QuizPointRequest;
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizCategoryDetailResponse;
+import darkoverload.itzip.feature.csQuiz.controller.response.QuizRankingResponse;
+import darkoverload.itzip.feature.csQuiz.controller.response.QuizRankingResponses;
+import darkoverload.itzip.feature.csQuiz.controller.response.QuizScoreResponse;
 import darkoverload.itzip.feature.csQuiz.entity.QuizCategory;
 import darkoverload.itzip.feature.csQuiz.entity.UserQuizStatus;
 import darkoverload.itzip.feature.csQuiz.service.QuizService;
+import darkoverload.itzip.feature.csQuiz.service.sub.quizscore.QuizScoreService;
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.code.CommonResponseCode;
@@ -18,6 +22,7 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +36,10 @@ import java.util.List;
 @RequestMapping("cs-quiz")
 @RequiredArgsConstructor
 public class CsQuizController {
+
     private final QuizService quizService;
+    private final QuizScoreService quizScoreService;
+
     /**
      * 주어진 카테고리 ID에 해당하는 카테고리 정보를 조회하는 메서드
      *
@@ -111,4 +119,39 @@ public class CsQuizController {
         quizService.createQuiz(quizCreatedRequest, customUserDetails);
         return "문제를 생성했습니다.";
     }
+
+    @Operation(
+            summary = "퀴즈 점수 조회",
+            description = "현재 인증된 사용자의 퀴즈 점수를 조회하여 반환합니다."
+    )
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations({
+            CommonExceptionCode.NOT_FOUND_USER,
+            CommonExceptionCode.NOT_FOUND_QUIZ_SCORE
+    })
+    @GetMapping("/score")
+    public QuizScoreResponse getScore(@AuthenticationPrincipal final CustomUserDetails customUserDetails) {
+        return QuizScoreResponse.from(
+                quizScoreService.findQuizScoreById(customUserDetails)
+        );
+    }
+
+    @Operation(
+            summary = "퀴즈 랭킹 조회",
+            description = "퀴즈 점수를 기준으로 상위 6명의 랭킹 정보를 조회하여 반환합니다."
+    )
+    @ResponseCodeAnnotation(CommonResponseCode.SUCCESS)
+    @ExceptionCodeAnnotations({
+            CommonExceptionCode.NOT_FOUND_QUIZ_SCORE_RANKING,
+            CommonExceptionCode.QUIZ_PROCESSING_ERROR
+    })
+    @GetMapping("/rankings")
+    public QuizRankingResponses getRankings() {
+        return QuizRankingResponses.of(
+                quizScoreService.getTop6Ranking().getRankings().stream()
+                        .map(QuizRankingResponse::from)
+                        .toList()
+        );
+    }
+
 }

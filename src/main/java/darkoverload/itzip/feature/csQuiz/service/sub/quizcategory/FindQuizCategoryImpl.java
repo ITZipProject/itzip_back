@@ -1,4 +1,4 @@
-package darkoverload.itzip.feature.csQuiz.service.sub.quizCategory;
+package darkoverload.itzip.feature.csQuiz.service.sub.quizcategory;
 
 import darkoverload.itzip.feature.csQuiz.controller.response.QuizCategoryDetailResponse;
 import darkoverload.itzip.feature.csQuiz.entity.QuizCategory;

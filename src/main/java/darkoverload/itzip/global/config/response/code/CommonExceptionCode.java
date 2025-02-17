@@ -130,6 +130,14 @@ public enum CommonExceptionCode implements ResponseCode {
     ALREADY_CORRECT(HttpStatus.BAD_REQUEST, "이미 정답을 맞췄습니다."),
     //카테고리가 없음
     NOT_FOUND_CATEGORY(HttpStatus.NOT_FOUND, "카테고리가 없습니다."),
+    //난이도 없음
+    NOT_FOUND_DIFFICULTY(HttpStatus.NOT_FOUND, "난이도가 없습니다."),
+    //퀴즈 처리 중 문제 발생
+    QUIZ_PROCESSING_ERROR(HttpStatus.BAD_REQUEST, "퀴즈 처리 중 문제가 발생했습니다."),
+    //퀴즈 점수가 없음
+    NOT_FOUND_QUIZ_SCORE(HttpStatus.NOT_FOUND, "퀴즈 점수를 찾을 수 없습니다"),
+    //퀴즈 랭킹이 없음
+    NOT_FOUND_QUIZ_SCORE_RANKING(HttpStatus.NOT_FOUND, "랭킹을 찾을 수 없습니다."),
 
     /**
      * Algorithm Error
