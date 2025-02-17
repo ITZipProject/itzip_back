@@ -15,7 +15,7 @@ public class QuizQueryRequest {
     //NEWEST, OLDEST
     private SortBy sortBy;
     //사용자 ID
-    private Long userId;
+    private String email;
     //사용자가 푼문제를 포함하는지 ture면 포함 false면 미포함
     private boolean inUserSolved;
     //문제 페이지 0부터 시작

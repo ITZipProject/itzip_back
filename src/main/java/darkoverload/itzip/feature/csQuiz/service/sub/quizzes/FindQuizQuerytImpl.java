@@ -51,9 +51,9 @@ public class FindQuizQuerytImpl implements FindQiuzQuery {
         // 사용자가 푼 문제의 Id값들만 저장할 리스트 초기화
         List<String> solvedProblemIds = new ArrayList<>();
 
-        if (quizQueryRequest.getUserId() != null){
+        if (quizQueryRequest.isInUserSolved() != true && quizQueryRequest.getEmail() != null) {
             //사용자를 찾고 사용자가 없을시 사용자가 없음 예외 출력
-            UserEntity userEntity = userService.getById(quizQueryRequest.getUserId())
+            UserEntity userEntity = userService.getByEmail(quizQueryRequest.getEmail())
                     .convertToEntity();
 
             //사용자가 푼문제매핑 테이블 list로 받아옴
