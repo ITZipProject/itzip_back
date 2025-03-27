@@ -49,19 +49,18 @@ public class SecurityConfig {
             "/cs-quizzes/**",
             "/cs-quiz/**",
 
-            //알고리즘 임시허용
-            "/algorithm/**",
-
             // 기술 정보 임시 허용
             "/tech-info/**",
 
             // 학교 정보 검색 허용
             "/schoolsearch",
+
             // 이력서 전체 검색 허용
             "/resume/search",
+
             // 직업 정보 임시 허용
             "/job-info",
-            "/job-info/scrap"
+            "/job-info/scrap",
     };
 
     // 비로그인 유저 허용 페이지
