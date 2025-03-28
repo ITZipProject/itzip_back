@@ -1,9 +1,10 @@
-package darkoverload.itzip.global.config.redis;
+package darkoverload.itzip.global.config.cache.redis;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -59,7 +60,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public CacheManager cacheManager(RedisConnectionFactory factory) {
+    @Primary
+    public CacheManager redisCacheManager(RedisConnectionFactory factory) {
         RedisCacheConfiguration cacheConfig = RedisCacheConfiguration.defaultCacheConfig()
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()))

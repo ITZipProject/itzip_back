@@ -86,34 +86,33 @@ public enum CommonExceptionCode implements ResponseCode {
     GITHUB_LOGIN_USER(HttpStatus.BAD_REQUEST, "깃허브 로그인으로 회원가입한 계정은 비밀번호 재설정이 불가합니다."),
 
     /**
-     * TechInfo - Blog Error
+     * Tech Info - Blog
      */
-    // ID에 해당하는 블로그를 찾을 수 없는 경우
-    NOT_FOUND_BLOG(HttpStatus.NOT_FOUND, "블로그를 찾을 수 없습니다."),
-    // 블로그 업데이트 작업이 실패한 경우
-    UPDATE_FAIL_BLOG(HttpStatus.BAD_REQUEST, "블로그 업데이트 오류"),
+    BLOG_NOT_FOUND(HttpStatus.NOT_FOUND, "블로그를 찾을 수 없습니다."),
+    BLOG_INTRO_REQUIRED(HttpStatus.BAD_REQUEST, "블로그 소개글은 반드시 입력되어야 합니다."),
 
     /**
-     * TechInfo - Post Error
+     * Tech Info - Article
      */
-    // ID에 해당하는 게시글를 찾을 수 없는 경우
-    NOT_FOUND_POST(HttpStatus.NOT_FOUND, "게시글를 찾을 수 없습니다."),
-    // 블로그에 해당하는 게시글를 찾을 수 없는 경우
-    NOT_FOUND_POST_IN_BLOG(HttpStatus.NOT_FOUND, "해당 블로그에 대한 게시물을 찾을 수 없습니다."),
-    // 카테고리에 해당하는 게시글를 찾을 수 없는 경우
-    NOT_FOUND_POST_IN_CATEGORY(HttpStatus.NOT_FOUND, "해당 카테고리에 대한 게시물을 찾을 수 없습니다."),
-    // 포스트 업데이트 작업이 실패한 경우
-    UPDATE_FAIL_POST(HttpStatus.BAD_REQUEST, "게시글 업데이트 오류"),
-    // 게시글에 해당하는 좋아요 삭제 작업이 실패한 경우
-    DELETE_FAIL_LIKE_IN_POST(HttpStatus.BAD_REQUEST, "해당 게시물에 대한 좋아요 삭제 오류"),
-    // 게시글에 해당하는 스크랩 삭제 작업이 실패한 경우
-    DELETE_FAIL_SCRAP_IN_POST(HttpStatus.BAD_REQUEST, "해당 게시물에 대한 스크랩 삭제 오류"),
+    ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "아티클을 찾을 수 없습니다."),
+    ARTICLE_TITLE_REQUIRED(HttpStatus.BAD_REQUEST, "아티클 제목은 반드시 입력되어야 합니다."),
+    ARTICLE_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "아티클 타입을 찾을 수 없습니다."),
 
     /**
-     * TechInfo - Post - Comment Error
+     * Tech Info - Comment
      */
-    NOT_FOUND_COMMENT_IN_POST(HttpStatus.NOT_FOUND, "해당 게시글에 대한 댓글을 찾을 수 없습니다."),
-    UPDATE_FAIL_COMMENT(HttpStatus.BAD_REQUEST, "댓글 업데이트 오류"),
+    COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "댓글을 찾을 수 없습니다."),
+    COMMENT_CONTENT_REQUIRED(HttpStatus.BAD_REQUEST, "댓글 본문은 반드시 입력되어야 합니다."),
+
+    /**
+     *  Tech Info - Like
+     */
+    ALREADY_LIKED_ARTICLE(HttpStatus.CONFLICT, "이미 해당 아티클에 좋아요를 눌렀습니다."),
+
+    /**
+     *  Tech Info - Scrap
+     */
+    ALREADY_SCRAP_ARTICLE(HttpStatus.CONFLICT, "이미 해당 아티클에 스크랩을 눌렀습니다."),
 
     /**
      * Quiz Error
