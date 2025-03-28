@@ -4,7 +4,7 @@ import darkoverload.itzip.feature.jwt.domain.Token;
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
 import darkoverload.itzip.feature.jwt.service.TokenService;
 import darkoverload.itzip.feature.jwt.util.JwtTokenizer;
-import darkoverload.itzip.feature.techinfo.service.blog.BlogCommandService;
+import darkoverload.itzip.feature.techinfo.application.event.payload.UserCreatedEvent;
 import darkoverload.itzip.feature.user.controller.request.*;
 import darkoverload.itzip.feature.user.controller.response.UserInfoResponse;
 import darkoverload.itzip.feature.user.controller.response.UserLoginResponse;
@@ -21,6 +21,7 @@ import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
     private final VerificationService verificationService;
     private final EmailService emailService;
     private final TokenService tokenService;
-    private final BlogCommandService blogCommandService;
+    private final ApplicationEventPublisher eventPublisher;
 
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenizer jwtTokenizer;
@@ -190,7 +191,7 @@ public class UserServiceImpl implements UserService {
 
         User savedUser = userRepository.save(user.convertToEntity()).convertToDomain();
 
-        blogCommandService.create(savedUser);
+        eventPublisher.publishEvent(new UserCreatedEvent(savedUser.getId())); // 회원 생성 이벤트 발행
 
         return "회원가입이 완료되었습니다.";
     }

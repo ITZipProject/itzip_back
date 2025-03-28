@@ -5,6 +5,8 @@ import darkoverload.itzip.global.entity.AuditingFields;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @ToString
 @Entity
 @Table(name = "users")
@@ -36,6 +38,16 @@ public class UserEntity extends AuditingFields {
     private Authority authority;
 
     private String snsType;
+
+    public UserEntity(String email, String nickname, String password, String imageUrl, Authority authority, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.email = email;
+        this.nickname = nickname;
+        this.password = password;
+        this.imageUrl = imageUrl;
+        this.authority = authority;
+        this.createDate = createdAt;
+        this.modifyDate = updatedAt;
+    }
 
     public User convertToDomain(){
         return User.builder()
