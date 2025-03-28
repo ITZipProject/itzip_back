@@ -22,6 +22,7 @@ spring:
       database: ${LOC_MONGO_DATABASE}
       authentication-database: ${LOC_MONGO_AUTH}
       uri: ${LOC_MONGO_URI}
+      auto-index-creation: true
 
   mail:
     host: smtp.gmail.com
