@@ -12,11 +12,18 @@ import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataAccessException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
+@Slf4j
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -55,9 +62,20 @@ public class CommentCommandServiceImpl implements CommentCommandService {
         comment.hide();
     }
 
+    @Async
+    @Retryable(
+            value = DataAccessException.class,
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 1000, multiplier = 2)
+    )
     @Override
     public void deleteByArticleId(final String articleId) {
         commentRepository.setDisplayedFalseByArticleId(articleId);
+    }
+
+    @Recover
+    public void recoverDeleteByArticleId(final DataAccessException e, final String articleId) {
+        log.error("댓글 삭제 재시도 실패: {}", articleId);
     }
 
     private void checkUserDetails(final CustomUserDetails userDetails) {

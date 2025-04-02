@@ -4,12 +4,17 @@ import darkoverload.itzip.feature.techinfo.application.service.cache.LikeCacheSe
 import darkoverload.itzip.feature.techinfo.application.service.command.ArticleCommandService;
 import darkoverload.itzip.feature.techinfo.infrastructure.persistence.cache.LikeCacheRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LikeCacheServiceImpl implements LikeCacheService {
@@ -21,15 +26,35 @@ public class LikeCacheServiceImpl implements LikeCacheService {
     private final ArticleCommandService articleCommandService;
 
     @Async
+    @Retryable(
+            value = Exception.class,
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 1000)
+    )
     @Override
     public void merge(final String articleId) {
         cacheRepository.merge(articleId, 1L);
     }
 
+    @Recover
+    public void recoverMerge(final Exception e, final String articleId) {
+        log.error("좋아요 병합 재시도 실패: {}", articleId);
+    }
+
     @Async
+    @Retryable(
+            value = Exception.class,
+            maxAttempts = 3,
+            backoff = @Backoff(delay = 1000)
+    )
     @Override
     public void subtract(final String articleId) {
         cacheRepository.merge(articleId, -1L);
+    }
+
+    @Recover
+    public void recoverSubtract(final Exception e, final String articleId) {
+        log.error("좋아요 감소 재시도 실패: {}", articleId);
     }
 
     @Scheduled(fixedDelayString = FLUSH_DELAY)

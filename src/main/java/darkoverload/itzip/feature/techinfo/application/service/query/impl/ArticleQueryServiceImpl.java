@@ -1,7 +1,7 @@
 package darkoverload.itzip.feature.techinfo.application.service.query.impl;
 
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
-import darkoverload.itzip.feature.techinfo.application.event.payload.ViewedEvent;
+import darkoverload.itzip.feature.techinfo.application.event.payload.ArticleViewedEvent;
 import darkoverload.itzip.feature.techinfo.application.generator.PageableGenerator;
 import darkoverload.itzip.feature.techinfo.ui.payload.response.ArticleResponse;
 import darkoverload.itzip.feature.techinfo.application.service.query.ArticleQueryService;
@@ -99,7 +99,7 @@ public class ArticleQueryServiceImpl implements ArticleQueryService {
                 .orElseThrow(() -> new RestApiException(CommonExceptionCode.ARTICLE_NOT_FOUND));
         final Blog blog = blogQueryService.getBlogById(article.getBlogId());
 
-        eventPublisher.publishEvent(new ViewedEvent(article.getId()));
+        eventPublisher.publishEvent(new ArticleViewedEvent(article.getId()));
 
         final boolean isLiked = isLikedFuture.join();
         final boolean isScrapped = isScrappedFuture.join();

@@ -3,7 +3,6 @@ package darkoverload.itzip.feature.techinfo.application.event.handler;
 import darkoverload.itzip.feature.techinfo.application.event.payload.ArticleHiddenEvent;
 import darkoverload.itzip.feature.techinfo.application.service.command.CommentCommandService;
 import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,7 +14,6 @@ public class CommentEventHandler {
         this.commandService = commandService;
     }
 
-    @Async
     @EventListener
     public void handleArticleHidden(final ArticleHiddenEvent event) {
         final String articleIdHex = event.articleId().toHexString();
