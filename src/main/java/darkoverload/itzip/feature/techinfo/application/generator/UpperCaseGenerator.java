@@ -2,6 +2,9 @@ package darkoverload.itzip.feature.techinfo.application.generator;
 
 import java.util.Objects;
 
+/**
+ * 문자열을 대문자로 변환하는 유틸리티 클래스입니다.
+ */
 public class UpperCaseGenerator {
 
     private UpperCaseGenerator() {

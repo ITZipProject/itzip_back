@@ -7,6 +7,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+/**
+ * 좋아요 및 취소 이벤트를 수행하는 핸들러입니다.
+ * 트랜잭션 커밋 이후에 실행됩니다.
+ */
 @Component
 public class LikeEventHandler {
 

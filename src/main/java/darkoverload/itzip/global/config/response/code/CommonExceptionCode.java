@@ -86,6 +86,11 @@ public enum CommonExceptionCode implements ResponseCode {
     GITHUB_LOGIN_USER(HttpStatus.BAD_REQUEST, "깃허브 로그인으로 회원가입한 계정은 비밀번호 재설정이 불가합니다."),
 
     /**
+     * Tech Info - Common
+     */
+    SORT_TYPE_NOT_FOUND(HttpStatus.NOT_FOUND, "정렬 타입을 찾을 수 없습니다."),
+
+    /**
      * Tech Info - Blog
      */
     BLOG_NOT_FOUND(HttpStatus.NOT_FOUND, "블로그를 찾을 수 없습니다."),

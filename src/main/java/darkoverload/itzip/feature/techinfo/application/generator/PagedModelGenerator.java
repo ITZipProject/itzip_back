@@ -5,6 +5,9 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.PagedModel;
 import org.springframework.hateoas.PagedModel.PageMetadata;
 
+/**
+ * Spring Data의 Page 객체를 HATEOAS의 PagedModel로 변환하는 유틸리티 클래스입니다.
+ */
 public class PagedModelGenerator {
 
     private PagedModelGenerator() {

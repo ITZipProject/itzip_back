@@ -1,6 +1,8 @@
 package darkoverload.itzip.feature.techinfo.application.type;
 
 import darkoverload.itzip.feature.techinfo.application.generator.UpperCaseGenerator;
+import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
+import darkoverload.itzip.global.config.response.exception.RestApiException;
 
 public enum SortType {
 
@@ -19,7 +21,7 @@ public enum SortType {
         try {
             valueOf(type);
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException(String.format("'%s'에 해당하는 정렬 타입을 찾을 수 없습니다.", type));
+            throw new RestApiException(CommonExceptionCode.SORT_TYPE_NOT_FOUND);
         }
     }
 

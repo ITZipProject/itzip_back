@@ -5,6 +5,9 @@ import darkoverload.itzip.feature.techinfo.application.service.command.CommentCo
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+/**
+ * 아티클 삭제(숨김) 이벤트를 처리하여 해당 아티클의 댓글을 삭제(숨김) 수행하는 핸들러입니다.
+ */
 @Component
 public class CommentEventHandler {
 

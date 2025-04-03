@@ -1,7 +1,7 @@
 package darkoverload.itzip.feature.techinfo.application.service.query.impl;
 
 import darkoverload.itzip.feature.jwt.infrastructure.CustomUserDetails;
-import darkoverload.itzip.feature.techinfo.application.event.payload.ArticleViewedEvent;
+import darkoverload.itzip.feature.techinfo.application.event.payload.ViewedEvent;
 import darkoverload.itzip.feature.techinfo.ui.payload.response.ArticleResponse;
 import darkoverload.itzip.feature.techinfo.application.service.query.ArticleQueryService;
 import darkoverload.itzip.feature.techinfo.application.service.query.BlogQueryService;
@@ -69,13 +69,13 @@ class ArticleQueryServiceImplTest {
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         final Article article = ArticleFixture.getSavedArticle();
         articleRepository.save(article);
     }
 
     @AfterEach
-    public void tearDown() {
+    void tearDown() {
         articleRepository.deleteById(ArticleFixture.DEFAULT_ID);
     }
 
@@ -105,7 +105,7 @@ class ArticleQueryServiceImplTest {
                 () -> assertThat(result.isScrapped()).isFalse()
         );
 
-        verify(eventPublisher, times(1)).publishEvent(any(ArticleViewedEvent.class));
+        verify(eventPublisher, times(1)).publishEvent(any(ViewedEvent.class));
         verify(asyncExecutor, times(0)).execute(any(Runnable.class));
     }
 
@@ -135,7 +135,7 @@ class ArticleQueryServiceImplTest {
                 () -> assertThat(result.isScrapped()).isTrue()
         );
 
-        verify(eventPublisher, times(1)).publishEvent(any(ArticleViewedEvent.class));
+        verify(eventPublisher, times(1)).publishEvent(any(ViewedEvent.class));
         verify(asyncExecutor, times(2)).execute(any(Runnable.class));
     }
 

@@ -6,6 +6,14 @@ import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
 
+/**
+ * 테스트용 Article 엔티티의 Fixture 데이터를 제공하는 클래스입니다.
+ *
+ * <p>
+ *     이 클래스는 Article 관련 테스트에서 사용될 기본 값들을 상수로 정의하고,
+ *     새 Article 객체와 저장된 Article 객체를 생성하는 헬퍼 메서드를 제공합니다.
+ * </p>
+ */
 public class ArticleFixture {
 
     private ArticleFixture() {

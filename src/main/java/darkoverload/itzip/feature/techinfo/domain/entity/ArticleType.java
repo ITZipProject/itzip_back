@@ -4,6 +4,11 @@ import darkoverload.itzip.feature.techinfo.application.generator.UpperCaseGenera
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 
+/**
+ * 아티클 유형(enum)을 정의하는 클래스입니다.
+ *
+ * <p>아티클의 유형을 나타내며, 문자열 입력을 해당 열거형 값으로 변환할 수 있습니다.</p>
+ */
 public enum ArticleType {
 
     SOFTWARE_DEVELOPMENT_PROGRAMMING_LANGUAGE,

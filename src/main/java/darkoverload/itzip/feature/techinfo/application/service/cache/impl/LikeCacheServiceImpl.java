@@ -14,6 +14,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+/**
+ * 좋아요 캐시 처리를 위한 서비스 구현체입니다.
+ *
+ * <p>
+ *     좋아요 병합, 감소, 그리고 캐시 플러시 작업을 수행합니다.
+ *     재시도 로직과 비동기 처리(@Async)를 적용하여 일시적인 오류에 대비합니다.
+ * </p>
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

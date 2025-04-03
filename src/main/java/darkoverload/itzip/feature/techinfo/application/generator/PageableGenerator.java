@@ -5,6 +5,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+/**
+ * 페이지와 정렬 옵션에 따른 Pageable 객체를 생성하는 유틸리티 클래스입니다.
+ */
 public class PageableGenerator {
 
     private static final String FIELD_VIEW_COUNT = "viewCount";

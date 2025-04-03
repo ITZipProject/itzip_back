@@ -15,6 +15,11 @@ import org.springframework.stereotype.Service;
 
 import java.util.Map;
 
+/**
+ * 조회수 캐시 처리를 위한 서비스 구현체입니다.
+ *
+ * <p>비동기, 재시도, 스케줄링을 활용하여 조회수 캐시 병합 및 플러시 작업을 수행합니다.</p>
+ */
 @Slf4j
 @Service
 @RequiredArgsConstructor

@@ -15,6 +15,11 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * MongoDB를 이용하여 커스텀 쿼리 및 집계 기능을 제공합니다.
+ *
+ * <p>이 클래스는 주로 아티클의 통계 정보 집계와 조회/좋아요 수 업데이트를 위한 기능을 포함합니다.</p>
+ */
 public class ArticleCustomRepositoryImpl implements ArticleCustomRepository {
 
     private static final String FIELD_ID = "_id";

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ public interface CommentRepository {
 
     @Modifying
     @Query("UPDATE Comment c SET c.displayed = false WHERE c.articleId = :articleId")
-    void setDisplayedFalseByArticleId(String articleId);
+    void setDisplayedFalseByArticleId(@Param("articleId") String articleId);
 
     void deleteById(Long id);
 
