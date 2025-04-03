@@ -40,8 +40,17 @@ dependencies {
     // Spring Actuator
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
+    // Spring Cache
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+
+    // Spring Retry
+    implementation 'org.springframework.retry:spring-retry'
+
     // H2
     runtimeOnly 'com.h2database:h2'
+
+    // Caffeine
+    implementation 'com.github.ben-manes.caffeine:caffeine'
 
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'

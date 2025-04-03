@@ -39,6 +39,7 @@ spring:
       database: ${TEST_MONGO_DATABASE}
       authentication-database: ${TEST_MONGO_AUTH}
       uri: ${TEST_MONGO_URI}
+      auto-index-creation: true
 
   mail:
     host: smtp.gmail.com

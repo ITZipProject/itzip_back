@@ -1,6 +1,6 @@
 package darkoverload.itzip.feature.user.service;
 
-import darkoverload.itzip.feature.techinfo.service.blog.BlogCommandService;
+import darkoverload.itzip.feature.techinfo.application.event.payload.UserCreatedEvent;
 import darkoverload.itzip.feature.user.controller.request.GithubUserInfo;
 import darkoverload.itzip.feature.user.controller.request.GithubUserRequest;
 import darkoverload.itzip.feature.user.controller.request.GoogleUserInfo;
@@ -10,6 +10,7 @@ import darkoverload.itzip.feature.user.repository.UserRepository;
 import darkoverload.itzip.global.config.response.code.CommonExceptionCode;
 import darkoverload.itzip.global.config.response.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,7 @@ public class OAuthServiceImpl implements OAuthService {
 
     private final UserService userService;
     private final UserRepository userRepository;
-    private final BlogCommandService blogCommandService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
     public ResponseEntity<?> google(GoogleUserRequest googleUserRequest) {
@@ -130,9 +131,9 @@ public class OAuthServiceImpl implements OAuthService {
      * @param user 회원가입할 유저
      */
     private ResponseEntity<String> save(User user) {
-        user.setNickname(userService.getUniqueNickname());     // 닉네임 중복 방지 로직
+        user.setNickname(userService.getUniqueNickname()); // 닉네임 중복 방지 로직
         User savedUser = userRepository.save(user.convertToEntity()).convertToDomain();
-        blogCommandService.create(savedUser);                  // 블로그 생성 로직
+        eventPublisher.publishEvent(new UserCreatedEvent(savedUser.getId())); // 회원 생성 이벤트 발행
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
     }
 }
