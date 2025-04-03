@@ -41,16 +41,15 @@ public class Scrap {
     protected Scrap() {
     }
 
-    public Scrap(final UserEntity user, final String articleId) {
-        this.user = user;
-        this.articleId = articleId;
-    }
-
-    public Scrap(final long id, final UserEntity user, final String articleId, final LocalDateTime createdAt) {
+    public Scrap(final Long id, final UserEntity user, final String articleId, final LocalDateTime createdAt) {
         this.id = id;
         this.user = user;
         this.articleId = articleId;
         this.createdAt = createdAt;
+    }
+
+    public Scrap(final UserEntity user, final String articleId) {
+        this(null, user, articleId, null);
     }
 
     public static Scrap create(final UserEntity user, final String articleId) {

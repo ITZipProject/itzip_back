@@ -47,6 +47,7 @@ public class Blog {
     }
 
     public Blog(final Long id, final UserEntity user, final String intro, final LocalDateTime createdAt, final LocalDateTime updatedAt) {
+        checkIntro(intro);
         this.id = id;
         this.user = user;
         this.intro = intro;
@@ -54,19 +55,18 @@ public class Blog {
         this.updatedAt = updatedAt;
     }
 
+    private void checkIntro(final String intro) {
+        if (Objects.isNull(intro) || intro.isBlank()) {
+            throw new RestApiException(CommonExceptionCode.BLOG_INTRO_REQUIRED);
+        }
+    }
+
     public Blog(final UserEntity user, final String intro) {
-        this.user = user;
-        this.intro = intro;
+        this(null, user, intro, null, null);
     }
 
     public static Blog create(final UserEntity user) {
         return new Blog(user, DEFAULT_BLOG_INTRO);
-    }
-
-    private static void checkIntro(final String intro) {
-        if (Objects.isNull(intro) || intro.isBlank()) {
-            throw new RestApiException(CommonExceptionCode.BLOG_INTRO_REQUIRED);
-        }
     }
 
     public void updateIntro(final String intro) {

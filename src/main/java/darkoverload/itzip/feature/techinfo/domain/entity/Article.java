@@ -62,31 +62,8 @@ public class Article {
     protected Article() {
     }
 
-    public Article(final long blogId, final ArticleType type, final String title, final String content, final String thumbnailImageUri, boolean displayed) {
-        this.blogId = blogId;
-        this.type = type;
-        this.title = title;
-        this.content = content;
-        this.thumbnailImageUri = thumbnailImageUri;
-        this.likesCount = 0L;
-        this.viewCount = 0L;
-        this.displayed = displayed;
-    }
-
-    public Article(final ObjectId id, final long blogId, final ArticleType type, final String title, final String content, final String thumbnailImageUri, final long likesCount, final long viewCount, final LocalDateTime createdAt, final boolean displayed) {
-        this.id = id;
-        this.blogId = blogId;
-        this.type = type;
-        this.title = title;
-        this.content = content;
-        this.thumbnailImageUri = thumbnailImageUri;
-        this.likesCount = likesCount;
-        this.viewCount = viewCount;
-        this.createdAt = createdAt;
-        this.displayed = displayed;
-    }
-
     public Article(final ObjectId id, final long blogId, final ArticleType type, final String title, final String content, final String thumbnailImageUri, final long likesCount, final long viewCount, final LocalDateTime createdAt, final LocalDateTime updatedAt, final boolean displayed) {
+        checkTitle(title);
         this.id = id;
         this.blogId = blogId;
         this.type = type;
@@ -100,20 +77,22 @@ public class Article {
         this.displayed = displayed;
     }
 
-    public static Article create(final long blogId, final String type, final String title, final String content, final String thumbnailImageUri) {
-        checkTitle(title);
-        return new Article(blogId, ArticleType.from(type), title, content, thumbnailImageUri, true);
-    }
-
-    private static void checkTitle(final String title) {
+    private void checkTitle(final String title) {
         if (Objects.isNull(title) || title.isBlank()) {
             throw new RestApiException(CommonExceptionCode.ARTICLE_TITLE_REQUIRED);
         }
     }
 
+    public Article(final long blogId, final ArticleType type, final String title, final String content, final String thumbnailImageUri, boolean displayed) {
+        this(null, blogId, type, title, content, thumbnailImageUri, 0L, 0L, null, null, displayed);
+    }
+
+    public static Article create(final long blogId, final String type, final String title, final String content, final String thumbnailImageUri) {
+        return new Article(blogId, ArticleType.from(type), title, content, thumbnailImageUri, true);
+    }
+
     public Article update(final String type, final String title, final String content, final String thumbnailImageUri) {
-        checkTitle(title);
-        return new Article(this.id, this.blogId, ArticleType.from(type), title, content, thumbnailImageUri, this.likesCount, this.viewCount, this.createdAt, this.displayed);
+        return new Article(this.id, this.blogId, ArticleType.from(type), title, content, thumbnailImageUri, this.likesCount, this.viewCount, this.createdAt, null, this.displayed);
     }
 
     public Article hide() {

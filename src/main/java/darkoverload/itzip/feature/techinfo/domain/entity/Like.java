@@ -41,16 +41,15 @@ public class Like {
     protected Like() {
     }
 
-    public Like(final UserEntity user, final String articleId) {
-        this.user = user;
-        this.articleId = articleId;
-    }
-
-    public Like(final long id, final UserEntity user, final String articleId, final LocalDateTime createdAt) {
+    public Like(final Long id, final UserEntity user, final String articleId, final LocalDateTime createdAt) {
         this.id = id;
         this.user = user;
         this.articleId = articleId;
         this.createdAt = createdAt;
+    }
+
+    public Like(final UserEntity user, final String articleId) {
+        this(null, user, articleId, null);
     }
 
     public static Like create(final UserEntity user, final String articleId) {

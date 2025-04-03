@@ -50,14 +50,8 @@ public class Comment {
     protected Comment() {
     }
 
-    public Comment(final UserEntity user, final String articleId, final String content) {
-        this.user = user;
-        this.articleId = articleId;
-        this.content = content;
-        this.displayed = true;
-    }
-
-    public Comment(final long id, final UserEntity user, final String articleId, final String content, final LocalDateTime createdAt, final LocalDateTime updatedAt, final boolean displayed) {
+    public Comment(final Long id, final UserEntity user, final String articleId, final String content, final LocalDateTime createdAt, final LocalDateTime updatedAt, final boolean displayed) {
+        checkContent(content);
         this.id = id;
         this.user = user;
         this.articleId = articleId;
@@ -67,15 +61,18 @@ public class Comment {
         this.displayed = displayed;
     }
 
-    public static Comment create(final UserEntity user, final String articleId, final String content) {
-        checkContent(content);
-        return new Comment(user, articleId, content);
-    }
-
-    private static void checkContent(final String content) {
+    private void checkContent(final String content) {
         if (Objects.isNull(content) || content.isBlank()) {
             throw new RestApiException(CommonExceptionCode.COMMENT_CONTENT_REQUIRED);
         }
+    }
+
+    public Comment(final UserEntity user, final String articleId, final String content, final boolean displayed) {
+        this(null, user, articleId, content, null, null, displayed);
+    }
+
+    public static Comment create(final UserEntity user, final String articleId, final String content) {
+        return new Comment(user, articleId, content, true);
     }
 
     public void updateContent(final String content) {
