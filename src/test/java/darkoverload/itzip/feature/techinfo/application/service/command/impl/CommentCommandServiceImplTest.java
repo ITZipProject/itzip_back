@@ -24,9 +24,11 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.jdbc.SqlGroup;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.awaitility.Awaitility.await;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SqlGroup({
@@ -215,8 +217,11 @@ class CommentCommandServiceImplTest {
         commentCommandService.deleteByArticleId(articleIdHex);
 
         // Then
-        final Comment result = commentRepository.findById(CommentFixture.DEFAULT_ID).get();
-        assertThat(result.getDisplayed()).isFalse();
+        await().atMost(5, TimeUnit.SECONDS)
+                .untilAsserted(() -> {
+                    final Comment result = commentRepository.findById(CommentFixture.DEFAULT_ID).get();
+                    assertThat(result.getDisplayed()).isFalse();
+                });
     }
 
 }
