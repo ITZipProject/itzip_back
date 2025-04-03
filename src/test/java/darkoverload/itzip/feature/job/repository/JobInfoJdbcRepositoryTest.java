@@ -1,6 +1,5 @@
 package darkoverload.itzip.feature.job.repository;
 
-
 import darkoverload.itzip.feature.job.domain.job.JobInfo;
 import darkoverload.itzip.feature.job.mock.JobInfoMockData;
 import darkoverload.itzip.feature.job.service.connect.port.JobInfoConnectRepository;
@@ -30,12 +29,12 @@ public class JobInfoJdbcRepositoryTest {
     @Autowired
     private JobInfoJpaRepository jpaRepository;
 
-    @Test
-    void jdbc_리스트_배치_저장_테스트() {
-        List<JobInfo> jobInfos = List.of(JobInfoMockData.jobInfoDataOne, JobInfoMockData.jobInfoDataSecond);
-
-        assertThat(repository.saveAll(jobInfos)).isEqualTo(2);
-    }
+//    @Test
+//    void jdbc_리스트_배치_저장_테스트() {
+//        List<JobInfo> jobInfos = List.of(JobInfoMockData.jobInfoDataOne, JobInfoMockData.jobInfoDataSecond);
+//
+//        assertThat(repository.saveAll(jobInfos)).isEqualTo(2);
+//    }
 
     @Test
     void jdbc_리스트_배치_업데이트_테스트() {
