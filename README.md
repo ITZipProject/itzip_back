@@ -1,7 +1,7 @@
 ## 📽️ 프로젝트 개요
 
 ### Software Architecture
-<img width="2199" alt="software architecture" src="https://github.com/user-attachments/assets/68c3ee1a-17b5-4898-9c82-7fc221990bbb" />
+<img width="2199" alt="software architecture" src="https://github.com/user-attachments/assets/44f58ee9-98a2-4f31-ab0e-1cbebb9aa73b" />
 
 ### ERD - 다이어그램
 ![entityManagerFactory(EntityManagerFactoryBuilder, PersistenceManagedTypes)](https://github.com/user-attachments/assets/0e4f14c5-9ae5-41bc-8b56-4a78860eb4b9)
