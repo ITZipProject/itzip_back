@@ -1,4 +1,4 @@
-name: Java CI with Gradle Build & Deploy
+name: Java CI with Full Gradle Caching & Deploy
 
 permissions:
   contents: read
@@ -13,37 +13,46 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - uses: actions/checkout@v4
-      - name: Set up JDK 21
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Set up JDK 21 & cache Gradle dependencies
         uses: actions/setup-java@v4
         with:
-          java-version: '21'
           distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+          cache-dependency-path: |
+            **/*.gradle*
+            **/gradle/wrapper/gradle-wrapper.properties
 
-      - name: Secret Prod Env File Download
+      - name: Cache Gradle build cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches/build-cache-1
+          key: ${{ runner.os }}-gradle-build-cache-${{ hashFiles('**/*.gradle*','gradle/wrapper/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-build-cache-
+            
+      - name: Download Prod & Test env files
         run: |
           mkdir -p ./src/main/resources/properties
           echo "${{ secrets.PROD_ENV_FILE }}" > ./src/main/resources/properties/env.properties
-
-      - name: Secret Test Env File Download
-        run: |
           mkdir -p ./src/test/resources/properties
           echo "${{ secrets.TEST_ENV_FILE }}" > ./src/test/resources/properties/test-env.properties
-
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v4.0.0
-
-      - name: Build with Gradle Wrapper
+          
+      - name: Build, Test & Cache
         id: build
-        run: ./gradlew build
+        run: |
+          ./gradlew build --no-daemon --build-cache
 
-      - name: Login Docker
+      - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push Docker Image
+      - name: Build and Push Docker image
         id: docker_build
         uses: docker/build-push-action@v3
         with:
@@ -54,7 +63,7 @@ jobs:
             ${{ secrets.DOCKER_USERNAME }}/jdk-21-spring-boot-3.3.1:${{ github.sha }}
             ${{ secrets.DOCKER_USERNAME }}/jdk-21-spring-boot-3.3.1:latest
 
-      - name: Deploy to Remote Server
+      - name: Deploy to remote server
         id: deploy
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -79,19 +88,15 @@ jobs:
         if: failure()
         run: |
           outcome_message=""
-          
           if [ "${{ steps.build.outcome }}" == "failure" ]; then
             outcome_message+="빌드 단계에서 오류 발생.\n"
           fi
-          
           if [ "${{ steps.docker_build.outcome }}" == "failure" ]; then
             outcome_message+="Docker 빌드 단계에서 오류 발생.\n"
           fi
-          
           if [ "${{ steps.deploy.outcome }}" == "failure" ]; then
             outcome_message+="배포 단계에서 오류 발생.\n"
           fi
-          
           curl -H "Content-Type: application/json" \
             -d "{\"content\": \"**배포 실패!** :x: \n빌드 및 배포 과정에서 오류가 발생했습니다. \n오류 내용: ${outcome_message}\"}" \
             ${{ secrets.DISCORD_WEBHOOK_URL }}
