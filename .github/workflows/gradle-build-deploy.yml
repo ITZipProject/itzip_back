@@ -1,5 +1,9 @@
 name: Java CI with Gradle Build & Deploy
 
+permissions:
+  contents: read
+  actions: write
+
 on:
   push:
     branches: [ "main" ]
@@ -7,9 +11,7 @@ on:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
+    
     steps:
       - uses: actions/checkout@v4
       - name: Set up JDK 21
